@@ -1,0 +1,31 @@
+<div class="govuk-width-container supervision-package">
+    <h2 class="govuk-heading-m">{{ params.heading or "Supervision package" }}</h2>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <div class="app-tier-header">
+                <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
+                    {{ params.tier }}
+                </h3>
+
+                {% if params.status %}
+                    <strong class="govuk-tag govuk-tag--{{ params.statusColour or 'orange' }}">
+                        {{ params.status }}
+                    </strong>
+                {% endif %}
+            </div>
+
+            <p class="govuk-body">
+                {{ params.bodyText }}
+            </p>
+
+            {% if params.historyHref %}
+                <p class="govuk-body">
+                    <a href="{{ params.historyHref }}" class="govuk-link govuk-link--no-visited-state">
+                        {{ params.historyText or "View tier change history" }}
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</div>

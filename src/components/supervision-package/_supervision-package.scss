@@ -1,0 +1,15 @@
+$supervision-package-border-colour: govuk-colour("mid-grey");
+$supervision-package-accent-colour: govuk-colour("blue");
+
+.supervision-package {
+  border-top: 5px solid $supervision-package-accent-colour;
+  border-right: 1px solid $supervision-package-border-colour;
+  border-bottom: 1px solid $supervision-package-border-colour;
+  border-left: 1px solid $supervision-package-border-colour;
+
+  padding-top: govuk-spacing(4);
+  padding-right: govuk-spacing(4);
+  padding-left: govuk-spacing(4);
+
+  margin-bottom: govuk-spacing(6);
+}
