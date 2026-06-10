@@ -4,6 +4,7 @@
   "description": "MPOP front-end components library",
   "main": "./dist/index.cjs.js",
   "scripts": {
+    "prepare": "hmpps-precommit-hooks-prepare",
     "test": "jest",
     "build": "rollup -c rollup.config.ts --bundleConfigAsCjs",
     "typecheck": "tsc --noEmit",
