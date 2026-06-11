@@ -24,7 +24,7 @@ describe('MPoPComponents', () => {
     mpopComponents = new MPoPComponents(null as any, config, null as any)
   })
 
-  describe('getCalculationDetails', () => {
+  describe('getTierDetails', () => {
     it('should return calculation and status 200 on success', async () => {
       const mockApiResponse = {
         tierScore: 'D2',
