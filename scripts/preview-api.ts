@@ -36,7 +36,7 @@ async function main() {
 
   const { calculation } = result
 
-  console.info(calculation)
+  console.info(result)
 
   const params = calculation
     ? {
