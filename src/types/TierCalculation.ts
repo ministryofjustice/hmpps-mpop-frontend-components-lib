@@ -1,12 +1,12 @@
-export type LatestTierCalculation = {
-    tierScore: string
-    calculationId: string
-    calculationDate: string
-    changeReason: string
-    provisional: boolean
+export type LatestTier = {
+  tierScore: string
+  calculationId: string
+  calculationDate: string
+  changeReason: string
+  provisional: boolean
 }
 
-export type LatestTierCalculationResponse = {
-    calculation: LatestTierCalculation | null
-    httpStatus: number
+export type LatestTierResponse = {
+  calculation: LatestTier | null
+  httpStatus: number
 }

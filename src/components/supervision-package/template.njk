@@ -5,18 +5,18 @@
         <div class="govuk-grid-column-two-thirds">
             <div class="app-tier-header">
                 <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
-                    {{ params.tier }}
+                    Tier {{ params.tierScore }}
                 </h3>
 
-                {% if params.status %}
-                    <strong class="govuk-tag govuk-tag--{{ params.statusColour or 'orange' }}">
-                        {{ params.status }}
-                    </strong>
+                {% if params.provisional %}
+                    <strong class="govuk-tag govuk-tag--orange">Provisional</strong>
                 {% endif %}
             </div>
 
             <p class="govuk-body">
-                {{ params.bodyText }}
+                {% if params.provisional %}
+                    We will calculate the supervision package once the tier is confirmed.
+                {% endif %}
             </p>
 
             {% if params.historyHref %}

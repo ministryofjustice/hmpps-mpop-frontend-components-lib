@@ -4,48 +4,46 @@ import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients
 import type Logger from 'bunyan'
 
 import type { MpopComponentsConfig } from './types/MpopComponentsConfig'
-import type { LatestTierCalculation, LatestTierCalculationResponse } from './types/TierCalculation'
-import {SuppressingRestClient} from "./SuppressingRestClient";
+import type { LatestTier, LatestTierResponse } from './types/TierCalculation'
+import { SuppressingRestClient } from './SuppressingRestClient'
 
 export default class MpopComponents {
-    private readonly tierApiRestClient: SuppressingRestClient
+  private readonly tierApiRestClient: SuppressingRestClient
 
-    constructor(
-        authenticationClient: AuthenticationClient,
-        config: MpopComponentsConfig,
-        logger: Logger | Console = console,
-    ) {
-        this.tierApiRestClient = new SuppressingRestClient(
-            new RestClient('ARNS API', config, logger, authenticationClient),
-            logger,
-        )
-    }
+  constructor(
+    authenticationClient: AuthenticationClient,
+    config: MpopComponentsConfig,
+    logger: Logger | Console = console,
+  ) {
+    this.tierApiRestClient = new SuppressingRestClient(
+      new RestClient('Tier API', config, logger, authenticationClient),
+      logger,
+    )
+  }
 
-    async getCalculationDetails(authOptions: AuthOptions | string, crn: string): Promise<LatestTierCalculationResponse> {
-        try {
-            const response = await this.tierApiRestClient.get<LatestTierCalculation | null>(
-                `/crn/${crn}/tier/details`,
-                authOptions,
-            )
+  async getTierDetails(authOptions: AuthOptions | string, crn: string): Promise<LatestTierResponse> {
+    try {
+      const response = await this.tierApiRestClient.get<LatestTier | null>(`/v3/crn/${crn}/tier`, authOptions)
 
-            if (!response) {
-                return {
-                    calculation: null,
-                    httpStatus: 404,
-                }
-            }
-
-            return {
-                calculation: response,
-                httpStatus: 200,
-            }
-        } catch (error) {
-            const status = error && typeof error === 'object' && 'status' in error ? (error as { status?: number }).status : 500
-
-            return {
-                calculation: null,
-                httpStatus: status ?? 500,
-            }
+      if (!response) {
+        return {
+          calculation: null,
+          httpStatus: 404,
         }
+      }
+
+      return {
+        calculation: response,
+        httpStatus: 200,
+      }
+    } catch (error) {
+      const status =
+        error && typeof error === 'object' && 'status' in error ? (error as { status?: number }).status : 500
+
+      return {
+        calculation: null,
+        httpStatus: status ?? 500,
+      }
     }
+  }
 }
