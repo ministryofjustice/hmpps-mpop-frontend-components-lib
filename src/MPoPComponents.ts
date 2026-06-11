@@ -23,7 +23,7 @@ export default class MPoPComponents {
 
   async getTierDetails(authOptions: AuthOptions | string, crn: string): Promise<LatestTierResponse> {
     try {
-      const response = await this.tierApiRestClient.get<LatestTier | null>(`/v3/crn/${crn}/tier`, authOptions)
+      const response = await this.tierApiRestClient.get<LatestTier>(`/v3/crn/${crn}/tier`, authOptions)
 
       if (!response) {
         return {
