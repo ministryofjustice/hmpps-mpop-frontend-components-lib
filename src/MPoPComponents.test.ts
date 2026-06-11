@@ -21,7 +21,7 @@ describe('MPoPComponents', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    mpopComponents = new MPoPComponents(null as any, config, null as any)
+    mpopComponents = new MPoPComponents(null as any, config, console)
   })
 
   describe('getTierDetails', () => {
