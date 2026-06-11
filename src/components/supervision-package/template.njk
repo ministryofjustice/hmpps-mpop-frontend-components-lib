@@ -13,11 +13,11 @@
                 {% endif %}
             </div>
 
-            <p class="govuk-body">
-                {% if params.provisional %}
+            {% if params.provisional %}
+                <p class="govuk-body">
                     We will calculate the supervision package once the tier is confirmed.
-                {% endif %}
-            </p>
+                </p>
+            {% endif %}
 
             {% if params.historyHref %}
                 <p class="govuk-body">
