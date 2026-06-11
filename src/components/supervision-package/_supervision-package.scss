@@ -13,3 +13,10 @@ $supervision-package-accent-colour: govuk-colour("blue");
 
   margin-bottom: govuk-spacing(6);
 }
+
+.app-tier-header {
+  display: flex;
+  align-items: center;
+  gap: govuk-spacing(2);
+  margin-bottom: govuk-spacing(3);
+}
