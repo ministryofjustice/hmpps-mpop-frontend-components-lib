@@ -3,16 +3,16 @@ import type { AuthOptions } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import type Logger from 'bunyan'
 
-import type { MpopComponentsConfig } from './types/MpopComponentsConfig'
+import type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
 import type { LatestTier, LatestTierResponse } from './types/TierCalculation'
 import { SuppressingRestClient } from './SuppressingRestClient'
 
-export default class MpopComponents {
+export default class MPoPComponents {
   private readonly tierApiRestClient: SuppressingRestClient
 
   constructor(
     authenticationClient: AuthenticationClient,
-    config: MpopComponentsConfig,
+    config: MPoPComponentsConfig,
     logger: Logger | Console = console,
   ) {
     this.tierApiRestClient = new SuppressingRestClient(

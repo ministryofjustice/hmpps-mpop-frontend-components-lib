@@ -64,6 +64,7 @@
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^28.0.3",
     "@types/node": "25.9.1",
+    "@types/nunjucks": "3.2.6",
     "@typescript-eslint/eslint-plugin": "8.60.1",
     "babel-jest": "^30.4.1",
     "dotenv": "17.4.2",
@@ -86,7 +87,6 @@
   "dependencies": {
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^1.2.1",
-    "@types/nunjucks": "^3.2.6",
     "sass": "^1.100.0"
   }
 }

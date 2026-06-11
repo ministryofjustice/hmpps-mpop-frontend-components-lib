@@ -1,3 +1,2 @@
 export { default as MpopComponents } from './MPoPComponents'
-export type { MpopComponentsConfig } from './types/MpopComponentsConfig'
-
+export type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'

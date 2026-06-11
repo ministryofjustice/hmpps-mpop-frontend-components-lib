@@ -3,7 +3,7 @@ import { SuppressingRestClient } from './SuppressingRestClient'
 
 jest.mock('@ministryofjustice/hmpps-rest-client')
 
-describe('NotFoundHandler', () => {
+describe('SuppressingRestClient', () => {
   let handler: SuppressingRestClient
   let mockedRestClient: jest.Mocked<RestClient>
   let mockedLogger: any
