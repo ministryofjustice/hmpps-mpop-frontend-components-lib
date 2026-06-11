@@ -5,7 +5,7 @@ import { SuppressingRestClient } from './SuppressingRestClient'
 jest.mock('@ministryofjustice/hmpps-rest-client')
 jest.mock('./SuppressingRestClient')
 
-describe('MpopComponents', () => {
+describe('MPoPComponents', () => {
   let mpopComponents: MPoPComponents
   const mockedRestClient = SuppressingRestClient as jest.MockedClass<typeof SuppressingRestClient>
 
