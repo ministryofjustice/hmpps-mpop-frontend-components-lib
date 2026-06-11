@@ -1,9 +1,11 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 
+const env = nunjucks.configure(['src/components'], { autoescape: true })
+
 const renderComponent = (params = {}) => {
-  const html = nunjucks.renderString(
-    `{% from "src/components/supervision-package/macro.njk" import supervisionPackage %}
+  const html = env.renderString(
+    `{% from "supervision-package/macro.njk" import supervisionPackage %}
      {{ supervisionPackage(params) }}`,
     { params },
   )
