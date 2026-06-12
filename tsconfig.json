@@ -12,6 +12,12 @@
     "allowSyntheticDefaultImports": true,
     "types": ["jest", "node"]
   },
-  "exclude": ["node_modules", "dist"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "scripts",
+    "rollup.config.ts"
+  ],
   "include": ["src/**/*.ts"]
 }

@@ -6,6 +6,9 @@
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "sass": "./dist/_all.scss",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "prepare": "hmpps-precommit-hooks-prepare",
     "build": "rollup -c rollup.config.ts --bundleConfigAsCjs",
