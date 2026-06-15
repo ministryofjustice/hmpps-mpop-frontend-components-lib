@@ -32,6 +32,11 @@ CLIENT_AUTH=$(printf %s "$AUTH_STRING" | base64 | tr -d '\n')
 
 POD=$(kubectl -n "$NAMESPACE" get pods --field-selector=status.phase==Running -o jsonpath="{.items[0].metadata.name}")
 
+if [ -z "$POD" ]; then
+  echo "No running pod found in namespace $NAMESPACE" >&2
+  exit 1
+fi
+
 AUTH_TOKEN=$(
   kubectl -n "$NAMESPACE" exec "$POD" -- \
     wget -q -O - \
