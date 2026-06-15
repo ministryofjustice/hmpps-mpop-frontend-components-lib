@@ -57,7 +57,7 @@ describe('MPoPComponents', () => {
       })
     })
 
-    it('should return status from error object when the API fails', async () => {
+    it('should return responseStatus from error object when the API fails', async () => {
       const error = {
         responseStatus: 401,
         data: {
