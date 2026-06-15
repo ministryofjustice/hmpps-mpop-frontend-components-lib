@@ -46,4 +46,9 @@ AUTH_TOKEN=$(
     jq -r .access_token
 )
 
+if [ -z "$AUTH_TOKEN" ] || [ "$AUTH_TOKEN" = "null" ]; then
+  echo "Failed to retrieve auth token for environment '$ENVIRONMENT'" >&2
+  exit 1
+fi
+
 echo "$AUTH_TOKEN"
