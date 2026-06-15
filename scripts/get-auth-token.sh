@@ -28,7 +28,7 @@ AUTH_STRING=$(
     jq -r '.data | map_values(@base64d) | "\(.SYSTEM_CLIENT_ID):\(.SYSTEM_CLIENT_SECRET)"'
 )
 
-CLIENT_AUTH=$(echo -n "$AUTH_STRING" | base64 -b 0)
+CLIENT_AUTH=$(printf %s "$AUTH_STRING" | base64 | tr -d '\n')
 
 POD=$(kubectl -n "$NAMESPACE" get pods --field-selector=status.phase==Running -o jsonpath="{.items[0].metadata.name}")
 
