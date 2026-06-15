@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'
 // eslint-disable-next-line import/no-extraneous-dependencies
