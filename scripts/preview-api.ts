@@ -28,7 +28,7 @@ if (!tierApiUrl) {
 }
 
 const getAuthToken = () =>
-  execFileSync('./scripts/get-auth-token.sh', [environment], {
+  execFileSync('bash', ['./scripts/get-auth-token.sh', environment], {
     encoding: 'utf8',
   }).trim()
 
