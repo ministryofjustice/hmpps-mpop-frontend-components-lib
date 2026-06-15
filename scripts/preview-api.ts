@@ -34,11 +34,12 @@ const getAuthToken = () =>
 
 async function main() {
   const crn = process.env.CRN
-  const authToken = getAuthToken()
 
   if (!crn) {
     throw new Error('Missing CRN in .env')
   }
+
+  const authToken = getAuthToken()
 
   const mpopComponents = new MPoPComponents(
     null as any,
