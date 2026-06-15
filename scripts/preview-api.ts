@@ -1,6 +1,8 @@
 import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'dotenv/config'
+
 import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
@@ -10,13 +12,31 @@ const env = nunjucks.configure(['src/components'], {
   autoescape: true,
 })
 
-async function main() {
-  const tierApiUrl = process.env.TIER_API_URL
-  const authToken = process.env.AUTH_TOKEN
-  const crn = process.env.CRN
+const environment = process.env.ENVIRONMENT ?? 'dev'
 
-  if (!tierApiUrl || !authToken || !crn) {
-    throw new Error('Missing TIER_API_URL, AUTH_TOKEN or CRN in .env')
+const tierApiUrlMap = {
+  dev: 'https://hmpps-tier-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://hmpps-tier-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
+} as const
+
+const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
+
+if (!tierApiUrl) {
+  throw new Error(`Unknown environment: ${environment}`)
+}
+
+const getAuthToken = () =>
+  execFileSync('./scripts/get-auth-token.sh', [environment], {
+    encoding: 'utf8',
+  }).trim()
+
+async function main() {
+  const crn = process.env.CRN
+  const authToken = getAuthToken()
+
+  if (!crn) {
+    throw new Error('Missing CRN in .env')
   }
 
   const mpopComponents = new MPoPComponents(
@@ -33,7 +53,6 @@ async function main() {
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
-
   const { calculation } = result
 
   console.info(result)
@@ -47,10 +66,9 @@ async function main() {
         historyText: 'View tier change history',
       }
     : {
-        tierScore: 'Tier unavailable',
-        status: 'Unavailable',
-        statusColour: 'grey',
-        bodyText: `Tier API returned status ${result.httpStatus}`,
+        tierScore: 'Unavailable',
+        provisional: false,
+        changeReason: `Tier API returned status ${result.httpStatus}`,
       }
 
   const html = env.renderString(
@@ -104,7 +122,7 @@ async function main() {
   fs.mkdirSync('preview', { recursive: true })
   fs.writeFileSync('preview/index-api.html', html)
 
-  console.log('Preview written to preview/index-api.html')
+  console.info('Preview written to preview/index-api.html')
 }
 
 main().catch(error => {
