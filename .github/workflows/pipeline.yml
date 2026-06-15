@@ -91,10 +91,9 @@ jobs:
           npm run build
       - name: Publish new versions of packages
         run: |
-          root_path=$(pwd)
           name=$(jq -r .name package.json)
 
-          if latest_version=$(npm view "@ministryofjustice/hmpps-mpop-frontend-components-lib" version --silent 2>/dev/null); then
+          if latest_version=$(npm view "$name" version --silent 2>/dev/null); then
             :
           else
             latest_version="unpublished"
