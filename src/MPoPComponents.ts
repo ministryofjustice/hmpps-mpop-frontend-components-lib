@@ -39,14 +39,11 @@ export default class MPoPComponents {
     } catch (error) {
       const err = error as {
         responseStatus?: number
-        data?: {
-          status?: number
-        }
       } | null
 
       return {
         calculation: null,
-        httpStatus: err?.responseStatus ?? err?.data?.status ?? 500,
+        httpStatus: err?.responseStatus ?? 500,
       }
     }
   }
