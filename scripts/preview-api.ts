@@ -21,7 +21,15 @@ const tierApiUrlMap = {
   prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
 } as const
 
+const tierHistoryUrlMap = {
+  dev: 'https://tier-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://tier-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://tier.hmpps.service.justice.gov.uk',
+} as const
+
 const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
+
+const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
 if (!tierApiUrl) {
   throw new Error(`Unknown environment: ${environment}`)
@@ -64,7 +72,7 @@ async function main() {
         tierScore: calculation.tierScore,
         provisional: calculation.provisional,
         changeReason: calculation.changeReason,
-        historyHref: '#',
+        historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
         historyText: 'View tier change history',
       }
     : {
