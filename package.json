@@ -6,6 +6,9 @@
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "sass": "./dist/_all.scss",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "prepare": "hmpps-precommit-hooks-prepare",
     "build": "rollup -c rollup.config.ts --bundleConfigAsCjs",
@@ -57,6 +60,7 @@
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-typescript": "^7.29.7",
     "@ministryofjustice/eslint-config-hmpps": "1.0.3",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.1",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
