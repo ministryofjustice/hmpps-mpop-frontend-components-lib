@@ -1,5 +1,6 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { tierTags } from '../../MPoPComponents'
 
 const env = nunjucks.configure(['src/components'], { autoescape: true })
 
@@ -14,19 +15,31 @@ const renderComponent = (params = {}) => {
 }
 
 describe('supervision-package', () => {
-  it('renders the supervision package content', () => {
-    const document = renderComponent({
-      tierScore: 'C',
-      provisional: true,
-      historyHref: '#',
-    })
+  it.each`
+    name             | tag                     | expectedTagText  | expectedTagClass       | expectedBodyText
+    ${'provisional'} | ${tierTags.provisional} | ${'Provisional'} | ${'govuk-tag--orange'} | ${'We will calculate the supervision package once the tier is confirmed.'}
+    ${'missing'}     | ${tierTags.missing}     | ${'Missing'}     | ${'govuk-tag--red'}    | ${null}
+    ${'unavailable'} | ${tierTags.unavailable} | ${'Unavailable'} | ${'govuk-tag--grey'}   | ${'Tier information is currently unavailable.'}
+    ${'none'}        | ${tierTags.none}        | ${null}          | ${null}                | ${null}
+  `('renders the "$name" tag state', ({ tag, expectedTagText, expectedTagClass, expectedBodyText }) => {
+    const document = renderComponent({ tierScore: 'C', tag, historyHref: '#' })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
     expect(document.querySelector('h2')?.textContent?.trim()).toBe('Supervision package')
     expect(document.querySelector('h3')?.textContent?.trim()).toBe('Tier C')
-    expect(document.querySelector('.govuk-tag')?.textContent?.trim()).toBe('Provisional')
-    expect(document.querySelector('.govuk-tag')?.classList.contains('govuk-tag--orange')).toBe(true)
-    expect(document.body.textContent).toContain('We will calculate the supervision package once the tier is confirmed.')
     expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+
+    const tagElement = document.querySelector('.govuk-tag')
+
+    if (expectedTagText) {
+      expect(tagElement?.textContent?.trim()).toBe(expectedTagText)
+      expect(tagElement?.classList.contains(expectedTagClass)).toBe(true)
+    } else {
+      expect(tagElement).toBeNull()
+    }
+
+    if (expectedBodyText) {
+      expect(document.body.textContent).toContain(expectedBodyText)
+    }
   })
 })

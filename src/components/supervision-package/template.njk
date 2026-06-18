@@ -8,14 +8,20 @@
                     Tier {{ params.tierScore }}
                 </h3>
 
-                {% if params.provisional %}
-                    <strong class="govuk-tag govuk-tag--orange">Provisional</strong>
+                {% if params.tag.text and params.tag.color %}
+                    <strong class="govuk-tag govuk-tag--{{ params.tag.color }}">{{ params.tag.text }}</strong>
                 {% endif %}
             </div>
 
-            {% if params.provisional %}
+            {% if params.tag.text == 'Provisional' %}
                 <p class="govuk-body">
                     We will calculate the supervision package once the tier is confirmed.
+                </p>
+            {% endif %}
+
+            {% if params.tag.text == 'Unavailable' %}
+                <p class="govuk-body">
+                    Tier information is currently unavailable.
                 </p>
             {% endif %}
 
