@@ -22,6 +22,7 @@ jobs:
   version-release:
     runs-on: ubuntu-latest
 
+    # Avoid running again on the version bump commit created by this workflow
     if: github.actor != 'github-actions[bot]'
 
     steps:
@@ -34,13 +35,11 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: 24
+
       - name: Setup git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Install dependencies
-        run: npm run setup
 
       - name: Bump package version
         run: npm version patch -m "Release v%s"
