@@ -19,10 +19,62 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  version-release:
+  lint:
+    name: Run linting checks
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
-    # Avoid running again on the version bump commit created by this workflow
+      - name: Setup node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Clean build step
+        run: npm run clean
+
+      - name: Test build step
+        run: npm run build
+
+      - name: Run linting checks
+        run: npm run lint
+
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    needs: lint
+    strategy:
+      matrix:
+        node: [24]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+
+      - name: Setup node ${{ matrix.node }}
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm run setup
+
+      - name: Test build step
+        run: npm run build
+
+      - name: Run unit tests
+        run: npm test
+
+  version-release:
+    name: Bump version and create release
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - lint
+
     if: github.actor != 'github-actions[bot]'
 
     steps:
