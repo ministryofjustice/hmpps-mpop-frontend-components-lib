@@ -23,9 +23,10 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 2. Commit the version change:
 
    ```bash
+   git checkout -b chore/bump-package-version
    git add package.json package-lock.json
    git commit -m "Bump package version"
-   git push
+   git push -u origin HEAD
    ```
 
 3. Raise a pull request and merge it into `main`.
