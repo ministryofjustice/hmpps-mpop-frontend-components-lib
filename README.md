@@ -7,9 +7,13 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 
 ### Release process
 
-1. Update the package version:
+1. Create a branch from the latest `main` and update the package version:
 
    ```bash
+   git checkout main
+   git pull
+   git checkout -b chore/bump-package-version
+
    npm version patch --no-git-tag-version
    ```
 
@@ -23,14 +27,10 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 2. Commit the version change:
 
    ```bash
-   git checkout main
-   git pull
-   git checkout -b chore/bump-package-version
    git add package.json package-lock.json
    git commit -m "Bump package version"
    git push -u origin HEAD
    ```
-
 3. Raise a pull request and merge it into `main`.
 
 4. Create a GitHub release for the version:
