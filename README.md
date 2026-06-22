@@ -45,7 +45,7 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 
 ### Notes
 
-- The GitHub release tag should match the version in `package.json`.
+- The GitHub release tag should be `v<version>` (e.g. `v1.2.3`) where `<version>` matches the version in `package.json`.
 - The package version must be greater than the latest version published to npm.
 - Publishing uses npm Trusted Publishing via GitHub Actions and does not require an npm token.
 - If the version already exists on npm, the publish workflow will skip publishing.
