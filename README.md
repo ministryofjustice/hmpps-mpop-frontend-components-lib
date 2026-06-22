@@ -33,9 +33,12 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
    ```
 3. Raise a pull request and merge it into `main`.
 
-4. Create a draft GitHub release for the version:
+4. Ensure your local `main` is up to date, then create a draft GitHub release for the version:
 
    ```bash
+   git checkout main
+   git pull
+
    VERSION=$(node -p "require('./package.json').version")
 
    gh release create "v$VERSION" \
