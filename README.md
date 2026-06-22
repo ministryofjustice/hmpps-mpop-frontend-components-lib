@@ -23,6 +23,8 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 2. Commit the version change:
 
    ```bash
+   git checkout main
+   git pull
    git checkout -b chore/bump-package-version
    git add package.json package-lock.json
    git commit -m "Bump package version"
@@ -42,11 +44,11 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
      --generate-notes
    ```
 
-5. Creating the GitHub release triggers the publish workflow and publishes the package to npm.
+5. Publishing the GitHub release (i.e. not a draft) triggers the publish workflow and publishes the package to npm.
 
 ### Notes
 
-- The GitHub release tag should match the version in `package.json`.
+- The GitHub release tag should be `v<version>`, where `<version>` matches the version in `package.json`.
 - The package version must be greater than the latest version published to npm.
 - Publishing uses npm Trusted Publishing via GitHub Actions and does not require an npm token.
 - If the version already exists on npm, the publish workflow will skip publishing.
