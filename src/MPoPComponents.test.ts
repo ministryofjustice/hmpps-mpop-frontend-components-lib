@@ -57,8 +57,14 @@ describe('MPoPComponents', () => {
       })
     })
 
-    it('should return status from error object when the API fails', async () => {
-      const error = { status: 401, message: 'Unauthorized' }
+    it('should return responseStatus from error object when the API fails', async () => {
+      const error = {
+        responseStatus: 401,
+        data: {
+          status: 401,
+          userMessage: 'Unauthorized',
+        },
+      }
 
       mockedRestClient.prototype.get.mockRejectedValue(error)
 
@@ -67,6 +73,27 @@ describe('MPoPComponents', () => {
       expect(result).toEqual({
         calculation: null,
         httpStatus: 401,
+      })
+    })
+
+    it('should return responseStatus from SanitisedError when the API fails', async () => {
+      const error = {
+        responseStatus: 403,
+        data: {
+          status: 403,
+          userMessage: 'Access denied',
+          developerMessage: null,
+          moreInfo: null,
+        },
+      }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getTierDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        calculation: null,
+        httpStatus: 403,
       })
     })
 

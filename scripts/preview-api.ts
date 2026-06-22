@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
 import fs from 'node:fs'
+import { execFileSync } from 'node:child_process'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'dotenv/config'
+
 import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
@@ -10,14 +13,41 @@ const env = nunjucks.configure(['src/components'], {
   autoescape: true,
 })
 
+const environment = process.env.ENVIRONMENT ?? 'dev'
+
+const tierApiUrlMap = {
+  dev: 'https://hmpps-tier-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://hmpps-tier-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
+} as const
+
+const tierHistoryUrlMap = {
+  dev: 'https://tier-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://tier-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://tier.hmpps.service.justice.gov.uk',
+} as const
+
+const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
+
+const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
+
+if (!tierApiUrl) {
+  throw new Error(`Unknown environment: ${environment}`)
+}
+
+const getAuthToken = () =>
+  execFileSync('bash', ['./scripts/get-auth-token.sh', environment], {
+    encoding: 'utf8',
+  }).trim()
+
 async function main() {
-  const tierApiUrl = process.env.TIER_API_URL
-  const authToken = process.env.AUTH_TOKEN
   const crn = process.env.CRN
 
-  if (!tierApiUrl || !authToken || !crn) {
-    throw new Error('Missing TIER_API_URL, AUTH_TOKEN or CRN in .env')
+  if (!crn) {
+    throw new Error('Missing CRN in .env')
   }
+
+  const authToken = getAuthToken()
 
   const mpopComponents = new MPoPComponents(
     null as any,
@@ -33,7 +63,6 @@ async function main() {
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
-
   const { calculation } = result
 
   console.info(result)
@@ -43,14 +72,13 @@ async function main() {
         tierScore: calculation.tierScore,
         provisional: calculation.provisional,
         changeReason: calculation.changeReason,
-        historyHref: '#',
+        historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
         historyText: 'View tier change history',
       }
     : {
-        tierScore: 'Tier unavailable',
-        status: 'Unavailable',
-        statusColour: 'grey',
-        bodyText: `Tier API returned status ${result.httpStatus}`,
+        tierScore: 'Unavailable',
+        provisional: false,
+        changeReason: `Tier API returned status ${result.httpStatus}`,
       }
 
   const html = env.renderString(
@@ -104,7 +132,7 @@ async function main() {
   fs.mkdirSync('preview', { recursive: true })
   fs.writeFileSync('preview/index-api.html', html)
 
-  console.log('Preview written to preview/index-api.html')
+  console.info('Preview written to preview/index-api.html')
 }
 
 main().catch(error => {
