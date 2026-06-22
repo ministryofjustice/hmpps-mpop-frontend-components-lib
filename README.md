@@ -33,7 +33,7 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
    ```
 3. Raise a pull request and merge it into `main`.
 
-4. Create a GitHub release for the version:
+4. Create a draft GitHub release for the version:
 
    ```bash
    VERSION=$(node -p "require('./package.json').version")
@@ -41,10 +41,11 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
    gh release create "v$VERSION" \
      --target main \
      --title "v$VERSION" \
-     --generate-notes
+     --generate-notes \
+     --draft
    ```
 
-5. Publishing the GitHub release (i.e. not a draft) triggers the publish workflow and publishes the package to npm.
+5. Publish the GitHub release (i.e. mark it as not a draft) to trigger the publish workflow and publish the package to npm.
 
 ### Notes
 
