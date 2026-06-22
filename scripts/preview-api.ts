@@ -63,14 +63,14 @@ async function main() {
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
-  const { calculation } = result
+  const { changeReason, tierScore, tag } = result.calculation
 
   console.info(result)
 
   const params = {
-    tierScore: calculation.tierScore,
-    tag: calculation.tag,
-    changeReason: calculation.changeReason,
+    tierScore,
+    tag,
+    changeReason,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
     historyText: 'View tier change history',
   }
@@ -127,7 +127,7 @@ async function main() {
       {{ supervisionPackage({
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
-        historyHref: "#"
+        historyHref: ""
       }) }}
 
       <h2 class="govuk-heading-m">Missing tier</h2>
@@ -135,7 +135,7 @@ async function main() {
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Missing", color: "red" },
-        historyHref: "#"
+        historyHref: ""
       }) }}
 
       <h2 class="govuk-heading-m">Unavailable tier</h2>
@@ -143,7 +143,7 @@ async function main() {
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Unavailable", color: "grey" },
-        historyHref: "#"
+        historyHref: ""
       }) }}
 
       <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
@@ -151,7 +151,7 @@ async function main() {
       {{ supervisionPackage({
         tierScore: "A",
         tag: { text: null, color: null },
-        historyHref: "#",
+        historyHref: "",
         historyText: "View tier change history"
       }) }}
     </div>
