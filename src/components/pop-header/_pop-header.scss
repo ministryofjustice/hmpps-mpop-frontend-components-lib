@@ -1,0 +1,12 @@
+.inline-list-from-tablet {
+  > li {
+    @include govuk-media-query($from: tablet) {
+      display: inline;
+    }
+  }
+}
+
+
+.pop-header__details {
+  display: flex;
+}

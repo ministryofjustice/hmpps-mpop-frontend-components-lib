@@ -21,6 +21,12 @@ const tierApiUrlMap = {
   prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
 } as const
 
+const masApiUrlMap = {
+  dev: 'https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://manage-supervision-and-delius-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://manage-supervision-and-delius.hmpps.service.justice.gov.uk',
+} as const
+
 const tierHistoryUrlMap = {
   dev: 'https://tier-dev.hmpps.service.justice.gov.uk',
   preprod: 'https://tier-preprod.hmpps.service.justice.gov.uk',
@@ -28,6 +34,7 @@ const tierHistoryUrlMap = {
 } as const
 
 const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
+const masApiUrl = masApiUrlMap[environment as keyof typeof masApiUrlMap]
 
 const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
@@ -58,16 +65,26 @@ async function main() {
         deadline: 5000,
       },
       agent: new AgentConfig(5000),
+      masApiConfig: {
+        url: masApiUrl,
+        timeout: {
+          response: 5000,
+          deadline: 5000,
+        },
+        agent: new AgentConfig(5000),
+      },
     },
     console,
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
   const { changeReason, tierScore, tag } = result.calculation
+  const personalDetails = await mpopComponents.getPersonalDetails(authToken, crn)
 
   console.info(result)
+  console.info(personalDetails)
 
-  const params = {
+  const supervisionPackageParams = {
     tierScore,
     tag,
     changeReason,
@@ -75,9 +92,19 @@ async function main() {
     historyText: 'View tier change history',
   }
 
+  const summary = personalDetails.personalDetails
+  const popHeaderParams = {
+    crn,
+    dob: summary?.dateOfBirth ?? '',
+    age: summary?.age ?? null,
+    tierScore,
+    historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
+  }
+
   const html = env.renderString(
     `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
+{% from "pop-header/macro.njk" import popHeader %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -106,6 +133,14 @@ async function main() {
       gap: 10px;
       margin-bottom: 15px;
     }
+
+    .preview-panel { display: none; }
+    .preview-panel.active { display: block; }
+
+    .govuk-flex { display: flex; }
+    .inline-list-from-tablet > li { display: inline; }
+    .hide-mobile { display: none; }
+    @media (min-width: 641px) { .hide-mobile { display: inline; } }
   </style>
 </head>
 
@@ -113,17 +148,23 @@ async function main() {
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <h1 class="govuk-heading-l">PoP Header</h1>
+        <div style="display: flex; justify-content: center;">
+          <div style="width: 100%; max-width: 960px;">
+            {{ popHeader(popHeaderParams) }}
+          </div>
+        </div>
 
-      <h2 class="govuk-heading-m">Tier API</h2>
-
-      {{ supervisionPackage(params) }}
-
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <h1 class="govuk-heading-l">Supervision Package</h1>
+        {{ supervisionPackage(supervisionPackageParams) }}
     </div>
   </main>
 </body>
 </html>
 `,
-    { params },
+    { supervisionPackageParams, popHeaderParams },
   )
 
   fs.mkdirSync('preview', { recursive: true })

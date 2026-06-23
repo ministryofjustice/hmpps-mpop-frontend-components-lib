@@ -1,14 +1,17 @@
-/* eslint-disable no-console */
 import fs from 'node:fs'
 import nunjucks from 'nunjucks'
+import { yearsSince } from '../src/utils/yearsSince'
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
 })
 
+const previewAge = yearsSince('1990-01-15')
+
 const html = env.renderString(
   `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
+{% from "pop-header/macro.njk" import popHeader %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -41,6 +44,11 @@ const html = env.renderString(
       gap: 10px;
       margin-bottom: 15px;
     }
+
+    .govuk-flex { display: flex; }
+    .inline-list-from-tablet > li { display: inline; }
+    .hide-mobile { display: none; }
+    @media (min-width: 641px) { .hide-mobile { display: inline; } }
   </style>
 </head>
 
@@ -48,6 +56,21 @@ const html = env.renderString(
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">Pop Header</h1>
+
+      {{ popHeader({
+        crn: "X123456",
+        dob: "1990-01-15",
+        age: previewAge,
+        tierScore: "B2",
+        historyHref: "#"
+      }) }}
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">Supervision Package</h1>
+
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
@@ -81,16 +104,13 @@ const html = env.renderString(
         historyHref: "#",
         historyText: "View tier change history"
       }) }}
-
     </div>
   </main>
 </body>
 </html>
 `,
-  {},
+  { previewAge },
 )
 
 fs.mkdirSync('preview', { recursive: true })
 fs.writeFileSync('preview/index.html', html)
-
-console.log('Preview written to preview/index.html')
