@@ -1,2 +1,58 @@
 # hmpps-mpop-frontend-components-lib
 MPoP front-end library
+
+## Releasing
+
+This package is published to npm using GitHub Releases and npm Trusted Publishing.
+
+### Release process
+
+1. Create a branch from the latest `main` and update the package version:
+
+   ```bash
+   git checkout main
+   git pull
+   git checkout -b chore/bump-package-version
+
+   npm version patch --no-git-tag-version
+   ```
+
+   Alternatively:
+
+   ```bash
+   npm version minor --no-git-tag-version
+   npm version major --no-git-tag-version
+   ```
+
+2. Commit the version change:
+
+   ```bash
+   git add package.json package-lock.json
+   git commit -m "Bump package version"
+   git push -u origin HEAD
+   ```
+3. Raise a pull request and merge it into `main`.
+
+4. Ensure your local `main` is up to date, then create a draft GitHub release for the version:
+
+   ```bash
+   git checkout main
+   git pull
+
+   VERSION=$(node -p "require('./package.json').version")
+
+   gh release create "v$VERSION" \
+     --target main \
+     --title "v$VERSION" \
+     --generate-notes \
+     --draft
+   ```
+
+5. Publish the GitHub release (i.e. mark it as not a draft) to trigger the publish workflow and publish the package to npm.
+
+### Notes
+
+- The GitHub release tag should be `v<version>`, where `<version>` matches the version in `package.json`.
+- The package version must be greater than the latest version published to npm.
+- Publishing uses npm Trusted Publishing via GitHub Actions and does not require an npm token.
+- If the version already exists on npm, the publish workflow will skip publishing.
