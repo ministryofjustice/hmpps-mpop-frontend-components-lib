@@ -41,6 +41,8 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
 
    VERSION=$(node -p "require('./package.json').version")
 
+   // Add a step to say github cli needs to be installed and you need to login to the github cli
+
    gh release create "v$VERSION" \
      --target main \
      --title "v$VERSION" \
