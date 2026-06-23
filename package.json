@@ -1,6 +1,6 @@
 {
   "name": "@ministryofjustice/hmpps-mpop-frontend-components-lib",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "MPOP front-end components library",
   "main": "./dist/index.cjs.js",
   "module": "./dist/index.esm.js",
