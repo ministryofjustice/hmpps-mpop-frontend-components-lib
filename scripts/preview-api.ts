@@ -114,46 +114,10 @@ async function main() {
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
 
-      <h2 class="govuk-heading-m">Live tier from the Tier API</h2>
-      <p class="govuk-body">Rendered from the Tier API in the <strong>${environment}</strong> environment for CRN <strong>${crn}</strong>. If the tier could not be retrieved, the component falls back to an "Unavailable" state showing the returned HTTP status.</p>
+      <h2 class="govuk-heading-m">Tier API</h2>
 
       {{ supervisionPackage(params) }}
 
-      <h2 class="govuk-heading-l">Example states</h2>
-      <p class="govuk-body">Static examples showing each supervision package banner variant.</p>
-
-      <h2 class="govuk-heading-m">Provisional tier</h2>
-      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
-      {{ supervisionPackage({
-        tierScore: "C",
-        tag: { text: "Provisional", color: "orange" },
-        historyHref: ""
-      }) }}
-
-      <h2 class="govuk-heading-m">Missing tier</h2>
-      <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
-      {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Missing", color: "red" },
-        historyHref: ""
-      }) }}
-
-      <h2 class="govuk-heading-m">Unavailable tier</h2>
-      <p class="govuk-body">The tier could not be retrieved (for example the Tier API errored), so it is shown with a grey "Unavailable" tag.</p>
-      {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Unavailable", color: "grey" },
-        historyHref: ""
-      }) }}
-
-      <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
-      <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
-      {{ supervisionPackage({
-        tierScore: "A",
-        tag: { text: null, color: null },
-        historyHref: "",
-        historyText: "View tier change history"
-      }) }}
     </div>
   </main>
 </body>

@@ -42,4 +42,16 @@ describe('supervision-package', () => {
       expect(document.body.textContent).toContain(expectedBodyText)
     }
   })
+
+  it('hides the tier score when tierScore is MISSING', () => {
+    const document = renderComponent({ tierScore: 'MISSING', tag: tierTags.missing, historyHref: '#' })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    expect(document.querySelector('h2')?.textContent?.trim()).toBe('Supervision package')
+    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Tier')
+
+    const tagElement = document.querySelector('.govuk-tag')
+    expect(tagElement?.textContent?.trim()).toBe('Missing')
+    expect(tagElement?.classList.contains('govuk-tag--red')).toBe(true)
+  })
 })
