@@ -1,13 +1,17 @@
 /* eslint-disable no-console */
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'dotenv/config'
+import sass from 'sass'
 
 import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 import MPoPComponents from '../src/MPoPComponents'
+
+const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
@@ -21,6 +25,12 @@ const tierApiUrlMap = {
   prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
 } as const
 
+const masApiUrlMap = {
+  dev: 'https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://manage-supervision-and-delius-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://manage-supervision-and-delius.hmpps.service.justice.gov.uk',
+} as const
+
 const tierHistoryUrlMap = {
   dev: 'https://tier-dev.hmpps.service.justice.gov.uk',
   preprod: 'https://tier-preprod.hmpps.service.justice.gov.uk',
@@ -28,6 +38,7 @@ const tierHistoryUrlMap = {
 } as const
 
 const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
+const masApiUrl = masApiUrlMap[environment as keyof typeof masApiUrlMap]
 
 const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
@@ -58,16 +69,26 @@ async function main() {
         deadline: 5000,
       },
       agent: new AgentConfig(5000),
+      masApiConfig: {
+        url: masApiUrl,
+        timeout: {
+          response: 5000,
+          deadline: 5000,
+        },
+        agent: new AgentConfig(5000),
+      },
     },
     console,
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
   const { changeReason, tierScore, tag } = result.calculation
+  const personalDetails = await mpopComponents.getPersonalDetails(authToken, crn)
 
   console.info(result)
+  console.info(personalDetails)
 
-  const params = {
+  const supervisionPackageParams = {
     tierScore,
     tag,
     changeReason,
@@ -75,9 +96,19 @@ async function main() {
     historyText: 'View tier change history',
   }
 
+  const summary = personalDetails.personalDetails
+  const popHeaderParams = {
+    crn,
+    dob: summary?.dateOfBirth ?? '',
+    age: summary?.age ?? null,
+    tierScore,
+    historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
+  }
+
   const html = env.renderString(
     `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
+{% from "pop-header/macro.njk" import popHeader %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -90,40 +121,30 @@ async function main() {
     href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
   >
 
-  <style>
-    .supervision-package {
-      border-top: 5px solid #1d70b8;
-      border-left: 1px solid #cecece;
-      border-right: 1px solid #cecece;
-      border-bottom: 1px solid #cecece;
-      padding: 20px 20px 0;
-      margin-bottom: 30px;
-    }
-
-    .app-tier-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-  </style>
+  <style>${previewApiCss}</style>
 </head>
 
 <body class="govuk-template__body">
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <h1 class="govuk-heading-l">PoP Header</h1>
+        <div style="display: flex; justify-content: center;">
+          <div style="width: 100%; max-width: 960px;">
+            {{ popHeader(popHeaderParams) }}
+          </div>
+        </div>
 
-      <h2 class="govuk-heading-m">Tier API</h2>
-
-      {{ supervisionPackage(params) }}
-
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <h1 class="govuk-heading-l">Supervision Package</h1>
+        {{ supervisionPackage(supervisionPackageParams) }}
     </div>
   </main>
 </body>
 </html>
 `,
-    { params },
+    { supervisionPackageParams, popHeaderParams },
   )
 
   fs.mkdirSync('preview', { recursive: true })

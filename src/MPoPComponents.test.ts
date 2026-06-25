@@ -1,9 +1,11 @@
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents, { tierTags } from './MPoPComponents'
 import { SuppressingRestClient } from './SuppressingRestClient'
+import * as yearsSinceModule from './utils/yearsSince'
 
 jest.mock('@ministryofjustice/hmpps-rest-client')
 jest.mock('./SuppressingRestClient')
+jest.mock('./utils/yearsSince')
 
 describe('MPoPComponents', () => {
   let mpopComponents: MPoPComponents
@@ -17,6 +19,14 @@ describe('MPoPComponents', () => {
       deadline: 5000,
     },
     agent: new AgentConfig(5000),
+    masApiConfig: {
+      url: 'https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk',
+      timeout: {
+        response: 5000,
+        deadline: 5000,
+      },
+      agent: new AgentConfig(5000),
+    },
   } as any
 
   const unavailableCalculation = {
@@ -182,6 +192,89 @@ describe('MPoPComponents', () => {
 
       expect(result).toEqual({
         calculation: unavailableCalculation,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
+  describe('getPersonalDetails', () => {
+    const mockSummary = {
+      name: { forename: 'John', middleName: 'A', surname: 'Doe' },
+      crn: 'X123456',
+      offenderId: 1,
+      pnc: 'PNC123',
+      noms: 'NOMS456',
+      dateOfBirth: '1990-01-01',
+    }
+
+    beforeEach(() => {
+      jest.spyOn(yearsSinceModule, 'yearsSince').mockReturnValue('35')
+    })
+
+    it('should return personalDetails with computed age and status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockSummary)
+
+      const result = await mpopComponents.getPersonalDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personalDetails: { ...mockSummary, age: '35' },
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/personal-details/X123456/summary', 'authToken')
+    })
+
+    it('should return null personalDetails with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonalDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personalDetails: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonalDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personalDetails: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonalDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personalDetails: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonalDetails('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personalDetails: null,
         httpStatus: 500,
         error,
       })

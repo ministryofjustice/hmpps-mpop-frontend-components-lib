@@ -5,14 +5,24 @@ MPoP front-end library
 
 This package is published to npm using GitHub Releases and npm Trusted Publishing.
 
+You can view the npm page for this package here https://www.npmjs.com/package/@ministryofjustice/hmpps-mpop-frontend-components-lib
+
+### Pre-requisites
+
+- Ensure GitHub CLI (gh) is installed and authenticated
+
+   ```bash
+   gh auth status || gh auth login
+   ```
+
 ### Release process
 
-1. Create a branch from the latest `main` and update the package version:
+1. Create a unique branch name from the latest `main` and update the package version, such as:
 
    ```bash
    git checkout main
    git pull
-   git checkout -b chore/bump-package-version
+   git checkout -b chore/bump-package-version-<version>
 
    npm version patch --no-git-tag-version
    ```
@@ -40,8 +50,6 @@ This package is published to npm using GitHub Releases and npm Trusted Publishin
    git pull
 
    VERSION=$(node -p "require('./package.json').version")
-
-   // Add a step to say github cli needs to be installed and you need to login to the github cli
 
    gh release create "v$VERSION" \
      --target main \

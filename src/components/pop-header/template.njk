@@ -1,0 +1,18 @@
+<div class='pop-header__details'>
+    <div>
+        <ul class='govuk-list govuk-caption-m inline-list-from-tablet'>
+            <li>CRN:
+                <span data-qa='crn'>{{ params.crn }}</span>
+                <span class='govuk-!-padding-left-3 govuk-!-padding-right-3 hide-mobile'>|</span>
+            </li>
+            <li>Date of birth:
+                <span data-qa='headerDateOfBirthValue'>{{ params.dob }}</span>
+                {% if params.age %}(<span data-qa='headerDateOfBirthAge'>{{ params.age }} years old</span>){% endif %}
+                <span class='govuk-!-padding-left-3 govuk-!-padding-right-3 hide-mobile'>|</span>
+            </li>
+            <li>Tier:{{' '}}
+                <a href='{{ params.historyHref }}' data-qa='tierLink' class='govuk-link'>{{ params.tierScore }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

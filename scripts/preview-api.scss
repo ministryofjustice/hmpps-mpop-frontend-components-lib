@@ -1,0 +1,41 @@
+.supervision-package {
+  border-top: 5px solid #1d70b8;
+  border-left: 1px solid #cecece;
+  border-right: 1px solid #cecece;
+  border-bottom: 1px solid #cecece;
+  padding: 20px 20px 0;
+  margin-bottom: 30px;
+}
+
+.app-tier-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.preview-panel {
+  display: none;
+}
+
+.preview-panel.active {
+  display: block;
+}
+
+.govuk-flex {
+  display: flex;
+}
+
+.inline-list-from-tablet>li {
+  display: inline;
+}
+
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .hide-mobile {
+    display: inline;
+  }
+}

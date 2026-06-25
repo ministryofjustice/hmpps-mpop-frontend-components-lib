@@ -1,14 +1,21 @@
-/* eslint-disable no-console */
 import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
+import sass from 'sass'
+import { yearsSince } from '../src/utils/yearsSince'
+
+const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
 })
 
+const previewAge = yearsSince('1990-01-15')
+
 const html = env.renderString(
   `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
+{% from "pop-header/macro.njk" import popHeader %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -21,33 +28,28 @@ const html = env.renderString(
     href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
   >
 
-  <style>
-    body {
-      margin: 0;
-    }
-
-    .supervision-package {
-      border-top: 5px solid #1d70b8;
-      border-left: 1px solid #cecece;
-      border-right: 1px solid #cecece;
-      border-bottom: 1px solid #cecece;
-      padding: 20px 20px 0;
-      margin-bottom: 30px;
-    }
-
-    .app-tier-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-  </style>
+  <style>${previewCss}</style>
 </head>
 
 <body class="govuk-template__body">
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">PoP Header</h1>
+
+      {{ popHeader({
+        crn: "X123456",
+        dob: "1990-01-15",
+        age: previewAge,
+        tierScore: "B2",
+        historyHref: "#"
+      }) }}
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">Supervision Package</h1>
+
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
@@ -81,16 +83,13 @@ const html = env.renderString(
         historyHref: "#",
         historyText: "View tier change history"
       }) }}
-
     </div>
   </main>
 </body>
 </html>
 `,
-  {},
+  { previewAge },
 )
 
 fs.mkdirSync('preview', { recursive: true })
 fs.writeFileSync('preview/index.html', html)
-
-console.log('Preview written to preview/index.html')

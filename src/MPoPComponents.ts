@@ -6,6 +6,8 @@ import type Logger from 'bunyan'
 import type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
 import type { LatestTierApiResponse, LatestTierResponse, TierTag } from './types/TierCalculation'
 import { SuppressingRestClient } from './SuppressingRestClient'
+import type { PersonalDetailsSummary, PersonalDetailsResponse } from './types/PersonalDetails'
+import { yearsSince } from './utils/yearsSince'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -17,6 +19,8 @@ export const tierTags: Record<string, TierTag> = {
 export default class MPoPComponents {
   private readonly tierApiRestClient: SuppressingRestClient
 
+  private readonly masApiRestClient: SuppressingRestClient
+
   constructor(
     authenticationClient: AuthenticationClient,
     config: MPoPComponentsConfig,
@@ -24,6 +28,11 @@ export default class MPoPComponents {
   ) {
     this.tierApiRestClient = new SuppressingRestClient(
       new RestClient('Tier API', config, logger, authenticationClient),
+      logger,
+    )
+
+    this.masApiRestClient = new SuppressingRestClient(
+      new RestClient('MAS API', config.masApiConfig ?? config, logger, authenticationClient),
       logger,
     )
   }
@@ -34,7 +43,6 @@ export default class MPoPComponents {
 
     try {
       const calculation = await this.tierApiRestClient.get<LatestTierApiResponse>(`/v3/crn/${crn}/tier`, authOptions)
-
       if (!calculation) {
         tierDetails = {
           calculation: {
@@ -81,6 +89,42 @@ export default class MPoPComponents {
 
     return {
       ...tierDetails,
+      error,
+    }
+  }
+
+  async getPersonalDetails(authOptions: AuthOptions | string, crn: string): Promise<PersonalDetailsResponse> {
+    let error: Error | null = null
+    let personalDetails: PersonalDetailsResponse
+
+    try {
+      const response = await this.masApiRestClient.get<PersonalDetailsSummary>(
+        `/personal-details/${crn}/summary`,
+        authOptions,
+      )
+      if (!response) {
+        personalDetails = {
+          personalDetails: null,
+          httpStatus: 404,
+        }
+      } else {
+        personalDetails = {
+          personalDetails: { ...response, age: yearsSince(response.dateOfBirth) },
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+
+      personalDetails = {
+        personalDetails: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...personalDetails,
       error,
     }
   }
