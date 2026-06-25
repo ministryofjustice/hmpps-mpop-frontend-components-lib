@@ -1,6 +1,10 @@
 import fs from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
+import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
+
+const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
@@ -24,32 +28,7 @@ const html = env.renderString(
     href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
   >
 
-  <style>
-    body {
-      margin: 0;
-    }
-
-    .supervision-package {
-      border-top: 5px solid #1d70b8;
-      border-left: 1px solid #cecece;
-      border-right: 1px solid #cecece;
-      border-bottom: 1px solid #cecece;
-      padding: 20px 20px 0;
-      margin-bottom: 30px;
-    }
-
-    .app-tier-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .govuk-flex { display: flex; }
-    .inline-list-from-tablet > li { display: inline; }
-    .hide-mobile { display: none; }
-    @media (min-width: 641px) { .hide-mobile { display: inline; } }
-  </style>
+  <style>${previewCss}</style>
 </head>
 
 <body class="govuk-template__body">
@@ -58,7 +37,7 @@ const html = env.renderString(
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">Pop Header</h1>
+      <h1 class="govuk-heading-l">PoP Header</h1>
 
       {{ popHeader({
         crn: "X123456",

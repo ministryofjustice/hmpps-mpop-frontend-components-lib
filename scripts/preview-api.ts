@@ -1,13 +1,17 @@
 /* eslint-disable no-console */
 import fs from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'dotenv/config'
+import sass from 'sass'
 
 import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 import MPoPComponents from '../src/MPoPComponents'
+
+const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
@@ -117,31 +121,7 @@ async function main() {
     href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
   >
 
-  <style>
-    .supervision-package {
-      border-top: 5px solid #1d70b8;
-      border-left: 1px solid #cecece;
-      border-right: 1px solid #cecece;
-      border-bottom: 1px solid #cecece;
-      padding: 20px 20px 0;
-      margin-bottom: 30px;
-    }
-
-    .app-tier-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .preview-panel { display: none; }
-    .preview-panel.active { display: block; }
-
-    .govuk-flex { display: flex; }
-    .inline-list-from-tablet > li { display: inline; }
-    .hide-mobile { display: none; }
-    @media (min-width: 641px) { .hide-mobile { display: inline; } }
-  </style>
+  <style>${previewApiCss}</style>
 </head>
 
 <body class="govuk-template__body">
