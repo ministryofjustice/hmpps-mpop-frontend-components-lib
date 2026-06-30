@@ -81,14 +81,20 @@ async function main() {
     console,
   )
 
-  const result = await mpopComponents.getTierDetails(authToken, crn)
-  const { changeReason, tierScore, tag } = result.calculation
+  const tierDetails = await mpopComponents.getTierDetails(authToken, crn)
+  const { changeReason, tierScore, tag } = tierDetails.calculation
   const personalDetails = await mpopComponents.getPersonalDetails(authToken, crn)
+  const supervisionPackageResult = await mpopComponents.getSupervisionPackage(authToken, crn)
+  const { phase } = supervisionPackageResult.supervisionPackageResponse
+  
 
-  console.info(result)
+
+  console.info(tierDetails)
   console.info(personalDetails)
+  console.info(supervisionPackageResult)
 
   const supervisionPackageParams = {
+    heading: phase?.name?.description,
     tierScore,
     tag,
     changeReason,

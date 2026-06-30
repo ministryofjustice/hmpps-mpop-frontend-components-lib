@@ -6,7 +6,7 @@ import type Logger from 'bunyan'
 import type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
 import type { LatestTierApiResponse, LatestTierResponse, TierTag } from './types/TierCalculation'
 import { SuppressingRestClient } from './SuppressingRestClient'
-import type { PersonalDetailsSummary, PersonalDetailsResponse } from './types/PersonalDetails'
+import type { PersonalDetailsSummary, PersonalDetailsResponse, SupervisionPackageResponse, SupervisionPackage } from './types/PersonalDetails'
 import { yearsSince } from './utils/yearsSince'
 
 export const tierTags: Record<string, TierTag> = {
@@ -125,6 +125,43 @@ export default class MPoPComponents {
 
     return {
       ...personalDetails,
+      error,
+    }
+  }
+
+  async getSupervisionPackage(authOptions: AuthOptions | string, crn: string): Promise<SupervisionPackage> {
+    let error: Error | null = null
+    let supervisionPackage: SupervisionPackage
+
+    try {
+      const response = await this.masApiRestClient.get<SupervisionPackageResponse>(
+        `/supervision-package/${crn}`,
+        authOptions,
+      )
+      if (!response) {
+        supervisionPackage = {
+          supervisionPackageResponse: null,
+          httpStatus: 404,
+        }
+      } else {
+        supervisionPackage = {
+          supervisionPackageResponse: { ...response },
+
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+
+      supervisionPackage = {
+        supervisionPackageResponse: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...supervisionPackage,
       error,
     }
   }

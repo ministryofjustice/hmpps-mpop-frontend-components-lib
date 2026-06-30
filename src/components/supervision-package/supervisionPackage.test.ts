@@ -43,6 +43,26 @@ describe('supervision-package', () => {
     }
   })
 
+  it('renders the progress bar width based on completed vs total appointments', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: tierTags.none,
+      historyHref: '#',
+      supervisionPackageResponse: {
+        phase: {
+          name: { code: 'EE', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-12-31',
+          appointments: { allowance: 10, scheduled: 7, completed: 5 },
+        },
+      },
+    })
+
+    const bar = document.querySelector('.appointment-progress__bar') as HTMLElement
+    expect(bar).not.toBeNull()
+    expect(bar.style.width).toBe('50%')
+  })
+
   it('hides the tier score when tierScore is MISSING', () => {
     const document = renderComponent({ tierScore: 'MISSING', tag: tierTags.missing, historyHref: '#' })
 

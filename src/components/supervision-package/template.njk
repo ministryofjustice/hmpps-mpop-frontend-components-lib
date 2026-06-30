@@ -1,16 +1,21 @@
 <div class='govuk-width-container supervision-package'>
-    <h2 class='govuk-heading-m'>{{ params.heading or 'Supervision package' }}</h2>
+    <h2 class='govuk-heading-m'>{{ 'Supervision package: ' + params.heading if params.heading else 'Supervision package' }}</h2>
     <div class='govuk-grid-row'>
-        <div class='govuk-grid-column-two-thirds'>
+        <div class='govuk-grid-column-one-half'>
             <div class='app-tier-header'>
                 <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
-                    Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
+                    Tier
+                    {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
                 </h3>
 
                 {% if params.tag.text and params.tag.color %}
                     <strong class='govuk-tag govuk-tag--{{ params.tag.color }}'>{{ params.tag.text }}</strong>
                 {% endif %}
             </div>
+
+            {% if params.createdOn %}
+                <p class='govuk-body'>The supervision package was created on {{ params.createdOn }}.</p>
+            {% endif %}
 
             {% if params.tag.text == 'Provisional' %}
                 <p class='govuk-body'>
@@ -31,6 +36,45 @@
                     </a>
                 </p>
             {% endif %}
+
+            {% if params.nextAppointment %}
+                <h3 class='govuk-heading-s'>Next appointment</h3>
+                <p class='govuk-body'>
+                    <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment }}</a>
+                </p>
+            {% endif %}
         </div>
+
+        <div class='govuk-grid-column-one-half'>
+            <h3 class='govuk-heading-s' >{{ params.supervisionPhase if params.supervisionPhase else 'Supervision stage'}} stage</h3>
+            {% if params.supervisionPhase == 'Early engagement' %}
+                {% include 'supervision-package/partials/_supervision-stage.njk'  %}
+            {% endif %}
+
+            {% include 'supervision-package/partials/_progress-bar.njk' %}
+
+            <div class='govuk-grid-row govuk-!-margin-top-4'>
+                <div class='govuk-grid-column-one-third'>
+                    <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>5</p>
+                </div>
+                <div class='govuk-grid-column-one-third'>
+                    <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>3</p>
+                </div>
+                <div class='govuk-grid-column-one-third'>
+                    <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>2</p>
+                </div>
+            </div>
+            <p class='govuk-body'>
+                <a class='govuk-link govuk-link--no-visited-state' href='#'>View all appointments</a>
+            </p>
+        </div>
+    </div>
+
+    <div class='govuk-button-group'>
+        <a draggable='false' href='#' role='button' data-module='govuk-button' class='govuk-button' >Arrange an appointment</a>
+        <a draggable='false' href='#' role='button' data-module='govuk-button' class='govuk-button govuk-button--secondary' >Update NDelius risk flag</a>
     </div>
 </div>

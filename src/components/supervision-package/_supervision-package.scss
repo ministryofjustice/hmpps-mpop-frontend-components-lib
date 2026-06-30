@@ -20,3 +20,89 @@ $supervision-package-accent-colour: govuk-colour("blue");
   gap: govuk-spacing(2);
   margin-bottom: govuk-spacing(3);
 }
+
+.appointment-progress__segment {
+  flex: 1;
+  background-color: govuk-colour("light-grey");
+}
+
+.appointment-progress__segment--completed {
+  background-color: $supervision-package-accent-colour;
+}
+
+// appointment guidance card
+// Base card
+.app-guidance-card {
+  padding: govuk-spacing(3);
+
+  border: 5px solid govuk-tint(govuk-colour("black"), 25%);
+  background: govuk-colour("white");
+}
+
+.app-guidance-card__label {
+  @include govuk-font($size: 24, $weight: bold);
+
+  display: inline-block;
+  padding: govuk-spacing(1) govuk-spacing(2);
+
+  background-color: govuk-tint(govuk-colour("black"), 80%);
+  color: govuk-colour("black");
+}
+
+.app-guidance-card__heading {
+  @include govuk-font($size: 36, $weight: bold);
+
+  margin: govuk-spacing(4) 0 govuk-spacing(3);
+}
+
+.app-guidance-card__body {
+  @include govuk-font($size: 19);
+
+  margin: 0;
+  padding-bottom: govuk-spacing(3);
+  color: govuk-colour("dark-grey");
+}
+
+@mixin guidance-card-variant($colour) {
+  border-color: govuk-colour($colour);
+
+  .app-guidance-card__label {
+    background-color: govuk-tint(govuk-colour($colour), 80%);
+    color: govuk-shade(govuk-colour($colour), 50%);
+  }
+}
+
+.app-guidance-card--red {
+  @include guidance-card-variant("red");
+}
+
+.app-guidance-card--orange {
+  @include guidance-card-variant("orange");
+}
+
+.app-guidance-card--purple {
+  @include guidance-card-variant("purple");
+}
+
+.app-guidance-card--yellow {
+  @include guidance-card-variant("yellow");
+}
+
+.appointment-progress {
+  background-color: govuk-tint(govuk-colour("turquoise"), 80%);
+  border-radius: 20px;
+  height: 19px;
+  margin-bottom: govuk-spacing(3);
+  overflow: hidden;
+  width: 100%;
+}
+
+.appointment-progress__bar {
+  background-color: govuk-colour("turquoise");
+  height: 100%;
+}
+
+.appointment-progress__bar-maximum {
+  background-color: govuk-colour("red");
+  height: 100%;
+}

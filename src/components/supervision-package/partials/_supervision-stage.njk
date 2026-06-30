@@ -1,0 +1,17 @@
+<p class='govuk-body'>{{ params.popName }} has {{ params.appointmentsRemaining }} supervision appointments remaining
+    until the supervision stage ends on {{ params.supervisionPhaseEndDate }}.
+</p>
+
+<p class='govuk-body'>Early engagement is expected to end on [DAY MONTH YEAR] if Charlie attends the required
+    appointments by then.
+</p>
+
+{% if params.finalThirdStartDate %}
+    <p class='govuk-body'>{{ params.popName }} is eligible to start the final third stage on
+        {{ params.finalThirdStartDate }}
+    </p>
+{% endif %}
+
+<p class='govuk-body'>
+    {{ params.appointmentsAttended }} of {{ params.appoitmentsTotal }} used
+</p>

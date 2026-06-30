@@ -1,3 +1,6 @@
+@import "node_modules/govuk-frontend/dist/govuk/_base.import";
+@import "src/assets/scss/all";
+
 body {
   margin: 0;
 }
@@ -17,6 +20,9 @@ body {
   gap: 10px;
   margin-bottom: 15px;
 }
+
+
+
 
 .govuk-flex {
   display: flex;

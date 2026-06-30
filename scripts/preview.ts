@@ -4,7 +4,9 @@ import nunjucks from 'nunjucks'
 import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
 
-const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url))).css
+const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
+  loadPaths: [fileURLToPath(new URL('..', import.meta.url))],
+}).css
 
 const env = nunjucks.configure(['src/components'], {
   autoescape: true,
@@ -43,7 +45,7 @@ const html = env.renderString(
         crn: "X123456",
         dob: "1990-01-15",
         age: previewAge,
-        tierScore: "B2",
+        tierScore: "C",
         historyHref: "#"
       }) }}
 
@@ -54,14 +56,29 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
       {{ supervisionPackage({
+        heading: "type sentence",
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
-        historyHref: "#"
+        historyHref: "#",
+        createdOn: "1 January 2026",
+        nextAppointment: "Planned office visit (NS): Friday 30 June 2026 at 5pm",
+        nextAppointmentHref: "#",
+        supervisionPhase: "Early engagement",
+        popName: "Stuart",
+        supervisionPackageResponse: {
+          phase: {
+            name: { code: "EE", description: "Early Engagement" },
+            startDate: "2026-01-01",
+            endDate: "2026-06-30",
+            appointments: { allowance: 8, scheduled: 6, completed: 5 }
+          }
+        }
       }) }}
 
       <h2 class="govuk-heading-m">Missing tier</h2>
       <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
       {{ supervisionPackage({
+        heading: "type sentence",
         tierScore: "",
         tag: { text: "Missing", color: "red" },
         historyHref: "#"
@@ -70,6 +87,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Unavailable tier</h2>
       <p class="govuk-body">The tier could not be retrieved (for example the Tier API errored), so it is shown with a grey "Unavailable" tag.</p>
       {{ supervisionPackage({
+        heading: "type sentence",
         tierScore: "",
         tag: { text: "Unavailable", color: "grey" },
         historyHref: "#"
@@ -78,6 +96,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
       <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
       {{ supervisionPackage({
+        heading: "type sentence",
         tierScore: "A",
         tag: { text: null, color: null },
         historyHref: "#",
