@@ -2,7 +2,7 @@ import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { yearsSince } from '../../utils/yearsSince'
 
-const env = nunjucks.configure(['src/components'], { autoescape: true })
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(

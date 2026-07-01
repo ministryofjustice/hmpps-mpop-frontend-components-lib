@@ -23,7 +23,7 @@ export type SupervisionPackageResponse = {
     name: {
       code: string
       description: string
-    },
+    }
     startDate: string
     endDate: string
     appointments: {
@@ -34,47 +34,47 @@ export type SupervisionPackageResponse = {
   }
   inputs: {
     date: string
-    gender: string,
-    opd: boolean,
-    iomRedRated: boolean,
-    intensiveSupervisionCourt: boolean,
-    nationalSecurityDivision: boolean,
-    finalThirdEligible: boolean,
+    gender: string
+    opd: boolean
+    iomRedRated: boolean
+    intensiveSupervisionCourt: boolean
+    nationalSecurityDivision: boolean
+    finalThirdEligible: boolean
     finalThirdDate: string
-    contactSuspendedDate: string,
+    contactSuspendedDate: string
     sentences: Array<Sentence>
   }
 }
 
 type Sentence = {
-  eventNumber: number,
-  startDate: string,
-  endDate: string,
-  inBreach: boolean,
+  eventNumber: number
+  startDate: string
+  endDate: string
+  inBreach: boolean
   supervisionPackage: {
-    code: string,
+    code: string
     description: string
-  },
+  }
   type: {
     description: string
     isCustodial: boolean
-  },
+  }
   custody: {
     status: {
-      code: string,
+      code: string
       description: string
-    },
+    }
     releases: Array<Release>
   }
 }
 
 type Release = {
-  releaseDate: string,
+  releaseDate: string
   recallDate: string
 }
 
 export type SupervisionPackage = {
-  supervisionPackageResponse: SupervisionPackageResponse,
-  httpStatus: number,
+  supervisionPackageResponse: SupervisionPackageResponse | null
+  httpStatus: number
   error?: Error | null
 }

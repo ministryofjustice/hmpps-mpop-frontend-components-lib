@@ -1,4 +1,6 @@
-$supervision-package-border-colour: govuk-colour("mid-grey");
+@use "govuk-frontend/dist/govuk/base" as *;
+
+$supervision-package-border-colour: govuk-colour("black", $variant: "tint-80");
 $supervision-package-accent-colour: govuk-colour("blue");
 
 .supervision-package {
@@ -23,7 +25,7 @@ $supervision-package-accent-colour: govuk-colour("blue");
 
 .appointment-progress__segment {
   flex: 1;
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
 }
 
 .appointment-progress__segment--completed {
@@ -60,7 +62,7 @@ $supervision-package-accent-colour: govuk-colour("blue");
 
   margin: 0;
   padding-bottom: govuk-spacing(3);
-  color: govuk-colour("dark-grey");
+  color: govuk-colour("black", $variant: "tint-25");
 }
 
 @mixin guidance-card-variant($colour) {
@@ -88,17 +90,17 @@ $supervision-package-accent-colour: govuk-colour("blue");
   @include guidance-card-variant("yellow");
 }
 
+
 .appointment-progress {
-  background-color: govuk-tint(govuk-colour("turquoise"), 80%);
+  background-color: govuk-colour("teal", $variant: "tint-80");
   border-radius: 20px;
   height: 19px;
-  margin-bottom: govuk-spacing(3);
   overflow: hidden;
   width: 100%;
 }
 
 .appointment-progress__bar {
-  background-color: govuk-colour("turquoise");
+  background-color: govuk-colour("teal", $variant: "tint-25");
   height: 100%;
 }
 

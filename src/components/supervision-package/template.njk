@@ -1,11 +1,13 @@
+{% from 'govuk/components/button/macro.njk' import govukButton %}
+
+
 <div class='govuk-width-container supervision-package'>
     <h2 class='govuk-heading-m'>{{ 'Supervision package: ' + params.heading if params.heading else 'Supervision package' }}</h2>
     <div class='govuk-grid-row'>
         <div class='govuk-grid-column-one-half'>
             <div class='app-tier-header'>
                 <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
-                    Tier
-                    {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
+                    Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
                 </h3>
 
                 {% if params.tag.text and params.tag.color %}
@@ -46,12 +48,16 @@
         </div>
 
         <div class='govuk-grid-column-one-half'>
-            <h3 class='govuk-heading-s' >{{ params.supervisionPhase if params.supervisionPhase else 'Supervision stage'}} stage</h3>
-            {% if params.supervisionPhase == 'Early engagement' %}
-                {% include 'supervision-package/partials/_supervision-stage.njk'  %}
+            <h3 class='govuk-heading-s' >{{ params.supervisionPhase }} stage</h3>
+            {% if params.supervisionPhase == 'Supervision engagement' %}
+                {% include './partials/_supervision-stage.njk'  %}
+            {% elseif params.supervisionPhase == 'Early engagement'%}
+                {% include './partials/_early-engagement-stage.njk' %}
+            {% elseif params.supervisionPhase == 'Final third' %}
+                {% include './partials/_final-third-stage.njk' %}
             {% endif %}
 
-            {% include 'supervision-package/partials/_progress-bar.njk' %}
+            {% include './partials/_progress-bar.njk' %}
 
             <div class='govuk-grid-row govuk-!-margin-top-4'>
                 <div class='govuk-grid-column-one-third'>
@@ -67,14 +73,29 @@
                     <p class='govuk-body-l govuk-!-font-weight-bold'>2</p>
                 </div>
             </div>
+
+
+
             <p class='govuk-body'>
-                <a class='govuk-link govuk-link--no-visited-state' href='#'>View all appointments</a>
+                {% if params.supervisionPhase == 'Final Third '%}
+                    <a href='#' class='govuk-link govuk-link--no-visited-state'>{{ 'View final third contact' if params.supervisionPhase == 'Supervision engagement'}}View final third contact</a>
+                {% else %}
+                    <a class='govuk-link govuk-link--no-visited-state' href='#'>View all appointments</a>
+                {% endif %}
             </p>
         </div>
     </div>
 
     <div class='govuk-button-group'>
-        <a draggable='false' href='#' role='button' data-module='govuk-button' class='govuk-button' >Arrange an appointment</a>
-        <a draggable='false' href='#' role='button' data-module='govuk-button' class='govuk-button govuk-button--secondary' >Update NDelius risk flag</a>
+        {{ govukButton({
+            text: 'Arrange an appointment',
+            href: '#'
+        }) }}
+
+        {{ govukButton({
+            text: 'Update NDelius risk flag',
+            classes: 'govuk-button--secondary',
+            href: '#'
+        }) }}
     </div>
 </div>

@@ -5,10 +5,13 @@ import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
-  loadPaths: [fileURLToPath(new URL('..', import.meta.url))],
+  loadPaths: [
+    fileURLToPath(new URL('..', import.meta.url)),
+    fileURLToPath(new URL('../node_modules', import.meta.url)),
+  ],
 }).css
 
-const env = nunjucks.configure(['src/components'], {
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
 

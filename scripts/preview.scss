@@ -1,5 +1,4 @@
-@import "node_modules/govuk-frontend/dist/govuk/_base.import";
-@import "src/assets/scss/all";
+@use "src/assets/scss/all";
 
 body {
   margin: 0;

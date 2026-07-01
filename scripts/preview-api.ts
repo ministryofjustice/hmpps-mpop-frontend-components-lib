@@ -13,7 +13,7 @@ import MPoPComponents from '../src/MPoPComponents'
 
 const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
-const env = nunjucks.configure(['src/components'], {
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
 
@@ -86,8 +86,6 @@ async function main() {
   const personalDetails = await mpopComponents.getPersonalDetails(authToken, crn)
   const supervisionPackageResult = await mpopComponents.getSupervisionPackage(authToken, crn)
   const { phase } = supervisionPackageResult.supervisionPackageResponse
-  
-
 
   console.info(tierDetails)
   console.info(personalDetails)

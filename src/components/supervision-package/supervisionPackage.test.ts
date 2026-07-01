@@ -2,7 +2,7 @@ import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { tierTags } from '../../MPoPComponents'
 
-const env = nunjucks.configure(['src/components'], { autoescape: true })
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
