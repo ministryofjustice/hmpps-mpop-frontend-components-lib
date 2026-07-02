@@ -75,6 +75,13 @@
                 </div>
             </div>
 
+            {% if params.iomRedRated %}
+                <p class='govuk-body'></p>
+            {% endif %}
+            {% if params.gender and params.tier == 'C' or 'D' or 'E' or 'F' or 'G' %}
+                <p class='govuk-body'>Additional appointment</p>
+            {% endif %}
+
             <p class='govuk-body'>
                 {% if params.supervisionPhase == 'Final Third '%}
                     <a href='#' class='govuk-link govuk-link--no-visited-state'>{{ 'View final third contact' if params.supervisionPhase == 'Supervision engagement'}}View final third contact</a>

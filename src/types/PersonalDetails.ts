@@ -51,7 +51,7 @@ type Sentence = {
   startDate: string
   endDate: string
   inBreach: boolean
-  supervisionPackage: {
+  supervisionPackage?: {
     code: string
     description: string
   }
