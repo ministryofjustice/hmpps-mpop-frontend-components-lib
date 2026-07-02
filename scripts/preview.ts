@@ -71,13 +71,12 @@ const html = env.renderString(
         nextAppointmentHref: "#",
         supervisionPhase: "Early engagement",
         popName: "Stuart",
-        supervisionPackageResponse: {
-          phase: {
-            name: { code: "EE", description: "Early Engagement" },
-            startDate: "2026-01-01",
-            endDate: "2026-06-30",
-            appointments: { allowance: 8, scheduled: 6, completed: 5 }
-          }
+        appointments: { allowance: 4, scheduled: 6, completed: 3 },
+        phase: {
+          startDate: "1 January 2025",
+          endDate: "1 January 2026",
+          phaseName: "Early engagement",
+          earlyEngagementWeeks: 8
         }
       }) }}
 

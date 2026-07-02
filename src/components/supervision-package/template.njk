@@ -47,13 +47,15 @@
         </div>
 
         <div class='govuk-grid-column-one-half'>
-            <h3 class='govuk-heading-s' >{{ params.phaseName }} stage</h3>
-            {% if params.phaseName == 'Early engagement'%}
+            <h3 class='govuk-heading-s' >{{ params.phase.phaseName }} stage</h3>
+            {% if params.phase.phaseName == 'Early engagement'%}
                 {% include './partials/_early-engagement-stage.njk' %}
-            {% elseif params.phaseName == 'Supervision engagement' %}
+            {% elseif params.phase.phaseName == 'Supervision engagement' %}
                 {% include './partials/_supervision-stage.njk'  %}
-            {% elseif params.phaseName == 'Final third' %}
+            {% elseif params.phase.phaseName == 'Final third' %}
                 {% include './partials/_final-third-stage.njk' %}
+            {% else %}
+                <p class='govuk-body'>{{ params.popName }} has {{params.appointments.allowance - params.appointments.completed}} supervision appointments remaining until the {{ params.phase.phaseName }} ends on the {{ params.phase.endDate }}</p>
             {% endif %}
 
             {% include './partials/_progress-bar.njk' %}
@@ -61,19 +63,17 @@
             <div class='govuk-grid-row govuk-!-margin-top-4'>
                 <div class='govuk-grid-column-one-third'>
                     <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>5</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.allowance}}</p>
                 </div>
                 <div class='govuk-grid-column-one-third'>
                     <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>3</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.allowance - params.appointments.completed}}</p>
                 </div>
                 <div class='govuk-grid-column-one-third'>
                     <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>2</p>
+                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.scheduled}}</p>
                 </div>
             </div>
-
-
 
             <p class='govuk-body'>
                 {% if params.supervisionPhase == 'Final Third '%}

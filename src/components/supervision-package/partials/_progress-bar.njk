@@ -1,7 +1,7 @@
-{% set appointments = params.supervisionPackageResponse.phase.appointments %}
+{% set appointments = params.appointments %}
 {% if appointments and appointments.allowance %}
     {% set widthPercent = (appointments.completed / appointments.allowance * 100) | round %}
     <div class="appointment-progress" aria-hidden="true">
-        <div class="appointment-progress__bar" style="width: {{ widthPercent }}%;"></div>
+        <div class="{{ 'appointment-progress__bar-maximum' if widthPercent === 100 else 'appointment-progress__bar' }}" style="width: {{ widthPercent }}%;"></div>
     </div>
 {% endif %}

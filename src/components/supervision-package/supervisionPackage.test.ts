@@ -51,14 +51,7 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: tierTags.none,
       historyHref: '#',
-      supervisionPackageResponse: {
-        phase: {
-          name: { code: 'EE', description: 'Early Engagement' },
-          startDate: '2026-01-01',
-          endDate: '2026-12-31',
-          appointments: { allowance: 10, scheduled: 7, completed: 5 },
-        },
-      },
+      appointments: { allowance: 10, scheduled: 7, completed: 5 },
     })
 
     const bar = document.querySelector('.appointment-progress__bar') as HTMLElement
