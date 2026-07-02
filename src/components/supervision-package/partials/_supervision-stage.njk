@@ -1,6 +1,9 @@
+
+{% set phaseLengthMonths = gestPackageLength(params.supervisionPackageResponse.phase.startDate, params.supervisionPackageResponse.phase.endDate) %}
 <p class='govuk-body'>{{ params.popName }} has {{ params.appointmentsRemaining }} supervision appointments remaining
-    until the supervision stage ends on {{ params.supervisionPhaseEndDate }}.
+    until the supervision stage {{ 'ends' if phaseLengthMonths <= 12 else 'resets' }} on {{ params.supervisionPhaseEndDate }}.
 </p>
+
 {% if params.finalThirdStartDate %}
     <p class='govuk-body'>{{ params.popName }} is eligible to start the final third stage on
         {{ params.finalThirdStartDate }}

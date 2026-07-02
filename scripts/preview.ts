@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
 import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
+import { gestPackageLength } from '../src/utils/getPackageLength'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
   loadPaths: [
@@ -14,6 +15,8 @@ const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.m
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
+
+env.addGlobal('gestPackageLength', gestPackageLength)
 
 const previewAge = yearsSince('1990-01-15')
 

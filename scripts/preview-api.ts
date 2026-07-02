@@ -10,12 +10,15 @@ import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 import MPoPComponents from '../src/MPoPComponents'
+import { gestPackageLength } from '../src/utils/getPackageLength'
 
 const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
+
+env.addGlobal('gestPackageLength', gestPackageLength)
 
 const environment = process.env.ENVIRONMENT ?? 'dev'
 

@@ -1,6 +1,5 @@
 {% from 'govuk/components/button/macro.njk' import govukButton %}
 
-
 <div class='govuk-width-container supervision-package'>
     <h2 class='govuk-heading-m'>{{ 'Supervision package: ' + params.heading if params.heading else 'Supervision package' }}</h2>
     <div class='govuk-grid-row'>
@@ -48,12 +47,12 @@
         </div>
 
         <div class='govuk-grid-column-one-half'>
-            <h3 class='govuk-heading-s' >{{ params.supervisionPhase }} stage</h3>
-            {% if params.supervisionPhase == 'Supervision engagement' %}
-                {% include './partials/_supervision-stage.njk'  %}
-            {% elseif params.supervisionPhase == 'Early engagement'%}
+            <h3 class='govuk-heading-s' >{{ params.phaseName }} stage</h3>
+            {% if params.phaseName == 'Early engagement'%}
                 {% include './partials/_early-engagement-stage.njk' %}
-            {% elseif params.supervisionPhase == 'Final third' %}
+            {% elseif params.phaseName == 'Supervision engagement' %}
+                {% include './partials/_supervision-stage.njk'  %}
+            {% elseif params.phaseName == 'Final third' %}
                 {% include './partials/_final-third-stage.njk' %}
             {% endif %}
 

@@ -1,4 +1,3 @@
-<p class='govuk-body'>You should see Stuart every week for the first 8 weeks of the sentence.</p>
-<p class='govuk-body'>Early engagement is expected to end on 17 August 2026 if Stuart attends the required appointments
-    by then.</p>
-<p class='govuk-body'>Stuart will then have a maximum of 22 supervision appointments for the rest of this sentence year.</p>
+<p class='govuk-body'>You should see {{ params.forename }} every week for the first {{ params.earlyEngagementWeeks }} weeks of the sentence.</p>
+<p class='govuk-body'>Early engagement ends on {{ params.phase.endDate }} if {{ params.forename }} attends the required appointments by then.</p>
+<p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ params.appointments.allowance }} supervision appointments for the rest of this sentence year.</p>

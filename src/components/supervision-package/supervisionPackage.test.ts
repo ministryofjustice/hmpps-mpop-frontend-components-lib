@@ -1,8 +1,11 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { tierTags } from '../../MPoPComponents'
+import { gestPackageLength } from '../../utils/getPackageLength'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
+
+env.addGlobal('gestPackageLength', gestPackageLength)
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
