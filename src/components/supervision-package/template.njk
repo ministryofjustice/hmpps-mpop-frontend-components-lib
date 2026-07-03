@@ -55,7 +55,7 @@
             {% elseif params.phase.phaseName == 'Final third' %}
                 {% include './partials/_final-third-stage.njk' %}
             {% else %}
-                <p class='govuk-body'>{{ params.popName }} has {{params.appointments.allowance - params.appointments.completed}} supervision appointments remaining until the {{ params.phase.phaseName }} ends on the {{ params.phase.endDate }}</p>
+                <p class='govuk-body'>{{ params.firstName }} has {{params.appointments.allowance - params.appointments.completed}} supervision appointments remaining until the {{ params.phase.phaseName }} ends on the {{ params.phase.endDate }}</p>
             {% endif %}
 
             {% include './partials/_progress-bar.njk' %}
@@ -76,18 +76,14 @@
             </div>
 
             {% if params.iomRedRated %}
-                <p class='govuk-body'></p>
+                <p class='govuk-body'>{{ params.firstName }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
             {% endif %}
-            {% if params.gender and params.tier == 'C' or 'D' or 'E' or 'F' or 'G' %}
-                <p class='govuk-body'>Additional appointment</p>
+            {% if params.gender and params.tierScore == 'C' or 'D' or 'E' or 'F' or 'G' %}
+                <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.firstName }} can have up to 5 additional discretionary appointments.</p>
             {% endif %}
 
             <p class='govuk-body'>
-                {% if params.supervisionPhase == 'Final Third '%}
-                    <a href='#' class='govuk-link govuk-link--no-visited-state'>{{ 'View final third contact' if params.supervisionPhase == 'Supervision engagement'}}View final third contact</a>
-                {% else %}
-                    <a class='govuk-link govuk-link--no-visited-state' href='#'>View all appointments</a>
-                {% endif %}
+                <a class='govuk-link govuk-link--no-visited-state' href='{{ params.appointmentsHref }}'>View all appointments</a>
             </p>
         </div>
     </div>

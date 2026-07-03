@@ -1,10 +1,10 @@
-<p class='govuk-body'>You should see {{ params.popName }} every week for the first {{ params.phase.earlyEngagementWeeks }} weeks of the sentence.</p>
+<p class='govuk-body'>You should see {{ params.firstName }} every week for the first {{ params.phase.earlyEngagementWeeks }} weeks of the sentence.</p>
 <p class='govuk-body'>Early engagement ends on {{ params.phase.endDate }} if {{ params.forename }} attends the required appointments by then.</p>
 <p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ params.appointments.allowance }} supervision appointments for the rest of this sentence year.</p>
 {% if params.isCustody %}
     {% if params.finalThirdEligible %}
-        <p class='govuk-body'>{{ params.popName }} is eligible to start the final third stage on {{ params.finalThirdDate }}.</p>
+        <p class='govuk-body'>{{ params.firstName }} is eligible to start the final third stage on {{ params.finalThirdDate }}.</p>
     {% else %}
-        <p class='govuk-body'>{{ params.popName }} is not eligible for the final third stage.</p>
+        <p class='govuk-body'>{{ params.firstName }} is not eligible for the final third stage.</p>
     {% endif %}
 {% endif %}

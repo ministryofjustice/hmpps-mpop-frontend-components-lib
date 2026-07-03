@@ -20,6 +20,29 @@ body {
   margin-bottom: 15px;
 }
 
+.phase-preview__appointments {
+  margin-top: 15px;
+}
+
+.phase-preview__appointment-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.phase-preview__appointment {
+  display: flex;
+  flex-direction: column;
+
+  .govuk-label {
+    margin-bottom: 5px;
+  }
+
+  .govuk-input {
+    margin-bottom: 0;
+  }
+}
+
 
 
 
