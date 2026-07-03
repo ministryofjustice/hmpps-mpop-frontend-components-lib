@@ -19,17 +19,25 @@ export default [
       typescript({ tsconfig: './tsconfig.json', noEmitOnError: true }),
       copy({
         targets: [
-          { src: 'src/components/*/*.njk', dest: 'dist/mpop' },
-          { src: 'src/components/*/*.scss', dest: 'dist/mpop' },
+          {
+            src: 'src/components/**/*.njk',
+            dest: 'dist/mpop',
+            rename: (name, extension, fullPath) => fullPath.replace(/^src[/\\]components[/\\]/, ''),
+          },
+          {
+            src: 'src/components/**/*.scss',
+            dest: 'dist/mpop',
+            rename: (name, extension, fullPath) => fullPath.replace(/^src[/\\]components[/\\]/, ''),
+          },
         ],
-        flatten: false,
+        flatten: true,
       }),
       copy({
         targets: [
           {
             src: 'src/assets/scss/_all.scss',
             dest: 'dist',
-            transform: contents => contents.toString().replaceAll('../../components', './mpop/components'),
+            transform: contents => contents.toString().replaceAll('../../components/', './'),
           },
         ],
         flatten: true,

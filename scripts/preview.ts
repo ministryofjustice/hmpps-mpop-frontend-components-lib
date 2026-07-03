@@ -3,12 +3,17 @@ import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
 import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
+import { dateWithYear } from '../src/utils/dateWithYear'
 
-const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url))).css
+const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
+  loadPaths: [process.cwd(), 'node_modules'],
+}).css
 
-const env = nunjucks.configure(['src/components'], {
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
+
+env.addGlobal('dateWithYear', dateWithYear)
 
 const previewAge = yearsSince('1990-01-15')
 
@@ -43,13 +48,25 @@ const html = env.renderString(
         crn: "X123456",
         dob: "1990-01-15",
         age: previewAge,
-        tierScore: "B2",
+        tierScore: "C",
         historyHref: "#"
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l">Supervision Package</h1>
 
+      <h2 class="govuk-heading-m">Early engagement</h2>
+      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
+      {{ supervisionPackage({
+       tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        createdOn: dateWithYear('2026-01-01'),
+        phaseName: 'Early engagement',
+        arrangeAppointmentHref: '#',
+        updateRiskFlagHref: '#'
+      }) }}
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
