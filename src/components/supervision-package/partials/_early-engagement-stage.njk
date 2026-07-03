@@ -1,10 +1,31 @@
-<p class='govuk-body'>You should see {{ params.firstName }} every week for the first {{ params.phase.earlyEngagementWeeks }} weeks of the sentence.</p>
-<p class='govuk-body'>Early engagement ends on {{ params.phase.endDate }} if {{ params.forename }} attends the required appointments by then.</p>
-<p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ params.appointments.allowance }} supervision appointments for the rest of this sentence year.</p>
+<p class='govuk-body'>You should see {{ params.firstName }} every week for the first
+    {{ params.phase.earlyEngagementWeeks }} weeks of the sentence.</p>
+<p class='govuk-body'>Early engagement ends on {{ params.phase.endDate }} if
+    {{ params.forename }} attends the required appointments by then.</p>
+<p class='govuk-body'>{{ params.forename }} will then have a maximum of
+    {{ params.appointments.allowance }} supervision appointments for the rest of this sentence year.</p>
+
 {% if params.isCustody %}
     {% if params.finalThirdEligible %}
-        <p class='govuk-body'>{{ params.firstName }} is eligible to start the final third stage on {{ params.finalThirdDate }}.</p>
+        <p class='govuk-body'>{{ params.firstName }} is eligible to start the final third stage on
+            {{ params.finalThirdDate }}.</p>
     {% else %}
         <p class='govuk-body'>{{ params.firstName }} is not eligible for the final third stage.</p>
     {% endif %}
 {% endif %}
+
+{% include './_progress-bar.njk' %}
+
+{% if params.iomRedRated %}
+    <p class='govuk-body'>{{ params.firstName }} has an IOM red RAG status. The maximum number of appointments is the same
+        as tier A.</p>
+{% endif %}
+
+{% if params.gender and params.tierScore == 'C' or 'D' or 'E' or 'F' or 'G' %}
+    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.firstName }} can have up to 5 additional
+        discretionary appointments.</p>
+{% endif %}
+
+<p class='govuk-body'>
+    <a class='govuk-link govuk-link--no-visited-state' href='{{ params.appointmentsHref }}'>View all appointments</a>
+</p>

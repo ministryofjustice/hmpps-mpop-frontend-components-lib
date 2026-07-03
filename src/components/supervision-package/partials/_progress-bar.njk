@@ -4,4 +4,21 @@
     <div class="appointment-progress" aria-hidden="true">
         <div class="{{ 'appointment-progress__bar-maximum' if widthPercent === 100 else 'appointment-progress__bar' }}" style="width: {{ widthPercent }}%;"></div>
     </div>
+
+    <div class='govuk-grid-row govuk-!-margin-top-4'>
+        <div class='govuk-grid-column-one-third'>
+            <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
+            <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.appointments.allowance }}</p>
+        </div>
+
+        <div class='govuk-grid-column-one-third'>
+            <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
+            <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.appointments.allowance - params.appointments.completed }}</p>
+        </div>
+
+        <div class='govuk-grid-column-one-third'>
+            <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
+            <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.appointments.scheduled }}</p>
+        </div>
+    </div>
 {% endif %}

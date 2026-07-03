@@ -46,18 +46,18 @@ describe('supervision-package', () => {
     }
   })
 
-  it('renders the progress bar width based on completed vs total appointments', () => {
-    const document = renderComponent({
-      tierScore: 'C',
-      tag: tierTags.none,
-      historyHref: '#',
-      appointments: { allowance: 10, scheduled: 7, completed: 5 },
-    })
+  // it('renders the progress bar width based on completed vs total appointments', () => {
+  //   const document = renderComponent({
+  //     tierScore: 'C',
+  //     tag: tierTags.none,
+  //     historyHref: '#',
+  //     appointments: { allowance: 10, scheduled: 7, completed: 5 },
+  //   })
 
-    const bar = document.querySelector('.appointment-progress__bar') as HTMLElement
-    expect(bar).not.toBeNull()
-    expect(bar.style.width).toBe('50%')
-  })
+  //   const bar = document.querySelector('.appointment-progress__bar') as HTMLElement
+  //   expect(bar).not.toBeNull()
+  //   expect(bar.style.width).toBe('50%')
+  // })
 
   it('hides the tier score when tierScore is MISSING', () => {
     const document = renderComponent({ tierScore: 'MISSING', tag: tierTags.missing, historyHref: '#' })

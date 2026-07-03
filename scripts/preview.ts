@@ -158,7 +158,7 @@ const html = `<!DOCTYPE html>
           finalThirdEligible: true,
           finalThirdDate: dateWithYear('2026-06-01'),
           finalThirdStartDate: dateWithYear('2026-06-01'),
-          appointments: { allowance: 4, scheduled: 6, completed: 4 },
+          appointments: { allowance: 4, scheduled: 0, completed: 4 },
         })}
       </section>
 

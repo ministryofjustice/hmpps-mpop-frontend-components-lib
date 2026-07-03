@@ -58,33 +58,7 @@
                 <p class='govuk-body'>{{ params.firstName }} has {{params.appointments.allowance - params.appointments.completed}} supervision appointments remaining until the {{ params.phase.phaseName }} ends on the {{ params.phase.endDate }}</p>
             {% endif %}
 
-            {% include './partials/_progress-bar.njk' %}
 
-            <div class='govuk-grid-row govuk-!-margin-top-4'>
-                <div class='govuk-grid-column-one-third'>
-                    <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.allowance}}</p>
-                </div>
-                <div class='govuk-grid-column-one-third'>
-                    <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.allowance - params.appointments.completed}}</p>
-                </div>
-                <div class='govuk-grid-column-one-third'>
-                    <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
-                    <p class='govuk-body-l govuk-!-font-weight-bold'>{{params.appointments.scheduled}}</p>
-                </div>
-            </div>
-
-            {% if params.iomRedRated %}
-                <p class='govuk-body'>{{ params.firstName }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
-            {% endif %}
-            {% if params.gender and params.tierScore == 'C' or 'D' or 'E' or 'F' or 'G' %}
-                <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.firstName }} can have up to 5 additional discretionary appointments.</p>
-            {% endif %}
-
-            <p class='govuk-body'>
-                <a class='govuk-link govuk-link--no-visited-state' href='{{ params.appointmentsHref }}'>View all appointments</a>
-            </p>
         </div>
     </div>
 
