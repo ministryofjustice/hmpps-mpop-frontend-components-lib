@@ -1,0 +1,15 @@
+<h3 class='govuk-heading-s' >Early engagement stage</h3>
+
+{% if params.appointmentsCompleted < params.earlyEngagementWeeks %}
+    <p class='govuk-body'>You should see {{ params.forename }} every week for the first {{ params.earlyEngagementWeeks }} weeks of the sentence.</p>
+{% endif %}
+
+<p class='govuk-body'>
+    Early engagement ends on {{ params.phaseEndDate }}{% if params.appointmentsCompleted < params.earlyEngagementWeeks %} if {{ params.forename }} attends the required appointments by then{% endif %}.
+</p>
+
+<p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ params.appointmentsAllowance - params.earlyEngagementWeeks }} supervision appointments for the rest of this sentence year.</p>
+
+<p class='govuk-body'>
+    <a class='govuk-link govuk-link--no-visited-state' href='{{params.allAppointmentsHref}}' >View all appointments</a>
+</p>
