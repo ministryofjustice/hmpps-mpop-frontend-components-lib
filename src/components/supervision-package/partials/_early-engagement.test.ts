@@ -4,9 +4,7 @@ import { JSDOM } from 'jsdom'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_early-engagement.njk', {
-    params: { allAppointmentsHref: '#', ...params },
-  })
+  const html = env.render('supervision-package/partials/_early-engagement.njk', { params })
   return new JSDOM(html).window.document
 }
 
@@ -34,44 +32,140 @@ describe('_early-engagement partial', () => {
     },
   )
 
-  describe('when appointmentsCompleted < earlyEngagementWeeks', () => {
-    const document = renderPartial({
-      forename: 'Alex',
-      appointmentsCompleted: 2,
-      earlyEngagementWeeks: 5,
-      appointmentsAllowance: 20,
-      phaseEndDate: '1 January 2026',
-    })
-    const bodyText = document.body.textContent ?? ''
+  describe('weekly attendance guidance', () => {
+    it('shows the weekly guidance when appointmentsCompleted is less than earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 2,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
 
-    it('renders the weekly-attendance guidance paragraph', () => {
-      expect(bodyText).toContain('You should see Alex every week for the first 5 weeks of the sentence.')
-    })
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const guidanceParagraph = paragraphs.find(p => p.textContent?.includes('every week'))
 
-    it('appends the conditional attendance clause to the end-date sentence', () => {
-      expect(bodyText).toContain(
-        'Early engagement ends on 1 January 2026 if Alex attends the required appointments by then.',
+      expect(guidanceParagraph?.textContent).toContain(
+        'You should see Alex every week for the first 5 weeks of the sentence.',
       )
+    })
+
+    it('hides the weekly guidance when appointmentsCompleted equals earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 5,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const guidanceParagraph = paragraphs.find(p => p.textContent?.includes('every week'))
+
+      expect(guidanceParagraph).toBeUndefined()
+    })
+
+    it('hides the weekly guidance when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 7,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const guidanceParagraph = paragraphs.find(p => p.textContent?.includes('every week'))
+
+      expect(guidanceParagraph).toBeUndefined()
+    })
+
+    it('hides the weekly guidance when forename is not provided', () => {
+      const document = renderPartial({
+        appointmentsCompleted: 2,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const guidanceParagraph = paragraphs.find(p => p.textContent?.includes('every week'))
+
+      expect(guidanceParagraph).toBeUndefined()
     })
   })
 
-  describe('when appointmentsCompleted >= earlyEngagementWeeks', () => {
-    const document = renderPartial({
-      forename: 'Alex',
-      appointmentsCompleted: 5,
-      earlyEngagementWeeks: 5,
-      appointmentsAllowance: 20,
-      phaseEndDate: '1 January 2026',
-    })
-    const bodyText = document.body.textContent ?? ''
+  describe('end-date paragraph conditional clause', () => {
+    it('includes the conditional attendance clause when appointmentsCompleted is less than earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 2,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
 
-    it('does not render the weekly-attendance guidance paragraph', () => {
-      expect(bodyText).not.toContain('You should see Alex every week')
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+
+      expect(endDateParagraph?.textContent).toContain('if Alex attends the required appointments by then')
     })
 
-    it('omits the conditional attendance clause from the end-date sentence', () => {
-      expect(bodyText).toContain('Early engagement ends on 1 January 2026.')
-      expect(bodyText).not.toContain('if Alex attends the required appointments by then')
+    it('omits the conditional attendance clause when appointmentsCompleted equals earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 5,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+
+      expect(endDateParagraph?.textContent).not.toContain('if Alex attends the required appointments by then')
+      expect(endDateParagraph?.textContent).toContain('Early engagement ends on 1 January 2026.')
+    })
+
+    it('omits the conditional attendance clause when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsCompleted: 8,
+        earlyEngagementWeeks: 5,
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+
+      expect(endDateParagraph?.textContent).not.toContain('if Alex attends the required appointments by then')
+    })
+
+    it('does not render the end-date paragraph when appointmentsAllowance is missing', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        earlyEngagementWeeks: 5,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+
+      expect(endDateParagraph).toBeUndefined()
+    })
+
+    it('does not render the end-date paragraph when earlyEngagementWeeks is missing', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        appointmentsAllowance: 20,
+        phaseEndDate: '1 January 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+
+      expect(endDateParagraph).toBeUndefined()
     })
   })
 })

@@ -73,6 +73,8 @@ const html = env.renderString(
         earlyEngagementWeeks: 8,
         appointmentsAllowance: 40,
         appointmentsCompleted: 4,
+        appointmentsScheduled: 1,
+        appointmentsEarlyEngagementCompleted: 4,
         allAppointmentsHref: '#'
       }) }}
 
@@ -90,7 +92,9 @@ const html = env.renderString(
         phaseEndDate: dateWithYear('2026-04-01'),
         earlyEngagementWeeks: 8,
         appointmentsAllowance: 40,
+        appointmentsEarlyEngagementCompleted: 8,
         appointmentsCompleted: 8,
+        appointmentsScheduled: 0,
         allAppointmentsHref: '#'
       }) }}
 

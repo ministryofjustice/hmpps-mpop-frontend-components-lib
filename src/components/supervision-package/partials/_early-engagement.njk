@@ -1,14 +1,20 @@
 <h3 class='govuk-heading-s'>Early engagement stage</h3>
 
-{% if params.appointmentsCompleted | int < params.earlyEngagementWeeks | int %}
+{% if params.forename and (params.appointmentsCompleted | int < params.earlyEngagementWeeks | int) %}
     <p class='govuk-body'>You should see {{ params.forename }} every week for the first {{ params.earlyEngagementWeeks }} weeks of the sentence.</p>
 {% endif %}
 
-<p class='govuk-body'>
-    Early engagement ends on {{ params.phaseEndDate }}{% if params.appointmentsCompleted | int < params.earlyEngagementWeeks | int %} if {{ params.forename }} attends the required appointments by then{% endif %}.
-</p>
+{% if params.forename and params.appointmentsAllowance is defined and params.earlyEngagementWeeks is defined %}
+    <p class='govuk-body'>
+        Early engagement ends on {{ params.phaseEndDate }}{% if params.forename and (params.appointmentsCompleted | int < params.earlyEngagementWeeks | int) %} if {{ params.forename }} attends the required appointments by then{% endif %}.
+    </p>
+{% endif %}
 
 <p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ (params.appointmentsAllowance | int) - (params.earlyEngagementWeeks | int) }} supervision appointments for the rest of this sentence year.</p>
+
+{% if params.earlyEngagementWeeks is defined and params.appointmentsEarlyEngagementCompleted is defined and params.appointmentsScheduled is defined %}
+    {% include './_progress-bar.njk' %}
+{% endif %}
 
 {% if params.allAppointmentsHref %}
     <p class='govuk-body'>

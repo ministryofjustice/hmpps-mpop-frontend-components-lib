@@ -20,3 +20,30 @@ $supervision-package-accent-colour: govuk-colour("blue");
   gap: govuk-spacing(2);
   margin-bottom: govuk-spacing(3);
 }
+
+.appointment-progress {
+  background-color: govuk-colour("teal", $variant: "tint-80");
+  border-radius: 20px;
+  height: 19px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.appointment-progress__bar {
+  background-color: govuk-colour("teal", $variant: "tint-25");
+  height: 100%;
+}
+
+.appointment-progress__bar-maximum {
+  background-color: govuk-colour("red");
+  height: 100%;
+}
+
+.appointment-progress__segment {
+  flex: 1;
+  background-color: govuk-colour("black", $variant: "tint-95");
+}
+
+.appointment-progress__segment--completed {
+  background-color: $supervision-package-accent-colour;
+}

@@ -1,0 +1,38 @@
+{% if params.phaseName == 'Early engagement' %}
+    {% set completed = params.appointmentsEarlyEngagementCompleted | int %}
+    {% set allowance = params.earlyEngagementWeeks | int %}
+{% else %}
+    {% set completed = (params.appointmentsCompleted or 0) | int %}
+    {% set allowance = (params.appointmentsAllowance | int) - (params.earlyEngagementWeeks | int) %}
+{% endif %}
+
+{% if allowance > 0 %}
+    {% set rawPercent = (completed / allowance * 100) | round %}
+{% else %}
+    {% set rawPercent = 0 %}
+{% endif %}
+
+{% set widthPercent = 100 if rawPercent > 100 else (0 if rawPercent < 0 else rawPercent) %}
+
+<p class='govuk-body'>{{ completed }} of {{ allowance }} appointments used</p>
+
+<div class="appointment-progress" aria-hidden="true">
+    <div class="{{ 'appointment-progress__bar-maximum' if widthPercent == 100 else 'appointment-progress__bar' }}" style="width: {{ widthPercent }}%;"></div>
+</div>
+
+<div class='govuk-grid-row govuk-!-margin-top-4'>
+    <div class='govuk-grid-column-one-third'>
+        <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
+        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ allowance }}</p>
+    </div>
+
+    <div class='govuk-grid-column-one-third'>
+        <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
+        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ allowance - completed }}</p>
+    </div>
+
+    <div class='govuk-grid-column-one-third'>
+        <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
+        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.appointmentsScheduled }}</p>
+    </div>
+</div>
