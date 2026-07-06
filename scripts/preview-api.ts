@@ -13,7 +13,7 @@ import MPoPComponents from '../src/MPoPComponents'
 
 const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
-const env = nunjucks.configure(['src/components'], {
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
 

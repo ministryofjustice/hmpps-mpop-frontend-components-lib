@@ -2,7 +2,7 @@ import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { tierTags } from '../../MPoPComponents'
 
-const env = nunjucks.configure(['src/components'], { autoescape: true })
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
@@ -41,6 +41,27 @@ describe('supervision-package', () => {
     if (expectedBodyText) {
       expect(document.body.textContent).toContain(expectedBodyText)
     }
+  })
+
+  it('renders the early engagement stage when phaseName is Early engagement', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phaseName: 'Early engagement',
+      forename: 'Alex',
+      earlyEngagementWeeks: 5,
+      appointmentsAllowance: 20,
+      appointmentsCompleted: 2,
+      phaseEndDate: '1 January 2026',
+      allAppointmentsHref: '#',
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h3')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Early engagement stage')
+    expect(headingTexts).not.toContain('Stage title')
   })
 
   it('hides the tier score when tierScore is MISSING', () => {

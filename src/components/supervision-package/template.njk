@@ -1,16 +1,19 @@
 <div class='govuk-width-container supervision-package'>
-    <h2 class='govuk-heading-m'>{{ params.heading or 'Supervision package' }}</h2>
+    <h2 class='govuk-heading-m'>{{ 'Supervision package: ' ~ params.heading if params.heading else 'Supervision package' }}</h2>
     <div class='govuk-grid-row'>
-        <div class='govuk-grid-column-two-thirds'>
+        <div class='{{ "govuk-grid-column-one-half" if params.phaseName else "govuk-grid-column-two-thirds" }}'>
             <div class='app-tier-header'>
                 <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
                     Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
                 </h3>
-
                 {% if params.tag.text and params.tag.color %}
                     <strong class='govuk-tag govuk-tag--{{ params.tag.color }}'>{{ params.tag.text }}</strong>
                 {% endif %}
             </div>
+
+            {% if params.createdOn %}
+                <p class='govuk-body'>The supervision package was created on {{ params.createdOn }}.</p>
+            {% endif %}
 
             {% if params.tag.text == 'Provisional' %}
                 <p class='govuk-body'>
@@ -31,6 +34,30 @@
                     </a>
                 </p>
             {% endif %}
+
+            {% if params.nextAppointment and params.nextAppointmentHref %}
+                <h3 class='govuk-heading-s'>Next appointment</h3>
+                <p class='govuk-body'>
+                    <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment }}</a>
+                </p>
+            {% endif %}
         </div>
+
+        {% if params.phaseName == 'Early engagement' %}
+            <div class='govuk-grid-column-one-half'>
+                {% include './partials/_early-engagement.njk' %}
+            </div>
+        {% endif %}
     </div>
+
+    {% if params.arrangeAppointmentHref and params.updateRiskFlagHref %}
+        <div class='govuk-button-group'>
+            <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
+                Arrange an appointment
+            </a>
+            <a href='{{ params.updateRiskFlagHref }}' role='button' draggable='false' class='govuk-button govuk-button--secondary' data-module='govuk-button'>
+                Update NDelius risk flag
+            </a>
+        </div>
+    {% endif %}
 </div>
