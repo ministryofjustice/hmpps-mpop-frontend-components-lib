@@ -69,10 +69,10 @@ const html = env.renderString(
         arrangeAppointmentHref: '#',
         updateRiskFlagHref: '#',
         forename: 'Stuart',
-        earlyEngagementWeeks: '8',
         phaseEndDate: dateWithYear('2026-04-01'),
-        appointmentsAllowance: '40',
-        appointmentsCompleted: '4',
+        earlyEngagementWeeks: 8,
+        appointmentsAllowance: 40,
+        appointmentsCompleted: 4,
         allAppointmentsHref: '#'
       }) }}
 
@@ -87,10 +87,10 @@ const html = env.renderString(
         arrangeAppointmentHref: '#',
         updateRiskFlagHref: '#',
         forename: 'Stuart',
-        earlyEngagementWeeks: '8',
         phaseEndDate: dateWithYear('2026-04-01'),
-        appointmentsAllowance: '40',
-        appointmentsCompleted: '8',
+        earlyEngagementWeeks: 8,
+        appointmentsAllowance: 40,
+        appointmentsCompleted: 8,
         allAppointmentsHref: '#'
       }) }}
 

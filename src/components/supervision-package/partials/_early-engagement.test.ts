@@ -4,7 +4,9 @@ import { JSDOM } from 'jsdom'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_early-engagement.njk', { params })
+  const html = env.render('supervision-package/partials/_early-engagement.njk', {
+    params: { allAppointmentsHref: '#', ...params },
+  })
   return new JSDOM(html).window.document
 }
 

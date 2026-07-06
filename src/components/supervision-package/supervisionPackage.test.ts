@@ -49,6 +49,12 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       phaseName: 'Early engagement',
+      forename: 'Alex',
+      earlyEngagementWeeks: 5,
+      appointmentsAllowance: 20,
+      appointmentsCompleted: 2,
+      phaseEndDate: '1 January 2026',
+      allAppointmentsHref: '#',
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
