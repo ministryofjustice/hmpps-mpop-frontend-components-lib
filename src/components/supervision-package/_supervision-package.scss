@@ -18,7 +18,13 @@ $supervision-package-accent-colour: govuk-colour("blue");
   display: flex;
   align-items: center;
   gap: govuk-spacing(2);
+  flex-wrap: wrap;
   margin-bottom: govuk-spacing(3);
+
+  > h2,
+  > h3 {
+    white-space: nowrap;
+  }
 }
 
 .appointment-progress {
@@ -37,13 +43,4 @@ $supervision-package-accent-colour: govuk-colour("blue");
 .appointment-progress__bar-maximum {
   background-color: govuk-colour("red");
   height: 100%;
-}
-
-.appointment-progress__segment {
-  flex: 1;
-  background-color: govuk-colour("black", $variant: "tint-95");
-}
-
-.appointment-progress__segment--completed {
-  background-color: $supervision-package-accent-colour;
 }

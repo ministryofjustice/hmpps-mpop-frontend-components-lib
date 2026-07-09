@@ -1,10 +1,95 @@
+.supervision-package .govuk-tag {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 1.1875rem;
+  line-height: 1.3157894737;
+  color: #0f385c;
+  background-color: #d2e2f1;
+  display: inline-block;
+  max-width: 160px;
+  margin-top: -2px;
+  margin-bottom: -3px;
+  padding-top: 2px;
+  padding-right: 8px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  border-radius: 1px;
+  text-decoration: none;
+  overflow-wrap: break-word;
+}
+
+.supervision-package .govuk-tag--green {
+  color: #083d29;
+  background-color: #cfe4dc;
+}
+
+.supervision-package .govuk-tag--purple {
+  color: #2a1950;
+  background-color: #ddd6ec;
+}
+
+.supervision-package .govuk-tag--red {
+  color: #651b1b;
+  background-color: #f4d7d7;
+}
+
+.supervision-package .govuk-tag--orange {
+  color: #7a3c1c;
+  background-color: #fde4d7;
+}
+
+.supervision-package .govuk-tag--teal {
+  color: #0b4144;
+  background-color: #d0e6e7;
+}
+
+.supervision-package .govuk-tag--magenta {
+  color: #651b3e;
+  background-color: #f4d7e5;
+}
+
+.supervision-package .govuk-tag--yellow {
+  color: #7a3c1c;
+  background-color: #ffee80;
+}
+
+.supervision-package .govuk-tag--grey {
+  color: #0b0c0c;
+  background-color: #cecece;
+}
+
+.supervision-package .app-status-badge {
+  font-family: "GDS Transport", arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  font-size: 1.1875rem;
+  line-height: 1.3157894737;
+  display: inline-block;
+  max-width: none;
+  margin-top: -2px;
+  margin-bottom: -3px;
+  padding-top: 2px;
+  padding-right: 8px;
+  padding-bottom: 3px;
+  padding-left: 8px;
+  border-radius: 1px;
+  text-decoration: none;
+  overflow-wrap: break-word;
+  width: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
 @font-face {
   font-family: "GDS Transport";
   font-style: normal;
   font-weight: 400;
   font-display: fallback;
   src: url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/light-94a07e06a1-v2.woff2") format("woff2"),
-       url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/light-f591b13f7d-v2.woff") format("woff");
+    url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/light-f591b13f7d-v2.woff") format("woff");
 }
 
 @font-face {
@@ -13,7 +98,7 @@
   font-weight: 700;
   font-display: fallback;
   src: url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/bold-b542beb274-v2.woff2") format("woff2"),
-       url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/bold-affa96571d-v2.woff") format("woff");
+    url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/bold-affa96571d-v2.woff") format("woff");
 }
 
 body {
@@ -32,8 +117,14 @@ body {
 .app-tier-header {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 20px;
+
+  >h2,
+  >h3 {
+    white-space: nowrap;
+  }
 }
 
 .govuk-flex {
@@ -56,15 +147,6 @@ body {
 .appointment-progress__bar-maximum {
   background-color: #d4351c;
   height: 100%;
-}
-
-.appointment-progress__segment {
-  flex: 1;
-  background-color: #f3f2f1;
-}
-
-.appointment-progress__segment--completed {
-  background-color: #1d70b8;
 }
 
 .inline-list-from-tablet>li {
