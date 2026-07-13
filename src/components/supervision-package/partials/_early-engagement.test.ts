@@ -168,4 +168,116 @@ describe('_early-engagement partial', () => {
       expect(endDateParagraph).toBeUndefined()
     })
   })
+
+  describe('custody and final third (lines 19–20)', () => {
+    it('shows the final third eligibility message when sentenceType is Custodial sentence and finalThirdEligible is true', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        sentenceType: 'Custodial sentence',
+        finalThirdEligible: true,
+        finalThirdStartDate: '1 April 2026',
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const finalThirdParagraph = paragraphs.find(p =>
+        p.textContent?.includes('eligible to start the final third stage'),
+      )
+
+      expect(finalThirdParagraph?.textContent).toContain(
+        'Alex is eligible to start the final third stage on 1 April 2026.',
+      )
+    })
+
+    it('shows the not-eligible message when sentenceType is Custodial sentence and finalThirdEligible is false', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        sentenceType: 'Custodial sentence',
+        finalThirdEligible: false,
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const notEligibleParagraph = paragraphs.find(p =>
+        p.textContent?.includes('not eligible for the final third stage'),
+      )
+
+      expect(notEligibleParagraph?.textContent).toContain('Alex is not eligible for the final third stage.')
+    })
+
+    it('shows neither final third message when sentenceType is not Custodial sentence', () => {
+      const document = renderPartial({ forename: 'Alex', sentenceType: 'Community sentence' })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const finalThirdParagraph = paragraphs.find(p => p.textContent?.includes('final third stage'))
+
+      expect(finalThirdParagraph).toBeUndefined()
+    })
+  })
+
+  describe('IOM red RAG status (line 31)', () => {
+    it('shows the IOM red RAG message when isRedIOM is true', () => {
+      const document = renderPartial({ forename: 'Alex', isRedIOM: true })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph?.textContent).toContain(
+        'Alex has an IOM red RAG status. The maximum number of appointments is the same as tier A.',
+      )
+    })
+
+    it('does not show the IOM red RAG message when isRedIOM is false', () => {
+      const document = renderPartial({ forename: 'Alex', isRedIOM: false })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph).toBeUndefined()
+    })
+
+    it('does not show the IOM red RAG message when isRedIOM is not set', () => {
+      const document = renderPartial({ forename: 'Alex' })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph).toBeUndefined()
+    })
+  })
+
+  describe('female discretionary appointments (line 35)', () => {
+    it('shows the discretionary appointments message for a female non-IOM person', () => {
+      const document = renderPartial({ forename: 'Alex', gender: 'female', tierScore: 'B', isRedIOM: false })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p =>
+        p.textContent?.includes('additional discretionary appointments'),
+      )
+
+      expect(discretionaryParagraph?.textContent).toContain(
+        'As a woman in tier B, Alex can have up to 5 additional discretionary appointments.',
+      )
+    })
+
+    it('does not show the discretionary appointments message when gender is female but isRedIOM is true', () => {
+      const document = renderPartial({ forename: 'Alex', gender: 'female', tierScore: 'B', isRedIOM: true })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p =>
+        p.textContent?.includes('additional discretionary appointments'),
+      )
+
+      expect(discretionaryParagraph).toBeUndefined()
+    })
+
+    it('does not show the discretionary appointments message when gender is not female', () => {
+      const document = renderPartial({ forename: 'Alex', gender: 'male', tierScore: 'B', isRedIOM: false })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p =>
+        p.textContent?.includes('additional discretionary appointments'),
+      )
+
+      expect(discretionaryParagraph).toBeUndefined()
+    })
+  })
 })

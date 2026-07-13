@@ -80,7 +80,10 @@ const html = env.renderString(
         isInBreach: true,
         isCustody: true,
         isOPD: true,
-        sentenceType: 'Community sentence'
+        sentenceType: 'Community sentence',
+        gender: 'male',
+        finalThirdEligible: false,
+        isLifeSentence: true
       }) }}
 
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
@@ -93,7 +96,7 @@ const html = env.renderString(
         phaseName: 'Early engagement',
         arrangeAppointmentHref: '#',
         updateRiskFlagHref: '#',
-        forename: 'Stuart',
+        forename: 'Maria',
         phaseEndDate: dateWithYear('2026-04-01'),
         earlyEngagementWeeks: 8,
         appointmentsAllowance: 40,
@@ -101,11 +104,14 @@ const html = env.renderString(
         appointmentsCompleted: 8,
         appointmentsScheduled: 0,
         allAppointmentsHref: '#',
-        isRedIOM: true,
+        isRedIOM: false,
         isInBreach: false,
-        isCustody: true,
+        isCustody: false,
         isOPD: false,
-        sentenceType: "Custodial sentence"
+        sentenceType: "Custodial sentence",
+        gender: 'female',
+        finalThirdEligible: true,
+        finalThirdStartDate: dateWithYear('2026-06-01')
       }) }}
 
       <h2 class="govuk-heading-m">Provisional tier</h2>

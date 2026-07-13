@@ -5,15 +5,35 @@
 {% endif %}
 
 {% if params.forename and params.appointmentsAllowance is defined and params.earlyEngagementWeeks is defined %}
-    <p class='govuk-body'>
+    {% if params.isLifeSentence or params.isIPP %}
+        <p class='govuk-body'>There is no supervision end date.</p>
+    {% else %}
+        <p class='govuk-body'>
         Early engagement ends on {{ params.phaseEndDate }}{% if params.forename and (params.appointmentsCompleted | int < params.earlyEngagementWeeks | int) %} if {{ params.forename }} attends the required appointments by then{% endif %}.
-    </p>
+        </p>
+    {% endif %}
 {% endif %}
 
 <p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ (params.appointmentsAllowance | int) - (params.earlyEngagementWeeks | int) }} supervision appointments for the rest of this sentence year.</p>
 
+{% if params.sentenceType == 'Custodial sentence' %}
+    {% if params.finalThirdEligible %}
+        <p class='govuk-body'>{{ params.forename }} is eligible to start the final third stage on {{ params.finalThirdStartDate }}.</p>
+    {% else %}
+        <p class='govuk-body'>{{ params.forename }} is not eligible for the final third stage.</p>
+    {% endif %}
+{% endif %}
+
 {% if params.earlyEngagementWeeks is defined and params.appointmentsEarlyEngagementCompleted is defined and params.appointmentsScheduled is defined %}
     {% include './_progress-bar.njk' %}
+{% endif %}
+
+{% if params.isRedIOM %}
+    <p class='govuk-body'>{{ params.forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
+{% endif %}
+
+{% if params.gender == 'female' and not params.isRedIOM %}
+    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.forename }} can have up to 5 additional discretionary appointments.</p>
 {% endif %}
 
 {% if params.allAppointmentsHref %}
