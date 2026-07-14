@@ -1,7 +1,9 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
+mpopNunjucksSetup(env)
 
 const renderPartial = (params = {}) => {
   const html = env.render('supervision-package/partials/_early-engagement.njk', { params })
@@ -20,9 +22,9 @@ describe('_early-engagement partial', () => {
     ({ appointmentsAllowance, earlyEngagementWeeks, expectedRemaining }) => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsAllowance,
-        earlyEngagementWeeks,
-        phaseEndDate: '1 January 2026',
+        currentYear: { appointments: { allowance: appointmentsAllowance } },
+        earlyEngagement: { weeks: earlyEngagementWeeks },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -36,10 +38,9 @@ describe('_early-engagement partial', () => {
     it('shows the weekly guidance when appointmentsCompleted is less than earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 2,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 2, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -53,10 +54,9 @@ describe('_early-engagement partial', () => {
     it('hides the weekly guidance when appointmentsCompleted equals earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 5,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 5, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -68,10 +68,9 @@ describe('_early-engagement partial', () => {
     it('hides the weekly guidance when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 7,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 7, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -82,10 +81,9 @@ describe('_early-engagement partial', () => {
 
     it('hides the weekly guidance when forename is not provided', () => {
       const document = renderPartial({
-        appointmentsCompleted: 2,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 2, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -99,10 +97,9 @@ describe('_early-engagement partial', () => {
     it('includes the conditional attendance clause when appointmentsCompleted is less than earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 2,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 2, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -114,10 +111,9 @@ describe('_early-engagement partial', () => {
     it('omits the conditional attendance clause when appointmentsCompleted equals earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 5,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 5, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -130,10 +126,9 @@ describe('_early-engagement partial', () => {
     it('omits the conditional attendance clause when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsCompleted: 8,
-        earlyEngagementWeeks: 5,
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { completed: 8, weeks: 5 },
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -145,8 +140,8 @@ describe('_early-engagement partial', () => {
     it('does not render the end-date paragraph when appointmentsAllowance is missing', () => {
       const document = renderPartial({
         forename: 'Alex',
-        earlyEngagementWeeks: 5,
-        phaseEndDate: '1 January 2026',
+        earlyEngagement: { weeks: 5 },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -158,8 +153,8 @@ describe('_early-engagement partial', () => {
     it('does not render the end-date paragraph when earlyEngagementWeeks is missing', () => {
       const document = renderPartial({
         forename: 'Alex',
-        appointmentsAllowance: 20,
-        phaseEndDate: '1 January 2026',
+        currentYear: { appointments: { allowance: 20 } },
+        phase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))

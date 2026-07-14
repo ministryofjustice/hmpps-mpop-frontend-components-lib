@@ -1,8 +1,10 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { tierTags } from '../../MPoPComponents'
+import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
+mpopNunjucksSetup(env)
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
@@ -48,12 +50,10 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phaseName: 'Early engagement',
+      phase: { name: { code: 'INIT', description: 'Early engagement' } },
       forename: 'Alex',
-      earlyEngagementWeeks: 5,
-      appointmentsAllowance: 20,
-      appointmentsCompleted: 2,
-      phaseEndDate: '1 January 2026',
+      earlyEngagement: { weeks: 5, completed: 2 },
+      currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
       allAppointmentsHref: '#',
     })
 

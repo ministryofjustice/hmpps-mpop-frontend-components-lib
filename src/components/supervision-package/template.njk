@@ -1,8 +1,7 @@
 {% set standardAppointmentsComplete = params.appointmentsAllowance is defined and params.appointmentsCompleted is defined and (params.appointmentsCompleted | int) >= (params.appointmentsAllowance | int) %}
-{% set hasSpecialStatus = params.isOPD or params.isInBreach or params.isCustody or params.isRedIOM %}
+{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.isInBreach or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
 
 <div class='govuk-width-container supervision-package'>
-
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
         <h2 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ params.sentenceType if params.sentenceType else 'Supervision package' }}</h2>
@@ -13,7 +12,7 @@
     {% endif %}
 
     <div class='govuk-grid-row'>
-        <div class='{{ "govuk-grid-column-one-half" if params.phaseName else "govuk-grid-column-two-thirds" }}'>
+        <div class='{{ "govuk-grid-column-one-half" if params.phase.name.description else "govuk-grid-column-two-thirds" }}'>
             <div class='app-tier-header'>
                 <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
                     Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
@@ -55,7 +54,7 @@
             {% endif %}
         </div>
 
-        {% if params.phaseName == 'Early engagement' %}
+        {% if params.phase.name.code  == 'INIT' %}
             <div class='govuk-grid-column-one-half'>
                 {% include './partials/_early-engagement.njk' %}
             </div>

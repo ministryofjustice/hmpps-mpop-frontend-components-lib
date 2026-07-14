@@ -10,10 +10,10 @@
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In custody</strong>
 {% endif %}
 
-{% if params.isOPD %}
+{% if params.inputs.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--purple'>Offender personality disorder</strong>
 {% endif %}
 
-{% if params.isRedIOM %}
+{% if params.inputs.integratedOffenderManagementRedRated %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>IOM (Integrated Offender Management): Red</strong>
 {% endif %}

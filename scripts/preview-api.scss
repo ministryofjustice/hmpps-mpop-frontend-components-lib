@@ -40,6 +40,24 @@
   display: block;
 }
 
+.appointment-progress {
+  background-color: #d5ecea;
+  border-radius: 20px;
+  height: 19px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.appointment-progress__bar {
+  background-color: #5eb8b0;
+  height: 100%;
+}
+
+.appointment-progress__bar-maximum {
+  background-color: #d4351c;
+  height: 100%;
+}
+
 .govuk-flex {
   display: flex;
 }

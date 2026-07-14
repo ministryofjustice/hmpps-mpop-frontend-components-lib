@@ -63,13 +63,13 @@ describe('_tags partial', () => {
 
   describe('Offender personality disorder badge', () => {
     it('shows the badge when isOPD is true', () => {
-      const document = renderPartial({ isOPD: true })
+      const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: true } })
 
       expect(getBadgeText(document)).toContain('Offender personality disorder')
     })
 
     it('does not show the badge when isOPD is false', () => {
-      const document = renderPartial({ isOPD: false })
+      const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: false } })
 
       expect(getBadgeText(document)).not.toContain('Offender personality disorder')
     })
@@ -123,13 +123,13 @@ describe('_tags partial', () => {
 
   describe('IOM badge', () => {
     it('shows the badge when isRedIOM is true', () => {
-      const document = renderPartial({ isRedIOM: true })
+      const document = renderPartial({ inputs: { integratedOffenderManagementRedRated: true } })
 
       expect(getBadgeText(document)).toContain('IOM (Integrated Offender Management): Red')
     })
 
     it('does not show the badge when isRedIOM is false', () => {
-      const document = renderPartial({ isRedIOM: false })
+      const document = renderPartial({ inputs: { integratedOffenderManagementRedRated: false } })
 
       expect(getBadgeText(document)).not.toContain('IOM (Integrated Offender Management): Red')
     })
@@ -144,10 +144,9 @@ describe('_tags partial', () => {
   describe('multiple badges', () => {
     it('shows all applicable badges simultaneously', () => {
       const document = renderPartial({
-        isOPD: true,
+        inputs: { offenderPersonalDisorderPathway: true, integratedOffenderManagementRedRated: true },
         isInBreach: true,
         isCustody: true,
-        isRedIOM: true,
       })
 
       const badges = getBadgeText(document)
