@@ -50,6 +50,15 @@ describe('_tags partial', () => {
       })
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
+
+    it('does not show the badge when appointmentsCompleted >= appointmentsAllowance but isOPD is true', () => {
+      const document = renderPartial({
+        appointmentsCompleted: 10,
+        appointmentsAllowance: 10,
+        isOPD: true,
+      })
+      expect(getBadgeText(document)).not.toContain('No appointments remaining')
+    })
   })
 
   describe('Offender personality disorder badge', () => {
