@@ -1,5 +1,3 @@
-<h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
-
 {% if params.forename and (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %}
     <p class='govuk-body'>You should see {{ params.forename }} every week for the first {{ params.earlyEngagement.weeks }} weeks of the sentence.</p>
 {% endif %}
@@ -10,7 +8,9 @@
     </p>
 {% endif %}
 
-<p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ (params.currentYear.appointments.allowance | int) - (params.earlyEngagement.weeks | int) }} supervision appointments for the rest of this sentence year.</p>
+{% if params.currentYear.appointments.allowance is defined and params.earlyEngagement.weeks is defined %}
+    <p class='govuk-body'>{{ params.forename }} will then have a maximum of {{ (params.currentYear.appointments.allowance | int) - (params.earlyEngagement.weeks | int) }} supervision appointments for the rest of this sentence year.</p>
+{% endif %}
 
 {% include './_progress-bar.njk' %}
 

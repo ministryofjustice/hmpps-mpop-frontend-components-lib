@@ -1,4 +1,4 @@
-{% set standardAppointmentsComplete = params.appointmentsAllowance is defined and params.appointmentsCompleted is defined and (params.appointmentsCompleted | int) >= (params.appointmentsAllowance | int) %}
+{% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
 {% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.isInBreach or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
 
 <div class='govuk-width-container supervision-package'>
@@ -54,9 +54,12 @@
             {% endif %}
         </div>
 
-        {% if params.phase.name.code  == 'INIT' %}
+        {% if params.phase.name.description %}
             <div class='govuk-grid-column-one-half'>
-                {% include './partials/_early-engagement.njk' %}
+                <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
+                {% if params.phase.name.code  == 'INIT' %}
+                    {% include './partials/_early-engagement.njk' %}
+                {% endif %}
             </div>
         {% endif %}
     </div>

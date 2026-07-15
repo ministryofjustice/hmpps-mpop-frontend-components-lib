@@ -13,48 +13,68 @@ const getBadgeText = (document: Document) =>
 
 describe('_tags partial', () => {
   describe('No appointments remaining badge', () => {
-    it('shows the badge when appointmentsCompleted equals appointmentsAllowance', () => {
+    it('shows the badge when completed equals allowance', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 10,
-        appointmentsAllowance: 10,
-      })
-
-      expect(getBadgeText(document)).toContain('No appointments remaining')
-    })
-
-    it('shows the badge when appointmentsCompleted exceeds appointmentsAllowance', () => {
-      const document = renderPartial({
-        phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 11,
-        appointmentsAllowance: 10,
+        currentYear: {
+          appointments: {
+            completed: 10,
+            allowance: 10,
+          },
+        },
       })
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
 
-    it('does not show the badge when appointmentsCompleted is less than appointmentsAllowance', () => {
+    it('shows the badge when completed exceeds allowance', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 5,
-        appointmentsAllowance: 10,
+        currentYear: {
+          appointments: {
+            completed: 11,
+            allowance: 10,
+          },
+        },
+      })
+      expect(getBadgeText(document)).toContain('No appointments remaining')
+    })
+
+    it('does not show the badge when completed is less than allowance', () => {
+      const document = renderPartial({
+        phaseEndDate: '1 January 2026',
+        currentYear: {
+          appointments: {
+            completed: 5,
+            allowance: 10,
+          },
+        },
       })
 
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
 
-    it('shows the badge when appointmentsCompleted and appointmentsAllowance are both 0', () => {
+    it('shows the badge when completed and allowance are both 0', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 0,
-        appointmentsAllowance: 0,
+
+        currentYear: {
+          appointments: {
+            completed: 0,
+            allowance: 0,
+          },
+        },
       })
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
 
-    it('does not show the badge when appointmentsCompleted >= appointmentsAllowance but offenderPersonalDisorderPathway is true', () => {
+    it('does not show the badge when completed >= allowance but offenderPersonalDisorderPathway is true', () => {
       const document = renderPartial({
-        appointmentsCompleted: 10,
-        appointmentsAllowance: 10,
+        currentYear: {
+          appointments: {
+            completed: 10,
+            allowance: 10,
+          },
+        },
         inputs: { offenderPersonalDisorderPathway: true },
       })
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
