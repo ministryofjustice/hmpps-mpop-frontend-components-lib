@@ -16,12 +16,12 @@ export type SupervisionPackage = {
   currentYear: {
     startDate: string
     endDate: string
+    isFirstYear: boolean
     appointments: {
       allowance: number
       scheduled: number
       completed: number
     }
-    firstYear: boolean
   }
   inputs: {
     date: string
@@ -30,38 +30,42 @@ export type SupervisionPackage = {
     offenderPersonalDisorderPathway: boolean
     intensiveSupervisionCourt: boolean
     nationalSecurityDivision: boolean
-    contactSuspendedDate: string
+    contactSuspendedDate?: string
     finalThirdEligibility: {
       eligible: boolean
       since: string
     }
-    sentences: {
-      eventNumber: string
-      startDate: string
-      endDate: string
-      supervisionPackage: {
-        code: string
-        description: string
-      }
-      type: {
-        code: string
-        description: string
-        custodial: boolean
-      }
-      custody: {
-        status: {
-          code: string
-          description: string
-        }
-        finalThirdDate: string
-        releases: {
-          releaseDate: string
-          recallDate: string
-        }[]
-      }
-      inBreach: boolean
-    }[]
+    sentences: Array<Sentence>
   }
+}
+
+type Sentence = {
+  eventNumber: string
+  startDate: string
+  endDate: string
+  supervisionPackage: {
+    code: string
+    description: string
+  }
+  type: {
+    code: string
+    description: string
+    isCustodial: boolean
+  }
+  custody: {
+    status: {
+      code: string
+      description: string
+    }
+    finalThirdDate: string
+    releases: Array<Release>
+  }
+  inBreach: boolean
+}
+
+type Release = {
+  releaseDate: string
+  recallDate?: string
 }
 
 export type SupervisionPackageResponse = {

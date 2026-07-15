@@ -297,7 +297,7 @@ describe('MPoPComponents', () => {
       currentYear: {
         startDate: '2026-07-08',
         endDate: '2027-01-07',
-        firstYear: true,
+        isFirstYear: true,
         appointments: { allowance: 46, scheduled: 0, completed: 0 },
       },
       inputs: {

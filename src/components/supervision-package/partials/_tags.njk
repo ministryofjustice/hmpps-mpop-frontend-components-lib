@@ -1,4 +1,4 @@
-{% if params.appointmentsAllowance is defined and params.appointmentsCompleted is defined and (params.appointmentsCompleted | int) >= (params.appointmentsAllowance | int) and not params.isOPD %}
+{% if params.appointmentsAllowance is defined and params.appointmentsCompleted is defined and (params.appointmentsCompleted | int) >= (params.appointmentsAllowance | int) and not params.inputs.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>No appointments remaining</strong>
 {% endif %}
 

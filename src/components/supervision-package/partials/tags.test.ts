@@ -51,30 +51,30 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
 
-    it('does not show the badge when appointmentsCompleted >= appointmentsAllowance but isOPD is true', () => {
+    it('does not show the badge when appointmentsCompleted >= appointmentsAllowance but offenderPersonalDisorderPathway is true', () => {
       const document = renderPartial({
         appointmentsCompleted: 10,
         appointmentsAllowance: 10,
-        isOPD: true,
+        inputs: { offenderPersonalDisorderPathway: true },
       })
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
   })
 
   describe('Offender personality disorder badge', () => {
-    it('shows the badge when isOPD is true', () => {
+    it('shows the badge when offenderPersonalDisorderPathway is true', () => {
       const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: true } })
 
       expect(getBadgeText(document)).toContain('Offender personality disorder')
     })
 
-    it('does not show the badge when isOPD is false', () => {
+    it('does not show the badge when offenderPersonalDisorderPathway is false', () => {
       const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: false } })
 
       expect(getBadgeText(document)).not.toContain('Offender personality disorder')
     })
 
-    it('does not show the badge when isOPD is not set', () => {
+    it('does not show the badge when offenderPersonalDisorderPathway is not set', () => {
       const document = renderPartial({})
 
       expect(getBadgeText(document)).not.toContain('Offender personality disorder')

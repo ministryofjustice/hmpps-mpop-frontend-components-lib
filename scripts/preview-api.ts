@@ -108,7 +108,7 @@ async function main() {
   console.info(personalDetailsResponse)
   console.info(supervisionPackageResponse)
 
-  const { supervisionPackage } = supervisionPackageResponse
+  const { supervisionPackage, httpStatus: supervisionPackageHttpStatus } = supervisionPackageResponse
   const { personalDetails } = personalDetailsResponse
 
   const supervisionPackageParams = {
@@ -122,7 +122,7 @@ async function main() {
     updateRiskFlagHref: '#',
     forename: personalDetails?.name.forename,
     surname: personalDetails?.name.surname,
-    ...supervisionPackage,
+    ...(supervisionPackageHttpStatus === 200 ? { supervisionPackage } : {}),
   }
 
   const popHeaderParams = {
