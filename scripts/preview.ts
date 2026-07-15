@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
 import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
-import { dateWithYear } from '../src/utils/dateWithYear'
+import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
   loadPaths: [process.cwd(), 'node_modules'],
@@ -15,7 +15,7 @@ const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/d
   autoescape: true,
 })
 
-env.addGlobal('dateWithYear', dateWithYear)
+mpopNunjucksSetup(env)
 
 const previewAge = yearsSince('1990-01-15')
 
@@ -60,50 +60,118 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
       {{ supervisionPackage({
-       tierScore: 'C',
+        tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        createdOn: dateWithYear('2026-01-01'),
-        phaseName: 'Early engagement',
+        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
         updateRiskFlagHref: '#',
         forename: 'Stuart',
-        phaseEndDate: dateWithYear('2026-04-01'),
-        earlyEngagementWeeks: 8,
-        appointmentsAllowance: 40,
-        appointmentsCompleted: 4,
-        appointmentsScheduled: 1,
-        appointmentsEarlyEngagementCompleted: 4,
-        allAppointmentsHref: '#',
-        isRedIOM: false,
-        isInBreach: true,
-        isCustody: false,
-        isOPD: true
+        surname: 'Morris',
+        phase: {
+          name: { code: 'INIT', description: 'Initial Weekly' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 2
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 2, completed: 2 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
       }) }}
 
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
       {{ supervisionPackage({
-       tierScore: 'C',
+        tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        createdOn: dateWithYear('2026-01-01'),
-        phaseName: 'Early engagement',
+        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
         updateRiskFlagHref: '#',
-        forename: 'Stuart',
-        phaseEndDate: dateWithYear('2026-04-01'),
-        earlyEngagementWeeks: 8,
-        appointmentsAllowance: 40,
-        appointmentsEarlyEngagementCompleted: 8,
-        appointmentsCompleted: 8,
-        appointmentsScheduled: 0,
-        allAppointmentsHref: '#',
-        isRedIOM: true,
-        isInBreach: false,
-        isCustody: true,
-        isOPD: false
+        forename: 'Maria',
+        surname: 'Morris',
+        phase: {
+          name: { code: 'INIT', description: 'Initial Weekly' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 0 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Female',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
       }) }}
 
       <h2 class="govuk-heading-m">Provisional tier</h2>

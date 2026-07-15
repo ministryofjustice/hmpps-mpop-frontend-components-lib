@@ -10,12 +10,15 @@ import nunjucks from 'nunjucks'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 
 import MPoPComponents from '../src/MPoPComponents'
+import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
 const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
 })
+
+mpopNunjucksSetup(env)
 
 const environment = process.env.ENVIRONMENT ?? 'dev'
 
@@ -37,8 +40,15 @@ const tierHistoryUrlMap = {
   prod: 'https://tier.hmpps.service.justice.gov.uk',
 } as const
 
+const supervisionPackageApiUrlMap = {
+  dev: 'https://supervision-packages-api-dev.hmpps.service.justice.gov.uk',
+  preprod: 'https://supervision-packages-api-preprod.hmpps.service.justice.gov.uk',
+  prod: 'https://supervision-packages-api.hmpps.service.justice.gov.uk',
+} as const
+
 const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
 const masApiUrl = masApiUrlMap[environment as keyof typeof masApiUrlMap]
+const supervisionPackageApiUrl = supervisionPackageApiUrlMap[environment as keyof typeof supervisionPackageApiUrlMap]
 
 const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
@@ -77,16 +87,31 @@ async function main() {
         },
         agent: new AgentConfig(5000),
       },
+      supervisionPackageApiConfig: {
+        url: supervisionPackageApiUrl,
+        timeout: {
+          response: 5000,
+          deadline: 5000,
+        },
+        agent: new AgentConfig(5000),
+      },
     },
     console,
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
   const { changeReason, tierScore, tag } = result.calculation
-  const personalDetails = await mpopComponents.getPersonalDetails(authToken, crn)
+  const personalDetailsResponse = await mpopComponents.getPersonalDetails(authToken, crn)
+  const supervisionPackageResponse = await mpopComponents.getSupervisionPackage(authToken, crn)
 
   console.info(result)
-  console.info(personalDetails)
+  console.info(personalDetailsResponse)
+  console.info(supervisionPackageResponse)
+
+  const { supervisionPackage, httpStatus: supervisionPackageHttpStatus } = supervisionPackageResponse
+  const { personalDetails } = personalDetailsResponse
+
+  console.log({ supervisionPackageHttpStatus })
 
   const supervisionPackageParams = {
     tierScore,
@@ -94,13 +119,18 @@ async function main() {
     changeReason,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
     historyText: 'View tier change history',
+    allAppointmentsHref: '#',
+    arrangeAppointmentHref: '#',
+    updateRiskFlagHref: '#',
+    forename: personalDetails?.name.forename,
+    surname: personalDetails?.name.surname,
+    ...(supervisionPackageHttpStatus === 200 ? supervisionPackage : {}),
   }
 
-  const summary = personalDetails.personalDetails
   const popHeaderParams = {
     crn,
-    dob: summary?.dateOfBirth ?? '',
-    age: summary?.age ?? null,
+    dob: personalDetails?.dateOfBirth ?? '',
+    age: personalDetails?.age ?? null,
     tierScore,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
   }

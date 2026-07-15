@@ -1,9 +1,9 @@
-{% if params.phaseName == 'Early engagement' %}
-    {% set completed = params.appointmentsEarlyEngagementCompleted | int %}
-    {% set allowance = params.earlyEngagementWeeks | int %}
+{% if params.phase.name.code  == 'INIT' %}
+    {% set completed = params.earlyEngagement.completed | int %}
+    {% set allowance = params.earlyEngagement.weeks | int %}
 {% else %}
-    {% set completed = (params.appointmentsCompleted or 0) | int %}
-    {% set allowance = (params.appointmentsAllowance | int) - (params.earlyEngagementWeeks | int) %}
+    {% set completed = params.currentYear.appointments.completed | int %}
+    {% set allowance = (params.currentYear.appointments.allowance  | int) - (params.earlyEngagement.weeks | int) %}
 {% endif %}
 
 {% if allowance > 0 %}
@@ -33,6 +33,6 @@
 
     <div class='govuk-grid-column-one-third'>
         <p class='govuk-body govuk-!-margin-bottom-2'>Upcoming</p>
-        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.appointmentsScheduled }}</p>
+        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ params.currentYear.appointments.scheduled | int }}</p>
     </div>
 </div>

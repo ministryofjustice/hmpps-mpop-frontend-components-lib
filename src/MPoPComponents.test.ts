@@ -280,4 +280,122 @@ describe('MPoPComponents', () => {
       })
     })
   })
+
+  describe('getSupervisionPackage', () => {
+    const mockSupervisionPackage = {
+      phase: {
+        name: { code: 'SENT', description: 'In Custody' },
+        startDate: '2026-07-08T00:00:00Z',
+        endDate: '2026-08-10T00:00:00Z',
+      },
+      earlyEngagement: {
+        startDate: '2026-08-10T00:00:00Z',
+        endDate: '2026-10-31T00:00:00Z',
+        weeks: 12,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-07-08',
+        endDate: '2027-01-07',
+        isFirstYear: true,
+        appointments: { allowance: 46, scheduled: 0, completed: 0 },
+      },
+      inputs: {
+        date: '2026-07-14T14:36:34.103477524+01:00',
+        gender: 'Male',
+        integratedOffenderManagementRedRated: false,
+        offenderPersonalDisorderPathway: false,
+        intensiveSupervisionCourt: false,
+        nationalSecurityDivision: false,
+        finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+        sentences: [
+          {
+            eventNumber: '1',
+            startDate: '2026-07-08',
+            endDate: '2027-01-07',
+            supervisionPackage: { code: 'SPA', description: 'A' },
+            type: {
+              code: '307',
+              description: 'Adult Custody < 12m',
+              isCustodial: true,
+            },
+            custody: {
+              status: { code: 'B', description: 'Released - On Licence' },
+              finalThirdDate: '2026-11-07',
+              releases: [{ releaseDate: '2026-07-10' }],
+            },
+            inBreach: false,
+          },
+        ],
+      },
+    }
+
+    it('should return supervisionPackage with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockSupervisionPackage)
+
+      const result = await mpopComponents.getSupervisionPackage('authToken', 'X123456')
+
+      expect(result).toEqual({
+        supervisionPackage: mockSupervisionPackage,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/case/X123456/current-phase', 'authToken')
+    })
+
+    it('should return null supervisionPackage with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getSupervisionPackage('authToken', 'X123456')
+
+      expect(result).toEqual({
+        supervisionPackage: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getSupervisionPackage('authToken', 'X123456')
+
+      expect(result).toEqual({
+        supervisionPackage: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null supervisionPackage with status 500 when the API throws', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getSupervisionPackage('authToken', 'X123456')
+
+      expect(result).toEqual({
+        supervisionPackage: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getSupervisionPackage('authToken', 'X123456')
+
+      expect(result).toEqual({
+        supervisionPackage: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
 })

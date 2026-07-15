@@ -13,68 +13,88 @@ const getBadgeText = (document: Document) =>
 
 describe('_tags partial', () => {
   describe('No appointments remaining badge', () => {
-    it('shows the badge when appointmentsCompleted equals appointmentsAllowance', () => {
+    it('shows the badge when completed equals allowance', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 10,
-        appointmentsAllowance: 10,
-      })
-
-      expect(getBadgeText(document)).toContain('No appointments remaining')
-    })
-
-    it('shows the badge when appointmentsCompleted exceeds appointmentsAllowance', () => {
-      const document = renderPartial({
-        phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 11,
-        appointmentsAllowance: 10,
+        currentYear: {
+          appointments: {
+            completed: 10,
+            allowance: 10,
+          },
+        },
       })
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
 
-    it('does not show the badge when appointmentsCompleted is less than appointmentsAllowance', () => {
+    it('shows the badge when completed exceeds allowance', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 5,
-        appointmentsAllowance: 10,
+        currentYear: {
+          appointments: {
+            completed: 11,
+            allowance: 10,
+          },
+        },
+      })
+      expect(getBadgeText(document)).toContain('No appointments remaining')
+    })
+
+    it('does not show the badge when completed is less than allowance', () => {
+      const document = renderPartial({
+        phaseEndDate: '1 January 2026',
+        currentYear: {
+          appointments: {
+            completed: 5,
+            allowance: 10,
+          },
+        },
       })
 
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
 
-    it('shows the badge when appointmentsCompleted and appointmentsAllowance are both 0', () => {
+    it('shows the badge when completed and allowance are both 0', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
-        appointmentsCompleted: 0,
-        appointmentsAllowance: 0,
+
+        currentYear: {
+          appointments: {
+            completed: 0,
+            allowance: 0,
+          },
+        },
       })
       expect(getBadgeText(document)).toContain('No appointments remaining')
     })
 
-    it('does not show the badge when appointmentsCompleted >= appointmentsAllowance but isOPD is true', () => {
+    it('does not show the badge when completed >= allowance but offenderPersonalDisorderPathway is true', () => {
       const document = renderPartial({
-        appointmentsCompleted: 10,
-        appointmentsAllowance: 10,
-        isOPD: true,
+        currentYear: {
+          appointments: {
+            completed: 10,
+            allowance: 10,
+          },
+        },
+        inputs: { offenderPersonalDisorderPathway: true },
       })
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
   })
 
   describe('Offender personality disorder badge', () => {
-    it('shows the badge when isOPD is true', () => {
-      const document = renderPartial({ isOPD: true })
+    it('shows the badge when offenderPersonalDisorderPathway is true', () => {
+      const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: true } })
 
       expect(getBadgeText(document)).toContain('Offender personality disorder')
     })
 
-    it('does not show the badge when isOPD is false', () => {
-      const document = renderPartial({ isOPD: false })
+    it('does not show the badge when offenderPersonalDisorderPathway is false', () => {
+      const document = renderPartial({ inputs: { offenderPersonalDisorderPathway: false } })
 
       expect(getBadgeText(document)).not.toContain('Offender personality disorder')
     })
 
-    it('does not show the badge when isOPD is not set', () => {
+    it('does not show the badge when offenderPersonalDisorderPathway is not set', () => {
       const document = renderPartial({})
 
       expect(getBadgeText(document)).not.toContain('Offender personality disorder')
@@ -123,13 +143,13 @@ describe('_tags partial', () => {
 
   describe('IOM badge', () => {
     it('shows the badge when isRedIOM is true', () => {
-      const document = renderPartial({ isRedIOM: true })
+      const document = renderPartial({ inputs: { integratedOffenderManagementRedRated: true } })
 
       expect(getBadgeText(document)).toContain('IOM (Integrated Offender Management): Red')
     })
 
     it('does not show the badge when isRedIOM is false', () => {
-      const document = renderPartial({ isRedIOM: false })
+      const document = renderPartial({ inputs: { integratedOffenderManagementRedRated: false } })
 
       expect(getBadgeText(document)).not.toContain('IOM (Integrated Offender Management): Red')
     })
@@ -144,10 +164,9 @@ describe('_tags partial', () => {
   describe('multiple badges', () => {
     it('shows all applicable badges simultaneously', () => {
       const document = renderPartial({
-        isOPD: true,
+        inputs: { offenderPersonalDisorderPathway: true, integratedOffenderManagementRedRated: true },
         isInBreach: true,
         isCustody: true,
-        isRedIOM: true,
       })
 
       const badges = getBadgeText(document)

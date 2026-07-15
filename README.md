@@ -1,6 +1,36 @@
 # hmpps-mpop-frontend-components-lib
 MPoP front-end library
 
+## Usage
+
+### Installation
+
+```bash
+npm install @ministryofjustice/hmpps-mpop-frontend-components-lib
+```
+
+### Nunjucks setup
+
+The components in this library use custom Nunjucks filters. You must register them with your Nunjucks environment before rendering any components, otherwise you will see a `filter not found` error.
+
+Call `mpopNunjucksSetup` once when configuring your application:
+
+```ts
+import nunjucks from 'nunjucks'
+import { mpopNunjucksSetup } from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+
+const env = nunjucks.configure([...])
+mpopNunjucksSetup(env)
+```
+
+### SCSS
+
+Import the component styles in your SCSS entry point:
+
+```scss
+@import '@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/all';
+```
+
 ## Releasing
 
 This package is published to npm using GitHub Releases and npm Trusted Publishing.

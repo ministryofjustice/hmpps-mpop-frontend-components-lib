@@ -1,4 +1,4 @@
-{% if params.appointmentsAllowance is defined and params.appointmentsCompleted is defined and (params.appointmentsCompleted | int) >= (params.appointmentsAllowance | int) and not params.isOPD %}
+{% if params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance | int) and not params.inputs.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>No appointments remaining</strong>
 {% endif %}
 
@@ -10,10 +10,10 @@
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In custody</strong>
 {% endif %}
 
-{% if params.isOPD %}
+{% if params.inputs.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--purple'>Offender personality disorder</strong>
 {% endif %}
 
-{% if params.isRedIOM %}
+{% if params.inputs.integratedOffenderManagementRedRated %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>IOM (Integrated Offender Management): Red</strong>
 {% endif %}
