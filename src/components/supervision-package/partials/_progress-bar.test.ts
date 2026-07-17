@@ -197,6 +197,30 @@ describe('_progress-bar partial', () => {
     })
   })
 
+  describe('label text', () => {
+    it('shows "Required" for the Early engagement phase (INIT)', () => {
+      const document = renderPartial({
+        phase: { name: { code: 'INIT' } },
+        earlyEngagement: { completed: 2, weeks: 5 },
+        currentYear: { appointments: { scheduled: 0 } },
+      })
+
+      const labels = Array.from(document.querySelectorAll('p.govuk-body.govuk-\\!-margin-bottom-2'))
+      expect(labels[0]?.textContent?.trim()).toBe('Required')
+    })
+
+    it('shows "Maximum" for a non-Early engagement phase (STD)', () => {
+      const document = renderPartial({
+        phase: { name: { code: 'STD' } },
+        currentYear: { appointments: { allowance: 20, completed: 3, scheduled: 0 } },
+        earlyEngagement: { weeks: 5 },
+      })
+
+      const labels = Array.from(document.querySelectorAll('p.govuk-body.govuk-\\!-margin-bottom-2'))
+      expect(labels[0]?.textContent?.trim()).toBe('Maximum')
+    })
+  })
+
   describe('missing value coercion', () => {
     it('treats undefined appointmentsEarlyEngagementCompleted as empty', () => {
       const document = renderPartial({

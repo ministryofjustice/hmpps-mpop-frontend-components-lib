@@ -175,11 +175,18 @@ const html = env.renderString(
       }) }}
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
-      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag.</p>
+      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
       {{ supervisionPackage({
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
-        historyHref: "#"
+        historyHref: "#",
+        forename: 'Stuart',
+        surname: 'Morris',
+        phase: {
+          name: { code: 'FTHRD', description: 'Final Third' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        }
       }) }}
 
       <h2 class="govuk-heading-m">Missing tier</h2>
