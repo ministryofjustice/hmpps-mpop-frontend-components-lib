@@ -22,7 +22,7 @@
 
 <div class='govuk-grid-row govuk-!-margin-top-4'>
     <div class='govuk-grid-column-one-third'>
-        <p class='govuk-body govuk-!-margin-bottom-2'>Maximum</p>
+        <p class='govuk-body govuk-!-margin-bottom-2'>{{ 'Required' if params.phase.name.code  == 'INIT' else 'Maximum' }}</p>
         <p class='govuk-body-l govuk-!-font-weight-bold'>{{ allowance }}</p>
     </div>
 
