@@ -28,6 +28,12 @@ const tierApiUrlMap = {
   prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
 } as const
 
+const ndeliusBaseUrlMap = {
+  dev: 'https://ndelius.test.probation.service.justice.gov.uk',
+  preprod: 'https://ndelius.pre-prod.delius.probation.hmpps.dsd.io',
+  prod: 'https://ndelius.probation.service.justice.gov.uk',
+} as const
+
 const masApiUrlMap = {
   dev: 'https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk',
   preprod: 'https://manage-supervision-and-delius-preprod.hmpps.service.justice.gov.uk',
@@ -49,6 +55,7 @@ const supervisionPackageApiUrlMap = {
 const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
 const masApiUrl = masApiUrlMap[environment as keyof typeof masApiUrlMap]
 const supervisionPackageApiUrl = supervisionPackageApiUrlMap[environment as keyof typeof supervisionPackageApiUrlMap]
+const ndeliusBaseUrl = ndeliusBaseUrlMap[environment as keyof typeof ndeliusBaseUrlMap]
 
 const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
@@ -121,9 +128,10 @@ async function main() {
     historyText: 'View tier change history',
     allAppointmentsHref: '#',
     arrangeAppointmentHref: '#',
-    updateRiskFlagHref: '#',
     forename: personalDetails?.name.forename,
     surname: personalDetails?.name.surname,
+    crn: personalDetails?.crn,
+    deliusBaseURL: ndeliusBaseUrl,
     ...(supervisionPackageHttpStatus === 200 ? supervisionPackage : {}),
   }
 

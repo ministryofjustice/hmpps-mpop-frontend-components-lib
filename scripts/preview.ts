@@ -66,9 +66,10 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        updateRiskFlagHref: '#',
         forename: 'Stuart',
         surname: 'Morris',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
         phase: {
           name: { code: 'INIT', description: 'Initial Weekly' },
           startDate: '2026-01-01',
@@ -124,9 +125,9 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        updateRiskFlagHref: '#',
         forename: 'Maria',
-        surname: 'Morris',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
         phase: {
           name: { code: 'INIT', description: 'Initial Weekly' },
           startDate: '2026-01-01',
