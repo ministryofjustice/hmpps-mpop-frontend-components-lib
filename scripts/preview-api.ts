@@ -110,15 +110,16 @@ async function main() {
   const { changeReason, tierScore, tag } = result.calculation
   const personalDetailsResponse = await mpopComponents.getPersonalDetails(authToken, crn)
   const supervisionPackageResponse = await mpopComponents.getSupervisionPackage(authToken, crn)
+  const getPersonScheduleResponse = await mpopComponents.getPersonSchedule(authToken, crn)
 
   console.info(result)
   console.info(personalDetailsResponse)
   console.info(supervisionPackageResponse)
+  console.info(getPersonScheduleResponse)
 
   const { supervisionPackage, httpStatus: supervisionPackageHttpStatus } = supervisionPackageResponse
   const { personalDetails } = personalDetailsResponse
-
-  console.log({ supervisionPackageHttpStatus })
+  const { personSchedule } = getPersonScheduleResponse
 
   const supervisionPackageParams = {
     tierScore,
@@ -132,6 +133,11 @@ async function main() {
     surname: personalDetails?.name.surname,
     crn: personalDetails?.crn,
     deliusBaseURL: ndeliusBaseUrl,
+    nextAppointment: {
+      description: personSchedule?.personSchedule?.appointments?.[0]?.type,
+      date: personSchedule?.personSchedule?.appointments?.[0]?.startDateTime,
+      href: '#',
+    },
     ...(supervisionPackageHttpStatus === 200 ? supervisionPackage : {}),
   }
 

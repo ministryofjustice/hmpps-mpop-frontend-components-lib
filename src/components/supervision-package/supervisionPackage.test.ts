@@ -64,6 +64,51 @@ describe('supervision-package', () => {
     expect(headingTexts).not.toContain('Stage title')
   })
 
+  describe('next appointment', () => {
+    it('renders the next appointment details when date, description and href are present', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        nextAppointment: {
+          date: '2026-08-01T14:30:00',
+          description: 'HOME VISIT',
+          href: '/appointments/123',
+        },
+      })
+
+      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Next appointment')
+
+      const appointmentLink = document.querySelector('a[href="/appointments/123"]')
+      expect(appointmentLink).not.toBeNull()
+      expect(appointmentLink?.textContent?.trim()).toBe('Home visit: 1 August 2026 at 2:30pm')
+
+      expect(document.body.textContent).not.toContain('No appointments scheduled')
+    })
+
+    it('renders "No appointments scheduled" when nextAppointment is absent', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#' })
+
+      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Next appointment')
+      expect(document.body.textContent).toContain('No appointments scheduled')
+    })
+
+    it('renders "No appointments scheduled" when nextAppointment is missing required fields', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        nextAppointment: { date: '2026-08-01T14:30:00', description: 'Home visit' },
+      })
+
+      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Next appointment')
+      expect(document.body.textContent).toContain('No appointments scheduled')
+    })
+  })
+
   it('hides the tier score when tierScore is MISSING', () => {
     const document = renderComponent({ tierScore: 'MISSING', tag: tierTags.missing, historyHref: '#' })
 

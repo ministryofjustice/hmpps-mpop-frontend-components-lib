@@ -398,4 +398,122 @@ describe('MPoPComponents', () => {
       })
     })
   })
+
+  describe('getPersonSchedule', () => {
+    const mockPersonSchedule = {
+      personSummary: {
+        name: { forename: 'John', surname: 'Doe' },
+        crn: 'X123456',
+        dateOfBirth: '1990-01-01',
+      },
+      personSchedule: {
+        size: 1,
+        page: 0,
+        totalResults: 1,
+        totalPages: 1,
+        appointments: [
+          {
+            id: '1',
+            type: 'Appointment',
+            startDateTime: '2026-08-01T10:00:00Z',
+          },
+        ],
+      },
+    }
+
+    it('should return personSchedule with status 200 when the API responds using default parameters', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPersonSchedule)
+
+      const result = await mpopComponents.getPersonSchedule('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personSchedule: mockPersonSchedule,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith(
+        '/schedule/X123456/upcoming?size=1&page=0&sortBy=date&ascending=true',
+        'authToken',
+      )
+    })
+
+    it('should build the query using the provided type, page, size and sortBy parameters', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPersonSchedule)
+
+      const result = await mpopComponents.getPersonSchedule(
+        'authToken',
+        'X123456',
+        'previous',
+        '2',
+        '10',
+        '&sortBy=date&ascending=false',
+      )
+
+      expect(result).toEqual({
+        personSchedule: mockPersonSchedule,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith(
+        '/schedule/X123456/previous?size=10&page=2&sortBy=date&ascending=false',
+        'authToken',
+      )
+    })
+
+    it('should return null personSchedule with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonSchedule('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personSchedule: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonSchedule('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personSchedule: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null personSchedule with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonSchedule('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personSchedule: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonSchedule('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personSchedule: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
 })
