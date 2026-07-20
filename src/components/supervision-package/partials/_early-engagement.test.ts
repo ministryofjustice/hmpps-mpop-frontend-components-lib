@@ -103,7 +103,7 @@ describe('_early-engagement partial', () => {
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement is expected to end on'))
 
       expect(endDateParagraph?.textContent).toContain('if Alex attends the required appointments by then')
     })
@@ -117,10 +117,10 @@ describe('_early-engagement partial', () => {
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement is expected to end on'))
 
       expect(endDateParagraph?.textContent).not.toContain('if Alex attends the required appointments by then')
-      expect(endDateParagraph?.textContent).toContain('Early engagement ends on 1 January 2026.')
+      expect(endDateParagraph?.textContent).toContain('Early engagement is expected to end on 1 January 2026.')
     })
 
     it('omits the conditional attendance clause when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
@@ -132,7 +132,7 @@ describe('_early-engagement partial', () => {
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement is expected to end on'))
 
       expect(endDateParagraph?.textContent).not.toContain('if Alex attends the required appointments by then')
     })
@@ -145,7 +145,7 @@ describe('_early-engagement partial', () => {
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement is expected to end on'))
 
       expect(endDateParagraph).toBeUndefined()
     })
@@ -158,7 +158,7 @@ describe('_early-engagement partial', () => {
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement ends on'))
+      const endDateParagraph = paragraphs.find(p => p.textContent?.includes('Early engagement is expected to end on'))
 
       expect(endDateParagraph).toBeUndefined()
     })

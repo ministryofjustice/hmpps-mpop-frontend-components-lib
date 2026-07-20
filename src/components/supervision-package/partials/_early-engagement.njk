@@ -4,7 +4,7 @@
 
 {% if params.forename and params.currentYear.appointments.allowance  is defined and params.earlyEngagement.weeks is defined %}
     <p class='govuk-body'>
-        Early engagement ends on {{ params.phase.endDate | dateWithYear }}{% if params.forename and (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %} if {{ params.forename }} attends the required appointments by then{% endif %}.
+        Early engagement is expected to end on {{ params.phase.endDate | dateWithYear }}{% if params.forename and (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %} if {{ params.forename }} attends the required appointments by then{% endif %}.
     </p>
 {% endif %}
 
