@@ -46,11 +46,14 @@
                 </p>
             {% endif %}
 
-            {% if params.nextAppointment and params.nextAppointmentHref %}
+            {% set nextAppointmentDate = (params.nextAppointment and params.nextAppointment.date) | dateWithYear(true) %}
+            {% if params.nextAppointment and nextAppointmentDate and params.nextAppointment.description and params.nextAppointment.href %}
                 <h3 class='govuk-heading-s'>Next appointment</h3>
                 <p class='govuk-body'>
-                    <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment }}</a>
+                    <a href='{{ params.nextAppointment.href }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment.description | toTitleCase }}: {{ nextAppointmentDate }}</a>
                 </p>
+            {% else %}
+                <p class='govuk-body'>No appointments scheduled</p>
             {% endif %}
         </div>
 

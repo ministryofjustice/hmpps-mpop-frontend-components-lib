@@ -70,6 +70,11 @@ const html = env.renderString(
         surname: 'Morris',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
         phase: {
           name: { code: 'INIT', description: 'Initial Weekly' },
           startDate: '2026-01-01',
@@ -128,6 +133,11 @@ const html = env.renderString(
         forename: 'Maria',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
         phase: {
           name: { code: 'INIT', description: 'Initial Weekly' },
           startDate: '2026-01-01',

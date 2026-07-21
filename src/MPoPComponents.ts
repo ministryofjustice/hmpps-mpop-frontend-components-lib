@@ -9,6 +9,7 @@ import { SuppressingRestClient } from './SuppressingRestClient'
 import type { PersonalDetailsSummary, PersonalDetailsResponse } from './types/PersonalDetails'
 import type { SupervisionPackage, SupervisionPackageResponse } from './types/SupervisionPackage'
 import { yearsSince } from './utils/yearsSince'
+import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -174,6 +175,49 @@ export default class MPoPComponents {
 
     return {
       ...supervisionPackageResponse,
+      error,
+    }
+  }
+
+  async getPersonSchedule(
+    authOptions: AuthOptions | string,
+    crn: string,
+    type: 'upcoming' | 'previous' = 'upcoming',
+    page: string = '0',
+    size: string = '1',
+    sortBy: string = '&sortBy=date&ascending=true',
+  ): Promise<PersonScheduleResponse> {
+    let error: Error | null = null
+    let personScheduleResponse: PersonScheduleResponse
+
+    try {
+      const queryParameters = `?${new URLSearchParams({ size, page }).toString()}${sortBy ?? ''}`
+      const response = await this.masApiRestClient.get<PersonSchedule>(
+        `/schedule/${crn}/${type}${queryParameters}`,
+        authOptions,
+      )
+      if (!response) {
+        personScheduleResponse = {
+          personSchedule: null,
+          httpStatus: 404,
+        }
+      } else {
+        personScheduleResponse = {
+          personSchedule: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      personScheduleResponse = {
+        personSchedule: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...personScheduleResponse,
       error,
     }
   }
