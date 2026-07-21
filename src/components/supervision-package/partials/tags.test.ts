@@ -1,7 +1,9 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
+mpopNunjucksSetup(env)
 
 const renderPartial = (params = {}) => {
   const html = env.render('supervision-package/partials/_tags.njk', { params })
@@ -102,19 +104,31 @@ describe('_tags partial', () => {
   })
 
   describe('In breach badge', () => {
-    it('shows the badge when isInBreach is true', () => {
-      const document = renderPartial({ isInBreach: true })
+    it('shows the badge when a sentence is in breach and its code is not SPX', () => {
+      const document = renderPartial({
+        inputs: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }] },
+      })
 
       expect(getBadgeText(document)).toContain('In breach')
     })
 
-    it('does not show the badge when isInBreach is false', () => {
-      const document = renderPartial({ isInBreach: false })
+    it('does not show the badge when the breached sentence has code SPX', () => {
+      const document = renderPartial({
+        inputs: { sentences: [{ supervisionPackage: { code: 'SPX' }, inBreach: true }] },
+      })
 
       expect(getBadgeText(document)).not.toContain('In breach')
     })
 
-    it('does not show the badge when isInBreach is not set', () => {
+    it('does not show the badge when no sentences are in breach', () => {
+      const document = renderPartial({
+        inputs: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }] },
+      })
+
+      expect(getBadgeText(document)).not.toContain('In breach')
+    })
+
+    it('does not show the badge when sentences is not set', () => {
       const document = renderPartial({})
 
       expect(getBadgeText(document)).not.toContain('In breach')
@@ -164,8 +178,11 @@ describe('_tags partial', () => {
   describe('multiple badges', () => {
     it('shows all applicable badges simultaneously', () => {
       const document = renderPartial({
-        inputs: { offenderPersonalDisorderPathway: true, integratedOffenderManagementRedRated: true },
-        isInBreach: true,
+        inputs: {
+          offenderPersonalDisorderPathway: true,
+          integratedOffenderManagementRedRated: true,
+          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
+        },
         isCustody: true,
       })
 

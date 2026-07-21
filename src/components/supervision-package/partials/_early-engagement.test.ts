@@ -163,4 +163,104 @@ describe('_early-engagement partial', () => {
       expect(endDateParagraph).toBeUndefined()
     })
   })
+
+  describe('IOM red RAG guidance', () => {
+    it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        inputs: { integratedOffenderManagementRedRated: true },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph?.textContent).toContain(
+        'Alex has an IOM red RAG status. The maximum number of appointments is the same as tier A.',
+      )
+    })
+
+    it('hides the IOM guidance when integratedOffenderManagementRedRated is false', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        inputs: { integratedOffenderManagementRedRated: false },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph).toBeUndefined()
+    })
+
+    it('hides the IOM guidance when inputs is not provided', () => {
+      const document = renderPartial({ forename: 'Alex' })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
+
+      expect(iomParagraph).toBeUndefined()
+    })
+  })
+
+  describe('additional discretionary appointments for women', () => {
+    it.each`
+      tierScore
+      ${'C'}
+      ${'D'}
+      ${'E'}
+      ${'F'}
+      ${'G'}
+    `('shows the guidance when gender is Female and tierScore is $tierScore', ({ tierScore }) => {
+      const document = renderPartial({
+        forename: 'Alex',
+        tierScore,
+        inputs: { gender: 'Female', integratedOffenderManagementRedRated: false },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p => p.textContent?.includes('discretionary appointments'))
+
+      expect(discretionaryParagraph?.textContent).toContain(
+        `As a woman in tier ${tierScore}, Alex can have up to 5 additional discretionary appointments.`,
+      )
+    })
+
+    it('hides the guidance when tierScore is not one of C, D, E, F or G', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        tierScore: 'B',
+        inputs: { gender: 'Female', integratedOffenderManagementRedRated: false },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p => p.textContent?.includes('discretionary appointments'))
+
+      expect(discretionaryParagraph).toBeUndefined()
+    })
+
+    it('hides the guidance when gender is not Female', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        tierScore: 'C',
+        inputs: { gender: 'Male', integratedOffenderManagementRedRated: false },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p => p.textContent?.includes('discretionary appointments'))
+
+      expect(discretionaryParagraph).toBeUndefined()
+    })
+
+    it('hides the guidance when integratedOffenderManagementRedRated is true', () => {
+      const document = renderPartial({
+        forename: 'Alex',
+        tierScore: 'C',
+        inputs: { gender: 'Female', integratedOffenderManagementRedRated: true },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const discretionaryParagraph = paragraphs.find(p => p.textContent?.includes('discretionary appointments'))
+
+      expect(discretionaryParagraph).toBeUndefined()
+    })
+  })
 })

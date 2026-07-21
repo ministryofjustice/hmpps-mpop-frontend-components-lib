@@ -2,7 +2,7 @@
     <strong class='app-status-badge govuk-tag govuk-tag--red'>No appointments remaining</strong>
 {% endif %}
 
-{% if params.isInBreach %}
+{% if params.inputs.sentences | hasBreachedSentence %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In breach</strong>
 {% endif %}
 

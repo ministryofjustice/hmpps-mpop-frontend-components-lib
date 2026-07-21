@@ -14,6 +14,14 @@
 
 {% include './_progress-bar.njk' %}
 
+{% if params.inputs.integratedOffenderManagementRedRated %}
+    <p class='govuk-body'>{{ params.forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
+{% endif %}
+
+{% if params.inputs | isEligibleForDiscretionaryAppointments(params.tierScore) %}
+    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.forename }} can have up to 5 additional discretionary appointments.</p>
+{% endif %}
+
 {% if params.allAppointmentsHref %}
     <p class='govuk-body'>
         <a class='govuk-link govuk-link--no-visited-state' href='{{ params.allAppointmentsHref }}' >View all appointments</a>
