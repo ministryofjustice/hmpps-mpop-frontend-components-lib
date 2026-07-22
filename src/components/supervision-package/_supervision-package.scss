@@ -12,6 +12,12 @@ $supervision-package-accent-colour: govuk-colour("blue");
   padding-left: govuk-spacing(4);
 
   margin-bottom: govuk-spacing(6);
+
+  .govuk-warning-text {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
 }
 
 .app-tier-header {
