@@ -179,7 +179,7 @@ const html = env.renderString(
                 finalThirdDate: '2026-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               },
-              inBreach: false
+              inBreach: true
             }
           ]
         }

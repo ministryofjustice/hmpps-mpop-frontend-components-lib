@@ -121,6 +121,46 @@ describe('supervision-package', () => {
     expect(tagElement?.classList.contains('govuk-tag--red')).toBe(true)
   })
 
+  describe('breach warning text', () => {
+    it('renders the warning text when the sentences are in breach', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        forename: 'Alex',
+        inputs: {
+          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
+        },
+      })
+
+      const warningText = document.querySelector('.govuk-warning-text__text')
+      expect(warningText).not.toBeNull()
+      expect(warningText?.textContent?.trim()).toContain(
+        'Alex is in breach. You should continue to offer appointments.',
+      )
+    })
+
+    it('does not render the warning text when no sentences are in breach', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        forename: 'Alex',
+        inputs: {
+          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }],
+        },
+      })
+
+      expect(document.querySelector('.govuk-warning-text')).toBeNull()
+    })
+
+    it('does not render the warning text when inputs.sentences is absent', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#' })
+
+      expect(document.querySelector('.govuk-warning-text')).toBeNull()
+    })
+  })
+
   describe('button group', () => {
     const findButton = (document: Document, text: string) =>
       Array.from(document.querySelectorAll('.govuk-button-group a')).find(a => a.textContent?.trim() === text)
