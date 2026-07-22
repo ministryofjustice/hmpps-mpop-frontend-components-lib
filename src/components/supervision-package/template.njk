@@ -1,5 +1,5 @@
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
-{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.isInBreach or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
+{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
 
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
