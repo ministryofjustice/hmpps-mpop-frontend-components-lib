@@ -1,0 +1,47 @@
+{% set sentence = params.supervisionPackage.inputs.sentences[0] %}
+{% set status = sentence.custody.finalThirdDate | finalThirdStatus(sentence.endDate) %}
+
+<section class="supervision-final-third-progress">
+  <div class="supervision-final-third-progress__body">
+
+    <h3 class="govuk-heading-m supervision-final-third-progress__title">
+      Final third progress
+    </h3>
+
+    <h4 class="govuk-heading-s supervision-final-third-progress__tier">
+      Tier: {{ params.tierScore }}
+    </h4>
+
+    <span class="supervision-final-third-progress__link">
+      <a
+        class="govuk-link"
+        href="{{ params.headerTierLink }}">
+        View tier change history
+      </a>
+    </span>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Final third date</th>
+          <th class="govuk-table__header">Status</th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{ sentence.custody.finalThirdDate | dateWithYear }}
+          </td>
+
+          <td class="govuk-table__cell">
+            <strong class="govuk-tag {{ status.tagClass }}">
+              {{ status.text }}
+            </strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>
