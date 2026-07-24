@@ -1,3 +1,5 @@
+@use "../src/components/supervision-final-third-progress/supervision-final-third-progress";
+
 .supervision-package .govuk-tag {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -162,3 +164,7 @@ body {
     display: inline;
   }
 }
+
+.supervision-final-third-progress__body {
+    padding: 20px;
+  }
