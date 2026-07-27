@@ -8,4 +8,4 @@ type Sentence = {
 }
 
 export const isRecalled = (sentences?: Sentence[] | null): boolean =>
-  Array.isArray(sentences) && sentences.some(sentence => sentence?.custody?.status?.code === 'D')
+  Array.isArray(sentences) && sentences.some(sentence => sentence?.custody?.status?.code === 'C')

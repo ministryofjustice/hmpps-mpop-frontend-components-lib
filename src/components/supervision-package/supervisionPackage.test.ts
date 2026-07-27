@@ -195,7 +195,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
-          sentences: [{ custody: { status: { code: 'D', description: 'Recalled' } } }],
+          sentences: [{ custody: { status: { code: 'C', description: 'Recalled' } } }],
         },
       })
 
@@ -211,7 +211,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
-          sentences: [{ custody: { status: { code: 'C', description: 'Custody' } } }],
+          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
         },
       })
 
@@ -234,7 +234,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
-          sentences: [{ custody: { status: { code: 'D', description: 'Recalled' } } }],
+          sentences: [{ custody: { status: { code: 'C', description: 'Recalled' } } }],
         },
       })
 
@@ -252,7 +252,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
-          sentences: [{ custody: { status: { code: 'C', description: 'Custody' } } }],
+          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
         },
       })
 

@@ -1,28 +1,28 @@
 import { isRecalled } from './isRecalled'
 
 describe('isRecalled', () => {
-  it('returns true when a sentence has a custody status code other than C', () => {
-    expect(isRecalled([{ custody: { status: { code: 'D', description: 'Recalled' } } }])).toBe(true)
+  it('returns true when a sentence has custody status code C', () => {
+    expect(isRecalled([{ custody: { status: { code: 'C', description: 'Recalled' } } }])).toBe(true)
   })
 
-  it('returns false when the only sentence has custody status code C', () => {
-    expect(isRecalled([{ custody: { status: { code: 'C', description: 'Custody' } } }])).toBe(false)
+  it('returns false when the only sentence has custody status code other than C', () => {
+    expect(isRecalled([{ custody: { status: { code: 'D', description: 'Custody' } } }])).toBe(false)
   })
 
   it('returns true when at least one of multiple sentences qualifies', () => {
     expect(
       isRecalled([
-        { custody: { status: { code: 'C', description: 'Custody' } } },
-        { custody: { status: { code: 'D', description: 'Recalled' } } },
+        { custody: { status: { code: 'D', description: 'Custody' } } },
+        { custody: { status: { code: 'C', description: 'Recalled' } } },
       ]),
     ).toBe(true)
   })
 
-  it('returns false when all sentences have custody status code C', () => {
+  it('returns false when all sentences have custody status code other than C', () => {
     expect(
       isRecalled([
-        { custody: { status: { code: 'C', description: 'Custody' } } },
-        { custody: { status: { code: 'C', description: 'Custody' } } },
+        { custody: { status: { code: 'D', description: 'Custody' } } },
+        { custody: { status: { code: 'D', description: 'Custody' } } },
       ]),
     ).toBe(false)
   })
