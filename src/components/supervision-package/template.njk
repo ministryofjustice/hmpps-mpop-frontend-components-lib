@@ -77,7 +77,7 @@
         {% endif %}
     </div>
 
-    {% if params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL) %}
+    {% if not (params.inputs.sentences | isRecalled) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
         <div class='govuk-button-group'>
             {% if params.arrangeAppointmentHref %}
                 <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
