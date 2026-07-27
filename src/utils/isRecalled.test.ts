@@ -27,8 +27,8 @@ describe('isRecalled', () => {
     ).toBe(false)
   })
 
-  it('returns true when custody is missing on a sentence', () => {
-    expect(isRecalled([{}])).toBe(true)
+  it('returns false when custody is missing on a sentence', () => {
+    expect(isRecalled([{}])).toBe(false)
   })
 
   it('returns false when sentences is undefined', () => {
