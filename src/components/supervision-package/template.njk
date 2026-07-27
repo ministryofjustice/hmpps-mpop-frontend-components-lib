@@ -77,7 +77,7 @@
         {% endif %}
     </div>
 
-    {% if params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL) %}
+    {% if params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL and params.inputs.sentences | isRecalled) %}
         <div class='govuk-button-group'>
             {% if params.arrangeAppointmentHref %}
                 <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
@@ -85,7 +85,7 @@
                 </a>
             {% endif %}
 
-            {% if params.crn and params.deliusBaseURL %}
+            {% if params.crn and params.deliusBaseURL and params.inputs.sentences | isRecalled %}
                 <a href='{{ params.deliusBaseURL }}/NDelius-war/delius/JSP/deeplink.xhtml?component=RegisterSummary&CRN={{params.crn}}' role='button' draggable='false' class='govuk-button govuk-button--secondary' data-module='govuk-button'>
                     Update NDelius risk flag
                 </a>
