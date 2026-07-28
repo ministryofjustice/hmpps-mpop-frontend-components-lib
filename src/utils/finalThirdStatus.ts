@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 
 export type FinalThirdStatus = {
-  text: 'Not Started' | 'In Progress' | 'Ended'
+  text: 'Not started' | 'In progress' | 'Ended'
   tagClass: 'govuk-tag--blue' | 'govuk-tag--green' | 'govuk-tag--grey'
 }
 
@@ -24,7 +24,7 @@ export const finalThirdStatus = (
 
   if (!finalThirdDate) {
     return {
-      text: 'Not Started',
+      text: 'Not started',
       tagClass: 'govuk-tag--blue',
     }
   }
@@ -33,13 +33,13 @@ export const finalThirdStatus = (
 
   if (today >= thirdDate) {
     return {
-      text: 'In Progress',
+      text: 'In progress',
       tagClass: 'govuk-tag--green',
     }
   }
 
   return {
-    text: 'Not Started',
+    text: 'Not started',
     tagClass: 'govuk-tag--blue',
   }
 }

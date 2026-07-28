@@ -59,6 +59,7 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
+      <p class="govuk-body"> Also displays Final third progess card</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -98,8 +99,8 @@ const html = env.renderString(
           integratedOffenderManagementRedRated: true,
           offenderPersonalDisorderPathway: false,
           intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          nationalSecurityDivision: true,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
             {
               eventNumber: '1',
@@ -113,7 +114,7 @@ const html = env.renderString(
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
+                finalThirdDate: '2024-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               },
               inBreach: false

@@ -1,3 +1,10 @@
+{% if
+  params.supervisionPackage.inputs.nationalSecurityDivision
+  and params.supervisionPackage.inputs.finalThirdEligibility.eligible
+  and params.supervisionPackage.inputs.sentences[0].type.isCustodial
+  and params.supervisionPackage.inputs.sentences[0].custody.finalThirdDate
+%}
+
 {% set sentence = params.supervisionPackage.inputs.sentences[0] %}
 {% set status = sentence.custody.finalThirdDate | finalThirdStatus(sentence.endDate) %}
 
@@ -8,22 +15,50 @@
       Final third progress
     </h3>
 
-    <h4 class="govuk-heading-s supervision-final-third-progress__tier">
-      Tier: {{ params.supervisionPackage.tierScore }}
-    </h4>
+    <div class="app-tier-header">
+      <h4 class="govuk-heading-s govuk-!-margin-bottom-0 supervision-final-third-progress__tier">
+        Tier {{ '' if params.supervisionPackage.tierScore == 'MISSING' else params.supervisionPackage.tierScore }}
+      </h4>
 
-    <span class="supervision-final-third-progress__link">
-      <a
-        class="govuk-link"
-        href="{{ params.supervisionPackage.historyHref }}">
-        View tier change history
-      </a>
-    </span>
+      {% if params.supervisionPackage.tag.text and params.supervisionPackage.tag.color %}
+        <strong class="govuk-tag govuk-tag--{{ params.supervisionPackage.tag.color }}">
+          {{ params.supervisionPackage.tag.text }}
+        </strong>
+      {% endif %}
+    </div>
+
+    {% if params.supervisionPackage.createdOn %}
+      <p class="govuk-body">
+        The supervision package was created on {{ params.supervisionPackage.createdOn }}.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.tag.text == 'Provisional' %}
+      <p class="govuk-body">
+        We will calculate the supervision package once the tier is confirmed.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.tag.text == 'Unavailable' %}
+      <p class="govuk-body">
+        Tier information is currently unavailable.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.historyHref %}
+      <p class="govuk-body">
+        <a
+          href="{{ params.supervisionPackage.historyHref }}"
+          class="govuk-link govuk-link--no-visited-state">
+          {{ params.supervisionPackage.historyText or 'View tier change history' }}
+        </a>
+      </p>
+    {% endif %}
 
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header">Final third date</th>
+          <th class="govuk-table__header">Start date</th>
           <th class="govuk-table__header">Status</th>
         </tr>
       </thead>
@@ -45,3 +80,5 @@
 
   </div>
 </section>
+
+{% endif %}

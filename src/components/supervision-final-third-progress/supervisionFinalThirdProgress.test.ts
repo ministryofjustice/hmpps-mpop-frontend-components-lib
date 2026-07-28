@@ -28,22 +28,33 @@ describe('supervision-final-third-progress', () => {
     jest.useRealTimers()
   })
 
-  const baseParams = {
+const baseParams = {
+  supervisionPackage: {
     tierScore: 'A',
-    headerTierLink: '/tier-history',
-    supervisionPackage: {
-      inputs: {
-        sentences: [
-          {
-            endDate: '2027-01-07',
-            custody: {
-              finalThirdDate: '2026-11-07',
-            },
-          },
-        ],
-      },
+    historyHref: '/tier-history',
+    tag: {
+      text: null,
+      color: null,
     },
-  }
+    inputs: {
+      nationalSecurityDivision: true,
+      finalThirdEligibility: {
+        eligible: true,
+      },
+      sentences: [
+        {
+          endDate: '2027-01-07',
+          type: {
+            isCustodial: true,
+          },
+          custody: {
+            finalThirdDate: '2026-11-07',
+          },
+        },
+      ],
+    },
+  },
+}
 
   it('renders the component', () => {
     jest.setSystemTime(new Date('2026-10-01'))
@@ -57,7 +68,7 @@ describe('supervision-final-third-progress', () => {
     )
 
     expect(document.querySelector('h4')?.textContent?.trim()).toBe(
-      'Tier: A',
+      'Tier A',
     )
 
     const link = document.querySelector('a')
@@ -83,7 +94,7 @@ describe('supervision-final-third-progress', () => {
 
     const tag = document.querySelector('.govuk-tag')
 
-    expect(tag?.textContent?.trim()).toBe('Not Started')
+    expect(tag?.textContent?.trim()).toBe('Not started')
     expect(tag?.classList.contains('govuk-tag--blue')).toBe(true)
   })
 
@@ -94,7 +105,7 @@ describe('supervision-final-third-progress', () => {
 
     const tag = document.querySelector('.govuk-tag')
 
-    expect(tag?.textContent?.trim()).toBe('In Progress')
+    expect(tag?.textContent?.trim()).toBe('In progress')
     expect(tag?.classList.contains('govuk-tag--green')).toBe(true)
   })
 

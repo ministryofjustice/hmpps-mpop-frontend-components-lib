@@ -13,7 +13,7 @@ describe('finalThirdStatus', () => {
     jest.setSystemTime(new Date('2026-11-01'))
 
     expect(finalThirdStatus('2026-11-07', '2027-01-07')).toEqual({
-      text: 'Not Started',
+      text: 'Not started',
       tagClass: 'govuk-tag--blue',
     })
   })
@@ -22,7 +22,7 @@ describe('finalThirdStatus', () => {
     jest.setSystemTime(new Date('2026-11-07'))
 
     expect(finalThirdStatus('2026-11-07', '2027-01-07')).toEqual({
-      text: 'In Progress',
+      text: 'In progress',
       tagClass: 'govuk-tag--green',
     })
   })
@@ -31,7 +31,7 @@ describe('finalThirdStatus', () => {
     jest.setSystemTime(new Date('2026-12-01'))
 
     expect(finalThirdStatus('2026-11-07', '2027-01-07')).toEqual({
-      text: 'In Progress',
+      text: 'In progress',
       tagClass: 'govuk-tag--green',
     })
   })
@@ -58,7 +58,7 @@ describe('finalThirdStatus', () => {
     jest.setSystemTime(new Date('2026-11-01'))
 
     expect(finalThirdStatus(undefined, '2027-01-07')).toEqual({
-      text: 'Not Started',
+      text: 'Not started',
       tagClass: 'govuk-tag--blue',
     })
   })
