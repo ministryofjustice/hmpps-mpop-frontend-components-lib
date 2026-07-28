@@ -1,5 +1,5 @@
 .supervision-final-third-progress {
-  border: 1px solid #b1b4b6;
+  border: 1px solid govuk-colour("mid-grey");
   margin-bottom: govuk-spacing(4);
 
   .supervision-final-third-progress__body {
@@ -12,11 +12,6 @@
 
   .supervision-final-third-progress__tier {
     margin-bottom: govuk-spacing(1);
-  }
-
-  .supervision-final-third-progress__link {
-    display: inline-block;
-    margin-bottom: govuk-spacing(4);
   }
 
   .govuk-table {

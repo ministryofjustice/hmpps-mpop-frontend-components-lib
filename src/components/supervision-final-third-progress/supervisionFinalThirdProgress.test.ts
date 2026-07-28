@@ -2,10 +2,7 @@ import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
-const env = nunjucks.configure(
-  ['src/components', 'node_modules/govuk-frontend/dist'],
-  { autoescape: true },
-)
+const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 
 mpopNunjucksSetup(env)
 
@@ -28,33 +25,33 @@ describe('supervision-final-third-progress', () => {
     jest.useRealTimers()
   })
 
-const baseParams = {
-  supervisionPackage: {
-    tierScore: 'A',
-    historyHref: '/tier-history',
-    tag: {
-      text: null,
-      color: null,
-    },
-    inputs: {
-      nationalSecurityDivision: true,
-      finalThirdEligibility: {
-        eligible: true,
+  const baseParams = {
+    supervisionPackage: {
+      tierScore: 'A',
+      historyHref: '/tier-history',
+      tag: {
+        text: null,
+        color: null,
       },
-      sentences: [
-        {
-          endDate: '2027-01-07',
-          type: {
-            isCustodial: true,
-          },
-          custody: {
-            finalThirdDate: '2026-11-07',
-          },
+      inputs: {
+        nationalSecurityDivision: true,
+        finalThirdEligibility: {
+          eligible: true,
         },
-      ],
+        sentences: [
+          {
+            endDate: '2027-01-07',
+            type: {
+              isCustodial: true,
+            },
+            custody: {
+              finalThirdDate: '2026-11-07',
+            },
+          },
+        ],
+      },
     },
-  },
-}
+  }
 
   it('renders the component', () => {
     jest.setSystemTime(new Date('2026-10-01'))
@@ -63,13 +60,9 @@ const baseParams = {
 
     expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
 
-    expect(document.querySelector('h3')?.textContent?.trim()).toBe(
-      'Final third progress',
-    )
+    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Final third progress')
 
-    expect(document.querySelector('h4')?.textContent?.trim()).toBe(
-      'Tier A',
-    )
+    expect(document.querySelector('h4')?.textContent?.trim()).toBe('Tier A')
 
     const link = document.querySelector('a')
 

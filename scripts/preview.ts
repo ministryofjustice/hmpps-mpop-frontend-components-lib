@@ -59,7 +59,7 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
-      <p class="govuk-body"> Also displays Final third progess card</p>
+      <p class="govuk-body"> Also displays Final third progress card</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },

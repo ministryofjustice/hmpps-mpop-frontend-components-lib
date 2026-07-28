@@ -5,14 +5,13 @@ export type FinalThirdStatus = {
   tagClass: 'govuk-tag--blue' | 'govuk-tag--green' | 'govuk-tag--grey'
 }
 
-export const finalThirdStatus = (
-  finalThirdDate?: string,
-  sentenceEndDate?: string,
-): FinalThirdStatus => {
-  const today = DateTime.now().startOf('day')
+const ZONE = 'Europe/London'
+
+export const finalThirdStatus = (finalThirdDate?: string, sentenceEndDate?: string): FinalThirdStatus => {
+  const today = DateTime.now().setZone(ZONE).startOf('day')
 
   if (sentenceEndDate) {
-    const endDate = DateTime.fromISO(sentenceEndDate).startOf('day')
+    const endDate = DateTime.fromISO(sentenceEndDate, { zone: ZONE }).startOf('day')
 
     if (today >= endDate) {
       return {
@@ -29,7 +28,7 @@ export const finalThirdStatus = (
     }
   }
 
-  const thirdDate = DateTime.fromISO(finalThirdDate).startOf('day')
+  const thirdDate = DateTime.fromISO(finalThirdDate, { zone: ZONE }).startOf('day')
 
   if (today >= thirdDate) {
     return {
