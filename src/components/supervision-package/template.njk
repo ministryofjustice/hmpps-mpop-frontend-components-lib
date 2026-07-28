@@ -25,6 +25,16 @@
 
     <div class='govuk-grid-row'>
         <div class='{{ "govuk-grid-column-one-half" if params.phase.name.description else "govuk-grid-column-two-thirds" }}'>
+            {% if params.inputs.sentences | hasBreachedSentence %}
+                <div class='govuk-warning-text'>
+                    <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
+                    <strong class='govuk-warning-text__text'>
+                        <span class='govuk-visually-hidden'>Warning</span>
+                        {{ params.forename }} is in breach. You should continue to offer appointments.
+                    </strong>
+                </div>
+            {% endif %}
+
             <div class='app-tier-header'>
                 <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
                     Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
@@ -79,7 +89,7 @@
         {% endif %}
     </div>
 
-    {% if params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL) %}
+    {% if not (params.inputs.sentences | isRecalled) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
         <div class='govuk-button-group'>
             {% if params.arrangeAppointmentHref %}
                 <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
