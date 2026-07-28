@@ -65,34 +65,34 @@ describe('supervision-package', () => {
   })
 
   it('renders the Final Third Progress component instead of the Supervision Package when eligible', () => {
-  const document = renderComponent({
-    tierScore: 'C',
-    tag: tierTags.none,
-    historyHref: '#',
-    inputs: {
-      nationalSecurityDivision: true,
-      finalThirdEligibility: {
-        eligible: true,
-      },
-      sentences: [
-        {
-          type: {
-            isCustodial: true,
-          },
-          custody: {
-            finalThirdDate: '2026-11-07',
-          },
-          endDate: '2027-01-07',
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: tierTags.none,
+      historyHref: '#',
+      inputs: {
+        nationalSecurityDivision: true,
+        finalThirdEligibility: {
+          eligible: true,
         },
-      ],
-    },
+        sentences: [
+          {
+            type: {
+              isCustodial: true,
+            },
+            custody: {
+              finalThirdDate: '2026-11-07',
+            },
+            endDate: '2027-01-07',
+          },
+        ],
+      },
+    })
+
+    expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
+    expect(document.body.textContent).toContain('Final third progress')
+
+    expect(document.querySelector('.supervision-package')).toBeNull()
   })
-
-  expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
-  expect(document.body.textContent).toContain('Final third progress')
-
-  expect(document.querySelector('.supervision-package')).toBeNull()
-})
 
   describe('next appointment', () => {
     it('renders the next appointment details when date, description and href are present', () => {
