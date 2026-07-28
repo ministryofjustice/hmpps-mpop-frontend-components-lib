@@ -2,9 +2,17 @@
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
 {% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
 
+{% if
+  params.inputs.nationalSecurityDivision
+  and params.inputs.finalThirdEligibility.eligible
+  and params.inputs.sentences[0].type.isCustodial
+  and params.inputs.sentences[0].custody.finalThirdDate
+%}
 {{ supervisionFinalThirdProgress({
     supervisionPackage: params
 }) }}
+
+{% else %}
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -87,3 +95,4 @@
         </div>
     {% endif %}
 </div>
+{% endif %}

@@ -59,7 +59,6 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
-      <p class="govuk-body"> Also displays Final third progress card</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -99,8 +98,8 @@ const html = env.renderString(
           integratedOffenderManagementRedRated: true,
           offenderPersonalDisorderPathway: false,
           intensiveSupervisionCourt: false,
-          nationalSecurityDivision: true,
-          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
           sentences: [
             {
               eventNumber: '1',
@@ -114,7 +113,7 @@ const html = env.renderString(
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2024-11-07',
+                finalThirdDate: '2026-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               },
               inBreach: false
@@ -224,6 +223,71 @@ const html = env.renderString(
         tag: { text: null, color: null },
         historyHref: "#",
         historyText: "View tier change history"
+      }) }}
+
+      <h2 class="govuk-heading-m">Final third progress</h2>
+      <p class="govuk-body">Displays the final third progress card</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Stuart',
+        surname: 'Morris',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Initial Weekly' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 2
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 2, completed: 2 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: true,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
       }) }}
     </div>
   </main>

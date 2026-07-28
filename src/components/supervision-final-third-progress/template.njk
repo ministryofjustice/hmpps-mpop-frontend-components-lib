@@ -1,9 +1,3 @@
-{% if
-  params.supervisionPackage.inputs.nationalSecurityDivision
-  and params.supervisionPackage.inputs.finalThirdEligibility.eligible
-  and params.supervisionPackage.inputs.sentences[0].type.isCustodial
-  and params.supervisionPackage.inputs.sentences[0].custody.finalThirdDate
-%}
 
 {% set sentence = params.supervisionPackage.inputs.sentences[0] %}
 {% set status = sentence.custody.finalThirdDate | finalThirdStatus(sentence.endDate) %}
@@ -80,5 +74,3 @@
 
   </div>
 </section>
-
-{% endif %}
