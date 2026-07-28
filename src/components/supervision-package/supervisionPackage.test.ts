@@ -64,6 +64,46 @@ describe('supervision-package', () => {
     expect(headingTexts).not.toContain('Stage title')
   })
 
+  it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'INIT', description: 'Early engagement' } },
+      forename: 'Alex',
+      inputs: { offenderPersonalDisorderPathway: true },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h3')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Supervision appointments')
+
+    expect(document.body.textContent).toContain('Alex is receiving offender personality disorder (OPD) treatment.')
+    expect(document.body.textContent).toContain(
+      'Alex can receive additional appointments while in treatment. Use your professional judgement to decide how many appointments are needed.',
+    )
+    expect(document.body.textContent).toContain(
+      'When treatment ends, the supervision package is recalculated on a pro rata basis.',
+    )
+  })
+
+  it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and phase.name.code INIT are true', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'INIT', description: 'Early engagement' } },
+      forename: 'Alex',
+      inputs: { offenderPersonalDisorderPathway: true },
+      earlyEngagement: { weeks: 5, completed: 2 },
+      currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
+    })
+
+    expect(document.body.textContent).not.toContain('You should see Alex every week')
+    expect(document.body.textContent).toContain('is receiving offender personality disorder (OPD) treatment.')
+  })
+
   describe('next appointment', () => {
     it('renders the next appointment details when date, description and href are present', () => {
       const document = renderComponent({

@@ -185,6 +185,69 @@ const html = env.renderString(
         }
       }) }}
 
+      <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Maria',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Initial Weekly' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 0 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Female',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: true,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
       {{ supervisionPackage({

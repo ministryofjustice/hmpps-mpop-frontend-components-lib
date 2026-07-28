@@ -69,9 +69,14 @@
 
         {% if params.phase.name.description %}
             <div class='govuk-grid-column-one-half'>
-                <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
-                {% if params.phase.name.code  == 'INIT' %}
+                {% if params.inputs.offenderPersonalDisorderPathway %}
+                    <h3 class='govuk-heading-s'>Supervision appointments</h3>
+                    {% include './partials/_opd.njk' %}
+                {% elseif params.phase.name.code  == 'INIT' %}
+                    <h3 class='govuk-heading-s'>Early engagement stage</h3>
                     {% include './partials/_early-engagement.njk' %}
+                {% else %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                 {% endif %}
             </div>
         {% endif %}
