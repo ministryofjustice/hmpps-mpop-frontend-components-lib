@@ -12,7 +12,7 @@
     {% endif %}
 
     <div class='govuk-grid-row'>
-        <div class='{{ "govuk-grid-column-one-half" if params.phase.name.description else "govuk-grid-column-two-thirds" }}'>
+        <div class='{{ "govuk-grid-column-one-half" if (params.phase.name.description and params.phase.name.code) or params.inputs.offenderPersonalDisorderPathway else "govuk-grid-column-two-thirds" }}'>
             {% if params.inputs.sentences | hasBreachedSentence %}
                 <div class='govuk-warning-text'>
                     <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
@@ -67,11 +67,16 @@
             {% endif %}
         </div>
 
-        {% if params.phase.name.description %}
+        {% if (params.phase.name.description and params.phase.name.code) or params.inputs.offenderPersonalDisorderPathway %}
             <div class='govuk-grid-column-one-half'>
-                <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
-                {% if params.phase.name.code  == 'INIT' %}
+                {% if params.inputs.offenderPersonalDisorderPathway %}
+                    <h3 class='govuk-heading-s'>Supervision appointments</h3>
+                    {% include './partials/_opd.njk' %}
+                {% elseif params.phase.name.code  == 'INIT' %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                     {% include './partials/_early-engagement.njk' %}
+                {% else %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }}</h3>
                 {% endif %}
             </div>
         {% endif %}
