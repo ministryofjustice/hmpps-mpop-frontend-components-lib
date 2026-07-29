@@ -64,35 +64,35 @@ describe('supervision-package', () => {
     expect(headingTexts).not.toContain('Stage title')
   })
 
-it('renders the Final Third Progress component instead of the Supervision Package when eligible', () => {
-  const document = renderComponent({
-    tierScore: 'C',
-    tag: tierTags.none,
-    historyHref: '#',
-    inputs: {
-      nationalSecurityDivision: true,
-      finalThirdEligibility: {
-        eligible: true,
-      },
-      sentences: [
-        {
-          type: {
-            isCustodial: true,
-          },
-          custody: {
-            finalThirdDate: '2026-11-07',
-          },
-          endDate: '2027-01-07',
+  it('renders the Final Third Progress component instead of the Supervision Package when eligible', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: tierTags.none,
+      historyHref: '#',
+      inputs: {
+        nationalSecurityDivision: true,
+        finalThirdEligibility: {
+          eligible: true,
         },
-      ],
-    },
+        sentences: [
+          {
+            type: {
+              isCustodial: true,
+            },
+            custody: {
+              finalThirdDate: '2026-11-07',
+            },
+            endDate: '2027-01-07',
+          },
+        ],
+      },
+    })
+
+    expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
+    expect(document.body.textContent).toContain('Final third progress')
+
+    expect(document.querySelector('.supervision-package')).toBeNull()
   })
-
-  expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
-  expect(document.body.textContent).toContain('Final third progress')
-
-  expect(document.querySelector('.supervision-package')).toBeNull()
-})
   it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {
     const document = renderComponent({
       tierScore: 'C',
