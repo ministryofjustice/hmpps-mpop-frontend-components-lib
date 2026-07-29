@@ -59,6 +59,10 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "phase": { "name": { "code": "INIT" } },
+}</code></pre>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -76,7 +80,7 @@ const html = env.renderString(
           href: '#'
         },
         phase: {
-          name: { code: 'INIT', description: 'Initial Weekly' },
+          name: { code: 'INIT', description: 'Early Engagement' },
           startDate: '2026-01-01',
           endDate: '2026-04-01'
         },
@@ -95,7 +99,7 @@ const html = env.renderString(
         inputs: {
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
-          integratedOffenderManagementRedRated: true,
+          integratedOffenderManagementRedRated: false,
           offenderPersonalDisorderPathway: false,
           intensiveSupervisionCourt: false,
           nationalSecurityDivision: false,
@@ -123,6 +127,81 @@ const html = env.renderString(
       }) }}
 
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
+      <p class="govuk-body">This is triggered when <code>earlyEngagement.completed</code> reaches <code>earlyEngagement.weeks</code> (i.e. <code>completed &gt;= weeks</code>) in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "phase": { "name": { "code": "INIT" } },
+  "earlyEngagement": { "weeks": 12, "completed": 12 }
+}</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Stuart',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 12
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 12 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
+      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is a woman</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "phase": { "name": { "code": "INIT" } },
+  "inputs": {
+    "gender": "Female",
+  }
+}</code></pre>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -139,7 +218,7 @@ const html = env.renderString(
           href: '#'
         },
         phase: {
-          name: { code: 'INIT', description: 'Initial Weekly' },
+          name: { code: 'INIT', description: 'Early Engagement' },
           startDate: '2026-01-01',
           endDate: '2026-04-01'
         },
@@ -179,7 +258,150 @@ const html = env.renderString(
                 finalThirdDate: '2026-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m">In breach</h2>
+      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is in breach</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "phase": { "name": { "code": "INIT" } },
+  "inputs": {
+    "sentences": [
+      { "supervisionPackage": { "code": "SPA" }, "inBreach": true }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Stuart',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 0 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
               inBreach: true
+            }
+          ]
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m">OPD</h2>
+      <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "inputs": {
+    "offenderPersonalDisorderPathway": true
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Stuart',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 0 }
+        },
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: true,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
             }
           ]
         }
@@ -187,6 +409,11 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
+      <p class="govuk-body">This is triggered by the following fields in the tier calculation and supervision package API responses:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "tag": { "text": "Provisional", "color": "orange" },
+  "phase": { "name": { "code": "FTHRD" } }
+}</code></pre>
       {{ supervisionPackage({
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
@@ -202,6 +429,10 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Missing tier</h2>
       <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "tierScore": "",
+  "tag": { "text": "Missing", "color": "red" }
+}</code></pre>
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Missing", color: "red" },
@@ -210,6 +441,10 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Unavailable tier</h2>
       <p class="govuk-body">The tier could not be retrieved (for example the Tier API errored), so it is shown with a grey "Unavailable" tag.</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "tierScore": "",
+  "tag": { "text": "Unavailable", "color": "grey" }
+}</code></pre>
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Unavailable", color: "grey" },
@@ -218,6 +453,10 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
       <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "tierScore": "A",
+  "tag": { "text": null, "color": null }
+}</code></pre>
       {{ supervisionPackage({
         tierScore: "A",
         tag: { text: null, color: null },
