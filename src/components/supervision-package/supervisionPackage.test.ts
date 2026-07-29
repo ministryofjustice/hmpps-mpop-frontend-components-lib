@@ -45,6 +45,43 @@ describe('supervision-package', () => {
     }
   })
 
+  describe('created/updated text', () => {
+    it('renders the "created on" text when createdAt equals updatedAt', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.body.textContent).toContain('The supervision package was created on 15 January 2026.')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('renders the "changed on" text when createdAt does not equal updatedAt', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        createdAt: '2026-01-15',
+        updatedAt: '2026-03-20',
+      })
+
+      expect(document.body.textContent).toContain(
+        'The supervision package was changed on 20 March 2026 and the appointment allowance was recalculated.',
+      )
+      expect(document.body.textContent).not.toContain('was created on')
+    })
+
+    it('renders neither created nor changed text when createdAt and updatedAt are absent', () => {
+      const document = renderComponent({ tierScore: 'C', tag: { text: null, color: null }, historyHref: '#' })
+
+      expect(document.body.textContent).not.toContain('was changed on')
+      expect(document.body.textContent).not.toContain('was created on')
+    })
+  })
+
   it('renders the early engagement stage when phaseName is Early engagement', () => {
     const document = renderComponent({
       tierScore: 'C',
@@ -130,6 +167,63 @@ describe('supervision-package', () => {
     })
 
     expect(document.body.textContent).not.toContain('You should see Alex every week')
+    expect(document.body.textContent).toContain('is receiving offender personality disorder (OPD) treatment.')
+  })
+
+  it.each`
+    name      | liferCategory
+    ${'LF01'} | ${{ code: 'LF01' }}
+    ${'LF02'} | ${{ code: 'LF02' }}
+    ${'LF03'} | ${{ code: 'LF03' }}
+    ${'x9'}   | ${{ code: 'x9' }}
+  `('renders the no end date stage when inputs.liferCategory.code is $name', ({ liferCategory }) => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'IPP', description: 'Indeterminate' } },
+      forename: 'Alex',
+      inputs: { liferCategory },
+      currentYear: { appointments: { allowance: 20, scheduled: 2, completed: 5 } },
+      earlyEngagement: { weeks: 0 },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    expect(headings).toContain('Indeterminate stage')
+
+    expect(document.body.textContent).toContain('There is no supervision end date.')
+    expect(document.body.textContent).toContain('5 of 20 appointments used')
+  })
+
+  it('does not render the no end date stage when inputs.liferCategory.code does not match a lifer category code', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'INIT', description: 'Early engagement' } },
+      forename: 'Alex',
+      inputs: { liferCategory: { code: 'LF99' } },
+      earlyEngagement: { weeks: 5, completed: 2 },
+      currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
+    })
+
+    expect(document.body.textContent).not.toContain('There is no supervision end date.')
+    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    expect(headings).toContain('Early engagement stage')
+  })
+
+  it('renders the OPD stage instead of the no end date stage when both offenderPersonalDisorderPathway is true and inputs.liferCategory.code matches a lifer category code', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'IPP', description: 'Indeterminate' } },
+      forename: 'Alex',
+      inputs: { offenderPersonalDisorderPathway: true, liferCategory: { code: 'LF01' } },
+    })
+
+    expect(document.body.textContent).not.toContain('There is no supervision end date.')
     expect(document.body.textContent).toContain('is receiving offender personality disorder (OPD) treatment.')
   })
 

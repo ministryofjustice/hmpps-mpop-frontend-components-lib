@@ -33,6 +33,14 @@
                         {{ params.forename }} is in breach. You should continue to offer appointments.
                     </strong>
                 </div>
+            {% elseif params.inputs.sentences | isRecalled %}
+                <div class='govuk-warning-text'>
+                    <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
+                    <strong class='govuk-warning-text__text'>
+                        <span class='govuk-visually-hidden'>Warning</span>
+                        {{ params.forename }} has been recalled. Their appointments are paused.
+                    </strong>
+                </div>
             {% endif %}
 
             <div class='app-tier-header'>
@@ -44,10 +52,6 @@
                 {% endif %}
             </div>
 
-            {% if params.createdOn %}
-                <p class='govuk-body'>The supervision package was created on {{ params.createdOn }}.</p>
-            {% endif %}
-
             {% if params.tag.text == 'Provisional' %}
                 <p class='govuk-body'>
                     We will calculate the supervision package once the tier is confirmed.
@@ -57,6 +61,16 @@
             {% if params.tag.text == 'Unavailable' %}
                 <p class='govuk-body'>
                     Tier information is currently unavailable.
+                </p>
+            {% endif %}
+
+            {% if params.createdAt and params.createdAt == params.updatedAt %}
+                <p class='govuk-body'>
+                    The supervision package was created on {{ params.createdAt | dateWithYear }}.
+                </p>
+            {% elseif params.createdAt and params.createdAt != params.updatedAt %}
+                <p class='govuk-body'>
+                    The supervision package was changed on {{ params.updatedAt | dateWithYear }} and the appointment allowance was recalculated.
                 </p>
             {% endif %}
 
@@ -84,11 +98,20 @@
                 {% if params.inputs.offenderPersonalDisorderPathway %}
                     <h3 class='govuk-heading-s'>Supervision appointments</h3>
                     {% include './partials/_opd.njk' %}
+                {% elseif params.inputs.liferCategory.code == 'LF01' or params.inputs.liferCategory.code == 'LF02' or params.inputs.liferCategory.code == 'LF03' or params.inputs.liferCategory.code == 'x9'  %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
+                    {% include './partials/_no-end-date.njk' %}
                 {% elseif params.phase.name.code  == 'INIT' %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                     {% include './partials/_early-engagement.njk' %}
                 {% else %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }}</h3>
+                {% endif %}
+
+                {% if params.allAppointmentsHref %}
+                    <p class='govuk-body'>
+                        <a class='govuk-link govuk-link--no-visited-state' href='{{ params.allAppointmentsHref }}' >View all appointments</a>
+                    </p>
                 {% endif %}
             </div>
         {% endif %}

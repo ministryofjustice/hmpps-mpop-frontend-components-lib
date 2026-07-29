@@ -63,6 +63,7 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
   "phase": { "name": { "code": "INIT" } },
 }</code></pre>
+      <p class="govuk-body">This variant is triggered purely by <code>phase.name.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -132,6 +133,7 @@ const html = env.renderString(
   "phase": { "name": { "code": "INIT" } },
   "earlyEngagement": { "weeks": 12, "completed": 12 }
 }</code></pre>
+      <p class="govuk-body">This variant happens in early engagement (<code>phase.name.code === 'INIT'</code>) if <code>earlyEngagement.weeks</code> is the same as <code>earlyEngagement.completed</code>. If it's not early engagement, the equivalent "max reached" condition instead compares <code>currentYear.appointments.completed</code> against <code>currentYear.appointments.allowance</code> (completed &gt;= allowance).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -194,6 +196,76 @@ const html = env.renderString(
         }
       }) }}
 
+
+      <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life emprisionment</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+  "inputs": { ipp: true } or { lifeSentence: true }
+}</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>inputs.ipp === true</code> or <code>inputs.lifeSentence === true</code>, regardless of what <code>phase.name.code</code> is set to.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        forename: 'Stuart',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 5
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 12 }
+        },
+        inputs: {
+          ipp: true,
+          lifeSentence: true,
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is a woman</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
@@ -202,6 +274,7 @@ const html = env.renderString(
     "gender": "Female",
   }
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>inputs.gender === 'Female'</code>, <code>tierScore</code> being one of <code>C</code>/<code>D</code>/<code>E</code>/<code>F</code>/<code>G</code>, and <code>inputs.integratedOffenderManagementRedRated === false</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -275,6 +348,7 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by any sentence in <code>inputs.sentences</code> having <code>inBreach === true</code> with a <code>supervisionPackage.code</code> other than <code>'SPX'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -345,6 +419,7 @@ const html = env.renderString(
     "offenderPersonalDisorderPathway": true
   }
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>inputs.offenderPersonalDisorderPathway === true</code>, regardless of <code>phase.name.code</code> or the IPP/life-sentence flags.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -409,11 +484,15 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
-      <p class="govuk-body">This is triggered by the following fields in the tier calculation and supervision package API responses:</p>
+      <p class="govuk-body">This is triggered by the <code>provisional</code> field on the Tier API's <code>GET /v3/crn/{crn}/tier</code> response, and the <code>phase</code> field on the Supervision Package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "tag": { "text": "Provisional", "color": "orange" },
-  "phase": { "name": { "code": "FTHRD" } }
+  "tierScore": "D2",
+  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
+  "calculationDate": "2021-04-23T18:25:43.511Z",
+  "changeReason": "A registration was added",
+  "provisional": true
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by the Tier API's <code>provisional === true</code>, reflected here as <code>tag: { text: "Provisional" }</code>.</p>
       {{ supervisionPackage({
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
@@ -429,10 +508,15 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Missing tier</h2>
       <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
+      <p class="govuk-body">This is triggered when the Tier API's <code>GET /v3/crn/{crn}/tier</code> response has a <code>tierScore</code> of <code>"MISSING"</code>:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "tierScore": "",
-  "tag": { "text": "Missing", "color": "red" }
+  "tierScore": "MISSING",
+  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
+  "calculationDate": "2021-04-23T18:25:43.511Z",
+  "changeReason": "A registration was added",
+  "provisional": false
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by the Tier API's <code>tierScore === 'MISSING'</code>, reflected here as <code>tag: { text: "Missing" }</code>.</p>
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Missing", color: "red" },
@@ -440,11 +524,8 @@ const html = env.renderString(
       }) }}
 
       <h2 class="govuk-heading-m">Unavailable tier</h2>
-      <p class="govuk-body">The tier could not be retrieved (for example the Tier API errored), so it is shown with a grey "Unavailable" tag.</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "tierScore": "",
-  "tag": { "text": "Unavailable", "color": "grey" }
-}</code></pre>
+      <p class="govuk-body">The tier could not be retrieved, so it is shown with a grey "Unavailable" tag. This is not something the Tier API returns directly &mdash; it is what <code>getTierDetails</code> in <code>MPoPComponents.ts</code> falls back to when the <code>GET /v3/crn/{crn}/tier</code> call errors or resolves to no data (for example a 404 or 500 response).</p>
+      <p class="govuk-body">This variant is triggered when the Tier API call errors or resolves to no data (404/500), which <code>getTierDetails</code> maps to <code>tag: { text: "Unavailable" }</code>.</p>
       {{ supervisionPackage({
         tierScore: "",
         tag: { text: "Unavailable", color: "grey" },
@@ -453,12 +534,17 @@ const html = env.renderString(
 
       <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
       <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
+      <p class="govuk-body">This is the standard shape returned by the Tier API's <code>GET /v3/crn/{crn}/tier</code> when a tier has been confirmed (not missing or provisional):</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "tierScore": "A",
-  "tag": { "text": null, "color": null }
+  "tierScore": "A1",
+  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
+  "calculationDate": "2021-04-23T18:25:43.511Z",
+  "changeReason": "A registration was added",
+  "provisional": false
 }</code></pre>
+      <p class="govuk-body">This variant is triggered by the Tier API returning a <code>tierScore</code> with <code>provisional === false</code> (and not <code>'MISSING'</code>), reflected here as <code>tag: { text: null }</code>.</p>
       {{ supervisionPackage({
-        tierScore: "A",
+        tierScore: "A1",
         tag: { text: null, color: null },
         historyHref: "#",
         historyText: "View tier change history"
