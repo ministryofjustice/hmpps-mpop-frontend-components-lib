@@ -465,40 +465,35 @@ const html = env.renderString(
       }) }}
 
       <h2 class="govuk-heading-m">Final third progress</h2>
-      <p class="govuk-body">Displays the final third progress card</p>
+      <p class="govuk-body">Displays the final third progress card.</p>
+      <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+        "inputs": {
+          "nationalSecurityDivision": true,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2027-01-07",
+              "type": {
+                "isCustodial": true
+              },
+              "custody": {
+                "finalThirdDate": "2025-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        forename: 'Stuart',
-        surname: 'Morris',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        phase: {
-          name: { code: 'INIT', description: 'Initial Weekly' },
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
         inputs: {
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
@@ -520,10 +515,127 @@ const html = env.renderString(
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
+                finalThirdDate: '2025-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
+              }
+            }
+          ]
+        }
+      }) }}
+
+      <p class="govuk-body">The status is "Not started" when the final third date is after today's date</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+        "inputs": {
+          "nationalSecurityDivision": true,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2027-01-07",
+              "type": {
+                "isCustodial": true
               },
-              inBreach: false
+              "custody": {
+                "finalThirdDate": "2027-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: true,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2027-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              }
+            }
+          ]
+        }
+      }) }}
+
+      <p class="govuk-body">The status is "Ended" when the sentence end date is before today's date</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+        "inputs": {
+          "nationalSecurityDivision": true,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2024-01-07",
+              "type": {
+                "isCustodial": true
+              },
+              "custody": {
+                "finalThirdDate": "2025-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        inputs: {
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: true,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2024-01-07',
+              endDate: '2024-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2027-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              }
             }
           ]
         }
