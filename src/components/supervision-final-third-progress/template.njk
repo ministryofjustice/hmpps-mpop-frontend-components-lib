@@ -1,0 +1,76 @@
+
+{% set sentence = params.supervisionPackage.inputs.sentences[0] %}
+{% set status = sentence.custody.finalThirdDate | finalThirdStatus(sentence.endDate) %}
+
+<section class="supervision-final-third-progress">
+  <div class="supervision-final-third-progress__body">
+
+    <h3 class="govuk-heading-m supervision-final-third-progress__title">
+      Final third progress
+    </h3>
+
+    <div class="app-tier-header">
+      <h4 class="govuk-heading-s govuk-!-margin-bottom-0 supervision-final-third-progress__tier">
+        Tier {{ '' if params.supervisionPackage.tierScore == 'MISSING' else params.supervisionPackage.tierScore }}
+      </h4>
+
+      {% if params.supervisionPackage.tag.text and params.supervisionPackage.tag.color %}
+        <strong class="govuk-tag govuk-tag--{{ params.supervisionPackage.tag.color }}">
+          {{ params.supervisionPackage.tag.text }}
+        </strong>
+      {% endif %}
+    </div>
+
+    {% if params.supervisionPackage.createdOn %}
+      <p class="govuk-body">
+        The supervision package was created on {{ params.supervisionPackage.createdOn }}.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.tag.text == 'Provisional' %}
+      <p class="govuk-body">
+        We will calculate the supervision package once the tier is confirmed.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.tag.text == 'Unavailable' %}
+      <p class="govuk-body">
+        Tier information is currently unavailable.
+      </p>
+    {% endif %}
+
+    {% if params.supervisionPackage.historyHref %}
+      <p class="govuk-body">
+        <a
+          href="{{ params.supervisionPackage.historyHref }}"
+          class="govuk-link govuk-link--no-visited-state">
+          {{ params.supervisionPackage.historyText or 'View tier change history' }}
+        </a>
+      </p>
+    {% endif %}
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+           <th scope="col" class="govuk-table__header">Start date</th>
+           <th scope="col" class="govuk-table__header">Status</th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{ sentence.custody.finalThirdDate | dateWithYear }}
+          </td>
+
+          <td class="govuk-table__cell">
+            <strong class="govuk-tag {{ status.tagClass }}">
+              {{ status.text }}
+            </strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</section>

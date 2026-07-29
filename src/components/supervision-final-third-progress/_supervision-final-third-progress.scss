@@ -1,0 +1,24 @@
+.supervision-final-third-progress {
+  border: 1px solid govuk-colour("mid-grey");
+  margin-bottom: govuk-spacing(4);
+
+  .supervision-final-third-progress__body {
+    padding: govuk-spacing(4);
+  }
+
+  .supervision-final-third-progress__title {
+    margin-bottom: govuk-spacing(3);
+  }
+
+  .supervision-final-third-progress__tier {
+    margin-bottom: govuk-spacing(1);
+  }
+
+  .govuk-table {
+    margin-bottom: 0;
+  }
+
+  .govuk-table__row:last-child .govuk-table__cell {
+    border-bottom: 0;
+  }
+}
