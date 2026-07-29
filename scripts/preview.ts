@@ -633,7 +633,7 @@ const html = env.renderString(
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2027-11-07',
+                finalThirdDate: '2025-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               }
             }
