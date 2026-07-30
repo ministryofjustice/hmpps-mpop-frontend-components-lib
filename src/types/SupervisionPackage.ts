@@ -23,8 +23,8 @@ export type SupervisionPackage = {
       completed: number
     }
   }
-  createdAt: string
-  updatedAt: string
+  createdAt?: string
+  updatedAt?: string
   inputs: {
     date: string
     gender: string
@@ -38,9 +38,9 @@ export type SupervisionPackage = {
       since: string
     }
     sentences: Array<Sentence>
-    liferCategory: {
-      code: string
-      description: string
+    liferCategory?: {
+      code?: string
+      description?: string
     }
   }
 }

@@ -64,11 +64,11 @@
                 </p>
             {% endif %}
 
-            {% if params.createdAt and params.createdAt == params.updatedAt %}
+            {% if params.createdAt and (params.createdAt == params.updatedAt or not params.updatedAt) %}
                 <p class='govuk-body'>
                     The supervision package was created on {{ params.createdAt | dateWithYear }}.
                 </p>
-            {% elseif params.createdAt and params.createdAt != params.updatedAt %}
+            {% elseif params.updatedAt and (not params.createdAt or params.createdAt != params.updatedAt) %}
                 <p class='govuk-body'>
                     The supervision package was changed on {{ params.updatedAt | dateWithYear }} and the appointment allowance was recalculated.
                 </p>

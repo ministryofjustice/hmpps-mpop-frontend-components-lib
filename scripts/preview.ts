@@ -197,11 +197,13 @@ const html = env.renderString(
       }) }}
 
 
-      <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life emprisionment</p>
+      <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life imprisonment</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "inputs": { ipp: true } or { lifeSentence: true }
+  "inputs": {
+    "liferCategory": { "code": "LF01" }
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.ipp === true</code> or <code>inputs.lifeSentence === true</code>, regardless of what <code>phase.name.code</code> is set to.</p>
+      <p class="govuk-body">This variant is triggered by <code>inputs.liferCategory.code</code> being one of <code>'LF01'</code>, <code>'LF02'</code>, <code>'LF03'</code> or <code>'x9'</code>, regardless of what <code>phase.name.code</code> is set to (unless <code>inputs.offenderPersonalDisorderPathway</code> is also true, which takes priority).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -235,8 +237,7 @@ const html = env.renderString(
           appointments: { allowance: 46, scheduled: 0, completed: 12 }
         },
         inputs: {
-          ipp: true,
-          lifeSentence: true,
+          liferCategory: { code: 'LF01' },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,

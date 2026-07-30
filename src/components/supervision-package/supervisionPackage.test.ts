@@ -74,6 +74,32 @@ describe('supervision-package', () => {
       expect(document.body.textContent).not.toContain('was created on')
     })
 
+    it('renders the "created on" text when createdAt is present and updatedAt is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        createdAt: '2026-01-15',
+      })
+
+      expect(document.body.textContent).toContain('The supervision package was created on 15 January 2026.')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('renders the "changed on" text when updatedAt is present and createdAt is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        updatedAt: '2026-03-20',
+      })
+
+      expect(document.body.textContent).toContain(
+        'The supervision package was changed on 20 March 2026 and the appointment allowance was recalculated.',
+      )
+      expect(document.body.textContent).not.toContain('was created on')
+    })
+
     it('renders neither created nor changed text when createdAt and updatedAt are absent', () => {
       const document = renderComponent({ tierScore: 'C', tag: { text: null, color: null }, historyHref: '#' })
 
