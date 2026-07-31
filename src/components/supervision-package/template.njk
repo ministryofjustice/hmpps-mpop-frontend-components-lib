@@ -1,6 +1,6 @@
 {% from "../supervision-final-third-progress/macro.njk" import supervisionFinalThirdProgress %}
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
-{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.isCustody or params.inputs.integratedOffenderManagementRedRated %}
+{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge or params.inputs.recallStatus | isRecalled or params.inputs.integratedOffenderManagementRedRated %}
 
 {% if
   params.inputs.nationalSecurityDivision
@@ -12,7 +12,7 @@
     supervisionPackage: params
 }) }}
 
-{% else %}
+{% elif params.phase.name.code != 'SPNA' %}
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -33,7 +33,7 @@
                         {{ params.forename }} is in breach. You should continue to offer appointments.
                     </strong>
                 </div>
-            {% elseif params.inputs.sentences | isRecalled %}
+            {% elseif params.inputs.sentences | isInCustody %}
                 <div class='govuk-warning-text'>
                     <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
                     <strong class='govuk-warning-text__text'>
@@ -98,12 +98,18 @@
                 {% if params.inputs.offenderPersonalDisorderPathway %}
                     <h3 class='govuk-heading-s'>Supervision appointments</h3>
                     {% include './partials/_opd.njk' %}
+                {% elseif params.inputs.sentences | isAtLarge or params.inputs.sentences | isInCustody %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
+                    {% include './partials/_progress-bar.njk' %}
                 {% elseif params.inputs.liferCategory.code == 'LF01' or params.inputs.liferCategory.code == 'LF02' or params.inputs.liferCategory.code == 'LF03' or params.inputs.liferCategory.code == 'x9'  %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                     {% include './partials/_no-end-date.njk' %}
                 {% elseif params.phase.name.code  == 'INIT' %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                     {% include './partials/_early-engagement.njk' %}
+                {% elseif params.phase.name.code  == 'STD' %}
+                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
+                    {% include './partials/_standard-supervision.njk' %}
                 {% else %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }}</h3>
                 {% endif %}
@@ -117,7 +123,7 @@
         {% endif %}
     </div>
 
-    {% if not (params.inputs.sentences | isRecalled) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
+    {% if not (params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge ) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
         <div class='govuk-button-group'>
             {% if params.arrangeAppointmentHref %}
                 <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>

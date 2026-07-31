@@ -136,22 +136,63 @@ describe('_tags partial', () => {
   })
 
   describe('In custody badge', () => {
-    it('shows the badge when isCustody is true', () => {
-      const document = renderPartial({ isCustody: true })
+    it.each`
+      code   | description
+      ${'D'} | ${'In Custody'}
+      ${'I'} | ${'In Custody - IRC'}
+      ${'R'} | ${'In Custody - RoTL'}
+      ${'C'} | ${'Community custody'}
+    `('shows the "$description" badge when sentences.custody.status.code is $code', ({ code, description }) => {
+      const document = renderPartial({ inputs: { sentences: [{ custody: { status: { code, description } } }] } })
 
-      expect(getBadgeText(document)).toContain('In custody')
+      expect(getBadgeText(document)).toContain(description)
     })
 
-    it('does not show the badge when isCustody is false', () => {
-      const document = renderPartial({ isCustody: false })
+    it('does not show the "In custody" badge when sentences.custody.status.code is not set', () => {
+      const document = renderPartial({ inputs: { sentences: [{ custody: { status: {} } }] } })
 
       expect(getBadgeText(document)).not.toContain('In custody')
     })
 
-    it('does not show the badge when isCustody is not set', () => {
+    it('does not show the "In custody" badge when sentences is not set', () => {
       const document = renderPartial({})
 
       expect(getBadgeText(document)).not.toContain('In custody')
+    })
+
+    it('does not show the "In custody" badge when the only matching sentence has code SPX', () => {
+      const document = renderPartial({
+        inputs: { sentences: [{ supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D' } } }] },
+      })
+
+      expect(getBadgeText(document)).not.toContain('In Custody')
+    })
+
+    it('shows the "Unlawfully at large" badge when sentences.custody.location.code is UATLRG', () => {
+      const document = renderPartial({ inputs: { sentences: [{ custody: { location: { code: 'UATLRG' } } }] } })
+
+      expect(getBadgeText(document)).toContain('Unlawfully at large')
+      expect(getBadgeText(document)).not.toContain('In custody')
+    })
+
+    it('shows the recall status description as the badge when recallStatus has a code and no custody status/location matches', () => {
+      const document = renderPartial({ inputs: { recallStatus: { code: 'REC01', description: 'Recall initiated' } } })
+
+      expect(getBadgeText(document)).toContain('Recall initiated')
+    })
+
+    it('prefers "Unlawfully at large" over "In custody" and "Recall initiated" when both would apply', () => {
+      const document = renderPartial({
+        inputs: {
+          recallStatus: { code: 'REC01', description: 'Recall initiated' },
+          sentences: [{ custody: { location: { code: 'UATLRG' }, status: { code: 'D', description: 'In Custody' } } }],
+        },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('Unlawfully at large')
+      expect(badges).not.toContain('In custody')
+      expect(badges).not.toContain('Recall initiated')
     })
   })
 
@@ -183,7 +224,6 @@ describe('_tags partial', () => {
           integratedOffenderManagementRedRated: true,
           sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
         },
-        isCustody: true,
       })
 
       const badges = getBadgeText(document)
@@ -191,7 +231,6 @@ describe('_tags partial', () => {
         expect.arrayContaining([
           'IOM (Integrated Offender Management): Red',
           'In breach',
-          'In custody',
           'Offender personality disorder',
         ]),
       )

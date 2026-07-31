@@ -1,11 +1,6 @@
-type Sentence = {
-  custody?: {
-    status: {
-      code: string
-      description: string
-    }
-  }
+type RecallStatus = {
+  code?: string
+  description?: string
 }
 
-export const isRecalled = (sentences?: Sentence[] | null): boolean =>
-  Array.isArray(sentences) && sentences.some(sentence => sentence?.custody?.status?.code === 'C')
+export const isRecalled = (recallStatus?: RecallStatus | null): boolean => Boolean(recallStatus?.code)

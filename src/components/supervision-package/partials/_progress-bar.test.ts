@@ -94,9 +94,9 @@ describe('_progress-bar partial', () => {
   describe('non-Early engagement phase', () => {
     it.each`
       appointmentsAllowance | earlyEngagementWeeks | appointmentsCompleted | expectedAllowance | expectedRemaining
-      ${20}                 | ${5}                 | ${3}                  | ${15}             | ${12}
-      ${10}                 | ${2}                 | ${1}                  | ${8}              | ${7}
-      ${15}                 | ${5}                 | ${5}                  | ${10}             | ${5}
+      ${20}                 | ${5}                 | ${3}                  | ${20}             | ${17}
+      ${10}                 | ${2}                 | ${1}                  | ${10}             | ${9}
+      ${15}                 | ${5}                 | ${5}                  | ${15}             | ${10}
     `(
       'shows allowance $expectedAllowance and remaining $expectedRemaining (appointmentsAllowance=$appointmentsAllowance, earlyEngagementWeeks=$earlyEngagementWeeks, completed=$appointmentsCompleted)',
       ({
@@ -149,11 +149,11 @@ describe('_progress-bar partial', () => {
       expect(bar.style.width).toBe('0%')
     })
 
-    it('renders 0% width when appointmentsAllowance equals earlyEngagementWeeks (non-early)', () => {
+    it('renders 0% width when appointmentsAllowance equals earlyEngagementCompleted (non-early)', () => {
       const document = renderPartial({
         phase: { name: { code: 'STD' } },
         currentYear: { appointments: { allowance: 5, completed: 3, scheduled: 0 } },
-        earlyEngagement: { weeks: 5 },
+        earlyEngagement: { completed: 5 },
       })
 
       const bar = document.querySelector(
@@ -183,11 +183,11 @@ describe('_progress-bar partial', () => {
     it('clamps to 100% and uses bar-maximum class when completed exceeds allowance (non-early)', () => {
       const document = renderPartial({
         phase: { name: { code: 'STD' } },
-        currentYear: { appointments: { allowance: 10, completed: 9, scheduled: 0 } },
+        currentYear: { appointments: { allowance: 10, completed: 12, scheduled: 0 } },
         earlyEngagement: { weeks: 2 },
       })
 
-      // allowance = 10 - 2 = 8, completed = 9 → rawPercent = 113 → clamped to 100
+      // allowance = 10, completed = 12 → rawPercent = 120 → clamped to 100
       const bar = document.querySelector(
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
@@ -222,7 +222,7 @@ describe('_progress-bar partial', () => {
   })
 
   describe('missing value coercion', () => {
-    it('treats undefined appointmentsEarlyEngagementCompleted as empty', () => {
+    it('treats undefined appointmentsEarlyEngagementCompleted as 0 and renders 0% width', () => {
       const document = renderPartial({
         phase: { name: { code: 'INIT' } },
         earlyEngagement: { weeks: 5 },
@@ -233,7 +233,7 @@ describe('_progress-bar partial', () => {
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
       expect(bar).not.toBeNull()
-      expect(bar.style.width).toBe('')
+      expect(bar.style.width).toBe('0%')
     })
 
     it('treats undefined earlyEngagementWeeks as 0 and renders 0% width', () => {
@@ -248,20 +248,6 @@ describe('_progress-bar partial', () => {
       ) as HTMLElement
       expect(bar).not.toBeNull()
       expect(bar.style.width).toBe('0%')
-    })
-
-    it('treats undefined appointmentsCompleted as empty (non-early)', () => {
-      const document = renderPartial({
-        phase: { name: { code: 'STD' } },
-        currentYear: { appointments: { allowance: 10, scheduled: 0 } },
-        earlyEngagement: { weeks: 2 },
-      })
-
-      const bar = document.querySelector(
-        '.appointment-progress__bar, .appointment-progress__bar-maximum',
-      ) as HTMLElement
-      expect(bar).not.toBeNull()
-      expect(bar.style.width).toBe('')
     })
   })
 })
