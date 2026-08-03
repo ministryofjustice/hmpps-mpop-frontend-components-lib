@@ -7,6 +7,7 @@ import { isEligibleForDiscretionaryAppointments } from './isEligibleForDiscretio
 import { finalThirdStatus } from './finalThirdStatus'
 import { isInCustody } from './isInCustody'
 import { isAtLarge } from './isAtLarge'
+import { sentenceType } from './sentenceType'
 
 export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('dateWithYear', dateWithYear)
@@ -17,4 +18,5 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('finalThirdStatus', finalThirdStatus)
   env.addFilter('isInCustody', isInCustody)
   env.addFilter('isAtLarge', isAtLarge)
+  env.addFilter('sentenceType', sentenceType)
 }

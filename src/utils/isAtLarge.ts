@@ -1,13 +1,5 @@
 import { getPrimarySentences } from './getPrimarySentences'
+import { Sentence } from '../types/SupervisionPackage'
 
-type Sentence = {
-  supervisionPackage?: { code?: string }
-  custody?: {
-    location?: {
-      code?: string
-    }
-  }
-}
-
-export const isAtLarge = (sentences?: Sentence[] | null): boolean =>
+export const isAtLarge = (sentences?: Array<Sentence> | null): boolean =>
   getPrimarySentences(sentences).some(sentence => sentence?.custody?.location?.code === 'UATLRG')

@@ -1,17 +1,8 @@
 import { getPrimarySentences } from './getPrimarySentences'
-
-type Sentence = {
-  supervisionPackage?: { code?: string }
-  custody?: {
-    status?: {
-      code?: string
-      description?: string
-    }
-  }
-}
+import { Sentence } from '../types/SupervisionPackage'
 
 export const isInCustody = (
-  sentences?: Sentence[] | null,
+  sentences?: Array<Sentence> | null,
   codeExceptions: string[] = ['B', 'T', 'P', 'AT'],
 ): string | undefined =>
   getPrimarySentences(sentences).find(
