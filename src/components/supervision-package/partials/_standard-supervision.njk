@@ -1,6 +1,6 @@
-{% if params.forename and (params.currentYear.appointments.completed  | int < params.currentYear.appointments.allowance | int)%}
+{% if params.forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
     <p class='govuk-body'>
-        {{ params.forename }} Charlie has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
+        {{ params.forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
     </p>
 {% endif %}
 
