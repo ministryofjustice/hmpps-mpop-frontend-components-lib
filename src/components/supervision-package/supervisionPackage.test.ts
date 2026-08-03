@@ -127,6 +127,32 @@ describe('supervision-package', () => {
     expect(headingTexts).not.toContain('Stage title')
   })
 
+  it('renders the standard supervision stage when phaseName is Standard', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      phase: { name: { code: 'STD', description: 'Standard' } },
+      forename: 'Alex',
+      currentYear: {
+        isFirstYear: true,
+        endDate: '2026-08-15',
+        appointments: { allowance: 20, scheduled: 2, completed: 5 },
+      },
+      earlyEngagement: { weeks: 0 },
+      allAppointmentsHref: '#',
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    expect(headings).toContain('Standard stage')
+
+    expect(document.body.textContent).toContain(
+      'Alex has 15 supervision appointments remaining until the supervision stage ends on 2026-08-15.',
+    )
+    expect(document.body.textContent).toContain('5 of 20 appointments used')
+  })
+
   it('renders the Final Third Progress component instead of the Supervision Package when eligible', () => {
     const document = renderComponent({
       tierScore: 'C',
@@ -156,6 +182,50 @@ describe('supervision-package', () => {
 
     expect(document.querySelector('.supervision-package')).toBeNull()
   })
+
+  describe('phase.name.code is SPNA', () => {
+    it('still renders the Final Third Progress component when eligible', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
+        inputs: {
+          nationalSecurityDivision: true,
+          finalThirdEligibility: {
+            eligible: true,
+          },
+          sentences: [
+            {
+              type: {
+                isCustodial: true,
+              },
+              custody: {
+                finalThirdDate: '2026-11-07',
+              },
+              endDate: '2027-01-07',
+            },
+          ],
+        },
+      })
+
+      expect(document.querySelector('.supervision-final-third-progress')).not.toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+
+    it('renders neither the Final Third Progress nor the Supervision Package when not eligible for Final Third Progress', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
+      })
+
+      expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+  })
+
   it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {
     const document = renderComponent({
       tierScore: 'C',
@@ -376,23 +446,7 @@ describe('supervision-package', () => {
       expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
     })
 
-    it('does not render the "Update NDelius risk flag" button when crn, deliusBaseURL are provided and the person is recalled', () => {
-      const document = renderComponent({
-        tierScore: 'C',
-        tag: tierTags.none,
-        historyHref: '#',
-        crn: 'X123456',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
-          sentences: [{ custody: { status: { code: 'C', description: 'Recalled' } } }],
-        },
-      })
-
-      expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
-    })
-
-    it('renders only the "Update NDelius risk flag" button when crn and deliusBaseURL are provided and the person is not recalled', () => {
+    it('does not render the "Update NDelius risk flag" button when crn, deliusBaseURL are provided and the person is in custody', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -401,6 +455,38 @@ describe('supervision-package', () => {
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
           sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
+        },
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+    })
+
+    it('does not render the "Update NDelius risk flag" button when crn, deliusBaseURL are provided and the person is at large', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        crn: 'X123456',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        inputs: {
+          sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+        },
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+    })
+
+    it('renders only the "Update NDelius risk flag" button when crn and deliusBaseURL are provided and the person is not in custody or at large', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        crn: 'X123456',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        inputs: {
+          sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
         },
       })
 
@@ -414,25 +500,7 @@ describe('supervision-package', () => {
       )
     })
 
-    it('renders no button group when arrangeAppointmentHref, crn and deliusBaseURL are all provided but the person is recalled', () => {
-      const document = renderComponent({
-        tierScore: 'C',
-        tag: tierTags.none,
-        historyHref: '#',
-        arrangeAppointmentHref: '/arrange-appointment',
-        crn: 'X123456',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
-          sentences: [{ custody: { status: { code: 'C', description: 'Recalled' } } }],
-        },
-      })
-
-      expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
-    })
-
-    it('renders both buttons when arrangeAppointmentHref, crn and deliusBaseURL are provided and the person is not recalled', () => {
+    it('renders no button group when arrangeAppointmentHref, crn and deliusBaseURL are all provided but the person is in custody', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -442,6 +510,42 @@ describe('supervision-package', () => {
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         inputs: {
           sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
+        },
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+      expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
+      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+    })
+
+    it('renders no button group when arrangeAppointmentHref, crn and deliusBaseURL are all provided but the person is at large', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        arrangeAppointmentHref: '/arrange-appointment',
+        crn: 'X123456',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        inputs: {
+          sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+        },
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+      expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
+      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+    })
+
+    it('renders both buttons when arrangeAppointmentHref, crn and deliusBaseURL are provided and the person is not in custody or at large', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        arrangeAppointmentHref: '/arrange-appointment',
+        crn: 'X123456',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        inputs: {
+          sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
         },
       })
 

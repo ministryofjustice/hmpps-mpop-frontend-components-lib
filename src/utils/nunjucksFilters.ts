@@ -5,7 +5,8 @@ import { toTitleCase } from './toTitleCase'
 import { hasBreachedSentence } from './hasBreachedSentence'
 import { isEligibleForDiscretionaryAppointments } from './isEligibleForDiscretionaryAppointments'
 import { finalThirdStatus } from './finalThirdStatus'
-import { isRecalled } from './isRecalled'
+import { isInCustody } from './isInCustody'
+import { isAtLarge } from './isAtLarge'
 
 export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('dateWithYear', dateWithYear)
@@ -14,5 +15,6 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('hasBreachedSentence', hasBreachedSentence)
   env.addFilter('isEligibleForDiscretionaryAppointments', isEligibleForDiscretionaryAppointments)
   env.addFilter('finalThirdStatus', finalThirdStatus)
-  env.addFilter('isRecalled', isRecalled)
+  env.addFilter('isInCustody', isInCustody)
+  env.addFilter('isAtLarge', isAtLarge)
 }

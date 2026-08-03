@@ -6,8 +6,10 @@
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In breach</strong>
 {% endif %}
 
-{% if params.isCustody %}
-    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In custody</strong>
+{% if params.inputs.sentences | isAtLarge  %}
+    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>Unlawfully at large</strong>
+{% elseif params.inputs.sentences | isInCustody %}
+    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.inputs.sentences | isInCustody }}</strong>
 {% endif %}
 
 {% if params.inputs.offenderPersonalDisorderPathway %}

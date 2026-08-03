@@ -1,9 +1,9 @@
 {% if params.phase.name.code  == 'INIT' %}
-    {% set completed = params.earlyEngagement.completed | int %}
-    {% set allowance = params.earlyEngagement.weeks | int %}
+    {% set completed = params.earlyEngagement.completed | int(0) %}
+    {% set allowance = params.earlyEngagement.weeks | int(0) %}
 {% else %}
-    {% set completed = params.currentYear.appointments.completed | int %}
-    {% set allowance = (params.currentYear.appointments.allowance  | int) - (params.earlyEngagement.weeks | int) %}
+    {% set completed = (params.currentYear.appointments.completed | int) - (params.earlyEngagement.completed | int(0)) %}
+    {% set allowance = (params.currentYear.appointments.allowance | int) - (params.earlyEngagement.completed | int(0)) %}
 {% endif %}
 
 {% if allowance > 0 %}
