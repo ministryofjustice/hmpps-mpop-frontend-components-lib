@@ -175,16 +175,9 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).not.toContain('In custody')
     })
 
-    it('shows the recall status description as the badge when recallStatus has a code and no custody status/location matches', () => {
-      const document = renderPartial({ inputs: { recallStatus: { code: 'REC01', description: 'Recall initiated' } } })
-
-      expect(getBadgeText(document)).toContain('Recall initiated')
-    })
-
-    it('prefers "Unlawfully at large" over "In custody" and "Recall initiated" when both would apply', () => {
+    it('prefers "Unlawfully at large" over "In custody" when both would apply', () => {
       const document = renderPartial({
         inputs: {
-          recallStatus: { code: 'REC01', description: 'Recall initiated' },
           sentences: [{ custody: { location: { code: 'UATLRG' }, status: { code: 'D', description: 'In Custody' } } }],
         },
       })
@@ -192,7 +185,6 @@ describe('_tags partial', () => {
       const badges = getBadgeText(document)
       expect(badges).toContain('Unlawfully at large')
       expect(badges).not.toContain('In custody')
-      expect(badges).not.toContain('Recall initiated')
     })
   })
 

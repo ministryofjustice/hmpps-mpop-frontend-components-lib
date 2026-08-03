@@ -8,8 +8,6 @@
 
 {% if params.inputs.sentences | isAtLarge  %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>Unlawfully at large</strong>
-{% elseif params.inputs.recallStatus | isRecalled %}
-    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.inputs.recallStatus.description }}</strong>
 {% elseif params.inputs.sentences | isInCustody %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.inputs.sentences | isInCustody }}</strong>
 {% endif %}

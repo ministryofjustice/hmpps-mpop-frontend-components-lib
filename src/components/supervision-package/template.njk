@@ -1,6 +1,6 @@
 {% from "../supervision-final-third-progress/macro.njk" import supervisionFinalThirdProgress %}
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
-{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge or params.inputs.recallStatus | isRecalled or params.inputs.integratedOffenderManagementRedRated %}
+{% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge or params.inputs.integratedOffenderManagementRedRated %}
 
 {% if
   params.inputs.nationalSecurityDivision

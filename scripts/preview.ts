@@ -562,7 +562,7 @@ const html = env.renderString(
     "sentences": { "custody": { "location": { "code": "UATLRG" } } }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.location.code === 'UATLRG'</code>, and takes priority over the "Recall initiated" and "In custody" badges.</p>
+      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.location.code === 'UATLRG'</code>, and takes priority over the "In custody" badge.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -611,59 +611,6 @@ const html = env.renderString(
         }
       }) }}
 
-      <h2 class="govuk-heading-m">Recall initiated</h2>
-      <p class="govuk-body">Display the supervision package when a recall has been initiated for the PoP</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "inputs": {
-    "recallStatus": { "code": "REC01" }
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.recallStatus.code === 'REC01'</code>, provided <code>inputs.sentences.custody.location.code</code> is not <code>'UATLRG'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        forename: 'Alex',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        phase: {
-          name: { code: 'INIT', description: 'Early Engagement' },
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
-        inputs: {
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          recallStatus: { code: 'REC01', description: 'Recall initiated' }
-        }
-      }) }}
-
       <h2 class="govuk-heading-m">In custody</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in custody</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -672,7 +619,7 @@ const html = env.renderString(
     "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.status.code</code> being one of <code>D</code> (In Custody), <code>I</code> (In Custody - IRC) or <code>R</code> (In Custody - RoTL), provided neither the "Unlawfully at large" nor "Recall initiated" conditions are met.</p>
+      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.status.code</code> being one of <code>D</code> (In Custody), <code>I</code> (In Custody - IRC) or <code>R</code> (In Custody - RoTL), provided neither the "Unlawfully at large" condition is met.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -884,25 +831,6 @@ const html = env.renderString(
               custody: { location: { code: 'UATLRG' } }
             }
           ]
-        }
-      }) }}
-
-      <h3 class="govuk-heading-s">Recall initiated</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
-  "inputs": { "recallStatus": { "code": "REC01" } }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.recallStatus.code === 'REC01'</code>, provided <code>inputs.sentences.custody.location.code</code> is not <code>'UATLRG'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
-          offenderPersonalDisorderPathway: false,
-          integratedOffenderManagementRedRated: false,
-          recallStatus: { code: 'REC01', description: 'Recall initiated' }
         }
       }) }}
 

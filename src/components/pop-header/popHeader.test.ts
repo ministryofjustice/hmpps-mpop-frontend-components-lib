@@ -42,7 +42,7 @@ describe('pop-header', () => {
   })
 
   it('renders the history href on the tier link', () => {
-    const document = renderComponent({ crn: 'X123456', dob: '', tierScore: 'C', historyHref: '/tier-history/X123456' })
+    const document = renderComponent({ crn: 'X123456', dob: '', tierScore: 'A1', historyHref: '/tier-history/X123456' })
 
     expect(document.querySelector('[data-qa="tierLink"]')?.getAttribute('href')).toBe('/tier-history/X123456')
   })
