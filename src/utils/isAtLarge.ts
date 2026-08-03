@@ -9,9 +9,5 @@ type Sentence = {
   }
 }
 
-type RecallStatus = {
-  code?: string
-}
-
-export const isAtLarge = (sentences?: Sentence[] | null, recallStatus?: RecallStatus | null): boolean =>
+export const isAtLarge = (sentences?: Sentence[] | null): boolean =>
   getPrimarySentences(sentences).some(sentence => sentence?.custody?.location?.code === 'UATLRG')

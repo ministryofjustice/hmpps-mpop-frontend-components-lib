@@ -10,16 +10,14 @@ describe('isAtLarge', () => {
   })
 
   it('returns false when none of the conditions match', () => {
-    expect(
-      isAtLarge([{ supervisionPackage: { code: 'SPA' }, custody: { location: { code: 'ABC' } } }], { code: 'REC02' }),
-    ).toBe(false)
+    expect(isAtLarge([{ supervisionPackage: { code: 'SPA' }, custody: { location: { code: 'ABC' } } }])).toBe(false)
   })
 
   it('returns false when sentences and recallStatus are undefined', () => {
-    expect(isAtLarge(undefined, undefined)).toBe(false)
+    expect(isAtLarge(undefined)).toBe(false)
   })
 
   it('returns false when sentences and recallStatus are null', () => {
-    expect(isAtLarge(null, null)).toBe(false)
+    expect(isAtLarge(null)).toBe(false)
   })
 })
