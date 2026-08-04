@@ -16,7 +16,7 @@ describe('sentenceType', () => {
     expect(sentenceType(buildInputs({ sentences: undefined }))).toBe(false)
   })
 
-  it('returns "Imprisonment for Public Protection " when liferCategory code is LF01', () => {
+  it('returns "Imprisonment for Public Protection" when liferCategory code is LF01', () => {
     expect(
       sentenceType(
         buildInputs({
@@ -24,7 +24,7 @@ describe('sentenceType', () => {
           sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
         }),
       ),
-    ).toBe('Imprisonment for Public Protection ')
+    ).toBe('Imprisonment for Public Protection')
   })
 
   it('returns "life sentence" when liferCategory is present without LF01 code', () => {
@@ -47,17 +47,6 @@ describe('sentenceType', () => {
         }),
       ),
     ).toBe('extended determinate sentence')
-  })
-
-  it('returns "life sentence" when liferCategory is present without LF02 code', () => {
-    expect(
-      sentenceType(
-        buildInputs({
-          liferCategory: { code: 'LF03' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
-        }),
-      ),
-    ).toBe('life sentence')
   })
 
   it('returns "custodial sentence" when a sentence is custodial and not SPX', () => {

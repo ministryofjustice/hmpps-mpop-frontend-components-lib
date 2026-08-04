@@ -224,6 +224,51 @@ describe('supervision-package', () => {
       expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
       expect(document.querySelector('.supervision-package')).toBeNull()
     })
+
+    it('renders neither the Final Third Progress nor the Supervision Package when phase.name.code is SPNA and nationalSecurityDivision is false', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
+        inputs: {
+          nationalSecurityDivision: false,
+        },
+      })
+
+      expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+
+    it('renders neither the Final Third Progress nor the Supervision Package when phase.name.code is not SPNA but nationalSecurityDivision is true', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        phase: { name: { code: 'TEST', description: 'Post sentence supervision' } },
+        inputs: {
+          nationalSecurityDivision: true,
+        },
+      })
+
+      expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+
+    it('renders the Supervision Package when phase.name.code is not SPNA and nationalSecurityDivision is false', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        phase: { name: { code: 'TEST', description: 'Post sentence supervision' } },
+        inputs: {
+          nationalSecurityDivision: false,
+        },
+      })
+
+      expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+    })
   })
 
   it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {

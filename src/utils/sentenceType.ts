@@ -5,7 +5,7 @@ export const sentenceType = (inputs?: Inputs) => {
     return false
   }
   if (inputs?.liferCategory?.code === 'LF01') {
-    return 'Imprisonment for Public Protection '
+    return 'Imprisonment for Public Protection'
   }
 
   if (inputs?.liferCategory?.code === 'LF02') {
