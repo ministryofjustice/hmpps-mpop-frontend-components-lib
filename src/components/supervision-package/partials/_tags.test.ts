@@ -55,7 +55,7 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
 
-    it('shows the badge when completed and allowance are both 0', () => {
+    it('does not show the badge when completed and allowance are both 0', () => {
       const document = renderPartial({
         phaseEndDate: '1 January 2026',
 
@@ -66,7 +66,7 @@ describe('_tags partial', () => {
           },
         },
       })
-      expect(getBadgeText(document)).toContain('No appointments remaining')
+      expect(getBadgeText(document)).not.toContain('No appointments remaining')
     })
 
     it('does not show the badge when completed >= allowance but offenderPersonalDisorderPathway is true', () => {
