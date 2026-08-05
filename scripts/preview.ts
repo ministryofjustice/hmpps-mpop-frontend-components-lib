@@ -60,7 +60,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Early engagement</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
 }</code></pre>
       <p class="govuk-body">This variant is triggered purely by <code>phase.name.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
@@ -129,7 +129,7 @@ const html = env.renderString(
 
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
       <p class="govuk-body">This is triggered when <code>earlyEngagement.completed</code> reaches <code>earlyEngagement.weeks</code> (i.e. <code>completed &gt;= weeks</code>) in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
   "earlyEngagement": { "weeks": 12, "completed": 12 }
 }</code></pre>
@@ -198,7 +198,7 @@ const html = env.renderString(
 
 
       <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life imprisonment</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": {
     "liferCategory": { "code": "LF01" }
   }
@@ -269,7 +269,7 @@ const html = env.renderString(
 
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is a woman</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
   "inputs": {
     "gender": "Female",
@@ -341,7 +341,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">In breach</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is in breach</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
   "inputs": {
     "sentences": [
@@ -415,7 +415,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">OPD</h2>
       <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": {
     "offenderPersonalDisorderPathway": true
   }
@@ -486,7 +486,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">No appointments remaining</h2>
       <p class="govuk-body">Display the supervision package when this year's appointment allowance has been used up</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentYear": {
     "appointments": { "allowance": 46, "completed": 46 }
   }
@@ -557,7 +557,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Unlawfully at large</h2>
       <p class="govuk-body">Display the supervision package when the PoP is unlawfully at large</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": {
     "sentences": { "custody": { "location": { "code": "UATLRG" } } }
   }
@@ -614,7 +614,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">In custody</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in custody</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": {
     "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } }
   }
@@ -671,7 +671,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">IOM: Red</h2>
       <p class="govuk-body">Display the supervision package when the PoP is rated red under Integrated Offender Management (IOM)</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": {
     "integratedOffenderManagementRedRated": true
   }
@@ -742,7 +742,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">No appointments remaining</h2>
       <p class="govuk-body">Display the supervision package when the PoP has used all of their allowed appointments for the current year</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentYear": { "appointments": { "allowance": 46, "completed": 46 } }
 }</code></pre>
       <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>inputs.offenderPersonalDisorderPathway</code> is not <code>true</code> (OPD takes priority and suppresses this badge).</p>
@@ -813,7 +813,7 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s">Unlawfully at large</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": { "sentences": { "custody": { "location": { "code": "UATLRG" } } } }
 }</code></pre>
       <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.location.code === 'UATLRG'</code>, which takes priority over the recall and in-custody statuses below.</p>
@@ -836,7 +836,7 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s">In custody</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": { "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } } }
 }</code></pre>
       <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.status.code</code> being one of <code>'D'</code>, <code>'I'</code> or <code>'R'</code> (shown here as <code>'D'</code>, "In Custody"), provided the location and recall statuses above do not apply.</p>
@@ -860,7 +860,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">IOM (Integrated Offender Management) red rated</h2>
       <p class="govuk-body">Display the supervision package when the PoP has an IOM red RAG status</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "inputs": { "integratedOffenderManagementRedRated": true }
 }</code></pre>
       <p class="govuk-body">This variant is triggered by <code>inputs.integratedOffenderManagementRedRated === true</code>. Note that when <code>inputs.nationalSecurityDivision</code> is also <code>true</code> alongside eligibility for the final third stage, the final third progress card is shown instead (see below) and this badge is not rendered.</p>
@@ -929,7 +929,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Provisional tier</h2>
       <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
       <p class="govuk-body">This is triggered by the <code>provisional</code> field on the Tier API's <code>GET /v3/crn/{crn}/tier</code> response, and the <code>phase</code> field on the Supervision Package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tierScore": "D2",
   "calculationId": "123e4567-e89b-12d3-a456-426614174000",
   "calculationDate": "2021-04-23T18:25:43.511Z",
@@ -948,7 +948,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Missing tier</h2>
       <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
       <p class="govuk-body">This is triggered when the Tier API's <code>GET /v3/crn/{crn}/tier</code> response has a <code>tierScore</code> of <code>"MISSING"</code>:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tierScore": "MISSING",
   "calculationId": "123e4567-e89b-12d3-a456-426614174000",
   "calculationDate": "2021-04-23T18:25:43.511Z",
@@ -974,7 +974,7 @@ const html = env.renderString(
       <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
       <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
       <p class="govuk-body">This is the standard shape returned by the Tier API's <code>GET /v3/crn/{crn}/tier</code> when a tier has been confirmed (not missing or provisional):</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tierScore": "C",
   "calculationId": "123e4567-e89b-12d3-a456-426614174000",
   "calculationDate": "2021-04-23T18:25:43.511Z",
@@ -994,7 +994,7 @@ const html = env.renderString(
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "inputs": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -1051,7 +1051,7 @@ const html = env.renderString(
       <p class="govuk-body">The status is "Not started" when the final third date is after today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "inputs": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -1110,7 +1110,7 @@ const html = env.renderString(
       <p class="govuk-body">The status is "Ended" when the sentence end date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;"><code>{
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "inputs": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -1162,6 +1162,121 @@ const html = env.renderString(
                 releases: [ { releaseDate: '2026-07-10' } ]
               }
             }
+          ]
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m">Sentence type heading</h2>
+      <p class="govuk-body">The "Supervision package" heading is suffixed with a sentence type description, derived from <code>inputs</code> via the <code>sentenceType</code> filter.</p>
+
+      <h3 class="govuk-heading-s">Custodial sentence</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "inputs": {
+    "sentences": [
+      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
+    ]
+  }
+}</code></pre>
+      <p class="govuk-body">This is triggered when at least one non-<code>SPX</code> sentence has <code>type.isCustodial === true</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        forename: 'Stuart',
+        inputs: {
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+          ]
+        }
+      }) }}
+
+      <h3 class="govuk-heading-s">Community sentence</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "inputs": {
+    "sentences": [
+      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
+    ]
+  }
+}</code></pre>
+      <p class="govuk-body">This is triggered when every primary sentence has <code>type.isCustodial === false</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        forename: 'Stuart',
+        inputs: {
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
+          ]
+        }
+      }) }}
+
+      <h3 class="govuk-heading-s">Life sentence</h3>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "inputs": {
+    "liferCategory": { "code": "LF03" }
+  }
+}</code></pre>
+      <p class="govuk-body">This is triggered by <code>inputs.liferCategory</code> being present with a code other than <code>'LF01'</code> or <code>'LF02'</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        forename: 'Stuart',
+        inputs: {
+          liferCategory: { code: 'LF03' },
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+          ]
+        }
+      }) }}
+
+      <h3 class="govuk-heading-s">Imprisonment for Public Protection</h3>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "inputs": {
+    "liferCategory": { "code": "LF01" }
+  }
+}</code></pre>
+      <p class="govuk-body">This is triggered by <code>inputs.liferCategory.code === 'LF01'</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        forename: 'Stuart',
+        inputs: {
+          liferCategory: { code: 'LF01' },
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+          ]
+        }
+      }) }}
+
+      <h3 class="govuk-heading-s">Extended determinate sentence</h3>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "inputs": {
+    "liferCategory": { "code": "LF02" }
+  }
+}</code></pre>
+      <p class="govuk-body">This is triggered by <code>inputs.liferCategory.code === 'LF02'</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        forename: 'Stuart',
+        inputs: {
+          liferCategory: { code: 'LF02' },
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
         }
       }) }}

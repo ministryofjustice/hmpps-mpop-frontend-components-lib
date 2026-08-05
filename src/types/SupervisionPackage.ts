@@ -25,27 +25,29 @@ export type SupervisionPackage = {
   }
   createdAt?: string
   updatedAt?: string
-  inputs: {
-    date: string
-    gender: string
-    integratedOffenderManagementRedRated: boolean
-    offenderPersonalDisorderPathway: boolean
-    intensiveSupervisionCourt: boolean
-    nationalSecurityDivision: boolean
-    contactSuspendedDate?: string
-    finalThirdEligibility: {
-      eligible: boolean
-      since: string
-    }
-    sentences: Array<Sentence>
-    liferCategory?: {
-      code?: string
-      description?: string
-    }
+  inputs: Inputs
+}
+
+export type Inputs = {
+  date: string
+  gender: string
+  integratedOffenderManagementRedRated: boolean
+  offenderPersonalDisorderPathway: boolean
+  intensiveSupervisionCourt: boolean
+  nationalSecurityDivision: boolean
+  contactSuspendedDate?: string
+  finalThirdEligibility: {
+    eligible: boolean
+    since: string
+  }
+  sentences: Array<Sentence>
+  liferCategory?: {
+    code?: string
+    description?: string
   }
 }
 
-type Sentence = {
+export type Sentence = {
   eventNumber: string
   startDate: string
   endDate: string
@@ -60,6 +62,10 @@ type Sentence = {
   }
   custody: {
     status: {
+      code: string
+      description: string
+    }
+    location: {
       code: string
       description: string
     }

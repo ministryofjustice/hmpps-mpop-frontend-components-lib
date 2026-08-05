@@ -1,6 +1,7 @@
 {% from "../supervision-final-third-progress/macro.njk" import supervisionFinalThirdProgress %}
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
 {% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge or params.inputs.integratedOffenderManagementRedRated %}
+{% set sentenceTypeValue = params.inputs | sentenceType %}
 
 {% if
   params.inputs.nationalSecurityDivision
@@ -12,15 +13,15 @@
     supervisionPackage: params
 }) }}
 
-{% elif params.phase.name.code != 'SPNA' %}
+{% elif params.phase.name.code != 'SPNA' and not params.inputs.nationalSecurityDivision %}
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
-        <h2 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ params.sentenceType if params.sentenceType else 'Supervision package' }}</h2>
+        <h2 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h2>
         {% include './partials/_tags.njk' %}
     </div>
     {% else %}
-            <h2 class='govuk-heading-m'>{{ 'Supervision package: ' ~ params.sentenceType if params.sentenceType else 'Supervision package' }}</h2>
+            <h2 class='govuk-heading-m'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h2>
     {% endif %}
 
     <div class='govuk-grid-row'>
