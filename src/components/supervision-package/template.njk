@@ -2,6 +2,7 @@
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
 {% set hasSpecialStatus = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | hasBreachedSentence or params.inputs.sentences | isInCustody or params.inputs.sentences | isAtLarge or params.inputs.integratedOffenderManagementRedRated %}
 {% set sentenceTypeValue = params.inputs | sentenceType %}
+{% set showPhaseColumn = params.inputs.offenderPersonalDisorderPathway or params.inputs.sentences | isAtLarge or params.inputs.sentences | isInCustody or params.inputs.liferCategory.code == 'LF01' or params.inputs.liferCategory.code == 'LF02' or params.inputs.liferCategory.code == 'LF03' or params.inputs.liferCategory.code == 'x9' or params.phase.name.code == 'INIT' or params.phase.name.code == 'STD' %}
 
 {% if
   params.inputs.nationalSecurityDivision
@@ -25,7 +26,7 @@
     {% endif %}
 
     <div class='govuk-grid-row'>
-        <div class='{{ "govuk-grid-column-one-half" if (params.phase.name.description and params.phase.name.code) or params.inputs.offenderPersonalDisorderPathway else "govuk-grid-column-two-thirds" }}'>
+        <div class='{{ "govuk-grid-column-one-half" if showPhaseColumn else "govuk-grid-column-two-thirds" }}'>
             {% if params.inputs.sentences | hasBreachedSentence %}
                 <div class='govuk-warning-text'>
                     <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
@@ -94,7 +95,7 @@
             {% endif %}
         </div>
 
-        {% if (params.phase.name.description and params.phase.name.code) or params.inputs.offenderPersonalDisorderPathway %}
+        {% if showPhaseColumn %}
             <div class='govuk-grid-column-one-half'>
                 {% if params.inputs.offenderPersonalDisorderPathway %}
                     <h3 class='govuk-heading-s'>Supervision appointments</h3>
@@ -111,8 +112,6 @@
                 {% elseif params.phase.name.code  == 'STD' %}
                     <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }} stage</h3>
                     {% include './partials/_standard-supervision.njk' %}
-                {% else %}
-                    <h3 class='govuk-heading-s'>{{ params.phase.name.description | toTitleCase }}</h3>
                 {% endif %}
 
                 {% if params.allAppointmentsHref %}
