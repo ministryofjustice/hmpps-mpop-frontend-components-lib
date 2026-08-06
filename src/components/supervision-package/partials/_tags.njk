@@ -1,21 +1,21 @@
-{% if params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.allowance | int) > 0 and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance | int) and not params.inputs.offenderPersonalDisorderPathway %}
+{% if params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.allowance | int) > 0 and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance | int) and not params.context.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>No appointments remaining</strong>
 {% endif %}
 
-{% if params.inputs.sentences | hasBreachedSentence %}
+{% if params.context.sentences | hasBreachedSentence %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>In breach</strong>
 {% endif %}
 
-{% if params.inputs.sentences | isAtLarge  %}
+{% if params.context.sentences | isAtLarge  %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>Unlawfully at large</strong>
-{% elseif params.inputs.sentences | isInCustody %}
-    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.inputs.sentences | isInCustody }}</strong>
+{% elseif params.context.sentences | isInCustody %}
+    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.context.sentences | isInCustody }}</strong>
 {% endif %}
 
-{% if params.inputs.offenderPersonalDisorderPathway %}
+{% if params.context.offenderPersonalDisorderPathway %}
     <strong class='app-status-badge govuk-tag govuk-tag--purple'>Offender personality disorder</strong>
 {% endif %}
 
-{% if params.inputs.integratedOffenderManagementRedRated %}
+{% if params.context.integratedOffenderManagementRedRated %}
     <strong class='app-status-badge govuk-tag govuk-tag--red'>IOM (Integrated Offender Management): Red</strong>
 {% endif %}

@@ -1,5 +1,5 @@
 import { getPrimarySentences } from './getPrimarySentences'
-import { Sentence } from '../types/SupervisionPackage'
+import { FrontendSentence } from '../types/SupervisionPackage'
 
-export const hasBreachedSentence = (sentences?: Array<Sentence> | null): boolean =>
+export const hasBreachedSentence = (sentences?: Array<FrontendSentence> | null): boolean =>
   getPrimarySentences(sentences).some(sentence => sentence?.inBreach === true)

@@ -14,7 +14,7 @@ describe('_standard-supervision partial', () => {
   describe('remaining appointments paragraph', () => {
     it('shows the "ends on" text when it is the first year', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
@@ -28,7 +28,7 @@ describe('_standard-supervision partial', () => {
 
     it('shows the "resets on" text when it is not the first year', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { isFirstYear: false, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
@@ -44,12 +44,12 @@ describe('_standard-supervision partial', () => {
   describe('final third eligibility', () => {
     it('shows the eligible text with the final third date when eligible is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
-        currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: {
+        context: {
+          name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: true },
           sentences: [{ custody: { finalThirdDate: '2026-11-07' } }],
         },
+        currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -62,9 +62,8 @@ describe('_standard-supervision partial', () => {
 
     it('shows the not eligible text when eligible is false', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' }, finalThirdEligibility: { eligible: false } },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: { finalThirdEligibility: { eligible: false } },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -75,7 +74,7 @@ describe('_standard-supervision partial', () => {
 
     it('hides the final third paragraph when finalThirdEligibility is not provided', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
@@ -105,9 +104,8 @@ describe('_standard-supervision partial', () => {
   describe('IOM red RAG guidance', () => {
     it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: { integratedOffenderManagementRedRated: true },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -120,9 +118,8 @@ describe('_standard-supervision partial', () => {
 
     it('hides the IOM guidance when integratedOffenderManagementRedRated is false', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: false },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: { integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -131,9 +128,9 @@ describe('_standard-supervision partial', () => {
       expect(iomParagraph).toBeUndefined()
     })
 
-    it('hides the IOM guidance when inputs is not provided', () => {
+    it('hides the IOM guidance when context is not provided', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
@@ -147,10 +144,9 @@ describe('_standard-supervision partial', () => {
   describe('discretionary appointments guidance', () => {
     it('shows the discretionary appointments guidance for an eligible woman', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: { gender: 'Female' },
+        context: { name: { forename: 'Alex' }, gender: 'Female' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -163,10 +159,9 @@ describe('_standard-supervision partial', () => {
 
     it('hides the discretionary appointments guidance for an ineligible tier', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'A',
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
-        inputs: { gender: 'Female' },
+        context: { name: { forename: 'Alex' }, gender: 'Female' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -175,11 +170,11 @@ describe('_standard-supervision partial', () => {
       expect(discretionaryParagraph).toBeUndefined()
     })
 
-    it('hides the discretionary appointments guidance when inputs is not provided', () => {
+    it('hides the discretionary appointments guidance when context is not provided', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+        context: { name: { forename: 'Alex' } },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))

@@ -1,8 +1,8 @@
 import { getPrimarySentences } from './getPrimarySentences'
-import { Sentence } from '../types/SupervisionPackage'
+import { FrontendSentence } from '../types/SupervisionPackage'
 
 export const isInCustody = (
-  sentences?: Array<Sentence> | null,
+  sentences?: Array<FrontendSentence> | null,
   codeExceptions: string[] = ['B', 'T', 'P', 'AT'],
 ): string | undefined =>
   getPrimarySentences(sentences).find(

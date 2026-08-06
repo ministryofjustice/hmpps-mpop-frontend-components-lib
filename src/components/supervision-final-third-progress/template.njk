@@ -1,5 +1,5 @@
 
-{% set sentence = params.supervisionPackage.inputs.sentences[0] %}
+{% set sentence = params.supervisionPackage.context.sentences[0] %}
 {% set status = sentence.custody.finalThirdDate | finalThirdStatus(sentence.endDate) %}
 
 <section class="supervision-final-third-progress">

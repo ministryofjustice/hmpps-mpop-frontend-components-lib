@@ -2,10 +2,10 @@
 
 {% include './_progress-bar.njk' %}
 
-{% if params.inputs.integratedOffenderManagementRedRated %}
-    <p class='govuk-body'>{{ params.forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
+{% if params.context.integratedOffenderManagementRedRated %}
+    <p class='govuk-body'>{{ params.context.name.forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
 {% endif %}
 
-{% if params.inputs | isEligibleForDiscretionaryAppointments(params.tierScore) %}
-    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.forename }} can have up to 5 additional discretionary appointments.</p>
+{% if params.context | isEligibleForDiscretionaryAppointments(params.tierScore) %}
+    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.context.name.forename }} can have up to 5 additional discretionary appointments.</p>
 {% endif %}

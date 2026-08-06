@@ -1,4 +1,4 @@
-{% if params.phase.name.code  == 'INIT' %}
+{% if params.currentPhase.phase.code  == 'INIT' %}
     {% set completed = params.earlyEngagement.completed | int(0) %}
     {% set allowance = params.earlyEngagement.weeks | int(0) %}
 {% else %}
@@ -22,7 +22,7 @@
 
 <div class='govuk-grid-row govuk-!-margin-top-4'>
     <div class='govuk-grid-column-one-third'>
-        <p class='govuk-body govuk-!-margin-bottom-2'>{{ 'Required' if params.phase.name.code  == 'INIT' else 'Maximum' }}</p>
+        <p class='govuk-body govuk-!-margin-bottom-2'>{{ 'Required' if params.currentPhase.phase.code  == 'INIT' else 'Maximum' }}</p>
         <p class='govuk-body-l govuk-!-font-weight-bold'>{{ allowance }}</p>
     </div>
 

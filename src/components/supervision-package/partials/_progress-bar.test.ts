@@ -21,7 +21,7 @@ describe('_progress-bar partial', () => {
       'sets width to $expectedPercent% when $appointmentsEarlyEngagementCompleted of $earlyEngagementWeeks appointments completed (Early engagement)',
       ({ appointmentsEarlyEngagementCompleted, earlyEngagementWeeks, expectedPercent }) => {
         const document = renderPartial({
-          phase: { name: { code: 'INIT' } },
+          currentPhase: { phase: { code: 'INIT' } },
           earlyEngagement: { completed: appointmentsEarlyEngagementCompleted, weeks: earlyEngagementWeeks },
           currentYear: { appointments: { scheduled: 0 } },
         })
@@ -36,7 +36,7 @@ describe('_progress-bar partial', () => {
 
     it('uses the bar-maximum class when progress reaches 100%', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 5, weeks: 5 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -47,7 +47,7 @@ describe('_progress-bar partial', () => {
 
     it('uses the standard bar class when progress is below 100%', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 3, weeks: 5 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -68,7 +68,7 @@ describe('_progress-bar partial', () => {
       'shows $expectedRemaining remaining when $appointmentsEarlyEngagementCompleted of $earlyEngagementWeeks completed',
       ({ appointmentsEarlyEngagementCompleted, earlyEngagementWeeks, expectedRemaining }) => {
         const document = renderPartial({
-          phase: { name: { code: 'INIT' } },
+          currentPhase: { phase: { code: 'INIT' } },
           earlyEngagement: { completed: appointmentsEarlyEngagementCompleted, weeks: earlyEngagementWeeks },
           currentYear: { appointments: { scheduled: 0 } },
         })
@@ -81,7 +81,7 @@ describe('_progress-bar partial', () => {
 
     it('shows earlyEngagementWeeks as the Maximum allowance', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 2, weeks: 8 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -107,7 +107,7 @@ describe('_progress-bar partial', () => {
         expectedRemaining,
       }) => {
         const document = renderPartial({
-          phase: { name: { code: 'STD' } },
+          currentPhase: { phase: { code: 'STD' } },
           currentYear: {
             appointments: { allowance: appointmentsAllowance, completed: appointmentsCompleted, scheduled: 0 },
           },
@@ -124,7 +124,7 @@ describe('_progress-bar partial', () => {
   describe('upcoming appointments', () => {
     it('displays the scheduled appointments count', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 1, weeks: 5 },
         currentYear: { appointments: { scheduled: 3 } },
       })
@@ -137,7 +137,7 @@ describe('_progress-bar partial', () => {
   describe('zero-denominator guard', () => {
     it('renders 0% width when earlyEngagementWeeks is 0 (Early engagement)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 3, weeks: 0 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -151,7 +151,7 @@ describe('_progress-bar partial', () => {
 
     it('renders 0% width when appointmentsAllowance equals earlyEngagementCompleted (non-early)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'STD' } },
+        currentPhase: { phase: { code: 'STD' } },
         currentYear: { appointments: { allowance: 5, completed: 3, scheduled: 0 } },
         earlyEngagement: { completed: 5 },
       })
@@ -167,7 +167,7 @@ describe('_progress-bar partial', () => {
   describe('width percent clamping', () => {
     it('clamps to 100% and uses bar-maximum class when completed exceeds allowance (Early engagement)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 7, weeks: 5 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -182,7 +182,7 @@ describe('_progress-bar partial', () => {
 
     it('clamps to 100% and uses bar-maximum class when completed exceeds allowance (non-early)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'STD' } },
+        currentPhase: { phase: { code: 'STD' } },
         currentYear: { appointments: { allowance: 10, completed: 12, scheduled: 0 } },
         earlyEngagement: { weeks: 2 },
       })
@@ -200,7 +200,7 @@ describe('_progress-bar partial', () => {
   describe('label text', () => {
     it('shows "Required" for the Early engagement phase (INIT)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 2, weeks: 5 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -211,7 +211,7 @@ describe('_progress-bar partial', () => {
 
     it('shows "Maximum" for a non-Early engagement phase (STD)', () => {
       const document = renderPartial({
-        phase: { name: { code: 'STD' } },
+        currentPhase: { phase: { code: 'STD' } },
         currentYear: { appointments: { allowance: 20, completed: 3, scheduled: 0 } },
         earlyEngagement: { weeks: 5 },
       })
@@ -224,7 +224,7 @@ describe('_progress-bar partial', () => {
   describe('missing value coercion', () => {
     it('treats undefined appointmentsEarlyEngagementCompleted as 0 and renders 0% width', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { weeks: 5 },
         currentYear: { appointments: { scheduled: 0 } },
       })
@@ -238,7 +238,7 @@ describe('_progress-bar partial', () => {
 
     it('treats undefined earlyEngagementWeeks as 0 and renders 0% width', () => {
       const document = renderPartial({
-        phase: { name: { code: 'INIT' } },
+        currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 3 },
         currentYear: { appointments: { scheduled: 0 } },
       })
