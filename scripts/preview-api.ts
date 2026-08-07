@@ -134,6 +134,11 @@ async function main() {
     ...(supervisionPackageFrontendContextResponse ?? {}),
   }
 
+  const supervisionPackageSummaryParams = {
+    forename: personalDetails?.name.forename,
+    ...(supervisionPackageFrontendContextResponse ?? {}),
+  }
+
   const popHeaderParams = {
     crn,
     dob: personalDetails?.dateOfBirth ?? '',
@@ -146,6 +151,7 @@ async function main() {
     `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
 {% from "pop-header/macro.njk" import popHeader %}
+{% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -176,12 +182,15 @@ async function main() {
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
         <h1 class="govuk-heading-l">Supervision Package</h1>
         {{ supervisionPackage(supervisionPackageParams) }}
+         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+          <h1 class="govuk-heading-l">Supervision Package Summary</h1>
+         {{ supervisionPackageSummary(supervisionPackageParams) }}
     </div>
   </main>
 </body>
 </html>
 `,
-    { supervisionPackageParams, popHeaderParams },
+    { supervisionPackageParams, popHeaderParams, supervisionPackageSummaryParams },
   )
 
   fs.mkdirSync('preview', { recursive: true })
