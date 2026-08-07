@@ -1,27 +1,29 @@
 import { sentenceType } from './sentenceType'
-import { Inputs } from '../types/SupervisionPackage'
+import { ContextDetails } from '../types/SupervisionPackage'
 
-const buildInputs = (overrides: Partial<Inputs> = {}): Inputs =>
+const buildContextDetails = (overrides: Partial<ContextDetails> = {}): ContextDetails =>
   ({
     sentences: [],
     ...overrides,
-  }) as Inputs
+  }) as ContextDetails
 
 describe('sentenceType', () => {
-  it('returns false when inputs is undefined', () => {
+  it('returns false when context is undefined', () => {
     expect(sentenceType(undefined)).toBe(false)
   })
 
-  it('returns false when inputs.sentences is undefined', () => {
-    expect(sentenceType(buildInputs({ sentences: undefined }))).toBe(false)
+  it('returns false when context.sentences is undefined', () => {
+    expect(sentenceType(buildContextDetails({ sentences: undefined }))).toBe(false)
   })
 
   it('returns "Imprisonment for Public Protection" when liferCategory code is LF01', () => {
     expect(
       sentenceType(
-        buildInputs({
+        buildContextDetails({
           liferCategory: { code: 'LF01' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('Imprisonment for Public Protection')
@@ -30,9 +32,11 @@ describe('sentenceType', () => {
   it('returns "life sentence" when liferCategory is present without LF01 code', () => {
     expect(
       sentenceType(
-        buildInputs({
+        buildContextDetails({
           liferCategory: { code: 'LF03' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('life sentence')
@@ -41,9 +45,11 @@ describe('sentenceType', () => {
   it('returns "extended determinate sentence" when liferCategory code is LF02', () => {
     expect(
       sentenceType(
-        buildInputs({
+        buildContextDetails({
           liferCategory: { code: 'LF02' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('extended determinate sentence')
@@ -52,8 +58,10 @@ describe('sentenceType', () => {
   it('returns "custodial sentence" when a sentence is custodial and not SPX', () => {
     expect(
       sentenceType(
-        buildInputs({
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }] as Inputs['sentences'],
+        buildContextDetails({
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('custodial sentence')
@@ -62,8 +70,10 @@ describe('sentenceType', () => {
   it('returns "community sentence" when the only custodial sentence has code SPX', () => {
     expect(
       sentenceType(
-        buildInputs({
-          sentences: [{ supervisionPackage: { code: 'SPX' }, type: { isCustodial: true } }] as Inputs['sentences'],
+        buildContextDetails({
+          sentences: [
+            { supervisionPackage: { code: 'SPX' }, type: { isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('community sentence')
@@ -72,8 +82,10 @@ describe('sentenceType', () => {
   it('returns "community sentence" when no sentences are custodial', () => {
     expect(
       sentenceType(
-        buildInputs({
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }] as Inputs['sentences'],
+        buildContextDetails({
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } },
+          ] as ContextDetails['sentences'],
         }),
       ),
     ).toBe('community sentence')
@@ -82,8 +94,8 @@ describe('sentenceType', () => {
   it('returns undefined when a sentence has no type (custodial status is unknown)', () => {
     expect(
       sentenceType(
-        buildInputs({
-          sentences: [{ supervisionPackage: { code: 'SPA' } }] as Inputs['sentences'],
+        buildContextDetails({
+          sentences: [{ supervisionPackage: { code: 'SPA' } }] as ContextDetails['sentences'],
         }),
       ),
     ).toBeUndefined()

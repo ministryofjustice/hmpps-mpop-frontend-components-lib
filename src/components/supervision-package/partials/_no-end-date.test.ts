@@ -35,8 +35,7 @@ describe('_no-end-date partial', () => {
   describe('IOM red RAG guidance', () => {
     it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
-        inputs: { integratedOffenderManagementRedRated: true },
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -49,8 +48,7 @@ describe('_no-end-date partial', () => {
 
     it('hides the IOM guidance when integratedOffenderManagementRedRated is false', () => {
       const document = renderPartial({
-        forename: 'Alex',
-        inputs: { integratedOffenderManagementRedRated: false },
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -59,8 +57,8 @@ describe('_no-end-date partial', () => {
       expect(iomParagraph).toBeUndefined()
     })
 
-    it('hides the IOM guidance when inputs is not provided', () => {
-      const document = renderPartial({ forename: 'Alex' })
+    it('hides the IOM guidance when context is not provided', () => {
+      const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
       const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
@@ -72,9 +70,8 @@ describe('_no-end-date partial', () => {
   describe('discretionary appointments guidance', () => {
     it('shows the discretionary appointments guidance for an eligible woman', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
-        inputs: { gender: 'Female' },
+        context: { name: { forename: 'Alex' }, gender: 'Female' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -87,9 +84,8 @@ describe('_no-end-date partial', () => {
 
     it('hides the discretionary appointments guidance when gender is not Female', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
-        inputs: { gender: 'Male' },
+        context: { name: { forename: 'Alex' }, gender: 'Male' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -100,9 +96,8 @@ describe('_no-end-date partial', () => {
 
     it('hides the discretionary appointments guidance when tierScore is not eligible', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'B',
-        inputs: { gender: 'Female' },
+        context: { name: { forename: 'Alex' }, gender: 'Female' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -113,9 +108,8 @@ describe('_no-end-date partial', () => {
 
     it('hides the discretionary appointments guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
-        inputs: { gender: 'Female', integratedOffenderManagementRedRated: true },
+        context: { name: { forename: 'Alex' }, gender: 'Female', integratedOffenderManagementRedRated: true },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))

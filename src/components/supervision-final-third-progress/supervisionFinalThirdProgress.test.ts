@@ -33,7 +33,7 @@ describe('supervision-final-third-progress', () => {
         text: null,
         color: null,
       },
-      inputs: {
+      context: {
         nationalSecurityDivision: true,
         finalThirdEligibility: {
           eligible: true,

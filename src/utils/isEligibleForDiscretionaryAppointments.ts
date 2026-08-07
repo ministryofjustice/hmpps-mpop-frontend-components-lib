@@ -1,12 +1,12 @@
-type Inputs = {
+type Context = {
   gender?: string
   integratedOffenderManagementRedRated?: boolean
 }
 
 const eligibleTiers = ['C', 'D', 'E', 'F', 'G']
 
-export const isEligibleForDiscretionaryAppointments = (inputs: Inputs | undefined, tierScore?: string): boolean =>
-  inputs?.gender === 'Female' &&
-  !inputs?.integratedOffenderManagementRedRated &&
+export const isEligibleForDiscretionaryAppointments = (context: Context | undefined, tierScore?: string): boolean =>
+  context?.gender === 'Female' &&
+  !context?.integratedOffenderManagementRedRated &&
   !!tierScore &&
   eligibleTiers.includes(tierScore)

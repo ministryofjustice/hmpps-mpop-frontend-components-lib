@@ -12,7 +12,7 @@ const renderPartial = (params = {}) => {
 
 describe('_opd partial', () => {
   it('renders the OPD treatment paragraph with the forename', () => {
-    const document = renderPartial({ forename: 'Alex' })
+    const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
     const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
     const treatmentParagraph = paragraphs.find(p => p.textContent?.includes('OPD'))
@@ -23,7 +23,7 @@ describe('_opd partial', () => {
   })
 
   it('renders the additional appointments paragraph with the forename', () => {
-    const document = renderPartial({ forename: 'Alex' })
+    const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
     const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
     const additionalAppointmentsParagraph = paragraphs.find(p => p.textContent?.includes('additional appointments'))
@@ -34,7 +34,7 @@ describe('_opd partial', () => {
   })
 
   it('renders the pro rata recalculation paragraph', () => {
-    const document = renderPartial({ forename: 'Alex' })
+    const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
     const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
     const proRataParagraph = paragraphs.find(p => p.textContent?.includes('pro rata'))
@@ -45,7 +45,7 @@ describe('_opd partial', () => {
   })
 
   it('renders exactly three paragraphs', () => {
-    const document = renderPartial({ forename: 'Alex' })
+    const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
     expect(document.querySelectorAll('p.govuk-body')).toHaveLength(3)
   })

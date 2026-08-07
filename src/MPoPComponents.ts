@@ -7,7 +7,11 @@ import type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
 import type { LatestTierApiResponse, LatestTierResponse, TierTag } from './types/TierCalculation'
 import { SuppressingRestClient } from './SuppressingRestClient'
 import type { PersonalDetailsSummary, PersonalDetailsResponse } from './types/PersonalDetails'
-import type { SupervisionPackage, SupervisionPackageResponse } from './types/SupervisionPackage'
+import type {
+  SupervisionPackageResponse,
+  SupervisionPackageFrontendContextResponse,
+  CurrentPhase,
+} from './types/SupervisionPackage'
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 
@@ -25,11 +29,15 @@ export default class MPoPComponents {
 
   private readonly supervisionPackageApiRestClient: SuppressingRestClient
 
+  private readonly logger: Logger | Console
+
   constructor(
     authenticationClient: AuthenticationClient,
     config: MPoPComponentsConfig,
     logger: Logger | Console = console,
   ) {
+    this.logger = logger
+
     this.tierApiRestClient = new SuppressingRestClient(
       new RestClient('Tier API', config, logger, authenticationClient),
       logger,
@@ -148,7 +156,7 @@ export default class MPoPComponents {
     let supervisionPackageResponse: SupervisionPackageResponse
 
     try {
-      const response = await this.supervisionPackageApiRestClient.get<SupervisionPackage>(
+      const response = await this.supervisionPackageApiRestClient.get<CurrentPhase>(
         `/case/${crn}/current-phase`,
         authOptions,
       )
@@ -219,6 +227,30 @@ export default class MPoPComponents {
     return {
       ...personScheduleResponse,
       error,
+    }
+  }
+
+  async getSupervisionPackageFrontendContext(
+    authOptions: AuthOptions | string,
+    crn: string,
+  ): Promise<SupervisionPackageFrontendContextResponse | null> {
+    try {
+      // SuppressingRestClient resolves 404s to null rather than throwing, so a missing context is not an error
+      return await this.supervisionPackageApiRestClient.get<SupervisionPackageFrontendContextResponse>(
+        `/frontend-context/${crn}`,
+        authOptions,
+      )
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      const error = err instanceof Error ? err : new Error('500 Internal Server Error')
+
+      if (responseStatus === 503) {
+        this.logger.error(`Supervision Package API unavailable (503) for crn ${crn}`)
+      } else {
+        this.logger.error(`Supervision Package API internal error (500) for crn ${crn}`)
+      }
+
+      throw error
     }
   }
 }

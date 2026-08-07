@@ -63,7 +63,7 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
 }</code></pre>
-      <p class="govuk-body">This variant is triggered purely by <code>phase.name.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
+      <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -71,11 +71,9 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
-        surname: 'Morris',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
-        nextAppointment: {
+                nextAppointment: {
           date: '2026-08-19T15:15:00+01:00',
           description: 'Planned Telephone Contact (NS)',
           href: '#'
@@ -97,7 +95,7 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 2, completed: 2 }
         },
-        inputs: {
+        context: {
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -133,7 +131,7 @@ const html = env.renderString(
   "phase": { "name": { "code": "INIT" } },
   "earlyEngagement": { "weeks": 12, "completed": 12 }
 }</code></pre>
-      <p class="govuk-body">This variant happens in early engagement (<code>phase.name.code === 'INIT'</code>) if <code>earlyEngagement.weeks</code> is the same as <code>earlyEngagement.completed</code>. If it's not early engagement, the equivalent "max reached" condition instead compares <code>currentYear.appointments.completed</code> against <code>currentYear.appointments.allowance</code> (completed &gt;= allowance).</p>
+      <p class="govuk-body">This variant happens in early engagement (<code>currentPhase.phase.code === 'INIT'</code>) if <code>earlyEngagement.weeks</code> is the same as <code>earlyEngagement.completed</code>. If it's not early engagement, the equivalent "max reached" condition instead compares <code>currentYear.appointments.completed</code> against <code>currentYear.appointments.allowance</code> (completed &gt;= allowance).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -141,7 +139,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -166,7 +163,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 12 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -199,11 +200,11 @@ const html = env.renderString(
 
       <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life imprisonment</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "liferCategory": { "code": "LF01" }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.liferCategory.code</code> being one of <code>'LF01'</code>, <code>'LF02'</code>, <code>'LF03'</code> or <code>'x9'</code>, regardless of what <code>phase.name.code</code> is set to (unless <code>inputs.offenderPersonalDisorderPathway</code> is also true, which takes priority).</p>
+      <p class="govuk-body">This variant is triggered by <code>context.liferCategory.code</code> being one of <code>'LF01'</code>, <code>'LF02'</code>, <code>'LF03'</code> or <code>'x9'</code>, regardless of what <code>currentPhase.phase.code</code> is set to (unless <code>context.offenderPersonalDisorderPathway</code> is also true, which takes priority).</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -211,7 +212,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -236,7 +236,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 12 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           liferCategory: { code: 'LF01' },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
@@ -271,11 +275,11 @@ const html = env.renderString(
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
-  "inputs": {
+  "context": {
     "gender": "Female",
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.gender === 'Female'</code>, <code>tierScore</code> being one of <code>C</code>/<code>D</code>/<code>E</code>/<code>F</code>/<code>G</code>, and <code>inputs.integratedOffenderManagementRedRated === false</code>.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.gender === 'Female'</code>, <code>tierScore</code> being one of <code>C</code>/<code>D</code>/<code>E</code>/<code>F</code>/<code>G</code>, and <code>context.integratedOffenderManagementRedRated === false</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -283,7 +287,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Maria',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -308,7 +311,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 0 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Female',
           integratedOffenderManagementRedRated: false,
@@ -343,13 +350,13 @@ const html = env.renderString(
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "phase": { "name": { "code": "INIT" } },
-  "inputs": {
+  "context": {
     "sentences": [
       { "supervisionPackage": { "code": "SPA" }, "inBreach": true }
     ]
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by any sentence in <code>inputs.sentences</code> having <code>inBreach === true</code> with a <code>supervisionPackage.code</code> other than <code>'SPX'</code>.</p>
+      <p class="govuk-body">This variant is triggered by any sentence in <code>context.sentences</code> having <code>inBreach === true</code> with a <code>supervisionPackage.code</code> other than <code>'SPX'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -357,7 +364,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -382,7 +388,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 0 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -416,11 +426,11 @@ const html = env.renderString(
       <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "offenderPersonalDisorderPathway": true
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.offenderPersonalDisorderPathway === true</code>, regardless of <code>phase.name.code</code> or the IPP/life-sentence flags.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.offenderPersonalDisorderPathway === true</code>, regardless of <code>currentPhase.phase.code</code> or the IPP/life-sentence flags.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -428,7 +438,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -453,7 +462,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 0 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -491,7 +504,7 @@ const html = env.renderString(
     "appointments": { "allowance": 46, "completed": 46 }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>inputs.offenderPersonalDisorderPathway</code> is not true.</p>
+      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not true.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -499,7 +512,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -524,7 +536,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 46 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -558,11 +574,11 @@ const html = env.renderString(
       <p class="govuk-body">Display the supervision package when the PoP is unlawfully at large</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "sentences": { "custody": { "location": { "code": "UATLRG" } } }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.location.code === 'UATLRG'</code>, and takes priority over the "In custody" badge.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.location.code === 'UATLRG'</code>, and takes priority over the "In custody" badge.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -570,7 +586,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Chris',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -595,7 +610,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 2, completed: 2 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -615,11 +634,11 @@ const html = env.renderString(
       <p class="govuk-body">Display the supervision package when the PoP is in custody</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } }
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.status.code</code> being one of <code>D</code> (In Custody), <code>I</code> (In Custody - IRC) or <code>R</code> (In Custody - RoTL), provided neither the "Unlawfully at large" condition is met.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.status.code</code> being one of <code>D</code> (In Custody), <code>I</code> (In Custody - IRC) or <code>R</code> (In Custody - RoTL), provided neither the "Unlawfully at large" condition is met.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -627,7 +646,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Jordan',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -652,7 +670,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 2, completed: 2 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -672,11 +694,11 @@ const html = env.renderString(
       <p class="govuk-body">Display the supervision package when the PoP is rated red under Integrated Offender Management (IOM)</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "integratedOffenderManagementRedRated": true
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.integratedOffenderManagementRedRated === true</code>.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.integratedOffenderManagementRedRated === true</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -684,7 +706,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -704,12 +725,17 @@ const html = env.renderString(
           completed: 2
         },
         currentYear: {
+
           startDate: '2026-07-08',
           endDate: '2027-01-07',
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 2, completed: 2 }
         },
-        inputs: {
+        context: {
+                          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
@@ -745,7 +771,7 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentYear": { "appointments": { "allowance": 46, "completed": 46 } }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>inputs.offenderPersonalDisorderPathway</code> is not <code>true</code> (OPD takes priority and suppresses this badge).</p>
+      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not <code>true</code> (OPD takes priority and suppresses this badge).</p>
       {{ supervisionPackage({
         tierScore: 'B',
         tag: { text: null, color: null },
@@ -753,7 +779,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -778,7 +803,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 46 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
@@ -814,16 +843,19 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Unlawfully at large</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": { "sentences": { "custody": { "location": { "code": "UATLRG" } } } }
+  "context": { "sentences": { "custody": { "location": { "code": "UATLRG" } } } }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.location.code === 'UATLRG'</code>, which takes priority over the recall and in-custody statuses below.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.location.code === 'UATLRG'</code>, which takes priority over the recall and in-custody statuses below.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           offenderPersonalDisorderPathway: false,
           integratedOffenderManagementRedRated: false,
           sentences: [
@@ -837,16 +869,19 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">In custody</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": { "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } } }
+  "context": { "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } } }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.sentences.custody.status.code</code> being one of <code>'D'</code>, <code>'I'</code> or <code>'R'</code> (shown here as <code>'D'</code>, "In Custody"), provided the location and recall statuses above do not apply.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.status.code</code> being one of <code>'D'</code>, <code>'I'</code> or <code>'R'</code> (shown here as <code>'D'</code>, "In Custody"), provided the location and recall statuses above do not apply.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           offenderPersonalDisorderPathway: false,
           integratedOffenderManagementRedRated: false,
           sentences: [
@@ -861,9 +896,9 @@ const html = env.renderString(
       <p class="govuk-body">Display the supervision package when the PoP has an IOM red RAG status</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": { "integratedOffenderManagementRedRated": true }
+  "context": { "integratedOffenderManagementRedRated": true }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>inputs.integratedOffenderManagementRedRated === true</code>. Note that when <code>inputs.nationalSecurityDivision</code> is also <code>true</code> alongside eligibility for the final third stage, the final third progress card is shown instead (see below) and this badge is not rendered.</p>
+      <p class="govuk-body">This variant is triggered by <code>context.integratedOffenderManagementRedRated === true</code>. Note that when <code>context.nationalSecurityDivision</code> is also <code>true</code> alongside eligibility for the final third stage, the final third progress card is shown instead (see below) and this badge is not rendered.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -871,7 +906,6 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        forename: 'Stuart',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointment: {
@@ -896,7 +930,11 @@ const html = env.renderString(
           isFirstYear: true,
           appointments: { allowance: 46, scheduled: 0, completed: 10 }
         },
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
@@ -941,8 +979,12 @@ const html = env.renderString(
         tierScore: "C",
         tag: { text: "Provisional", color: "orange" },
         historyHref: "#",
-        forename: 'Stuart',
-        surname: 'Morris'
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          }
+        }
       }) }}
 
       <h2 class="govuk-heading-m">Missing tier</h2>
@@ -995,7 +1037,7 @@ const html = env.renderString(
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-        "inputs": {
+        "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
             "eligible": true,
@@ -1019,7 +1061,7 @@ const html = env.renderString(
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        inputs: {
+        context: {
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
@@ -1052,7 +1094,7 @@ const html = env.renderString(
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-        "inputs": {
+        "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
             "eligible": true,
@@ -1078,7 +1120,11 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        inputs: {
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
@@ -1111,7 +1157,7 @@ const html = env.renderString(
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-        "inputs": {
+        "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
             "eligible": true,
@@ -1137,7 +1183,7 @@ const html = env.renderString(
         historyText: 'View tier change history',
         allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        inputs: {
+        context: {
           date: '2026-07-15T10:02:47.256918704+01:00',
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
@@ -1167,12 +1213,12 @@ const html = env.renderString(
       }) }}
 
       <h2 class="govuk-heading-m">Sentence type heading</h2>
-      <p class="govuk-body">The "Supervision package" heading is suffixed with a sentence type description, derived from <code>inputs</code> via the <code>sentenceType</code> filter.</p>
+      <p class="govuk-body">The "Supervision package" heading is suffixed with a sentence type description, derived from <code>context</code> via the <code>sentenceType</code> filter.</p>
 
       <h3 class="govuk-heading-s">Custodial sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "sentences": [
       { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
     ]
@@ -1184,8 +1230,11 @@ const html = env.renderString(
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           sentences: [
             { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
@@ -1195,7 +1244,7 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Community sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "sentences": [
       { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
     ]
@@ -1207,8 +1256,11 @@ const html = env.renderString(
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           sentences: [
             { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
           ]
@@ -1218,18 +1270,21 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Life sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "liferCategory": { "code": "LF03" }
   }
 }</code></pre>
-      <p class="govuk-body">This is triggered by <code>inputs.liferCategory</code> being present with a code other than <code>'LF01'</code> or <code>'LF02'</code>.</p>
+      <p class="govuk-body">This is triggered by <code>context.liferCategory</code> being present with a code other than <code>'LF01'</code> or <code>'LF02'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           liferCategory: { code: 'LF03' },
           sentences: [
             { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
@@ -1240,18 +1295,21 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Imprisonment for Public Protection</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "liferCategory": { "code": "LF01" }
   }
 }</code></pre>
-      <p class="govuk-body">This is triggered by <code>inputs.liferCategory.code === 'LF01'</code>.</p>
+      <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF01'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           liferCategory: { code: 'LF01' },
           sentences: [
             { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
@@ -1262,18 +1320,21 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Extended determinate sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "inputs": {
+  "context": {
     "liferCategory": { "code": "LF02" }
   }
 }</code></pre>
-      <p class="govuk-body">This is triggered by <code>inputs.liferCategory.code === 'LF02'</code>.</p>
+      <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF02'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
         historyText: 'View tier change history',
-        forename: 'Stuart',
-        inputs: {
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
           liferCategory: { code: 'LF02' },
           sentences: [
             { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }

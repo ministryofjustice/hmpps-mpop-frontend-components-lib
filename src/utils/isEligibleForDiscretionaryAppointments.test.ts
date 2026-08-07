@@ -35,7 +35,7 @@ describe('isEligibleForDiscretionaryAppointments', () => {
     ).toBe(false)
   })
 
-  it('returns false when inputs is undefined', () => {
+  it('returns false when context is undefined', () => {
     expect(isEligibleForDiscretionaryAppointments(undefined, 'C')).toBe(false)
   })
 })

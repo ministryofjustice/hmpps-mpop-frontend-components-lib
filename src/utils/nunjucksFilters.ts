@@ -1,6 +1,7 @@
 import { Environment } from 'nunjucks'
 import { dateWithYear } from './dateWithYear'
 import { govukTime } from './govukTime'
+import { appointmentDateTime } from './appointmentDateTime'
 import { toTitleCase } from './toTitleCase'
 import { hasBreachedSentence } from './hasBreachedSentence'
 import { isEligibleForDiscretionaryAppointments } from './isEligibleForDiscretionaryAppointments'
@@ -12,6 +13,7 @@ import { sentenceType } from './sentenceType'
 export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('dateWithYear', dateWithYear)
   env.addFilter('govukTime', govukTime)
+  env.addFilter('appointmentDateTime', appointmentDateTime)
   env.addFilter('toTitleCase', toTitleCase)
   env.addFilter('hasBreachedSentence', hasBreachedSentence)
   env.addFilter('isEligibleForDiscretionaryAppointments', isEligibleForDiscretionaryAppointments)

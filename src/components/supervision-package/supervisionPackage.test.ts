@@ -113,8 +113,8 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'INIT', description: 'Early engagement' } },
-      forename: 'Alex',
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' } },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
       allAppointmentsHref: '#',
@@ -132,8 +132,8 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'STD', description: 'Standard' } },
-      forename: 'Alex',
+      currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+      context: { name: { forename: 'Alex' } },
       currentYear: {
         isFirstYear: true,
         endDate: '2026-08-15',
@@ -158,7 +158,7 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: tierTags.none,
       historyHref: '#',
-      inputs: {
+      context: {
         nationalSecurityDivision: true,
         finalThirdEligibility: {
           eligible: true,
@@ -183,14 +183,14 @@ describe('supervision-package', () => {
     expect(document.querySelector('.supervision-package')).toBeNull()
   })
 
-  describe('phase.name.code is SPNA', () => {
+  describe('currentPhase.phase.code is SPNA', () => {
     it('still renders the Final Third Progress component when eligible', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
-        inputs: {
+        currentPhase: { phase: { code: 'SPNA', description: 'Post sentence supervision' } },
+        context: {
           nationalSecurityDivision: true,
           finalThirdEligibility: {
             eligible: true,
@@ -218,20 +218,20 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
+        currentPhase: { phase: { code: 'SPNA', description: 'Post sentence supervision' } },
       })
 
       expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
       expect(document.querySelector('.supervision-package')).toBeNull()
     })
 
-    it('renders neither the Final Third Progress nor the Supervision Package when phase.name.code is SPNA and nationalSecurityDivision is false', () => {
+    it('renders neither the Final Third Progress nor the Supervision Package when currentPhase.phase.code is SPNA and nationalSecurityDivision is false', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        phase: { name: { code: 'SPNA', description: 'Post sentence supervision' } },
-        inputs: {
+        currentPhase: { phase: { code: 'SPNA', description: 'Post sentence supervision' } },
+        context: {
           nationalSecurityDivision: false,
         },
       })
@@ -240,13 +240,13 @@ describe('supervision-package', () => {
       expect(document.querySelector('.supervision-package')).toBeNull()
     })
 
-    it('renders neither the Final Third Progress nor the Supervision Package when phase.name.code is not SPNA but nationalSecurityDivision is true', () => {
+    it('renders neither the Final Third Progress nor the Supervision Package when currentPhase.phase.code is not SPNA but nationalSecurityDivision is true', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        phase: { name: { code: 'TEST', description: 'Post sentence supervision' } },
-        inputs: {
+        currentPhase: { phase: { code: 'TEST', description: 'Post sentence supervision' } },
+        context: {
           nationalSecurityDivision: true,
         },
       })
@@ -255,13 +255,13 @@ describe('supervision-package', () => {
       expect(document.querySelector('.supervision-package')).toBeNull()
     })
 
-    it('renders the Supervision Package when phase.name.code is not SPNA and nationalSecurityDivision is false', () => {
+    it('renders the Supervision Package when currentPhase.phase.code is not SPNA and nationalSecurityDivision is false', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        phase: { name: { code: 'TEST', description: 'Post sentence supervision' } },
-        inputs: {
+        currentPhase: { phase: { code: 'TEST', description: 'Post sentence supervision' } },
+        context: {
           nationalSecurityDivision: false,
         },
       })
@@ -276,9 +276,8 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'INIT', description: 'Early engagement' } },
-      forename: 'Alex',
-      inputs: { offenderPersonalDisorderPathway: true },
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' }, offenderPersonalDisorderPathway: true },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -295,14 +294,13 @@ describe('supervision-package', () => {
     )
   })
 
-  it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and phase.name.code INIT are true', () => {
+  it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and currentPhase.phase.code INIT are true', () => {
     const document = renderComponent({
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'INIT', description: 'Early engagement' } },
-      forename: 'Alex',
-      inputs: { offenderPersonalDisorderPathway: true },
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' }, offenderPersonalDisorderPathway: true },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
     })
@@ -317,14 +315,13 @@ describe('supervision-package', () => {
     ${'LF02'} | ${{ code: 'LF02' }}
     ${'LF03'} | ${{ code: 'LF03' }}
     ${'x9'}   | ${{ code: 'x9' }}
-  `('renders the no end date stage when inputs.liferCategory.code is $name', ({ liferCategory }) => {
+  `('renders the no end date stage when context.liferCategory.code is $name', ({ liferCategory }) => {
     const document = renderComponent({
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'IPP', description: 'Indeterminate' } },
-      forename: 'Alex',
-      inputs: { liferCategory },
+      currentPhase: { phase: { code: 'IPP', description: 'Indeterminate' } },
+      context: { name: { forename: 'Alex' }, liferCategory },
       currentYear: { appointments: { allowance: 20, scheduled: 2, completed: 5 } },
       earlyEngagement: { weeks: 0 },
     })
@@ -337,14 +334,13 @@ describe('supervision-package', () => {
     expect(document.body.textContent).toContain('5 of 20 appointments used')
   })
 
-  it('does not render the no end date stage when inputs.liferCategory.code does not match a lifer category code', () => {
+  it('does not render the no end date stage when context.liferCategory.code does not match a lifer category code', () => {
     const document = renderComponent({
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'INIT', description: 'Early engagement' } },
-      forename: 'Alex',
-      inputs: { liferCategory: { code: 'LF99' } },
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' }, liferCategory: { code: 'LF99' } },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
     })
@@ -354,14 +350,13 @@ describe('supervision-package', () => {
     expect(headings).toContain('Early engagement stage')
   })
 
-  it('renders the OPD stage instead of the no end date stage when both offenderPersonalDisorderPathway is true and inputs.liferCategory.code matches a lifer category code', () => {
+  it('renders the OPD stage instead of the no end date stage when both offenderPersonalDisorderPathway is true and context.liferCategory.code matches a lifer category code', () => {
     const document = renderComponent({
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      phase: { name: { code: 'IPP', description: 'Indeterminate' } },
-      forename: 'Alex',
-      inputs: { offenderPersonalDisorderPathway: true, liferCategory: { code: 'LF01' } },
+      currentPhase: { phase: { code: 'IPP', description: 'Indeterminate' } },
+      context: { name: { forename: 'Alex' }, offenderPersonalDisorderPathway: true, liferCategory: { code: 'LF01' } },
     })
 
     expect(document.body.textContent).not.toContain('There is no supervision end date.')
@@ -369,16 +364,17 @@ describe('supervision-package', () => {
   })
 
   describe('next appointment', () => {
-    it('renders the next appointment details when date, description and href are present', () => {
+    it('renders the next appointment details when date, startTime, type description and href are present', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
         nextAppointment: {
-          date: '2026-08-01T14:30:00',
-          description: 'HOME VISIT',
-          href: '/appointments/123',
+          date: '2026-08-13',
+          startTime: '12:00:00',
+          type: { code: 'COAP', description: 'Planned Office Visit (NS)' },
         },
+        nextAppointmentHref: '/appointments/123',
       })
 
       const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
@@ -386,7 +382,7 @@ describe('supervision-package', () => {
 
       const appointmentLink = document.querySelector('a[href="/appointments/123"]')
       expect(appointmentLink).not.toBeNull()
-      expect(appointmentLink?.textContent?.trim()).toBe('Home visit: 1 August 2026 at 2:30pm')
+      expect(appointmentLink?.textContent?.trim()).toBe('Planned office visit (NS): Thursday 13 Aug at 12pm')
 
       expect(document.body.textContent).not.toContain('No appointments scheduled')
     })
@@ -404,7 +400,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        nextAppointment: { date: '2026-08-01T14:30:00', description: 'Home visit' },
+        nextAppointment: { date: '2026-08-13', type: { description: 'Home visit' } },
       })
 
       const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
@@ -431,8 +427,8 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        forename: 'Alex',
-        inputs: {
+        context: {
+          name: { forename: 'Alex' },
           sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
         },
       })
@@ -449,8 +445,8 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: tierTags.none,
         historyHref: '#',
-        forename: 'Alex',
-        inputs: {
+        context: {
+          name: { forename: 'Alex' },
           sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }],
         },
       })
@@ -458,7 +454,7 @@ describe('supervision-package', () => {
       expect(document.querySelector('.govuk-warning-text')).toBeNull()
     })
 
-    it('does not render the warning text when inputs.sentences is absent', () => {
+    it('does not render the warning text when context.sentences is absent', () => {
       const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#' })
 
       expect(document.querySelector('.govuk-warning-text')).toBeNull()
@@ -498,7 +494,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
         },
       })
@@ -514,7 +510,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { location: { code: 'UATLRG' } } }],
         },
       })
@@ -530,7 +526,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
         },
       })
@@ -553,7 +549,7 @@ describe('supervision-package', () => {
         arrangeAppointmentHref: '/arrange-appointment',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
         },
       })
@@ -571,7 +567,7 @@ describe('supervision-package', () => {
         arrangeAppointmentHref: '/arrange-appointment',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { location: { code: 'UATLRG' } } }],
         },
       })
@@ -589,7 +585,7 @@ describe('supervision-package', () => {
         arrangeAppointmentHref: '/arrange-appointment',
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        inputs: {
+        context: {
           sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
         },
       })

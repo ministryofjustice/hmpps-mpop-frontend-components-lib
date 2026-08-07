@@ -1,17 +1,23 @@
 import { hasBreachedSentence } from './hasBreachedSentence'
-import { Sentence } from '../types/SupervisionPackage'
+import { FrontendSentence } from '../types/SupervisionPackage'
 
 describe('hasBreachedSentence', () => {
   it('returns true when a sentence is in breach and its code is not SPX', () => {
-    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPA' }, inBreach: true }] as Sentence[])).toBe(true)
+    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPA' }, inBreach: true }] as FrontendSentence[])).toBe(
+      true,
+    )
   })
 
   it('returns false when the only breached sentence has code SPX', () => {
-    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPX' }, inBreach: true }] as Sentence[])).toBe(false)
+    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPX' }, inBreach: true }] as FrontendSentence[])).toBe(
+      false,
+    )
   })
 
   it('returns false when no sentences are in breach', () => {
-    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPA' }, inBreach: false }] as Sentence[])).toBe(false)
+    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPA' }, inBreach: false }] as FrontendSentence[])).toBe(
+      false,
+    )
   })
 
   it('returns true when at least one of multiple sentences qualifies', () => {
@@ -20,7 +26,7 @@ describe('hasBreachedSentence', () => {
         { supervisionPackage: { code: 'SPX' }, inBreach: true },
         { supervisionPackage: { code: 'SPA' }, inBreach: false },
         { supervisionPackage: { code: 'SPB' }, inBreach: true },
-      ] as Sentence[]),
+      ] as FrontendSentence[]),
     ).toBe(true)
   })
 

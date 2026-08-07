@@ -1,12 +1,12 @@
 import { isInCustody } from './isInCustody'
-import { Sentence } from '../types/SupervisionPackage'
+import { FrontendSentence } from '../types/SupervisionPackage'
 
 describe('isInCustody', () => {
   it.each(['D', 'I', 'R'])('returns the description when a non-SPX sentence has custody status code %s', code => {
     expect(
       isInCustody([
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code, description: 'In Custody' } } },
-      ] as Sentence[]),
+      ] as FrontendSentence[]),
     ).toBe('In Custody')
   })
 
@@ -14,13 +14,13 @@ describe('isInCustody', () => {
     expect(
       isInCustody([
         { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In Custody' } } },
-      ] as Sentence[]),
+      ] as FrontendSentence[]),
     ).toBeUndefined()
   })
 
   it('returns undefined when no sentence has a custody status code', () => {
     expect(
-      isInCustody([{ supervisionPackage: { code: 'SPA' }, custody: { status: {} } }] as Sentence[]),
+      isInCustody([{ supervisionPackage: { code: 'SPA' }, custody: { status: {} } }] as FrontendSentence[]),
     ).toBeUndefined()
   })
 
@@ -30,7 +30,7 @@ describe('isInCustody', () => {
         { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'Ignored' } } },
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'C', description: 'Community custody' } } },
         { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'I', description: 'In Custody - IRC' } } },
-      ] as Sentence[]),
+      ] as FrontendSentence[]),
     ).toBe('Community custody')
   })
 
@@ -47,7 +47,7 @@ describe('isInCustody', () => {
       isInCustody(
         [
           { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'B', description: 'Bailed' } } },
-        ] as Sentence[],
+        ] as FrontendSentence[],
         ['B'],
       ),
     ).toBeUndefined()
@@ -59,7 +59,7 @@ describe('isInCustody', () => {
         [
           { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'B', description: 'Bailed' } } },
           { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'D', description: 'In Custody' } } },
-        ] as Sentence[],
+        ] as FrontendSentence[],
         ['B'],
       ),
     ).toBe('In Custody')

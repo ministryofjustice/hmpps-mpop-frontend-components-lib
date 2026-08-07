@@ -21,10 +21,10 @@ describe('_early-engagement partial', () => {
     'shows $expectedRemaining remaining appointments when allowance is $appointmentsAllowance and earlyEngagementWeeks is $earlyEngagementWeeks',
     ({ appointmentsAllowance, earlyEngagementWeeks, expectedRemaining }) => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { appointments: { allowance: appointmentsAllowance } },
         earlyEngagement: { weeks: earlyEngagementWeeks },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -37,10 +37,10 @@ describe('_early-engagement partial', () => {
   describe('weekly attendance guidance', () => {
     it('shows the weekly guidance when appointmentsCompleted is less than earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 2, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -53,10 +53,10 @@ describe('_early-engagement partial', () => {
 
     it('hides the weekly guidance when appointmentsCompleted equals earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 5, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -67,10 +67,10 @@ describe('_early-engagement partial', () => {
 
     it('hides the weekly guidance when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 7, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -83,7 +83,7 @@ describe('_early-engagement partial', () => {
       const document = renderPartial({
         earlyEngagement: { completed: 2, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -96,10 +96,10 @@ describe('_early-engagement partial', () => {
   describe('end-date paragraph conditional clause', () => {
     it('includes the conditional attendance clause when appointmentsCompleted is less than earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 2, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -110,10 +110,10 @@ describe('_early-engagement partial', () => {
 
     it('omits the conditional attendance clause when appointmentsCompleted equals earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 5, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -125,10 +125,10 @@ describe('_early-engagement partial', () => {
 
     it('omits the conditional attendance clause when appointmentsCompleted exceeds earlyEngagementWeeks', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { completed: 8, weeks: 5 },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -139,9 +139,9 @@ describe('_early-engagement partial', () => {
 
     it('does not render the end-date paragraph when appointmentsAllowance is missing', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         earlyEngagement: { weeks: 5 },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -152,9 +152,9 @@ describe('_early-engagement partial', () => {
 
     it('does not render the end-date paragraph when earlyEngagementWeeks is missing', () => {
       const document = renderPartial({
-        forename: 'Alex',
+        context: { name: { forename: 'Alex' } },
         currentYear: { appointments: { allowance: 20 } },
-        phase: { endDate: '2026-01-01' },
+        currentPhase: { endDate: '2026-01-01' },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -167,8 +167,7 @@ describe('_early-engagement partial', () => {
   describe('IOM red RAG guidance', () => {
     it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
-        inputs: { integratedOffenderManagementRedRated: true },
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -181,8 +180,7 @@ describe('_early-engagement partial', () => {
 
     it('hides the IOM guidance when integratedOffenderManagementRedRated is false', () => {
       const document = renderPartial({
-        forename: 'Alex',
-        inputs: { integratedOffenderManagementRedRated: false },
+        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -191,8 +189,8 @@ describe('_early-engagement partial', () => {
       expect(iomParagraph).toBeUndefined()
     })
 
-    it('hides the IOM guidance when inputs is not provided', () => {
-      const document = renderPartial({ forename: 'Alex' })
+    it('hides the IOM guidance when context is not provided', () => {
+      const document = renderPartial({ context: { name: { forename: 'Alex' } } })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
       const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
@@ -211,9 +209,8 @@ describe('_early-engagement partial', () => {
       ${'G'}
     `('shows the guidance when gender is Female and tierScore is $tierScore', ({ tierScore }) => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore,
-        inputs: { gender: 'Female', integratedOffenderManagementRedRated: false },
+        context: { name: { forename: 'Alex' }, gender: 'Female', integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -226,9 +223,8 @@ describe('_early-engagement partial', () => {
 
     it('hides the guidance when tierScore is not one of C, D, E, F or G', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'B',
-        inputs: { gender: 'Female', integratedOffenderManagementRedRated: false },
+        context: { name: { forename: 'Alex' }, gender: 'Female', integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -239,9 +235,8 @@ describe('_early-engagement partial', () => {
 
     it('hides the guidance when gender is not Female', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
-        inputs: { gender: 'Male', integratedOffenderManagementRedRated: false },
+        context: { name: { forename: 'Alex' }, gender: 'Male', integratedOffenderManagementRedRated: false },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -252,9 +247,8 @@ describe('_early-engagement partial', () => {
 
     it('hides the guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({
-        forename: 'Alex',
         tierScore: 'C',
-        inputs: { gender: 'Female', integratedOffenderManagementRedRated: true },
+        context: { name: { forename: 'Alex' }, gender: 'Female', integratedOffenderManagementRedRated: true },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))

@@ -300,7 +300,7 @@ describe('MPoPComponents', () => {
         isFirstYear: true,
         appointments: { allowance: 46, scheduled: 0, completed: 0 },
       },
-      inputs: {
+      context: {
         date: '2026-07-14T14:36:34.103477524+01:00',
         gender: 'Male',
         integratedOffenderManagementRedRated: false,
@@ -514,6 +514,102 @@ describe('MPoPComponents', () => {
         httpStatus: 500,
         error,
       })
+    })
+  })
+
+  describe('getSupervisionPackageFrontendContext', () => {
+    const mockFrontendContext = {
+      currentPhase: {
+        supervisionPackage: { code: 'SPA', description: 'A' },
+        phase: { code: 'SENT', description: 'In Custody' },
+        eventNumber: '1',
+        startDate: '2026-07-08',
+        endDate: '2027-01-07',
+      },
+      earlyEngagement: {
+        startDate: '2026-08-10T00:00:00Z',
+        endDate: '2026-10-31T00:00:00Z',
+        weeks: 12,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-07-08',
+        endDate: '2027-01-07',
+        proRataFromDate: '2026-07-08',
+        appointments: { allowance: 46, scheduled: 0, completed: 0 },
+        isFirstYear: true,
+      },
+      nextAppointment: {
+        id: 1,
+        date: '2026-08-10',
+        startTime: '10:00',
+        type: { code: 'HVR', description: 'Home visit' },
+        description: 'Home visit',
+      },
+      createdAt: '2026-07-14T14:36:34.103477524+01:00',
+      updatedAt: '2026-07-14T14:36:34.103477524+01:00',
+      context: {
+        name: { forename: 'John', middleNames: 'A', surname: 'Doe' },
+        gender: 'Male',
+        sentences: [],
+        integratedOffenderManagementRedRated: false,
+        offenderPersonalDisorderPathway: false,
+        intensiveSupervisionCourt: false,
+        nationalSecurityDivision: false,
+        finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+      },
+    }
+
+    it('should return the frontend context when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockFrontendContext)
+
+      const result = await mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')
+
+      expect(result).toEqual(mockFrontendContext)
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/frontend-context/X123456', 'authToken')
+    })
+
+    it('should return null when the API resolves to null (404 suppressed)', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')
+
+      expect(result).toBeNull()
+    })
+
+    it('should log a 503 message and rethrow when the API is unavailable', async () => {
+      const error = { responseStatus: 503, message: 'Service unavailable' }
+      const loggerErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
+
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Supervision Package API unavailable (503) for crn X123456')
+    })
+
+    it('should log a generic internal error message and rethrow for other failures', async () => {
+      const error = { responseStatus: 500, message: 'Internal Server Error' }
+      const loggerErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
+
+      expect(loggerErrorSpy).toHaveBeenCalledWith('Supervision Package API internal error (500) for crn X123456')
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toBe(error)
     })
   })
 })

@@ -1,5 +1,5 @@
 import { getPrimarySentences } from './getPrimarySentences'
-import { Sentence } from '../types/SupervisionPackage'
+import { FrontendSentence } from '../types/SupervisionPackage'
 
 describe('getPrimarySentences', () => {
   it('returns sentences whose supervisionPackage code is not SPX', () => {
@@ -8,12 +8,12 @@ describe('getPrimarySentences', () => {
         { supervisionPackage: { code: 'SPX' } },
         { supervisionPackage: { code: 'SPA' } },
         { supervisionPackage: { code: 'SPB' } },
-      ] as Sentence[]),
+      ] as FrontendSentence[]),
     ).toEqual([{ supervisionPackage: { code: 'SPA' } }, { supervisionPackage: { code: 'SPB' } }])
   })
 
   it('returns an empty array when all sentences have code SPX', () => {
-    expect(getPrimarySentences([{ supervisionPackage: { code: 'SPX' } }] as Sentence[])).toEqual([])
+    expect(getPrimarySentences([{ supervisionPackage: { code: 'SPX' } }] as FrontendSentence[])).toEqual([])
   })
 
   it('returns an empty array when sentences is undefined', () => {
