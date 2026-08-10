@@ -3,8 +3,8 @@ import { FrontendSentence } from '../types/SupervisionPackage'
 
 export const isInCustody = (
   sentences?: Array<FrontendSentence> | null,
-  codeExceptions: string[] = ['B', 'T', 'P', 'AT'],
+  codes: string[] = ['D', 'I', 'R', 'C'],
 ): string | undefined =>
   getPrimarySentences(sentences).find(
-    sentence => sentence?.custody?.status?.code && !codeExceptions.includes(sentence.custody.status.code.toUpperCase()),
+    sentence => sentence?.custody?.status?.code && codes.includes(sentence.custody.status.code.toUpperCase()),
   )?.custody?.status?.description
