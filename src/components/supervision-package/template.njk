@@ -16,7 +16,7 @@
     supervisionPackage: params
 }) }}
 
-{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and showPhaseColumn %}
+{% elif params.currentPhase.phase.code != 'SPNA' and not params.context.nationalSecurityDivision %}
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -87,7 +87,6 @@
             {% endif %}
 
             {% set nextAppointmentDateTime = (params.nextAppointment.date | appointmentDateTime(params.nextAppointment.startTime)) if params.nextAppointment else null %}
-           {% if phaseCode != 'FTHRD' %}
             {% if nextAppointmentDateTime and params.nextAppointment.type.description %}
                 <h3 class='govuk-heading-s'>Next appointment</h3>
                 <p class='govuk-body'>
@@ -100,7 +99,6 @@
             {% else %}
                 <p class='govuk-body'>No appointments scheduled</p>
             {% endif %}
-            {% endif %}
         </div>
 
         {% if showPhaseColumn %}
@@ -111,25 +109,40 @@
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_progress-bar.njk' %}
-                {% elseif lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
+                {% elseif params.context.liferCategory.code == 'LF01' or params.context.liferCategory.code == 'LF02' or params.context.liferCategory.code == 'LF03' or params.context.liferCategory.code == 'x9'  %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_no-end-date.njk' %}
-                {% elseif phaseCode == 'INIT' %}
+                {% elseif params.currentPhase.phase.code  == 'INIT' %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_early-engagement.njk' %}
-                {% elseif phaseCode == 'STD' %}
+                {% elseif params.currentPhase.phase.code  == 'STD' %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_standard-supervision.njk' %}
-                {% elseif phaseCode == 'FTHRD' %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
-                    {% include './partials/_final-third.njk' %}
                 {% endif %}
 
-                {% include './partials/_view-appointments.njk' %}
+                {% if params.allAppointmentsHref %}
+                    <p class='govuk-body'>
+                        <a class='govuk-link govuk-link--no-visited-state' href='{{ params.allAppointmentsHref }}' >View all appointments</a>
+                    </p>
+                {% endif %}
             </div>
         {% endif %}
     </div>
 
-    {% include './partials/_action-buttons.njk' %}
+    {% if not (params.context.sentences | isInCustody or params.context.sentences | isAtLarge ) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
+        <div class='govuk-button-group'>
+            {% if params.arrangeAppointmentHref %}
+                <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
+                    Arrange an appointment
+                </a>
+            {% endif %}
+
+            {% if params.crn and params.deliusBaseURL %}
+                <a href='{{ params.deliusBaseURL }}/NDelius-war/delius/JSP/deeplink.xhtml?component=RegisterSummary&CRN={{params.crn}}' role='button' draggable='false' class='govuk-button govuk-button--secondary' data-module='govuk-button'>
+                    Update NDelius risk flag
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
 {% endif %}
