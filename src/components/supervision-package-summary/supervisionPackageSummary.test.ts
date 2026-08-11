@@ -162,6 +162,111 @@ describe('supervision-package-summary', () => {
     )
   })
 
+  it('renders the supervision stage with breach warning', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      forename: 'Stuart',
+      context: {
+        finalThirdEligibility: {
+          eligible: false,
+        },
+        sentences: [
+          {
+            inBreach: true,
+          },
+        ],
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toBe(
+      'Stuart is in breach. You should continue to offer appointments.',
+    )
+  })
+
+  it('renders the supervision stage with recall warning', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      forename: 'Stuart',
+      context: {
+        finalThirdEligibility: {
+          eligible: false,
+        },
+        recallStatus: {
+          code: 'R',
+          description: 'Recall',
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toBe(
+      'Stuart has been recalled. Their appointments are paused.',
+    )
+  })
+
+  it('renders the supervision stage with all appointments used', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      forename: 'Stuart',
+      context: {
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 4,
+        },
+      },
+    })
+    expect(document.body.textContent).toContain(
+      'Stuart has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.',
+    )
+  })
+
   it('renders the last third stage', () => {
     const document = renderComponent({
       currentPhase: {
