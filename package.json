@@ -97,10 +97,12 @@
   },
   "type": "commonjs",
   "dependencies": {
-    "luxon": "3.7.2",
+    "@emnapi/core": "1.11.3",
+    "@emnapi/runtime": "1.11.3",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^1.2.1",
     "@types/nunjucks": "3.2.6",
+    "luxon": "3.7.2",
     "sass": "^1.101.0"
   }
 }
