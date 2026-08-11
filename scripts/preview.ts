@@ -1439,6 +1439,148 @@ const html = env.renderString(
   }
   }) }}
 
+  <h3 class="govuk-heading-s">Supervision stage with breach warning</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "context": {
+    sentences: [
+      {
+        inBreach: true
+      }
+    ]
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    },
+    sentences: [
+      {
+        inBreach: true
+      }
+    ]
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Supervision stage with recall warning</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "context": {
+    "recallStatus": {
+      "code": "R",
+      "description": "Recall"
+    }
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    },
+    recallStatus: {
+      code: 'R',
+      description: 'Recall'
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Supervision stage with all appointments used</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "earlyEngagement": {
+    "weeks": 0,  
+    "completed": 0
+  },
+  "currentYear": {
+    "appointments": {
+      "allowance": 4,
+      "scheduled": 1,
+      "completed": 4
+    }
+  }
+  
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 4
+    }
+  }
+  }) }}
+
   <h3 class="govuk-heading-s">Final third</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{

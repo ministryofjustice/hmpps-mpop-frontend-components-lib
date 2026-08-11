@@ -1,5 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% set finalThird = params
   .context
@@ -44,9 +45,28 @@
 {% endif %}
 {% set remaining = required - completed %}
 {% set upcoming = (params.currentYear.appointments.scheduled | int) | int(0) %}
+{% set warning = null %}
+{% if params
+  .context
+  .sentences[0]
+  .inBreach %}
+  {% set warning = forename + " is in breach. You should continue to offer appointments." %}
+{% endif %}
+{% if params.context.recallStatus.code %}
+  {% set warning = forename + " has been recalled. Their appointments are paused." %}
+{% endif %}
 
 <section class="supervision-package-summary">
   <h3 class='govuk-heading-m'>Supervision package summary</h3>
+  {% if warning %}
+    {{ govukWarningText({
+  text: warning,
+  iconFallbackText: "Warning"
+}) }}
+  {% endif %}
+  {% if params.currentPhase.phase.code == 'STD' and required == completed %}
+    <p class="govuk-body">{{ forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.</p>
+  {% endif %}
   {% if not finalThird %}
     <p class="govuk-body">{{ completed }} of {{ required }}{{ ( ' ' + stage if params.currentPhase.phase.code == 'INIT' ) }} appointments used</p>
     {{ govukSummaryList({
