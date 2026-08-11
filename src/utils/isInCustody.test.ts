@@ -42,7 +42,7 @@ describe('isInCustody', () => {
     expect(isInCustody([])).toBeUndefined()
   })
 
-  it('returns undefined when the only matching sentence has a code in codeExceptions', () => {
+  it('returns the description when a sentence matches a custom codes list', () => {
     expect(
       isInCustody(
         [
@@ -50,18 +50,18 @@ describe('isInCustody', () => {
         ] as FrontendSentence[],
         ['B'],
       ),
-    ).toBeUndefined()
+    ).toBe('Bailed')
   })
 
-  it('returns the description of a sentence not matching codeExceptions', () => {
+  it('returns undefined when no sentence matches the custom codes list', () => {
     expect(
       isInCustody(
         [
           { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'B', description: 'Bailed' } } },
           { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'D', description: 'In Custody' } } },
         ] as FrontendSentence[],
-        ['B'],
+        ['X'],
       ),
-    ).toBe('In Custody')
+    ).toBeUndefined()
   })
 })

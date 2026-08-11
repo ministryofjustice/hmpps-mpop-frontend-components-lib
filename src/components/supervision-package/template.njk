@@ -2,7 +2,9 @@
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
 {% set hasSpecialStatus = params.context.offenderPersonalDisorderPathway or params.context.sentences | hasBreachedSentence or params.context.sentences | isInCustody or params.context.sentences | isAtLarge or params.context.integratedOffenderManagementRedRated %}
 {% set sentenceTypeValue = params.context | sentenceType %}
-{% set showPhaseColumn = params.context.offenderPersonalDisorderPathway or params.context.sentences | isAtLarge or params.context.sentences | isInCustody or params.context.liferCategory.code == 'LF01' or params.context.liferCategory.code == 'LF02' or params.context.liferCategory.code == 'LF03' or params.context.liferCategory.code == 'x9' or params.currentPhase.phase.code == 'INIT' or params.currentPhase.phase.code == 'STD' %}
+{% set phaseCode = params.currentPhase.phase.code | upper %}
+{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' %}
+{% set lifeCategoryCode = params.context.liferCategory.code | upper %}
 
 {% if
   params.context.nationalSecurityDivision
@@ -14,7 +16,7 @@
     supervisionPackage: params
 }) }}
 
-{% elif params.currentPhase.phase.code != 'SPNA' and not params.context.nationalSecurityDivision %}
+{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and showPhaseColumn %}
 <div class='govuk-width-container supervision-package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -85,6 +87,7 @@
             {% endif %}
 
             {% set nextAppointmentDateTime = (params.nextAppointment.date | appointmentDateTime(params.nextAppointment.startTime)) if params.nextAppointment else null %}
+           {% if phaseCode != 'FTHRD' %}
             {% if nextAppointmentDateTime and params.nextAppointment.type.description %}
                 <h3 class='govuk-heading-s'>Next appointment</h3>
                 <p class='govuk-body'>
@@ -97,6 +100,7 @@
             {% else %}
                 <p class='govuk-body'>No appointments scheduled</p>
             {% endif %}
+            {% endif %}
         </div>
 
         {% if showPhaseColumn %}
@@ -107,40 +111,25 @@
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_progress-bar.njk' %}
-                {% elseif params.context.liferCategory.code == 'LF01' or params.context.liferCategory.code == 'LF02' or params.context.liferCategory.code == 'LF03' or params.context.liferCategory.code == 'x9'  %}
+                {% elseif lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_no-end-date.njk' %}
-                {% elseif params.currentPhase.phase.code  == 'INIT' %}
+                {% elseif phaseCode == 'INIT' %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_early-engagement.njk' %}
-                {% elseif params.currentPhase.phase.code  == 'STD' %}
+                {% elseif phaseCode == 'STD' %}
                     <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
                     {% include './partials/_standard-supervision.njk' %}
+                {% elseif phaseCode == 'FTHRD' %}
+                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    {% include './partials/_final-third.njk' %}
                 {% endif %}
 
-                {% if params.allAppointmentsHref %}
-                    <p class='govuk-body'>
-                        <a class='govuk-link govuk-link--no-visited-state' href='{{ params.allAppointmentsHref }}' >View all appointments</a>
-                    </p>
-                {% endif %}
+                {% include './partials/_view-appointments.njk' %}
             </div>
         {% endif %}
     </div>
 
-    {% if not (params.context.sentences | isInCustody or params.context.sentences | isAtLarge ) and (params.arrangeAppointmentHref or (params.crn and params.deliusBaseURL)) %}
-        <div class='govuk-button-group'>
-            {% if params.arrangeAppointmentHref %}
-                <a href='{{ params.arrangeAppointmentHref }}' role='button' draggable='false' class='govuk-button' data-module='govuk-button'>
-                    Arrange an appointment
-                </a>
-            {% endif %}
-
-            {% if params.crn and params.deliusBaseURL %}
-                <a href='{{ params.deliusBaseURL }}/NDelius-war/delius/JSP/deeplink.xhtml?component=RegisterSummary&CRN={{params.crn}}' role='button' draggable='false' class='govuk-button govuk-button--secondary' data-module='govuk-button'>
-                    Update NDelius risk flag
-                </a>
-            {% endif %}
-        </div>
-    {% endif %}
+    {% include './partials/_action-buttons.njk' %}
 </div>
 {% endif %}
