@@ -32,7 +32,7 @@ type FrontendCustody = {
 }
 
 export type FrontendSentenceType = CodeDescription & {
-  isCustodial: boolean
+  custodial: boolean
 }
 
 export type FrontendSentence = {
