@@ -157,7 +157,7 @@ describe('supervision-package', () => {
     expect(headings).toContain('Standard stage')
 
     expect(document.body.textContent).toContain(
-      'Alex has 15 supervision appointments remaining until the supervision stage ends on 2026-08-15.',
+      'Alex has 15 supervision appointments remaining until the supervision stage ends on 15 August 2026.',
     )
     expect(document.body.textContent).toContain('5 of 20 appointments used')
   })

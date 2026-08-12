@@ -1,0 +1,15 @@
+{% if phaseCode != 'FTHRD' %}
+    {% set nextAppointmentDateTime = (params.nextAppointment.date | appointmentDateTime(params.nextAppointment.startTime)) if params.nextAppointment else null %}
+    {% if nextAppointmentDateTime and params.nextAppointment.type.description %}
+        <h3 class='govuk-heading-s'>Next appointment</h3>
+        <p class='govuk-body'>
+            {% if params.nextAppointmentHref %}
+                <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}</a>
+            {% else %}
+                {{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}
+            {% endif %}
+        </p>
+    {% else %}
+        <p class='govuk-body'>No appointments scheduled</p>
+    {% endif %}
+{% endif %}

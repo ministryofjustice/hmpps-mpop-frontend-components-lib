@@ -29,54 +29,10 @@
 
     <div class='govuk-grid-row'>
         <div class='{{ "govuk-grid-column-one-half" if showPhaseColumn else "govuk-grid-column-two-thirds" }}'>
-            {% if params.context.sentences | hasBreachedSentence %}
-                <div class='govuk-warning-text'>
-                    <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
-                    <strong class='govuk-warning-text__text'>
-                        <span class='govuk-visually-hidden'>Warning</span>
-                        {{ params.context.name.forename }} is in breach. You should continue to offer appointments.
-                    </strong>
-                </div>
-            {% elseif params.context.sentences | isInCustody %}
-                <div class='govuk-warning-text'>
-                    <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
-                    <strong class='govuk-warning-text__text'>
-                        <span class='govuk-visually-hidden'>Warning</span>
-                        {{ params.context.name.forename }} has been recalled. Their appointments are paused.
-                    </strong>
-                </div>
-            {% endif %}
 
-            <div class='app-tier-header'>
-                <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
-                    Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
-                </h3>
-                {% if params.tag.text and params.tag.color %}
-                    <strong class='govuk-tag govuk-tag--{{ params.tag.color }}'>{{ params.tag.text }}</strong>
-                {% endif %}
-            </div>
-
-            {% if params.tag.text == 'Provisional' %}
-                <p class='govuk-body'>
-                    We will calculate the supervision package once the tier is confirmed.
-                </p>
-            {% endif %}
-
-            {% if params.tag.text == 'Unavailable' %}
-                <p class='govuk-body'>
-                    Tier information is currently unavailable.
-                </p>
-            {% endif %}
-
-            {% if params.createdAt and (params.createdAt == params.updatedAt or not params.updatedAt) %}
-                <p class='govuk-body'>
-                    The supervision package was created on {{ params.createdAt | dateWithYear }}.
-                </p>
-            {% elseif params.updatedAt and (not params.createdAt or params.createdAt != params.updatedAt) %}
-                <p class='govuk-body'>
-                    The supervision package was changed on {{ params.updatedAt | dateWithYear }} and the appointment allowance was recalculated.
-                </p>
-            {% endif %}
+            {% include './partials/_warnings.njk' %}
+            {% include './partials/_tier.njk' %}
+            {% include './partials/_package-creation-date.njk' %}
 
             {% if params.historyHref %}
                 <p class='govuk-body'>
@@ -86,21 +42,7 @@
                 </p>
             {% endif %}
 
-            {% set nextAppointmentDateTime = (params.nextAppointment.date | appointmentDateTime(params.nextAppointment.startTime)) if params.nextAppointment else null %}
-           {% if phaseCode != 'FTHRD' %}
-            {% if nextAppointmentDateTime and params.nextAppointment.type.description %}
-                <h3 class='govuk-heading-s'>Next appointment</h3>
-                <p class='govuk-body'>
-                    {% if params.nextAppointmentHref %}
-                        <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}</a>
-                    {% else %}
-                        {{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}
-                    {% endif %}
-                </p>
-            {% else %}
-                <p class='govuk-body'>No appointments scheduled</p>
-            {% endif %}
-            {% endif %}
+            {% include './partials/_next-appointment.njk' %}
         </div>
 
         {% if showPhaseColumn %}

@@ -1,0 +1,18 @@
+<div class='app-tier-header'>
+    <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
+        Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
+    </h3>
+    {% if params.tag.text and params.tag.color %}
+        <strong class='govuk-tag govuk-tag--{{ params.tag.color }}'>{{ params.tag.text }}</strong>
+    {% endif %}
+</div>
+{% if params.tag.text == 'Provisional' %}
+    <p class='govuk-body'>
+        We will calculate the supervision package once the tier is confirmed.
+    </p>
+{% endif %}
+{% if params.tag.text == 'Unavailable' %}
+    <p class='govuk-body'>
+        Tier information is currently unavailable.
+    </p>
+{% endif %}
