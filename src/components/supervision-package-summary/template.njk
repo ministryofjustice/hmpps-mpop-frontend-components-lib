@@ -2,23 +2,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% set finalThird = params
-  .context
-  .nationalSecurityDivision
-    and params
-  .context
-  .finalThirdEligibility
-  .eligible
-    and params
-  .context
-  .sentences[0]
-  .type
-  .custodial
-  and params
-  .context
-  .sentences[0]
-  .custody
-  .finalThirdDate %}
+{% set finalThird = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and params.context.sentences[0].type.custodial and params.context.sentences[0].custody.finalThirdDate %}
 
 {% set stage = 'early engagement' %}
 {% set key = 'Required' %}
