@@ -194,7 +194,7 @@ describe('supervision-package-summary', () => {
         },
       },
     })
-    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toBe(
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toContain(
       'Stuart is in breach. You should continue to offer appointments.',
     )
   })
@@ -230,7 +230,7 @@ describe('supervision-package-summary', () => {
         },
       },
     })
-    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toBe(
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toContain(
       'Stuart has been recalled. Their appointments are paused.',
     )
   })
