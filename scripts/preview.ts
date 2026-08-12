@@ -115,7 +115,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -189,7 +189,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -265,7 +265,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -341,7 +341,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -494,7 +494,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -570,7 +570,81 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m">No appointments remaining</h2>
+      <p class="govuk-body">Display the supervision package when this year's appointment allowance has been used up</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentYear": {
+    "appointments": { "allowance": 46, "completed": 46 }
+  }
+}</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not true.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 12
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 46 }
+        },
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -771,7 +845,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -845,7 +919,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -974,7 +1048,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -1070,7 +1144,7 @@ const html = env.renderString(
             {
               "endDate": "2027-01-07",
               "type": {
-                "isCustodial": true
+                "custodial": true
               },
               "custody": {
                 "finalThirdDate": "2025-11-07"
@@ -1101,7 +1175,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -1127,7 +1201,7 @@ const html = env.renderString(
             {
               "endDate": "2027-01-07",
               "type": {
-                "isCustodial": true
+                "custodial": true
               },
               "custody": {
                 "finalThirdDate": "2027-11-07"
@@ -1164,7 +1238,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -1190,7 +1264,7 @@ const html = env.renderString(
             {
               "endDate": "2024-01-07",
               "type": {
-                "isCustodial": true
+                "custodial": true
               },
               "custody": {
                 "finalThirdDate": "2025-11-07"
@@ -1223,7 +1297,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isCustodial: true
+                custodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -1243,11 +1317,11 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
+      { "supervisionPackage": { "code": "SPA" }, "type": { "custodial": true } }
     ]
   }
 }</code></pre>
-      <p class="govuk-body">This is triggered when at least one non-<code>SPX</code> sentence has <code>type.isCustodial === true</code>.</p>
+      <p class="govuk-body">This is triggered when at least one non-<code>SPX</code> sentence has <code>type.custodial === true</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -1259,7 +1333,7 @@ const html = env.renderString(
             surname: 'Morris'
           },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } }
           ]
         }
       }) }}
@@ -1269,11 +1343,11 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
+      { "supervisionPackage": { "code": "SPA" }, "type": { "custodial": false } }
     ]
   }
 }</code></pre>
-      <p class="govuk-body">This is triggered when every primary sentence has <code>type.isCustodial === false</code>.</p>
+      <p class="govuk-body">This is triggered when every primary sentence has <code>type.custodial === false</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -1285,7 +1359,7 @@ const html = env.renderString(
             surname: 'Morris'
           },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
+            { supervisionPackage: { code: 'SPA' }, type: { custodial: false } }
           ]
         }
       }) }}
@@ -1310,7 +1384,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF03' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } }
           ]
         }
       }) }}
@@ -1335,7 +1409,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF01' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } }
           ]
         }
       }) }}
@@ -1360,7 +1434,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF02' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } }
           ]
         }
       }) }}

@@ -9,7 +9,7 @@
 {% if
   params.context.nationalSecurityDivision
   and params.context.finalThirdEligibility.eligible
-  and params.context.sentences[0].type.isCustodial
+  and params.context.sentences[0].type.custodial
   and params.context.sentences[0].custody.finalThirdDate
 %}
 {{ supervisionFinalThirdProgress({

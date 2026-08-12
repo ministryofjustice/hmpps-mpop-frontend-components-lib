@@ -36,7 +36,7 @@ describe('supervision-package-summary', () => {
         startDate: '2026-08-06',
         endDate: '2026-08-06',
         appointments: {
-          allowance: 0,
+          allowance: 8,
           scheduled: 1,
           completed: 0,
         },

@@ -19,10 +19,10 @@ export const sentenceType = (context?: ContextDetails) => {
   if (primarySentences.length === 0) {
     return 'community sentence'
   }
-  if (primarySentences.some(sentence => sentence.type?.isCustodial === true)) {
+  if (primarySentences.some(sentence => sentence.type?.custodial === true)) {
     return 'custodial sentence'
   }
-  if (primarySentences.every(sentence => sentence.type?.isCustodial === false)) {
+  if (primarySentences.every(sentence => sentence.type?.custodial === false)) {
     return 'community sentence'
   }
   return undefined
