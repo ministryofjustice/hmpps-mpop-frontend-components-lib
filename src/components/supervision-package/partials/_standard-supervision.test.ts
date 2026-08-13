@@ -22,7 +22,7 @@ describe('_standard-supervision partial', () => {
       const remainingParagraph = paragraphs.find(p => p.textContent?.includes('supervision appointments remaining'))
 
       expect(remainingParagraph?.textContent).toContain(
-        'Alex has 15 supervision appointments remaining until the supervision stage ends on 2026-08-15.',
+        'Alex has 15 supervision appointments remaining until the supervision stage ends on 15 August 2026.',
       )
     })
 
@@ -36,18 +36,18 @@ describe('_standard-supervision partial', () => {
       const remainingParagraph = paragraphs.find(p => p.textContent?.includes('supervision appointments remaining'))
 
       expect(remainingParagraph?.textContent).toContain(
-        'Alex has 15 supervision appointments remaining until the supervision package resets on 2026-08-15.',
+        'Alex has 15 supervision appointments remaining until the supervision package resets on 15 August 2026.',
       )
     })
   })
 
   describe('final third eligibility', () => {
-    it('shows the eligible text with the final third date when eligible is true', () => {
+    it('shows the eligible text with the final third date when eligible is true and sentence type is custodial', () => {
       const document = renderPartial({
         context: {
           name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: true },
-          sentences: [{ custody: { finalThirdDate: '2026-11-07' } }],
+          sentences: [{ custody: { finalThirdDate: '2026-11-07' }, type: { isCustodial: true } }],
         },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
