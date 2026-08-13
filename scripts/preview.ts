@@ -415,7 +415,7 @@ const html = env.renderString(
               type: {
                 code: '307',
                 description: 'Adult Custody < 12m',
-                isisCustodial: true
+                isCustodial: true
               },
               custody: {
                 status: { code: 'B', description: 'Released - On Licence' },
@@ -1144,7 +1144,7 @@ const html = env.renderString(
             {
               "endDate": "2027-01-07",
               "type": {
-                "custodial": true
+                "isCustodial": true
               },
               "custody": {
                 "finalThirdDate": "2025-11-07"
@@ -1201,7 +1201,7 @@ const html = env.renderString(
             {
               "endDate": "2027-01-07",
               "type": {
-                "custodial": true
+                "isCustodial": true
               },
               "custody": {
                 "finalThirdDate": "2027-11-07"
@@ -1264,7 +1264,7 @@ const html = env.renderString(
             {
               "endDate": "2024-01-07",
               "type": {
-                "custodial": true
+                "isCustodial": true
               },
               "custody": {
                 "finalThirdDate": "2025-11-07"
@@ -1317,7 +1317,7 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "custodial": true } }
+      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
     ]
   }
 }</code></pre>
@@ -1343,7 +1343,7 @@ const html = env.renderString(
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "custodial": false } }
+      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
     ]
   }
 }</code></pre>
@@ -1666,7 +1666,7 @@ const html = env.renderString(
     "sentences": [
       {
         "type": {
-          "custodial": true
+          "isCustodial": true
         },
         "custody": {
           "finalThirdDate": "2026-08-06"
