@@ -22,7 +22,7 @@ describe('sentenceType', () => {
         buildContextDetails({
           liferCategory: { code: 'LF01' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } },
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -35,7 +35,7 @@ describe('sentenceType', () => {
         buildContextDetails({
           liferCategory: { code: 'LF03' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } },
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -48,7 +48,7 @@ describe('sentenceType', () => {
         buildContextDetails({
           liferCategory: { code: 'LF02' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } },
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -60,7 +60,7 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { custodial: true } },
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -72,7 +72,7 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPX' }, type: { custodial: true } },
+            { supervisionPackage: { code: 'SPX' }, type: { isCustodial: true } },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -84,7 +84,7 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { custodial: false } },
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } },
           ] as ContextDetails['sentences'],
         }),
       ),
