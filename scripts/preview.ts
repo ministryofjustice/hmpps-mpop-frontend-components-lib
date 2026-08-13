@@ -23,6 +23,7 @@ const html = env.renderString(
   `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
 {% from "pop-header/macro.njk" import popHeader %}
+{% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -557,6 +558,80 @@ const html = env.renderString(
           gender: 'Male',
           integratedOffenderManagementRedRated: false,
           offenderPersonalDisorderPathway: true,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m">No appointments remaining</h2>
+      <p class="govuk-body">Display the supervision package when this year's appointment allowance has been used up</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentYear": {
+    "appointments": { "allowance": 46, "completed": 46 }
+  }
+}</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not true.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        phase: {
+          name: { code: 'INIT', description: 'Early Engagement' },
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 12
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 0, completed: 46 }
+        },
+        context: {
+                  name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
           intensiveSupervisionCourt: false,
           nationalSecurityDivision: false,
           finalThirdEligibility: { eligible: false, since: '2026-07-10' },
@@ -1363,6 +1438,276 @@ const html = env.renderString(
           ]
         }
       }) }}
+
+       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">Supervision Package Summary</h1>
+       <h3 class="govuk-heading-s">Early engagement</h3>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "INIT"
+    }
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'INIT' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 4,  
+    completed: 2
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 0,
+      scheduled: 1,
+      completed: 0
+    }
+  }
+  }) }}
+
+   <h3 class="govuk-heading-s">Supervision stage</h3>
+      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Supervision stage with breach warning</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "context": {
+    sentences: [
+      {
+        inBreach: true
+      }
+    ]
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    },
+    sentences: [
+      {
+        inBreach: true
+      }
+    ]
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Supervision stage with recall warning</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "context": {
+    "recallStatus": {
+      "code": "R",
+      "description": "Recall"
+    }
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    },
+    recallStatus: {
+      code: 'R',
+      description: 'Recall'
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Supervision stage with all appointments used</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD"
+    }
+  },
+  "earlyEngagement": {
+    "weeks": 0,  
+    "completed": 0
+  },
+  "currentYear": {
+    "appointments": {
+      "allowance": 4,
+      "scheduled": 1,
+      "completed": 4
+    }
+  }
+  
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    finalThirdEligibility: {
+      eligible: false
+    }
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 4
+    }
+  }
+  }) }}
+
+  <h3 class="govuk-heading-s">Final third</h3>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "context": {
+    "finalThirdEligibility": {
+      "eligible": true
+    },
+    "nationalSecurityDivision": true,
+    "sentences": [
+      {
+        "type": {
+          "isCustodial": true
+        },
+        "custody": {
+          "finalThirdDate": "2026-08-06"
+        }
+      }
+    ]
+  }
+}</code></pre>
+ {{ supervisionPackageSummary({
+  currentPhase: {
+    phase: { code: 'STD' }
+  },
+  forename: 'Stuart',
+  context: {
+    nationalSecurityDivision: true,
+    finalThirdEligibility: {
+      eligible: true
+    },
+    sentences: [
+      { 
+        type: { isCustodial: true },
+        custody: { finalThirdDate: '2026-08-06' }
+      }
+    ]
+  },
+  earlyEngagement: {
+    startDate: '2026-08-06T13:46:16.916Z',
+    endDate: '2026-08-06T13:46:16.916Z',
+    weeks: 0,  
+    completed: 0
+  },
+  currentYear: {
+    startDate: '2026-08-06',
+    endDate: '2026-08-06',
+    appointments: {
+      allowance: 4,
+      scheduled: 1,
+      completed: 2
+    }
+  }
+  }) }}
     </div>
   </main>
 </body>
