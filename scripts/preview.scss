@@ -105,6 +105,10 @@ body {
   margin: 0;
 }
 
+.stage-panel[hidden] {
+  display: none;
+}
+
 .supervision-package {
   border-top: 5px solid #1d70b8;
   border-left: 1px solid #cecece;
