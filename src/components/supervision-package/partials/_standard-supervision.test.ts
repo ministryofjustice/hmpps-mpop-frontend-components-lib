@@ -65,7 +65,7 @@ describe('_standard-supervision partial', () => {
         context: {
           name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { custodial: true } }],
+          sentences: [{ type: { isCustodial: true } }],
         },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })

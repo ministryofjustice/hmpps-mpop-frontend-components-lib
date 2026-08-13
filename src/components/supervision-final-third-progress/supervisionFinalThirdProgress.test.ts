@@ -42,7 +42,7 @@ describe('supervision-final-third-progress', () => {
           {
             endDate: '2027-01-07',
             type: {
-              custodial: true,
+              isCustodial: true,
             },
             custody: {
               finalThirdDate: '2026-11-07',

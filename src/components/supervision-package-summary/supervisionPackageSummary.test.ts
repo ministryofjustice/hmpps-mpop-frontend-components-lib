@@ -280,7 +280,7 @@ describe('supervision-package-summary', () => {
         },
         sentences: [
           {
-            type: { custodial: true },
+            type: { isCustodial: true },
             custody: { finalThirdDate: '2026-08-06' },
           },
         ],

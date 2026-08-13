@@ -317,7 +317,7 @@ describe('MPoPComponents', () => {
             type: {
               code: '307',
               description: 'Adult Custody < 12m',
-              custodial: true,
+              isCustodial: true,
             },
             custody: {
               status: { code: 'B', description: 'Released - On Licence' },

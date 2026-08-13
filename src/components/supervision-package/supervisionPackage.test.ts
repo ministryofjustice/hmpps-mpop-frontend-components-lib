@@ -222,7 +222,7 @@ describe('supervision-package', () => {
         sentences: [
           {
             type: {
-              custodial: true,
+              isCustodial: true,
             },
             custody: {
               finalThirdDate: '2026-11-07',
@@ -254,7 +254,7 @@ describe('supervision-package', () => {
           sentences: [
             {
               type: {
-                custodial: true,
+                isCustodial: true,
               },
               custody: {
                 finalThirdDate: '2026-11-07',

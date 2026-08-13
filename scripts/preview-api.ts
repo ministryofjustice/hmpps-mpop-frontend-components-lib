@@ -137,29 +137,6 @@ async function main() {
   const supervisionPackageSummaryParams = {
     ...(supervisionPackageFrontendContextResponse ?? {}),
     forename: personalDetails?.name.forename,
-    currentPhase: {
-      phase: { code: 'INIT' },
-    },
-    context: {
-      finalThirdEligibility: {
-        eligible: false,
-      },
-    },
-    earlyEngagement: {
-      startDate: '2026-08-06T13:46:16.916Z',
-      endDate: '2026-08-06T13:46:16.916Z',
-      weeks: 4,
-      completed: 2,
-    },
-    currentYear: {
-      startDate: '2026-08-06',
-      endDate: '2026-08-06',
-      appointments: {
-        allowance: 0,
-        scheduled: 1,
-        completed: 0,
-      },
-    },
   }
 
   const popHeaderParams = {
