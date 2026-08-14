@@ -22,7 +22,8 @@
     "security_audit": "npx audit-ci --config audit-ci.json",
     "setup": "npm ci && hmpps-npm-script-run-allowlist",
     "preview": "tsx scripts/preview.ts",
-    "preview:api": "tsx scripts/preview-api.ts"
+    "preview:api": "tsx scripts/preview-api.ts",
+    "preview:localhost3000": "tsx scripts/preview-localhost.ts"
   },
   "lint-staged": {
     "*.{ts,css}": [
