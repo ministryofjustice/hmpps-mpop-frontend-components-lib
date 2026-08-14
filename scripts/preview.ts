@@ -6,6 +6,7 @@ import nunjucks from 'nunjucks'
 import sass from 'sass'
 import { yearsSince } from '../src/utils/yearsSince'
 import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
+import { previewClientScript } from './previewScript'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
   loadPaths: [process.cwd(), 'node_modules'],
@@ -37,6 +38,13 @@ const html = env.renderString(
   >
 
   <style>${previewCss}</style>
+  <style>
+    [data-tag-selector].govuk-radios--small .govuk-radios__item:not([hidden]) {
+      display: flex;
+      align-items: center;
+      min-height: 40px;
+    }
+  </style>
 </head>
 
 <body class="govuk-template__body">
@@ -81,13 +89,18 @@ const html = env.renderString(
         </fieldset>
       </div>
 
+
+
       <div class="stage-panel" data-stage="early-engagement">
-        <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
-        <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+        <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the supervision package</p>
+        <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
         <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
+  "currentPhase": { 
+    "phase": { "code": "INIT", "description": "Early engagement" }
+  }
 }</code></pre>
-        <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
+        <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'INIT'</code></p>
+        <div class="default-example">
         {{ supervisionPackage({
           tierScore: 'C',
           tag: { text: null, color: null },
@@ -150,15 +163,19 @@ const html = env.renderString(
             ]
           }
         }) }}
+        </div>
       </div>
 
       <div class="stage-panel" data-stage="standard-supervision" hidden>
-        <p class="govuk-body">Display the supervision package when the PoP has used all of their allowed appointments for the current year</p>
-        <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+        <p class="govuk-body">Display the supervision package when the PoP is in the Standard Supervision phase of the supervision package</p>
+        <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
         <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentYear": { "appointments": { "allowance": 46, "completed": 46 } }
+  "currentPhase": { 
+    "phase": { "code": "STD", "description": "Standard Supervision" } 
+  }
 }</code></pre>
-        <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not <code>true</code> (OPD takes priority and suppresses this badge).</p>
+        <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'STD'</code></p>
+        <div class="default-example">
         {{ supervisionPackage({
           tierScore: 'C',
           tag: { text: null, color: null },
@@ -221,15 +238,23 @@ const html = env.renderString(
             ]
           }
         }) }}
+        </div>
       </div>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
       <div class="stage-panel" data-stage="final-third" hidden>
-        <p class="govuk-body">Display the supervision package when the PoP is in the Final third phase of the sentence</p>
+        <p class="govuk-body">Display the supervision package when the PoP is in the Final third phase of the supervision package</p>
         <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
         <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "FTHRD" } },
+  "currentPhase": { 
+    "phase": { "code": "FTHRD", "description": "Final Third" } 
+  },
+  "sentences": [{
+    "type": { "isCustodial": true }
+  }]
 }</code></pre>
-        <p class="govuk-body">This variant is triggered by <code>currentPhase.phase.code === 'FTHRD'</code>.</p>
+        <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'FTHRD'</code> and sentence type <code>isCustodial === true</code> </p>
+        <div class="default-example">
         {{ supervisionPackage({
           tierScore: 'C',
           tag: { text: null, color: null },
@@ -296,17 +321,67 @@ const html = env.renderString(
             ]
           }
         }) }}
+        </div>
       </div>
 
+      <h2 class="govuk-heading-m">Tags combinations</h2>
+      <p class="govuk-body">Select any tags to preview the supervision package variants they trigger. Multiple tags can be selected at once.</p>
 
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-visually-hidden">Tags</legend>
+          <div class="govuk-radios govuk-radios--small" data-tag-selector style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); column-gap: 20px; row-gap: 10px;">
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-none" type="radio" name="tag" value="" checked>
+              <label class="govuk-label govuk-radios__label" for="tag-none">None</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement">
+              <input class="govuk-radios__input" id="tag-max-appointments-reached" type="radio" name="tag" value="max-appointments-reached">
+              <label class="govuk-label govuk-radios__label" for="tag-max-appointments-reached">Max appointments reached</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-ipp-or-life" type="radio" name="tag" value="ipp-or-life">
+              <label class="govuk-label govuk-radios__label" for="tag-ipp-or-life">IPP or life imprisonment</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement">
+              <input class="govuk-radios__input" id="tag-in-breach" type="radio" name="tag" value="in-breach">
+              <label class="govuk-label govuk-radios__label" for="tag-in-breach">In breach</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-opd" type="radio" name="tag" value="opd">
+              <label class="govuk-label govuk-radios__label" for="tag-opd">OPD</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-no-appointments-remaining" type="radio" name="tag" value="no-appointments-remaining">
+              <label class="govuk-label govuk-radios__label" for="tag-no-appointments-remaining">No appointments remaining</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-unlawfully-at-large" type="radio" name="tag" value="unlawfully-at-large">
+              <label class="govuk-label govuk-radios__label" for="tag-unlawfully-at-large">Unlawfully at large</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-in-custody" type="radio" name="tag" value="in-custody">
+              <label class="govuk-label govuk-radios__label" for="tag-in-custody">In custody</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-iom-red" type="radio" name="tag" value="iom-red">
+              <label class="govuk-label govuk-radios__label" for="tag-iom-red">IOM red rated</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="early-engagement standard-supervision final-third">
+              <input class="govuk-radios__input" id="tag-custody-status" type="radio" name="tag" value="custody-status">
+              <label class="govuk-label govuk-radios__label" for="tag-custody-status">Custody status badge</label>
+            </div>
+            <div class="govuk-radios__item" data-stages="final-third">
+              <input class="govuk-radios__input" id="tag-final-third-progress" type="radio" name="tag" value="final-third-progress">
+              <label class="govuk-label govuk-radios__label" for="tag-final-third-progress">Final third progress</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
 
-
-
-
-
-
-
-
+      <div class="tags-panel" style="margin-top: 30px;">
+        <h3 class="govuk-heading-s">Selected tag variations</h3>
+        <div class="tag-example" data-tag="max-appointments-reached" data-stages="early-engagement" hidden>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
       <p class="govuk-body">This is triggered when <code>earlyEngagement.completed</code> reaches <code>earlyEngagement.weeks</code> (i.e. <code>completed &gt;= weeks</code>) in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
@@ -380,8 +455,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
-
+        <div class="tag-example" data-tag="ipp-or-life" data-stages="early-engagement standard-supervision final-third" hidden>
       <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life imprisonment</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -456,83 +532,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
-      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is a woman</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
-  "context": {
-    "gender": "Female",
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.gender === 'Female'</code>, <code>tierScore</code> being one of <code>C</code>/<code>D</code>/<code>E</code>/<code>F</code>/<code>G</code>, and <code>context.integratedOffenderManagementRedRated === false</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 0
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 0 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Female',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
+        <div class="tag-example" data-tag="in-breach" data-stages="early-engagement" hidden>
       <h2 class="govuk-heading-m">In breach</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is in breach</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
@@ -611,7 +613,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="opd" data-stages="early-engagement standard-supervision final-third" hidden>
       <h2 class="govuk-heading-m">OPD</h2>
       <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -687,7 +691,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="no-appointments-remaining" data-stages="standard-supervision" hidden>
       <h2 class="govuk-heading-m">No appointments remaining</h2>
       <p class="govuk-body">Display the supervision package when this year's appointment allowance has been used up</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
@@ -761,7 +767,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="unlawfully-at-large" data-stages="early-engagement standard-supervision final-third" hidden>
       <h2 class="govuk-heading-m">Unlawfully at large</h2>
       <p class="govuk-body">Display the supervision package when the PoP is unlawfully at large</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -823,7 +831,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="in-custody" data-stages="early-engagement standard-supervision final-third" hidden>
       <h2 class="govuk-heading-m">In custody</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in custody</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -885,7 +895,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="iom-red" data-stages="early-engagement" hidden>
       <h2 class="govuk-heading-m">IOM: Red</h2>
       <p class="govuk-body">Display the supervision package when the PoP is rated red under Integrated Offender Management (IOM)</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -962,7 +974,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="no-appointments-remaining" data-stages="final-third" hidden>
       <h2 class="govuk-heading-m">No appointments remaining</h2>
       <p class="govuk-body">Display the supervision package when the PoP has used all of their allowed appointments for the current year</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
@@ -1036,7 +1050,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="custody-status" data-stages="early-engagement standard-supervision final-third" hidden>
       <h2 class="govuk-heading-m">Custody status</h2>
       <p class="govuk-body">Displays a status badge derived from the PoP's custody location, recall status and custody status, in that priority order.</p>
 
@@ -1091,7 +1107,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
+        <div class="tag-example" data-tag="iom-red" data-stages="standard-supervision final-third" hidden>
       <h2 class="govuk-heading-m">IOM (Integrated Offender Management) red rated</h2>
       <p class="govuk-body">Display the supervision package when the PoP has an IOM red RAG status</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -1165,74 +1183,9 @@ const html = env.renderString(
           ]
         }
       }) }}
+        </div>
 
-      <h2 class="govuk-heading-m">Provisional tier</h2>
-      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
-      <p class="govuk-body">This is triggered by the <code>provisional</code> field on the Tier API's <code>GET /v3/crn/{crn}/tier</code> response, and the <code>phase</code> field on the Supervision Package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "D2",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": true
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API's <code>provisional === true</code>, reflected here as <code>tag: { text: "Provisional" }</code>.</p>
-      {{ supervisionPackage({
-        tierScore: "C",
-        tag: { text: "Provisional", color: "orange" },
-        historyHref: "#",
-        context: {
-          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          }
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">Missing tier</h2>
-      <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
-      <p class="govuk-body">This is triggered when the Tier API's <code>GET /v3/crn/{crn}/tier</code> response has a <code>tierScore</code> of <code>"MISSING"</code>:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "MISSING",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": false
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API's <code>tierScore === 'MISSING'</code>, reflected here as <code>tag: { text: "Missing" }</code>.</p>
-      {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Missing", color: "red" },
-        historyHref: "#"
-      }) }}
-
-      <h2 class="govuk-heading-m">Unavailable tier</h2>
-      <p class="govuk-body">The tier could not be retrieved, so it is shown with a grey "Unavailable" tag. This is not something the Tier API returns directly &mdash; it is what <code>getTierDetails</code> in <code>MPoPComponents.ts</code> falls back to when the <code>GET /v3/crn/{crn}/tier</code> call errors or resolves to no data (for example a 404 or 500 response).</p>
-      <p class="govuk-body">This variant is triggered when the Tier API call errors or resolves to no data (404/500), which <code>getTierDetails</code> maps to <code>tag: { text: "Unavailable" }</code>.</p>
-      {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Unavailable", color: "grey" },
-        historyHref: "#"
-      }) }}
-
-      <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
-      <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
-      <p class="govuk-body">This is the standard shape returned by the Tier API's <code>GET /v3/crn/{crn}/tier</code> when a tier has been confirmed (not missing or provisional):</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "C",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": false
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API returning a <code>tierScore</code> with <code>provisional === false</code> (and not <code>'MISSING'</code>), reflected here as <code>tag: { text: null }</code>.</p>
-      {{ supervisionPackage({
-        tierScore: "C",
-        tag: { text: null, color: null },
-        historyHref: "#",
-        historyText: "View tier change history"
-      }) }}
-
+        <div class="tag-example" data-tag="final-third-progress" data-stages="final-third" hidden>
       <h2 class="govuk-heading-m">Final third progress</h2>
       <p class="govuk-body">Displays the final third progress card.</p>
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
@@ -1413,136 +1366,8 @@ const html = env.renderString(
           ]
         }
       }) }}
-
-      <h2 class="govuk-heading-m">Sentence type heading</h2>
-      <p class="govuk-body">The "Supervision package" heading is suffixed with a sentence type description, derived from <code>context</code> via the <code>sentenceType</code> filter.</p>
-
-      <h3 class="govuk-heading-s">Custodial sentence</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
-    ]
-  }
-}</code></pre>
-      <p class="govuk-body">This is triggered when at least one non-<code>SPX</code> sentence has <code>type.isCustodial === true</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
-          ]
-        }
-      }) }}
-
-      <h3 class="govuk-heading-s">Community sentence</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
-    ]
-  }
-}</code></pre>
-      <p class="govuk-body">This is triggered when every primary sentence has <code>type.isCustodial === false</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
-          ]
-        }
-      }) }}
-
-      <h3 class="govuk-heading-s">Life sentence</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "liferCategory": { "code": "LF03" }
-  }
-}</code></pre>
-      <p class="govuk-body">This is triggered by <code>context.liferCategory</code> being present with a code other than <code>'LF01'</code> or <code>'LF02'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          liferCategory: { code: 'LF03' },
-          sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
-          ]
-        }
-      }) }}
-
-      <h3 class="govuk-heading-s">Imprisonment for Public Protection</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "liferCategory": { "code": "LF01" }
-  }
-}</code></pre>
-      <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF01'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          liferCategory: { code: 'LF01' },
-          sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
-          ]
-        }
-      }) }}
-
-      <h3 class="govuk-heading-s">Extended determinate sentence</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "liferCategory": { "code": "LF02" }
-  }
-}</code></pre>
-      <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF02'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          liferCategory: { code: 'LF02' },
-          sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
-          ]
-        }
-      }) }}
+        </div>
+      </div>
 
        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l">Supervision Package Summary</h1>
@@ -1816,15 +1641,7 @@ const html = env.renderString(
     </div>
   </main>
 
-  <script>
-    document.querySelectorAll('[data-stage-selector] input[name="stage"]').forEach(function (radio) {
-      radio.addEventListener('change', function () {
-        document.querySelectorAll('.stage-panel').forEach(function (panel) {
-          panel.hidden = panel.dataset.stage !== radio.value
-        })
-      })
-    })
-  </script>
+  <script>${previewClientScript}</script>
 </body>
 </html>
 `,
