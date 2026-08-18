@@ -1,4 +1,5 @@
 import { ContextDetails } from '../types/SupervisionPackage'
+import { getPrimarySentence } from './getPrimarySentence'
 
 export const sentenceType = (context?: ContextDetails) => {
   if (!context || !context.sentences) {
@@ -14,16 +15,14 @@ export const sentenceType = (context?: ContextDetails) => {
   if (context.liferCategory) {
     return 'life sentence'
   }
-  const primarySentences = context.sentences.filter(sentence => sentence.supervisionPackage?.code !== 'SPX')
+  const primarySentence = getPrimarySentence(context.sentences)
 
-  if (primarySentences.length === 0) {
+  if (primarySentence?.type?.isCustodial === false) {
     return 'community sentence'
   }
-  if (primarySentences.some(sentence => sentence.type?.isCustodial === true)) {
+  if (primarySentence?.type?.isCustodial === true) {
     return 'custodial sentence'
   }
-  if (primarySentences.every(sentence => sentence.type?.isCustodial === false)) {
-    return 'community sentence'
-  }
+
   return undefined
 }

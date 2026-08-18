@@ -213,6 +213,16 @@ describe('supervision-package-summary', () => {
           code: 'R',
           description: 'Recall',
         },
+        sentences: [
+          {
+            custody: {
+              status: {
+                code: 'R',
+                description: 'Recalled',
+              },
+            },
+          },
+        ],
       },
       earlyEngagement: {
         startDate: '2026-08-06T13:46:16.916Z',

@@ -27,7 +27,7 @@ describe('_next-appointment partial', () => {
     it('renders the heading and appointment details', () => {
       const document = renderPartial({ nextAppointment })
 
-      const heading = document.querySelector('h3.govuk-heading-s')
+      const heading = document.querySelector('h4.govuk-heading-s')
       const paragraph = document.querySelector('p.govuk-body')
 
       expect(heading?.textContent?.trim()).toBe('Next appointment')
@@ -62,19 +62,19 @@ describe('_next-appointment partial', () => {
     it('renders the partial for non-final-third phase codes', () => {
       const document = renderPartial({ nextAppointment }, 'STD')
 
-      expect(document.querySelector('h3.govuk-heading-s')?.textContent?.trim()).toBe('Next appointment')
+      expect(document.querySelector('h4.govuk-heading-s')?.textContent?.trim()).toBe('Next appointment')
     })
   })
 
   describe('when there is no next appointment to show', () => {
-    it('shows the fallback message when nextAppointment is missing', () => {
+    it('shows the heading with "No appointments scheduled" when nextAppointment is missing', () => {
       const document = renderPartial({})
 
-      expect(document.querySelector('h3.govuk-heading-s')).toBeNull()
+      expect(document.querySelector('h4.govuk-heading-s')?.textContent?.trim()).toBe('Next appointment')
       expect(document.querySelector('p.govuk-body')?.textContent?.trim()).toBe('No appointments scheduled')
     })
 
-    it('shows the fallback message when the appointment date/time cannot be built', () => {
+    it('shows "No appointments scheduled" when the appointment date/time cannot be built', () => {
       const document = renderPartial({
         nextAppointment: { date: '', startTime: '', type: { description: 'home visit' } },
       })
@@ -82,7 +82,7 @@ describe('_next-appointment partial', () => {
       expect(document.querySelector('p.govuk-body')?.textContent?.trim()).toBe('No appointments scheduled')
     })
 
-    it('shows the fallback message when the appointment type description is missing', () => {
+    it('shows "No appointments scheduled" when the appointment type description is missing', () => {
       const document = renderPartial({
         nextAppointment: { date: '2026-08-13', startTime: '09:15:00', type: {} },
       })

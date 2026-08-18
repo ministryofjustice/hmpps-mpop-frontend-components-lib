@@ -1463,7 +1463,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 4,  
+    weeks: 4,
     completed: 2
   },
   currentYear: {
@@ -1499,7 +1499,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,  
+    weeks: 0,
     completed: 0
   },
   currentYear: {
@@ -1547,7 +1547,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,  
+    weeks: 0,
     completed: 0
   },
   currentYear: {
@@ -1593,7 +1593,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,  
+    weeks: 0,
     completed: 0
   },
   currentYear: {
@@ -1616,7 +1616,7 @@ const html = env.renderString(
     }
   },
   "earlyEngagement": {
-    "weeks": 0,  
+    "weeks": 0,
     "completed": 0
   },
   "currentYear": {
@@ -1626,7 +1626,7 @@ const html = env.renderString(
       "completed": 4
     }
   }
-  
+
 }</code></pre>
  {{ supervisionPackageSummary({
   currentPhase: {
@@ -1641,7 +1641,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,  
+    weeks: 0,
     completed: 0
   },
   currentYear: {
@@ -1686,7 +1686,7 @@ const html = env.renderString(
       eligible: true
     },
     sentences: [
-      { 
+      {
         type: { isCustodial: true },
         custody: { finalThirdDate: '2026-08-06' }
       }
@@ -1695,7 +1695,7 @@ const html = env.renderString(
   earlyEngagement: {
     startDate: '2026-08-06T13:46:16.916Z',
     endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,  
+    weeks: 0,
     completed: 0
   },
   currentYear: {

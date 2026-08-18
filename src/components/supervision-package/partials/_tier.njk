@@ -1,10 +1,12 @@
 <div class='app-tier-header'>
-    <h3 class='govuk-heading-s govuk-!-margin-bottom-0'>
-        Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}
-    </h3>
-    {% if params.tag.text and params.tag.color %}
-        <strong class='govuk-tag govuk-tag--{{ params.tag.color }}'>{{ params.tag.text }}</strong>
-    {% endif %}
+    {% set tierHeadingText = 'Tier' if not params.tierScore or params.tierScore == 'MISSING' else 'Tier ' ~ params.tierScore %}
+    {% set tagHeadingText = ' ' ~ params.tag.text if params.tag.text and params.tag.color else '' %}
+    <h4 class='govuk-heading-s govuk-!-margin-bottom-0' aria-label='{{ tierHeadingText ~ tagHeadingText }}'>
+        <span aria-hidden='true'>Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}</span>
+        {% if params.tag.text and params.tag.color %}
+            <strong class='govuk-tag govuk-tag--{{ params.tag.color }} govuk-!-margin-left-1' aria-hidden='true'>{{ params.tag.text }}</strong>
+        {% endif %}
+    </h4>
 </div>
 {% if params.tag.text == 'Provisional' %}
     <p class='govuk-body'>
