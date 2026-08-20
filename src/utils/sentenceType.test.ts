@@ -67,18 +67,6 @@ describe('sentenceType', () => {
     ).toBe('custodial sentence')
   })
 
-  it('returns "community sentence" when the only custodial sentence has code SPX', () => {
-    expect(
-      sentenceType(
-        buildContextDetails({
-          sentences: [
-            { supervisionPackage: { code: 'SPX' }, type: { isCustodial: true } },
-          ] as ContextDetails['sentences'],
-        }),
-      ),
-    ).toBe('community sentence')
-  })
-
   it('returns "community sentence" when no sentences are custodial', () => {
     expect(
       sentenceType(

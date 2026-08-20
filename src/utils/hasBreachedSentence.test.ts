@@ -8,9 +8,9 @@ describe('hasBreachedSentence', () => {
     )
   })
 
-  it('returns false when the only breached sentence has code SPX', () => {
+  it('returns true when a sentence is in breach', () => {
     expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPX' }, inBreach: true }] as FrontendSentence[])).toBe(
-      false,
+      true,
     )
   })
 
@@ -20,12 +20,11 @@ describe('hasBreachedSentence', () => {
     )
   })
 
-  it('returns true when at least one of multiple sentences qualifies', () => {
+  it('returns true when the primary sentence is in breach among SPX sentences', () => {
     expect(
       hasBreachedSentence([
         { supervisionPackage: { code: 'SPX' }, inBreach: true },
-        { supervisionPackage: { code: 'SPA' }, inBreach: false },
-        { supervisionPackage: { code: 'SPB' }, inBreach: true },
+        { supervisionPackage: { code: 'SPA' }, inBreach: true },
       ] as FrontendSentence[]),
     ).toBe(true)
   })

@@ -5,26 +5,28 @@
 {% set phaseCode = params.currentPhase.phase.code | upper %}
 {% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' %}
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
+{% set sentence = params.context.sentences | getPrimarySentence %}
 
 {% if
   params.context.nationalSecurityDivision
   and params.context.finalThirdEligibility.eligible
-  and params.context.sentences[0].type.isCustodial
-  and params.context.sentences[0].custody.finalThirdDate
+  and sentence.type.isCustodial
+  and sentence.custody.finalThirdDate
 %}
+<div role='region' aria-label='Supervision package'>
 {{ supervisionFinalThirdProgress({
     supervisionPackage: params
 }) }}
-
+</div>
 {% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and showPhaseColumn %}
-<div class='govuk-width-container supervision-package'>
+<div class='govuk-width-container supervision-package' role='region' aria-label='Supervision package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
-        <h2 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h2>
+        <h3 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h3>
         {% include './partials/_tags.njk' %}
     </div>
     {% else %}
-            <h2 class='govuk-heading-m'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h2>
+            <h3 class='govuk-heading-m'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h3>
     {% endif %}
 
     <div class='govuk-grid-row'>
@@ -48,22 +50,22 @@
         {% if showPhaseColumn %}
             <div class='govuk-grid-column-one-half'>
                 {% if params.context.offenderPersonalDisorderPathway %}
-                    <h3 class='govuk-heading-s'>Supervision appointments</h3>
+                    <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_opd.njk' %}
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_progress-bar.njk' %}
                 {% elseif lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_no-end-date.njk' %}
                 {% elseif phaseCode == 'INIT' %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_early-engagement.njk' %}
                 {% elseif phaseCode == 'STD' %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_standard-supervision.njk' %}
                 {% elseif phaseCode == 'FTHRD' %}
-                    <h3 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h3>
+                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_final-third.njk' %}
                 {% endif %}
 

@@ -30,7 +30,7 @@ describe('_progress-bar partial', () => {
           '.appointment-progress__bar, .appointment-progress__bar-maximum',
         ) as HTMLElement
         expect(bar).not.toBeNull()
-        expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe(`${expectedPercent}%`)
+        expect(bar.classList.contains(`appointment-progress__bar--width-${expectedPercent}`)).toBe(true)
       },
     )
 
@@ -146,7 +146,7 @@ describe('_progress-bar partial', () => {
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
       expect(bar).not.toBeNull()
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('0%')
+      expect(bar.classList.contains('appointment-progress__bar--width-0')).toBe(true)
     })
 
     it('renders 0% width when appointmentsAllowance equals earlyEngagementCompleted (non-early)', () => {
@@ -160,7 +160,7 @@ describe('_progress-bar partial', () => {
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
       expect(bar).not.toBeNull()
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('0%')
+      expect(bar.classList.contains('appointment-progress__bar--width-0')).toBe(true)
     })
   })
 
@@ -175,7 +175,7 @@ describe('_progress-bar partial', () => {
       const bar = document.querySelector(
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('100%')
+      expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
       expect(document.querySelector('.appointment-progress__bar')).not.toBeNull()
       expect(document.querySelector('.appointment-progress__bar-maximum')).toBeNull()
     })
@@ -191,7 +191,7 @@ describe('_progress-bar partial', () => {
       const bar = document.querySelector(
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('100%')
+      expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
       expect(document.querySelector('.appointment-progress__bar-maximum')).not.toBeNull()
       expect(document.querySelector('.appointment-progress__bar')).toBeNull()
     })
@@ -233,7 +233,7 @@ describe('_progress-bar partial', () => {
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
       expect(bar).not.toBeNull()
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('0%')
+      expect(bar.classList.contains('appointment-progress__bar--width-0')).toBe(true)
     })
 
     it('treats undefined earlyEngagementWeeks as 0 and renders 0% width', () => {
@@ -247,7 +247,7 @@ describe('_progress-bar partial', () => {
         '.appointment-progress__bar, .appointment-progress__bar-maximum',
       ) as HTMLElement
       expect(bar).not.toBeNull()
-      expect(bar.style.getPropertyValue('--appointment-progress-width')).toBe('0%')
+      expect(bar.classList.contains('appointment-progress__bar--width-0')).toBe(true)
     })
   })
 })

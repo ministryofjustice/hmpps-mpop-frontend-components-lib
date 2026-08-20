@@ -27,8 +27,8 @@ $supervision-package-accent-colour: govuk-colour("blue");
   flex-wrap: wrap;
   margin-bottom: govuk-spacing(3);
 
-  > h2,
-  > h3 {
+  > h3,
+  > h4 {
     white-space: nowrap;
   }
 }
@@ -44,11 +44,17 @@ $supervision-package-accent-colour: govuk-colour("blue");
 .appointment-progress__bar {
   background-color: govuk-colour("teal", $variant: "tint-25");
   height: 100%;
-  width: var(--appointment-progress-width, 0);
 }
 
 .appointment-progress__bar-maximum {
   background-color: govuk-colour("red");
   height: 100%;
-  width: var(--appointment-progress-width, 0);
+}
+
+// Width is applied via a generated modifier class rather than an inline style, so that the
+// bar still renders correctly under a Content-Security-Policy that disallows inline styles.
+@for $i from 0 through 100 {
+  .appointment-progress__bar--width-#{$i} {
+    width: $i * 1%;
+  }
 }

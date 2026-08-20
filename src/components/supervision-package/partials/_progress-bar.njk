@@ -17,8 +17,9 @@
 <p class='govuk-body'>{{ completed }} of {{ allowance }} appointments used</p>
 
 <div class="appointment-progress" aria-hidden="true">
-    <div class="{{ 'appointment-progress__bar-maximum' if params.currentPhase.phase.code  != 'INIT' and widthPercent == 100 else 'appointment-progress__bar' }}" style="--appointment-progress-width: {{ widthPercent }}%;"></div>
+    <div class="{{ 'appointment-progress__bar-maximum' if params.currentPhase.phase.code  != 'INIT' and widthPercent == 100 else 'appointment-progress__bar' }} appointment-progress__bar--width-{{ widthPercent }}"></div>
 </div>
+<span class="govuk-visually-hidden">progress indicator, {{ widthPercent }}%</span>
 
 <div class='govuk-grid-row govuk-!-margin-top-4'>
     <div class='govuk-grid-column-one-third'>

@@ -38,7 +38,7 @@ describe('pop-header', () => {
     const document = renderComponent({ crn: 'X123456', dob: '', tierScore: 'B2', historyHref: '#' })
 
     const link = document.querySelector('[data-qa="tierLink"]')
-    expect(link?.textContent?.trim()).toBe('B2')
+    expect(link?.textContent?.trim()).toBe('Tier: B2')
   })
 
   it('renders the history href on the tier link', () => {

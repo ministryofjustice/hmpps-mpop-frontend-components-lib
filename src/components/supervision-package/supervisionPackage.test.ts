@@ -32,8 +32,10 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    expect(document.querySelector('h2')?.textContent?.trim()).toBe('Supervision package')
-    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Tier C')
+    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Supervision package')
+    expect(document.querySelector('h4')?.getAttribute('aria-label')).toBe(
+      expectedTagText ? `Tier C ${expectedTagText}` : 'Tier C',
+    )
     expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
 
     const tagElement = document.querySelector('.govuk-tag')
@@ -130,7 +132,7 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    const headings = document.querySelectorAll('h3')
+    const headings = document.querySelectorAll('h4')
     const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
     expect(headingTexts).toContain('Early engagement stage')
     expect(headingTexts).not.toContain('Stage title')
@@ -153,7 +155,7 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
     expect(headings).toContain('Standard stage')
 
     expect(document.body.textContent).toContain(
@@ -173,7 +175,7 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
     expect(headings).toContain('Final third stage')
     expect(document.body.textContent).toContain('Alex is in the final third of the sentence.')
     expect(document.body.textContent).toContain(
@@ -337,7 +339,7 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    const headings = document.querySelectorAll('h3')
+    const headings = document.querySelectorAll('h4')
     const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
     expect(headingTexts).toContain('Supervision appointments')
 
@@ -377,7 +379,7 @@ describe('supervision-package', () => {
     })
 
     expect(document.body.textContent).not.toContain('There is no supervision end date.')
-    const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+    const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
     expect(headings).toContain('Early engagement stage')
   })
 
@@ -396,7 +398,7 @@ describe('supervision-package', () => {
         nextAppointmentHref: '/appointments/123',
       })
 
-      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
       expect(headings).toContain('Next appointment')
 
       const appointmentLink = document.querySelector('a[href="/appointments/123"]')
@@ -414,8 +416,8 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD' } },
       })
 
-      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
-      expect(headings).not.toContain('Next appointment')
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Next appointment')
       expect(document.body.textContent).toContain('No appointments scheduled')
     })
 
@@ -428,8 +430,8 @@ describe('supervision-package', () => {
         nextAppointment: { date: '2026-08-13', type: { description: 'Home visit' } },
       })
 
-      const headings = Array.from(document.querySelectorAll('h3')).map(h => h.textContent?.trim())
-      expect(headings).not.toContain('Next appointment')
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Next appointment')
       expect(document.body.textContent).toContain('No appointments scheduled')
     })
   })
@@ -443,8 +445,8 @@ describe('supervision-package', () => {
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
-    expect(document.querySelector('h2')?.textContent?.trim()).toBe('Supervision package')
-    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Tier')
+    expect(document.querySelector('h3')?.textContent?.trim()).toBe('Supervision package')
+    expect(document.querySelector('h4')?.getAttribute('aria-label')).toBe('Tier Missing')
 
     const tagElement = document.querySelector('.govuk-tag')
     expect(tagElement?.textContent?.trim()).toBe('Missing')

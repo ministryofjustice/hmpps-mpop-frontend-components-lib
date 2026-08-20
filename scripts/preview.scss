@@ -155,6 +155,12 @@ body {
   height: 100%;
 }
 
+@for $i from 0 through 100 {
+  .appointment-progress__bar--width-#{$i} {
+    width: $i * 1%;
+  }
+}
+
 .inline-list-from-tablet>li {
   display: inline;
 }

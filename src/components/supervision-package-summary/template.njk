@@ -1,8 +1,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% set sentence = params.context.sentences | getPrimarySentence %}
 
-{% set finalThird = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and params.context.sentences[0].type.isCustodial and params.context.sentences[0].custody.finalThirdDate %}
+{% set finalThird = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and sentence.type.isCustodial and sentence.custody.finalThirdDate %}
 
 {% set stage = 'early engagement' %}
 {% set key = 'Required' %}
@@ -30,7 +31,7 @@
 {% set warning = null %}
 {% if params.context.sentences | hasBreachedSentence %}
   {% set warning = forename + " is in breach. You should continue to offer appointments." %}
- {% elif params.context.recallStatus and params.context.recallStatus.code %}
+ {% elif params.context.sentences | isInCustody %}
   {% set warning = forename + " has been recalled. Their appointments are paused." %}
 {% endif %}
 
@@ -78,7 +79,7 @@
         text:  upcoming,
         classes: 'govuk-!-width-one-half'
       }
-    }  
+    }
   ]
 }) }}
   {% endif %}

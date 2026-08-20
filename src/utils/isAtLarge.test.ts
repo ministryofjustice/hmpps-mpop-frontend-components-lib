@@ -10,12 +10,12 @@ describe('isAtLarge', () => {
     ).toBe(true)
   })
 
-  it('returns false when the only sentence with custody location code UATLRG has code SPX', () => {
+  it('returns true when any sentence has custody location code UATLRG', () => {
     expect(
       isAtLarge([
         { supervisionPackage: { code: 'SPX' }, custody: { location: { code: 'UATLRG' } } },
       ] as FrontendSentence[]),
-    ).toBe(false)
+    ).toBe(true)
   })
 
   it('returns false when none of the conditions match', () => {

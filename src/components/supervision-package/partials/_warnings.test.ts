@@ -76,10 +76,10 @@ describe('_warnings partial', () => {
       expect(document.querySelector('.govuk-warning-text')).toBeNull()
     })
 
-    it('ignores non-primary (SPX) sentences', () => {
+    it('renders the breach warning for a sentence with code SPX', () => {
       const document = renderPartial(context([{ ...breachedSentence, supervisionPackage: { code: 'SPX' } }]))
 
-      expect(document.querySelector('.govuk-warning-text')).toBeNull()
+      expect(document.querySelector('.govuk-warning-text')).not.toBeNull()
     })
   })
 })

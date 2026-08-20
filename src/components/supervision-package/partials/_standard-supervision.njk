@@ -1,3 +1,5 @@
+{% set sentence = params.context.sentences | getPrimarySentence %}
+
 {% if params.context.name.forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
     <p class='govuk-body'>
         {{ params.context.name.forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
@@ -10,9 +12,9 @@
     <p class='govuk-body'>{{ params.context.name.forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
 {% endif %}
 
-{% if params.context.sentences[0].type.isCustodial %}
+{% if sentence.type.isCustodial %}
     {% if params.context.finalThirdEligibility.eligible %}
-        <p class='govuk-body'>{{ params.context.name.forename }} is eligible to start the final third stage on {{ params.context.sentences[0].custody.finalThirdDate | dateWithYear }}.</p>
+        <p class='govuk-body'>{{ params.context.name.forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.</p>
     {% elseif params.context.finalThirdEligibility.eligible == false %}
         <p class='govuk-body'>{{ params.context.name.forename }} is not eligible for the final third stage.</p>
     {% endif %}

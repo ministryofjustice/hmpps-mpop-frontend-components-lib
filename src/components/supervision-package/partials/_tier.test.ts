@@ -15,17 +15,44 @@ describe('_tier partial', () => {
     it('renders the tier score in the heading', () => {
       const document = renderPartial({ tierScore: 'A2' })
 
-      const heading = document.querySelector('h3.govuk-heading-s')
+      const heading = document.querySelector('h4.govuk-heading-s')
 
-      expect(heading?.textContent?.trim()).toBe('Tier A2')
+      expect(heading?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier A2')
     })
 
     it('renders just "Tier" when the tier score is MISSING', () => {
       const document = renderPartial({ tierScore: 'MISSING' })
 
-      const heading = document.querySelector('h3.govuk-heading-s')
+      const heading = document.querySelector('h4.govuk-heading-s')
 
-      expect(heading?.textContent?.trim()).toBe('Tier')
+      expect(heading?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier')
+    })
+
+    it('exposes a single accessible name via aria-label so assistive tech reads it as one phrase', () => {
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Confirmed', color: 'green' } })
+
+      const heading = document.querySelector('h4.govuk-heading-s')
+
+      expect(heading?.getAttribute('aria-label')).toBe('Tier A2 Confirmed')
+      heading?.querySelectorAll('span, strong').forEach(element => {
+        expect(element.getAttribute('aria-hidden')).toBe('true')
+      })
+    })
+
+    it('exposes "Tier" as the accessible name when there is no tag', () => {
+      const document = renderPartial({ tierScore: 'A2' })
+
+      const heading = document.querySelector('h4.govuk-heading-s')
+
+      expect(heading?.getAttribute('aria-label')).toBe('Tier A2')
+    })
+
+    it('does not include the word "undefined" in the accessible name when tierScore is missing entirely', () => {
+      const document = renderPartial({ tag: { text: 'Unavailable', color: 'grey' } })
+
+      const heading = document.querySelector('h4.govuk-heading-s')
+
+      expect(heading?.getAttribute('aria-label')).toBe('Tier Unavailable')
     })
   })
 
@@ -37,6 +64,23 @@ describe('_tier partial', () => {
 
       expect(tag?.textContent?.trim()).toBe('Confirmed')
       expect(tag?.classList.contains('govuk-tag--green')).toBe(true)
+    })
+
+    it('renders the tag as a strong inside the heading so it is announced as part of the same phrase', () => {
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Confirmed', color: 'green' } })
+
+      const heading = document.querySelector('h4.govuk-heading-s')
+
+      expect(heading?.querySelector('strong.govuk-tag')).not.toBeNull()
+      expect(heading?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier A2 Confirmed')
+    })
+
+    it('hides the visual tag from assistive tech since the heading aria-label already includes it', () => {
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Confirmed', color: 'green' } })
+
+      const tag = document.querySelector('strong.govuk-tag')
+
+      expect(tag?.getAttribute('aria-hidden')).toBe('true')
     })
 
     it('does not render the tag when the text is missing', () => {

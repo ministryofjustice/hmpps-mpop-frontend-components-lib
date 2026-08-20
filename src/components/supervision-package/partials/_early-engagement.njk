@@ -1,3 +1,5 @@
+{% set sentence = params.context.sentences | getPrimarySentence %}
+
 {% if params.context.name.forename and (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %}
     <p class='govuk-body'>
         You should see {{ params.context.name.forename }} every week for the first {{ params.earlyEngagement.weeks }} weeks of the sentence.
@@ -14,10 +16,10 @@
     </p>
 {% endif %}
 
-{% if params.context.sentences[0].type.isCustodial %}
+{% if sentence.type.isCustodial %}
     {% if params.context.finalThirdEligibility.eligible == true %}
         <p class='govuk-body'>
-            {{ params.context.name.forename }} is eligible to start the final third stage on {{ params.context.sentences[0].custody.finalThirdDate | dateWithYear }}.
+            {{ params.context.name.forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.
         </p>
     {% elseif params.context.finalThirdEligibility.eligible == false%}
         <p class='govuk-body'>{{ params.context.name.forename }} is not eligible for the final third stage.</p>

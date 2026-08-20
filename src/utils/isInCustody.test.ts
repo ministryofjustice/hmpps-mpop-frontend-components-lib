@@ -2,20 +2,12 @@ import { isInCustody } from './isInCustody'
 import { FrontendSentence } from '../types/SupervisionPackage'
 
 describe('isInCustody', () => {
-  it.each(['D', 'I', 'R'])('returns the description when a non-SPX sentence has custody status code %s', code => {
+  it.each(['D', 'I', 'R'])('returns the description when a sentence has custody status code %s', code => {
     expect(
       isInCustody([
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code, description: 'In Custody' } } },
       ] as FrontendSentence[]),
     ).toBe('In Custody')
-  })
-
-  it('returns undefined when the only matching sentence has code SPX', () => {
-    expect(
-      isInCustody([
-        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In Custody' } } },
-      ] as FrontendSentence[]),
-    ).toBeUndefined()
   })
 
   it('returns undefined when no sentence has a custody status code', () => {
@@ -24,14 +16,14 @@ describe('isInCustody', () => {
     ).toBeUndefined()
   })
 
-  it('returns the description of the first matching sentence when multiple non-SPX sentences qualify', () => {
+  it('returns the description of the first matching sentence when multiple sentences qualify', () => {
     expect(
       isInCustody([
-        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'Ignored' } } },
+        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In Custody' } } },
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'C', description: 'Community custody' } } },
         { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'I', description: 'In Custody - IRC' } } },
       ] as FrontendSentence[]),
-    ).toBe('Community custody')
+    ).toBe('In Custody')
   })
 
   it('returns undefined when sentences is undefined', () => {
