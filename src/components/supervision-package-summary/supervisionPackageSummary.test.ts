@@ -20,8 +20,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'INIT' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -97,6 +99,9 @@ describe('supervision-package-summary', () => {
       },
       forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -167,8 +172,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -204,14 +211,13 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
+        sentences: [{ custody: { status: { code: 'C' } } }],
         finalThirdEligibility: {
           eligible: false,
-        },
-        recallStatus: {
-          code: 'R',
-          description: 'Recall',
         },
       },
       earlyEngagement: {
@@ -240,8 +246,11 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
+
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -272,8 +281,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         nationalSecurityDivision: true,
         finalThirdEligibility: {
           eligible: true,

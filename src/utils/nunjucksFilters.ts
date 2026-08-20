@@ -4,6 +4,7 @@ import { govukTime } from './govukTime'
 import { appointmentDateTime } from './appointmentDateTime'
 import { toTitleCase } from './toTitleCase'
 import { hasBreachedSentence } from './hasBreachedSentence'
+import { hasRecalledSentence } from './hasRecalledSentence'
 import { isEligibleForDiscretionaryAppointments } from './isEligibleForDiscretionaryAppointments'
 import { finalThirdStatus } from './finalThirdStatus'
 import { isInCustody } from './isInCustody'
@@ -16,6 +17,7 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('appointmentDateTime', appointmentDateTime)
   env.addFilter('toTitleCase', toTitleCase)
   env.addFilter('hasBreachedSentence', hasBreachedSentence)
+  env.addFilter('hasRecalledSentence', hasRecalledSentence)
   env.addFilter('isEligibleForDiscretionaryAppointments', isEligibleForDiscretionaryAppointments)
   env.addFilter('finalThirdStatus', finalThirdStatus)
   env.addFilter('isInCustody', isInCustody)
