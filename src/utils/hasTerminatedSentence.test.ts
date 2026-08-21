@@ -18,12 +18,12 @@ describe('hasTerminatedSentence', () => {
     ).toBe(false)
   })
 
-  it('returns true when at least one of multiple sentences is custodial and is terminated', () => {
+  it('returns true when SPA primary sentence is terminated', () => {
     expect(
       hasTerminatedSentence([
+        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'C' } } },
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'T' } } },
-        { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'C' } } },
-        { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'A' } } },
+        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'A' } } },
       ] as FrontendSentence[]),
     ).toBe(true)
   })
