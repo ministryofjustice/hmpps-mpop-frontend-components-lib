@@ -518,10 +518,10 @@ describe('supervision-package', () => {
       const arrangeButton = findButton(document, 'Arrange an appointment')
       expect(arrangeButton?.getAttribute('href')).toBe('/arrange-appointment')
 
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
-    it('does not render the "Update NDelius risk flag" button when crn, deliusBaseURL are provided and the person is in custody', () => {
+    it('does not render the "Update risk flags on NDelius" button when crn, deliusBaseURL are provided and the person is in custody', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -534,10 +534,10 @@ describe('supervision-package', () => {
       })
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
-    it('does not render the "Update NDelius risk flag" button when crn, deliusBaseURL are provided and the person is at large', () => {
+    it('does not render the "Update risk flags on NDelius" button when crn, deliusBaseURL are provided and the person is at large', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -550,10 +550,10 @@ describe('supervision-package', () => {
       })
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
-    it('renders only the "Update NDelius risk flag" button when crn and deliusBaseURL are provided and the person is not in custody or at large', () => {
+    it('renders only the "Update risk flags on NDelius" button when crn and deliusBaseURL are provided and the person is not in custody or at large', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -570,7 +570,7 @@ describe('supervision-package', () => {
 
       expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
 
-      const updateRiskButton = findButton(document, 'Update NDelius risk flag')
+      const updateRiskButton = findButton(document, 'Update risk flags on NDelius')
       expect(updateRiskButton?.getAttribute('href')).toBe(
         'https://ndelius.test.probation.service.justice.gov.uk/NDelius-war/delius/JSP/deeplink.xhtml?component=RegisterSummary&CRN=X123456',
       )
@@ -591,7 +591,7 @@ describe('supervision-package', () => {
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
       expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
     it('renders no button group when arrangeAppointmentHref, crn and deliusBaseURL are all provided but the person is at large', () => {
@@ -609,7 +609,7 @@ describe('supervision-package', () => {
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
       expect(findButton(document, 'Arrange an appointment')).toBeUndefined()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
     it('renders both buttons when arrangeAppointmentHref, crn and deliusBaseURL are provided and the person is not in custody or at large', () => {
@@ -627,10 +627,10 @@ describe('supervision-package', () => {
       })
 
       expect(findButton(document, 'Arrange an appointment')).not.toBeUndefined()
-      expect(findButton(document, 'Update NDelius risk flag')).not.toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).not.toBeUndefined()
     })
 
-    it('does not render the "Update NDelius risk flag" button when only crn is provided', () => {
+    it('does not render the "Update risk flags on NDelius" button when only crn is provided', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -639,10 +639,10 @@ describe('supervision-package', () => {
       })
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
 
-    it('does not render the "Update NDelius risk flag" button when only deliusBaseURL is provided', () => {
+    it('does not render the "Update risk flags on NDelius" button when only deliusBaseURL is provided', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: tierTags.none,
@@ -651,7 +651,7 @@ describe('supervision-package', () => {
       })
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
-      expect(findButton(document, 'Update NDelius risk flag')).toBeUndefined()
+      expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
   })
 })
