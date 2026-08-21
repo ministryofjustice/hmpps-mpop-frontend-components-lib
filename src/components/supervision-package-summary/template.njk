@@ -7,7 +7,7 @@
 
 {% set stage = 'early engagement' %}
 {% set key = 'Required' %}
-{% set forename = params.forename %}
+{% set forename = params.context.name.forename %}
 {% set required = 0 %}
 {% set completed = 0 %}
 
@@ -91,11 +91,11 @@
      {% if completed < required %}
    <p class="govuk-body">You should see {{ forename }} every week for the first {{ params.earlyEngagement.weeks }} weeks of the sentence.</p>
  {% endif %}
-      <p class="govuk-body">Early engagement is expected to end on {{ params.earlyEngagement.endDate | dateWithYear }} if {{ params.forename }} attends the required appointments by then.</p>
-       <p class="govuk-body">{{ params.forename }} will then have a maximum of {{ (params.currentYear.appointments.allowance | int(0)) - (params.earlyEngagement.weeks | int(0)) }} supervision appointments for the rest of this sentence year.</p>
+      <p class="govuk-body">Early engagement is expected to end on {{ params.earlyEngagement.endDate | dateWithYear }} if {{ forename }} attends the required appointments by then.</p>
+       <p class="govuk-body">{{ forename }} will then have a maximum of {{ (params.currentYear.appointments.allowance | int(0)) - (params.earlyEngagement.weeks | int(0)) }} supervision appointments for the rest of this sentence year.</p>
     {% endif %}
     {% if params.currentPhase.phase.code == 'STD' %}
-      <p class="govuk-body">{{ params.forename }} has a maximum of {{ remaining }} appointments remaining.</p>
+      <p class="govuk-body">{{ forename }} has a maximum of {{ remaining }} appointments remaining.</p>
       <p class="govuk-body">
         {% if params.currentYear.isFirstYear %}
 The supervision package ends on {{ params.currentYear.endDate | dateWithYear }}.

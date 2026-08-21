@@ -20,8 +20,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'INIT' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -97,6 +99,9 @@ describe('supervision-package-summary', () => {
       },
       forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -167,8 +172,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -204,25 +211,14 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
+        sentences: [{ custody: { status: { description: 'Recalled', code: 'C' } } }],
         finalThirdEligibility: {
           eligible: false,
         },
-        recallStatus: {
-          code: 'R',
-          description: 'Recall',
-        },
-        sentences: [
-          {
-            custody: {
-              status: {
-                code: 'R',
-                description: 'Recalled',
-              },
-            },
-          },
-        ],
       },
       earlyEngagement: {
         startDate: '2026-08-06T13:46:16.916Z',
@@ -250,8 +246,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         finalThirdEligibility: {
           eligible: false,
         },
@@ -282,8 +280,10 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-      forename: 'Stuart',
       context: {
+        name: {
+          forename: 'Stuart',
+        },
         nationalSecurityDivision: true,
         finalThirdEligibility: {
           eligible: true,
