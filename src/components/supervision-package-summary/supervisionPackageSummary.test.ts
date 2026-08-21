@@ -215,7 +215,7 @@ describe('supervision-package-summary', () => {
         name: {
           forename: 'Stuart',
         },
-        sentences: [{ custody: { status: { code: 'C' } } }],
+        sentences: [{ custody: { status: { description: 'Recalled', code: 'C' } } }],
         finalThirdEligibility: {
           eligible: false,
         },
@@ -246,7 +246,6 @@ describe('supervision-package-summary', () => {
       currentPhase: {
         phase: { code: 'STD' },
       },
-
       context: {
         name: {
           forename: 'Stuart',

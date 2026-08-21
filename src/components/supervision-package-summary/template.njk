@@ -31,7 +31,7 @@
 {% set warning = null %}
 {% if params.context.sentences | hasBreachedSentence %}
   {% set warning = forename + " is in breach. You should continue to offer appointments." %}
- {% elif params.context.sentences | hasRecalledSentence %}
+ {% elif params.context.sentences | isInCustody %}
   {% set warning = forename + " has been recalled. Their appointments are paused." %}
 {% endif %}
 
