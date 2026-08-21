@@ -77,12 +77,12 @@ describe('_action-buttons partial', () => {
     })
   })
 
-  describe('update NDelius risk flag button', () => {
-    it('renders the update NDelius risk flag button with a deeplink built from crn and deliusBaseURL', () => {
+  describe('Update risk flags on NDelius button', () => {
+    it('renders the Update risk flags on NDelius button with a deeplink built from crn and deliusBaseURL', () => {
       const document = renderPartial({ crn: 'X123456', deliusBaseURL: 'https://delius.example.com' })
 
       const button = Array.from(document.querySelectorAll('a.govuk-button')).find(a =>
-        a.textContent?.includes('Update NDelius risk flag'),
+        a.textContent?.includes('Update risk flags on NDelius'),
       )
 
       expect(button?.getAttribute('href')).toBe(
@@ -91,24 +91,24 @@ describe('_action-buttons partial', () => {
       expect(button?.classList.contains('govuk-button--secondary')).toBe(true)
     })
 
-    it('does not render the update NDelius risk flag button when crn is missing', () => {
+    it('does not render the Update risk flags on NDelius button when crn is missing', () => {
       const document = renderPartial({
         arrangeAppointmentHref: '/arrange',
         deliusBaseURL: 'https://delius.example.com',
       })
 
       const button = Array.from(document.querySelectorAll('a.govuk-button')).find(a =>
-        a.textContent?.includes('Update NDelius risk flag'),
+        a.textContent?.includes('Update risk flags on NDelius'),
       )
 
       expect(button).toBeUndefined()
     })
 
-    it('does not render the update NDelius risk flag button when deliusBaseURL is missing', () => {
+    it('does not render the Update risk flags on NDelius button when deliusBaseURL is missing', () => {
       const document = renderPartial({ arrangeAppointmentHref: '/arrange', crn: 'X123456' })
 
       const button = Array.from(document.querySelectorAll('a.govuk-button')).find(a =>
-        a.textContent?.includes('Update NDelius risk flag'),
+        a.textContent?.includes('Update risk flags on NDelius'),
       )
 
       expect(button).toBeUndefined()
