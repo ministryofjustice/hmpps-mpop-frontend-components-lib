@@ -12,10 +12,13 @@ const renderPartial = (params = {}) => {
 
 describe('_standard-supervision partial', () => {
   describe('remaining appointments paragraph', () => {
-    it('shows the "ends on" text when it is the first year', () => {
+    it('shows the "ends on" text when the primary sentence ends on or before the current year end date', () => {
       const document = renderPartial({
-        context: { name: { forename: 'Alex' } },
-        currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2026-08-15' }],
+        },
+        currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
@@ -26,10 +29,13 @@ describe('_standard-supervision partial', () => {
       )
     })
 
-    it('shows the "resets on" text when it is not the first year', () => {
+    it('shows the "resets on" text when the primary sentence ends after the current year end date', () => {
       const document = renderPartial({
-        context: { name: { forename: 'Alex' } },
-        currentYear: { isFirstYear: false, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01' }],
+        },
+        currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
 
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))

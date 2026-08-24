@@ -197,6 +197,28 @@ describe('supervision-package', () => {
     expect(document.querySelector('.govuk-grid-column-two-thirds')).toBeNull()
   })
 
+  it.each`
+    phaseCode
+    ${'IOM'}
+    ${'OPD'}
+  `(
+    'renders the supervision package and shows the phase column when currentPhase.phase.code is $phaseCode',
+    ({ phaseCode }) => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: phaseCode, description: 'Other' } },
+        context: { name: { forename: 'Alex' } },
+        allAppointmentsHref: '#',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-one-half')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-two-thirds')).toBeNull()
+    },
+  )
+
   it('does not render the supervision package when currentPhase.phase.code does not match a phase column code', () => {
     const document = renderComponent({
       tierScore: 'C',

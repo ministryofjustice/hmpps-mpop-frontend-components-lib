@@ -105,6 +105,7 @@ describe('supervision-package-summary', () => {
         finalThirdEligibility: {
           eligible: false,
         },
+        sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01' }],
       },
       earlyEngagement: {
         startDate: '2026-08-06T13:46:16.916Z',
@@ -164,6 +165,42 @@ describe('supervision-package-summary', () => {
     )
     expect(document.querySelector('.govuk-details__text p:nth-child(2)')?.textContent?.trim()).toBe(
       'Appointments reset with the supervision package on 6 August 2026.',
+    )
+  })
+
+  it('renders the "ends on" text when the primary sentence ends on or before the current year end date', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        finalThirdEligibility: {
+          eligible: false,
+        },
+        sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2026-08-06' }],
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+
+    expect(document.querySelector('.govuk-details__text p:nth-child(2)')?.textContent?.trim()).toBe(
+      'The supervision package ends on 6 August 2026.',
     )
   })
 
