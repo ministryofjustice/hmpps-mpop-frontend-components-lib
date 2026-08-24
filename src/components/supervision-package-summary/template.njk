@@ -97,10 +97,10 @@
     {% if params.currentPhase.phase.code == 'STD' %}
       <p class="govuk-body">{{ forename }} has a maximum of {{ remaining }} appointments remaining.</p>
       <p class="govuk-body">
-        {% if params.currentYear.isFirstYear %}
-The supervision package ends on {{ params.currentYear.endDate | dateWithYear }}.
-    {% else %}
+        {% if params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
  Appointments reset with the supervision package on {{ params.currentYear.endDate | dateWithYear }}.
+    {% else %}
+The supervision package ends on {{ params.currentYear.endDate | dateWithYear }}.
     {% endif %}
       </p>
     {% endif %}

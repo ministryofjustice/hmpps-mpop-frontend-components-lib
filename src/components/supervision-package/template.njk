@@ -3,7 +3,7 @@
 {% set hasSpecialStatus = params.context.offenderPersonalDisorderPathway or params.context.sentences | hasBreachedSentence or params.context.sentences | isInCustody or params.context.sentences | isAtLarge or params.context.integratedOffenderManagementRedRated %}
 {% set sentenceTypeValue = params.context | sentenceType %}
 {% set phaseCode = params.currentPhase.phase.code | upper %}
-{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' %}
+{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' %}
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
 {% set sentence = params.context.sentences | getPrimarySentence %}
 
@@ -31,7 +31,6 @@
 
     <div class='govuk-grid-row'>
         <div class='{{ "govuk-grid-column-one-half" if showPhaseColumn else "govuk-grid-column-two-thirds" }}'>
-
             {% include './partials/_warnings.njk' %}
             {% include './partials/_tier.njk' %}
             {% include './partials/_package-creation-date.njk' %}
@@ -52,6 +51,9 @@
                 {% if params.context.offenderPersonalDisorderPathway %}
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_opd.njk' %}
+                {% elseif params.context.integratedOffenderManagementRedRated %}
+                    <h4 class='govuk-heading-s'>Red rated IOM</h4>
+                    {% include './partials/_red-iom.njk' %}
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
                     <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_progress-bar.njk' %}
