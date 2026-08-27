@@ -5,8 +5,11 @@ import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_warnings.njk', { params })
+const renderPartial = (params: Record<string, unknown> = {}) => {
+  const html = env.render('supervision-package/partials/_warnings.njk', {
+    params,
+    forename: (params as { context?: { name?: { forename?: string } } }).context?.name?.forename,
+  })
   return new JSDOM(html).window.document
 }
 

@@ -6,13 +6,15 @@ const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/d
 mpopNunjucksSetup(env)
 
 const renderPartial = (params: Record<string, unknown> = {}) => {
+  const mergedParams = {
+    context: { name: { forename: 'Alex' }, sentences: [] },
+    currentPhase: { phase: { code: 'STD' } },
+    currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10, scheduled: 0 } },
+    ...params,
+  }
   const html = env.render('supervision-package/partials/_red-iom.njk', {
-    params: {
-      context: { name: { forename: 'Alex' }, sentences: [] },
-      currentPhase: { phase: { code: 'STD' } },
-      currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10, scheduled: 0 } },
-      ...params,
-    },
+    params: mergedParams,
+    forename: (mergedParams.context as { name?: { forename?: string } }).name?.forename,
   })
   return new JSDOM(html).window.document
 }

@@ -6,6 +6,7 @@
 {% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' %}
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
 {% set sentence = params.context.sentences | getPrimarySentence %}
+{% set forename = params.context.name.forename %}
 
 {% if
   params.context.nationalSecurityDivision
@@ -18,7 +19,7 @@
     supervisionPackage: params
 }) }}
 </div>
-{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and showPhaseColumn %}
+{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase) %}
 <div class='govuk-width-container supervision-package' role='region' aria-label='Supervision package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -26,14 +27,25 @@
         {% include './partials/_tags.njk' %}
     </div>
     {% else %}
-            <h3 class='govuk-heading-m'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h3>
+        <h3 class='govuk-heading-m'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h3>
     {% endif %}
 
     <div class='govuk-grid-row'>
-        <div class='{{ "govuk-grid-column-one-half" if showPhaseColumn else "govuk-grid-column-two-thirds" }}'>
+        {% if showPhaseColumn %}
+            {% set columnClass = 'govuk-grid-column-one-half' %}
+        {% elif not params.currentPhase %}
+            {% set columnClass = 'govuk-grid-column-full' %}
+        {% else %}
+            {% set columnClass = 'govuk-grid-column-two-thirds' %}
+        {% endif %}
+        <div class='{{ columnClass }}'>
             {% include './partials/_warnings.njk' %}
             {% include './partials/_tier.njk' %}
             {% include './partials/_package-creation-date.njk' %}
+
+            {% if not params.currentPhase and params.oasysReviewHref %}
+                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state'>Start an OASys review (opens in new tab)</a> to confirm {{ forename}}`s supervision package. Until then, follow national standards for appointments.</p>
+            {% endif %}
 
             {% if params.historyHref %}
                 <p class='govuk-body'>
@@ -43,10 +55,12 @@
                 </p>
             {% endif %}
 
-            {% include './partials/_next-appointment.njk' %}
+            {% if params.currentPhase %}
+                {% include './partials/_next-appointment.njk' %}
+            {% endif %}
         </div>
 
-        {% if showPhaseColumn %}
+        {% if showPhaseColumn and params.currentPhase %}
             <div class='govuk-grid-column-one-half'>
                 {% if params.context.offenderPersonalDisorderPathway %}
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
@@ -57,9 +71,6 @@
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
                     <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_progress-bar.njk' %}
-                {% elseif lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
-                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
-                    {% include './partials/_no-end-date.njk' %}
                 {% elseif phaseCode == 'INIT' %}
                     <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_early-engagement.njk' %}
@@ -76,6 +87,8 @@
         {% endif %}
     </div>
 
-    {% include './partials/_action-buttons.njk' %}
+    {% if params.currentPhase %}
+        {% include './partials/_action-buttons.njk' %}
+    {% endif %}
 </div>
 {% endif %}

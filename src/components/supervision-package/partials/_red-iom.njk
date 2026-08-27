@@ -1,29 +1,30 @@
 {% set sentence = params.context.sentences | getPrimarySentence %}
 
-{% if params.context.name.forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
+<p class='govuk-body'>{{ forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
+
+
+{% if forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
     <p class='govuk-body'>
-        {{ params.context.name.forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
+        {{ forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
     </p>
 {% endif %}
 
 {% if params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
-    <p class='govuk-body'>{{ params.context.name.forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
+    <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
 {% else %}
-    <p class='govuk-body'>{{ params.context.name.forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>
+    <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>
 {% endif %}
 
 {% if sentence.type.isCustodial %}
     {% if params.context.finalThirdEligibility.eligible %}
-        <p class='govuk-body'>{{ params.context.name.forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.</p>
+        <p class='govuk-body'>{{ forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.</p>
     {% elseif params.context.finalThirdEligibility.eligible == false %}
-        <p class='govuk-body'>{{ params.context.name.forename }} is not eligible for the final third stage.</p>
+        <p class='govuk-body'>{{ forename }} is not eligible for the final third stage.</p>
     {% endif %}
 {% endif %}
 
 {% include './_progress-bar.njk' %}
 
-<p class='govuk-body'>{{ params.context.name.forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
-
 {% if params.context | isEligibleForDiscretionaryAppointments(params.tierScore) %}
-    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ params.context.name.forename }} can have up to 5 additional discretionary appointments.</p>
+    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ forename }} can have up to 5 additional discretionary appointments.</p>
 {% endif %}
