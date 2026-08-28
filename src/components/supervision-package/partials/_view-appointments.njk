@@ -1,5 +1,5 @@
 {% if params.allAppointmentsHref %}
-    {% if params.currentPhase.phase.code  == 'FTHRD' %}
+    {% if phaseCode == 'FTHRD' %}
         <p class='govuk-body'>
             <a class='govuk-link govuk-link--no-visited-state' href='{{ params.allAppointmentsHref }}' >View last appointment</a>
         </p>

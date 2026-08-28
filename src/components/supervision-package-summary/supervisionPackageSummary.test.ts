@@ -358,4 +358,111 @@ describe('supervision-package-summary', () => {
       'Meet Stuart if there is a need for responsive management, risk or enforcement activity.',
     )
   })
+
+  it('does not render when the phase code is not supported and the sentence is not in the final third', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'SPNA' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 4,
+        completed: 2,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 8,
+          scheduled: 1,
+          completed: 0,
+        },
+      },
+    })
+
+    expect(document.querySelector('.supervision-package-summary')).toBeNull()
+  })
+
+  it('renders when in the final third even with an unsupported phase code', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'SPNA' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        nationalSecurityDivision: true,
+        finalThirdEligibility: {
+          eligible: true,
+        },
+        sentences: [
+          {
+            type: { isCustodial: true },
+            custody: { finalThirdDate: '2026-08-06' },
+          },
+        ],
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+
+    expect(document.querySelector('.supervision-package-summary')).not.toBeNull()
+    expect(document.body.textContent).toContain('Stuart is in the final third of the sentence.')
+  })
+
+  it.each(['FTHRD', 'IOM', 'OPD', 'fthrd'])('renders when the phase code is %s', phaseCode => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: phaseCode },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 4,
+        completed: 2,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 8,
+          scheduled: 1,
+          completed: 0,
+        },
+      },
+    })
+
+    expect(document.querySelector('.supervision-package-summary')).not.toBeNull()
+  })
 })
