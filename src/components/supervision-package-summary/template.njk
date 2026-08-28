@@ -4,6 +4,8 @@
 {% set sentence = params.context.sentences | getPrimarySentence %}
 
 {% set finalThird = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and sentence.type.isCustodial and sentence.custody.finalThirdDate %}
+{% set phaseCode = params.currentPhase.phase.code | upper %}
+{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' %}
 
 {% set stage = 'early engagement' %}
 {% set key = 'Required' %}
@@ -11,6 +13,7 @@
 {% set required = 0 %}
 {% set completed = 0 %}
 
+{% if showPhaseColumn or finalThird %}
 {% if params.currentPhase.phase.code == 'INIT' %}
   {% if params.earlyEngagement.weeks is defined and params.earlyEngagement.completed is defined %}
     {% set required = params.earlyEngagement.weeks | int(0) %}
@@ -110,3 +113,4 @@ The supervision package ends on {{ params.currentYear.endDate | dateWithYear }}.
     <p class="govuk-body">Meet {{ forename }} if there is a need for responsive management, risk or enforcement activity.</p>
   {% endif %}
 </section>
+{% endif %}

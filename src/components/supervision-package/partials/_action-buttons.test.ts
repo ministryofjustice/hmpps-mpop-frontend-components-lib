@@ -5,8 +5,9 @@ import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_action-buttons.njk', { params })
+const renderPartial = (params: Record<string, unknown> & { currentPhase?: { phase?: { code?: string } } } = {}) => {
+  const phaseCode = params.currentPhase?.phase?.code?.toUpperCase()
+  const html = env.render('supervision-package/partials/_action-buttons.njk', { params, phaseCode })
   return new JSDOM(html).window.document
 }
 
