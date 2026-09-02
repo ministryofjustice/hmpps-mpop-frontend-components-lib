@@ -405,6 +405,72 @@ describe('supervision-package', () => {
     expect(headings).toContain('Early engagement stage')
   })
 
+  describe('OASys review prompt', () => {
+    it('renders the OASys review link when currentPhase is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
+      expect(document.body.textContent).toContain(
+        'Start an OASys review (opens in new tab) to confirm Alex`s supervision package. Until then, follow national standards for appointments.',
+      )
+    })
+
+    it('does not render the OASys review link when currentPhase is present', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'STD' } },
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+    })
+
+    it('renders the OASys review link and full-width layout when currentPhase is null', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: null,
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
+
+      expect(document.querySelector('.govuk-grid-column-full')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-one-half')).toBeNull()
+      expect(document.querySelector('.govuk-grid-column-two-thirds')).toBeNull()
+
+      expect(document.body.textContent).not.toContain('Next appointment')
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('does not render the OASys review link when oasysReviewHref is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+      })
+
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+    })
+  })
+
   describe('next appointment', () => {
     it('renders the next appointment details when date, startTime, type description and href are present', () => {
       const document = renderComponent({

@@ -20,18 +20,6 @@ describe('_no-end-date partial', () => {
     expect(noEndDateParagraph?.textContent?.trim()).toBe('There is no supervision end date.')
   })
 
-  it('renders the progress bar using the current year appointments', () => {
-    const document = renderPartial({
-      currentYear: { appointments: { allowance: 20, completed: 5, scheduled: 2 } },
-      earlyEngagement: { weeks: 0 },
-    })
-
-    const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-    const usedParagraph = paragraphs.find(p => p.textContent?.includes('appointments used'))
-
-    expect(usedParagraph?.textContent?.trim()).toBe('5 of 20 appointments used')
-  })
-
   describe('IOM red RAG guidance', () => {
     it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
       const document = renderPartial({

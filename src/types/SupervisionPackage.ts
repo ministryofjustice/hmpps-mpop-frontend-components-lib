@@ -103,7 +103,7 @@ type NextAppointment = {
 }
 
 export type SupervisionPackageFrontendContextResponse = {
-  currentPhase: CurrentPhase
+  currentPhase: CurrentPhase | null
   earlyEngagement: EarlyEngagement
   currentYear: CurrentYear
   nextAppointment: NextAppointment

@@ -28,6 +28,12 @@ const tierApiUrlMap = {
   prod: 'https://hmpps-tier.hmpps.service.justice.gov.uk',
 } as const
 
+const oasysLink = {
+  dev: 'https://t2.oasys.service.justice.gov.uk',
+  preprod: 'https://pp-int.oasys.service.justice.gov.uk',
+  prod: 'https://int.oasys.service.justice.gov.uk',
+} as const
+
 const ndeliusBaseUrlMap = {
   dev: 'https://ndelius.test.probation.service.justice.gov.uk',
   preprod: 'https://ndelius.pre-prod.delius.probation.hmpps.dsd.io',
@@ -56,6 +62,7 @@ const tierApiUrl = tierApiUrlMap[environment as keyof typeof tierApiUrlMap]
 const masApiUrl = masApiUrlMap[environment as keyof typeof masApiUrlMap]
 const supervisionPackageApiUrl = supervisionPackageApiUrlMap[environment as keyof typeof supervisionPackageApiUrlMap]
 const ndeliusBaseUrl = ndeliusBaseUrlMap[environment as keyof typeof ndeliusBaseUrlMap]
+const oasysReviewLink = oasysLink[environment as keyof typeof oasysLink]
 
 const tierHistoryUrl = tierHistoryUrlMap[environment as keyof typeof tierHistoryUrlMap]
 
@@ -131,6 +138,7 @@ async function main() {
     crn: personalDetails?.crn,
     deliusBaseURL: ndeliusBaseUrl,
     nextAppointmentHref: '#',
+    oasysReviewHref: oasysReviewLink,
     ...(supervisionPackageFrontendContextResponse ?? {}),
   }
 

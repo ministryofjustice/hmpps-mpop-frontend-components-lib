@@ -3,7 +3,7 @@
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>
             <span class='govuk-visually-hidden'>Warning</span>
-            {{ params.context.name.forename }} is in breach. You should continue to offer appointments.
+            {{ forename }} is in breach. You should continue to offer appointments.
         </strong>
     </div>
 {% elseif params.context.sentences | isInCustody %}
@@ -11,7 +11,7 @@
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>
             <span class='govuk-visually-hidden'>Warning</span>
-            {{ params.context.name.forename }} has been recalled. Their appointments are paused.
+            {{ forename }} has been recalled. Their appointments are paused.
         </strong>
     </div>
 {% endif %}

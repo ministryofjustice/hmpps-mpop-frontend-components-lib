@@ -354,6 +354,72 @@ const html = env.renderString(
         }
       }) }}
 
+      <h2 class="govuk-heading-m">No current phase</h2>
+      <p class="govuk-body">Display the supervision package when the PoP is not in a National Security Division sentence and no <code>currentPhase</code> is present in the supervision package API response</p>
+      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": null,
+  "context": {
+    "nationalSecurityDivision": false
+  }
+}</code></pre>
+      <p class="govuk-body">This variant is triggered by <code>params.currentPhase</code> being falsy (no phase has been calculated yet), provided <code>context.nationalSecurityDivision</code> is not <code>true</code> and <code>phaseCode !== 'SPNA'</code>. It shows the "Start an OASys review" prompt in place of a phase column, since <code>showPhaseColumn</code> also evaluates falsy when there is no <code>currentPhase</code>.</p>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        oasysReviewHref: '#',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        currentPhase: null,
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 2, completed: 2 }
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2026-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
       <h2 class="govuk-heading-m">Final third</h2>
       <p class="govuk-body">Display the supervision package when the PoP is in the Final third phase of the sentence</p>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
@@ -1304,6 +1370,193 @@ const html = env.renderString(
                 finalThirdDate: '2025-11-07',
                 releases: [ { releaseDate: '2026-07-10' } ]
               }
+            }
+          ]
+        }
+      }) }}
+
+      <p class="govuk-body">The final third progress card is only shown when <code>context.nationalSecurityDivision</code> is <code>true</code>. When it is <code>false</code>, the standard supervision package is shown instead, with the "Final third" stage panel.</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+        "currentPhase": { "phase": { "code": "FTHRD" } },
+        "context": {
+          "nationalSecurityDivision": false,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2027-01-07",
+              "type": {
+                "isCustodial": true
+              },
+              "custody": {
+                "finalThirdDate": "2025-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointment: {
+          date: '2026-08-19T15:15:00+01:00',
+          description: 'Planned Telephone Contact (NS)',
+          href: '#'
+        },
+        currentPhase: {
+          phase: { code: 'FTHRD', description: 'Final Third' },
+          supervisionPackage: { code: 'SPA', description: 'A' },
+          eventNumber: '1',
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 12
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 2, completed: 20 }
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2025-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
+            }
+          ]
+        }
+      }) }}
+
+      <p class="govuk-body">The stage panel is driven by <code>currentPhase.phase.code</code>, not by <code>context.finalThirdEligibility</code>. So a PoP can be eligible for the final third while <code>currentPhase.phase.code</code> is still <code>'STD'</code>, in which case the "Standard supervision" stage panel is shown rather than the "Final third" one.</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+        "currentPhase": { "phase": { "code": "STD" } },
+        "context": {
+          "nationalSecurityDivision": false,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2027-01-07",
+              "type": {
+                "isCustodial": true
+              },
+              "custody": {
+                "finalThirdDate": "2025-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        allAppointmentsHref: '#',
+        arrangeAppointmentHref: '#',
+        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
+        crn: 'X991651',
+        nextAppointmentHref: '#',
+	nextAppointment: {
+		id: '2511051671',
+		date: "2026-08-25",
+		startTime: "12:00:00",
+		type: {
+			code: "COAP",
+			description: "Planned Office Visit (NS)"
+		}
+	},
+        currentPhase: {
+          phase: { code: 'STD', description: 'Standard Supervision' },
+          supervisionPackage: { code: 'SPA', description: 'A' },
+          eventNumber: '1',
+          startDate: '2026-01-01',
+          endDate: '2026-04-01'
+        },
+        earlyEngagement: {
+          startDate: '2026-07-10T00:00:00Z',
+          endDate: '2026-10-31T00:00:00Z',
+          weeks: 12,
+          completed: 12
+        },
+        currentYear: {
+          startDate: '2026-07-08',
+          endDate: '2027-01-07',
+          isFirstYear: true,
+          appointments: { allowance: 46, scheduled: 2, completed: 20 }
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: false,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2025-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              },
+              inBreach: false
             }
           ]
         }
