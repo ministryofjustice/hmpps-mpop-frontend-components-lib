@@ -351,6 +351,69 @@ describe('supervision-package', () => {
     })
   })
 
+  describe('currentPhase.phase.code is SPNS', () => {
+    const spnsParams = {
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNS', description: 'In flight' } },
+      context: { name: { forename: 'Alex' } },
+      appointmentsEstimate: 4,
+      supervisionEndDate: '2026-08-15',
+      oasysReviewHref: '/oasys/review/123',
+      allAppointmentsHref: '#',
+    }
+
+    it('renders the phase column with the "Appointments" heading and the in-flight guidance', () => {
+      const document = renderComponent(spnsParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Appointments')
+      expect(document.body.textContent).toContain(
+        'Alex could have 4 supervision appointments remaining until the supervision stage ends on 15 August 2026.',
+      )
+      expect(document.body.textContent).toContain(
+        'Appointments do not count towards the package until it is confirmed.',
+      )
+
+      expect(document.querySelector('.govuk-grid-column-one-half')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-two-thirds')).toBeNull()
+    })
+
+    it('renders the data-under-review warning', () => {
+      const document = renderComponent(spnsParams)
+
+      const warning = document.querySelector('.govuk-warning-text')
+      expect(warning?.textContent).toContain(
+        'The supervision package shown may change. It is based on data that needs review.',
+      )
+    })
+
+    it('renders the OASys review link even though currentPhase is present', () => {
+      const document = renderComponent(spnsParams)
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent({ ...spnsParams, nextAppointment: { date: '2026-09-10' } })
+
+      expect(document.body.textContent).not.toContain('Next appointment')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent({
+        ...spnsParams,
+        arrangeAppointmentHref: '/arrange-appointment',
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+  })
+
   it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {
     const document = renderComponent({
       tierScore: 'C',

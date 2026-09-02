@@ -3,7 +3,7 @@
 {% set hasSpecialStatus = params.context.offenderPersonalDisorderPathway or params.context.sentences | hasBreachedSentence or params.context.sentences | isInCustody or params.context.sentences | isAtLarge or params.context.integratedOffenderManagementRedRated %}
 {% set sentenceTypeValue = params.context | sentenceType %}
 {% set phaseCode = params.currentPhase.phase.code | upper %}
-{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' %}
+{% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' or phaseCode == 'SPNS' %}
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
 {% set sentence = params.context.sentences | getPrimarySentence %}
 {% set forename = params.context.name.forename %}
@@ -43,7 +43,7 @@
             {% include './partials/_tier.njk' %}
             {% include './partials/_package-creation-date.njk' %}
 
-            {% if not params.currentPhase and params.oasysReviewHref %}
+            {% if (not params.currentPhase or phaseCode == 'SPNS') and params.oasysReviewHref %}
                 <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state'>Start an OASys review (opens in new tab)</a> to confirm {{ forename}}`s supervision package. Until then, follow national standards for appointments.</p>
             {% endif %}
 
@@ -55,7 +55,7 @@
                 </p>
             {% endif %}
 
-            {% if params.currentPhase %}
+            {% if params.currentPhase and phaseCode != 'SPNS' %}
                 {% include './partials/_next-appointment.njk' %}
             {% endif %}
         </div>
@@ -80,6 +80,9 @@
                 {% elseif phaseCode == 'FTHRD' %}
                     <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
                     {% include './partials/_final-third.njk' %}
+                {% elseif phaseCode == 'SPNS' %}
+                    <h4 class='govuk-heading-s'>Appointments</h4>
+                    {% include './partials/_in-flight.njk' %}
                 {% endif %}
 
                 {% include './partials/_view-appointments.njk' %}
@@ -87,7 +90,7 @@
         {% endif %}
     </div>
 
-    {% if params.currentPhase %}
+    {% if phaseCode and phaseCode != 'SPNS' %}
         {% include './partials/_action-buttons.njk' %}
     {% endif %}
 </div>
