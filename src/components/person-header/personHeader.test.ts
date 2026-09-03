@@ -49,31 +49,19 @@ describe('person-header', () => {
     expect(managedBy?.textContent?.trim()).toBe('Jack Frost (Worksop Probation Office)')
   })
 
-  it('renders the ROSH title', () => {
-    const document = renderComponent({ rosh: { level: 'Medium' } })
+  it('renders pre-rendered risk badge markup as-is', () => {
+    const document = renderComponent({
+      riskBadges: '<span class="arns-badge-base--medium" data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',
+    })
 
-    expect(document.querySelector('[data-qa="roshLabel"]')?.textContent?.trim()).toBe('ROSH')
+    const wrapper = document.querySelector('[data-qa="riskBadges"]')
+    expect(wrapper?.querySelector('[data-qa="ogrsBadge"]')?.textContent?.trim()).toBe('OGRS LOW')
   })
 
-  it('renders the OGRS title', () => {
-    const document = renderComponent({ ogrs: { level: 'Low', percentage: '5.67%' } })
-
-    expect(document.querySelector('[data-qa="ogrsLabel"]')?.textContent?.trim()).toBe('OGRS')
-  })
-
-  it('does not render risk labels when not provided', () => {
+  it('does not render the risk badges wrapper when not provided', () => {
     const document = renderComponent({ name: 'Andrew Langley' })
 
-    expect(document.querySelector('[data-qa="roshLabel"]')).toBeNull()
-    expect(document.querySelector('[data-qa="ogrsLabel"]')).toBeNull()
-  })
-
-  it('renders OGRS before ROSH, on one line', () => {
-    const document = renderComponent({ ogrs: { level: 'Low', percentage: '5.67%' }, rosh: { level: 'Medium' } })
-
-    const tags = document.querySelectorAll('[data-qa="ogrsLabel"], [data-qa="roshLabel"]')
-    expect(Array.from(tags).map(el => el.getAttribute('data-qa'))).toEqual(['ogrsLabel', 'roshLabel'])
-    expect(tags[0].parentElement).toBe(tags[1].parentElement)
+    expect(document.querySelector('[data-qa="riskBadges"]')).toBeNull()
   })
 
   it('renders the risk alert badges title', () => {
@@ -92,5 +80,11 @@ describe('person-header', () => {
     const document = renderComponent({ riskFlags: [] })
 
     expect(document.querySelector('[data-qa="riskAlertBadges"]')).toBeNull()
+  })
+
+  it('does not render the risk panel at all when there are no risk badges or flags', () => {
+    const document = renderComponent({ name: 'Andrew Langley' })
+
+    expect(document.querySelector('.person-header__risk-panel')).toBeNull()
   })
 })

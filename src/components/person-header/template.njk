@@ -19,19 +19,15 @@
         </ul>
     </div>
 
-    <div class='person-header__risk-panel'>
-        <div class='person-header__risk-tags'>
-            {% if params.ogrs %}
-                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='ogrsLabel'>OGRS</h2>
+    {% if params.riskBadges or (params.riskFlags and params.riskFlags.length) %}
+        <div class='person-header__risk-panel'>
+            {% if params.riskBadges %}
+                <div class='person-header__risk-tags' data-qa='riskBadges'>{{ params.riskBadges | safe }}</div>
             {% endif %}
 
-            {% if params.rosh %}
-                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='roshLabel'>ROSH</h2>
+            {% if params.riskFlags and params.riskFlags.length %}
+                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h2>
             {% endif %}
         </div>
-
-        {% if params.riskFlags and params.riskFlags.length %}
-            <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h2>
-        {% endif %}
-    </div>
+    {% endif %}
 </div>
