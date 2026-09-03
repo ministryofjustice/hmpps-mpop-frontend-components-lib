@@ -69,4 +69,10 @@ describe('person-header', () => {
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
   })
+
+  it('does not render the risk panel when riskBadges is only whitespace', () => {
+    const document = renderComponent({ riskBadges: '\n    \n' })
+
+    expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+  })
 })

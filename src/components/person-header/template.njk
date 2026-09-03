@@ -19,7 +19,7 @@
         </ul>
     </div>
 
-    {% if params.riskBadges %}
+    {% if params.riskBadges and (params.riskBadges | trim) %}
         <div class='person-header__risk-panel'>
             <div class='person-header__risk-tags' data-qa='riskBadges'>{{ params.riskBadges | safe }}</div>
         </div>
