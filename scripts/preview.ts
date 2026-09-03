@@ -27,6 +27,7 @@ const html = env.renderString(
 {% from "supervision-package/macro.njk" import supervisionPackage %}
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
+{% from "person-header/macro.njk" import personHeader %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -56,6 +57,22 @@ const html = env.renderString(
         age: previewAge,
         tierScore: "C",
         historyHref: "#"
+      }) }}
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l">Person Header</h1>
+      <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by, and non-interactive ROSH/OGRS risk labels).</p>
+
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Jack Frost (Worksop Probation Office)",
+        rosh: true,
+        ogrs: true,
+        riskFlags: true
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
