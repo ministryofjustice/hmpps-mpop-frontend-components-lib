@@ -356,10 +356,9 @@ describe('supervision-package', () => {
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
-      currentPhase: { phase: { code: 'SPNS', description: 'In flight' } },
+      currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' } },
       context: { name: { forename: 'Alex' } },
-      appointmentsEstimate: 4,
-      supervisionEndDate: '2026-08-15',
+      currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
       oasysReviewHref: '/oasys/review/123',
       allAppointmentsHref: '#',
     }
@@ -395,7 +394,10 @@ describe('supervision-package', () => {
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
       expect(oasysLink).not.toBeNull()
-      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
+      expect(oasysLink?.textContent?.trim()).toBe('Complete an OASys review (opens in new tab)')
+      expect(document.body.textContent).toContain(
+        'Complete an OASys review (opens in new tab) to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
+      )
     })
 
     it('does not render the next appointment section', () => {
@@ -412,6 +414,27 @@ describe('supervision-package', () => {
 
       expect(document.querySelector('.govuk-button-group')).toBeNull()
     })
+
+    it('does not render the "Start an OASys review" prompt', () => {
+      const document = renderComponent(spnsParams)
+
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+    })
+  })
+
+  it('does not render the SPNS OASys prompt or confirmation text when currentPhase is present but not SPNS', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'STD' } },
+      context: { name: { forename: 'Alex' } },
+      oasysReviewHref: '/oasys/review/123',
+    })
+
+    expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+    expect(document.body.textContent).not.toContain('Complete an OASys review')
+    expect(document.body.textContent).not.toContain('Appointments do not count towards the package')
   })
 
   it('renders the OPD stage when offenderPersonalDisorderPathway is true', () => {
@@ -482,7 +505,7 @@ describe('supervision-package', () => {
       expect(oasysLink).not.toBeNull()
       expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
       expect(document.body.textContent).toContain(
-        'Start an OASys review (opens in new tab) to confirm Alex`s supervision package. Until then, follow national standards for appointments.',
+        'Start an OASys review (opens in new tab) to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
       )
     })
 

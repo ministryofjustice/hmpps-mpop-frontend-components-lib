@@ -1,7 +1,3 @@
 <p class='govuk-body'>
-    {{ forename }} could have {{ params.appointmentsEstimate }} supervision appointments remaining until the supervision stage ends on {{ params.supervisionEndDate | dateWithYear }}.
-</p>
-
-<p class='govuk-body'>
-    Appointments do not count towards the package until it is confirmed.
+    {{ forename }} could have {{ params.currentYear.appointments.allowance }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.
 </p>

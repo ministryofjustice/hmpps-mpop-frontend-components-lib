@@ -422,19 +422,14 @@ const html = env.renderString(
 
 
 
-            <h2 class="govuk-heading-m">In Flight (OASys started but not completed)</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is not in a National Security Division sentence and no <code>currentPhase</code> is present in the supervision package API response</p>
+      <h2 class="govuk-heading-m">In Flight (OASys started but not completed)</h2>
+      <p class="govuk-body">Display the supervision package when the PoP is not in a National Security Division sentence and <code>currentPhase.phase.code</code> is <code>SPNS</code> in the supervision package API response</p>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    code: 'SPNS'
-  },
-  "context": {
-    "nationalSecurityDivision": false
-  }
+      "currentPhase": { "phase": { "code": "SPNS" } },
+      "context": { "nationalSecurityDivision": false }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>params.currentPhase</code> being falsy (no phase has been calculated yet), provided <code>context.nationalSecurityDivision</code> is not <code>true</code> and <code>phaseCode !== 'SPNA'</code>. It shows the "Start an OASys review" prompt in place of a phase column, since <code>showPhaseColumn</code> also evaluates falsy when there is no <code>currentPhase</code>.</p>
-      {{ supervisionPackage({
+      <p class="govuk-body">This variant is triggered by <code>currentPhase.phase.code === 'SPNS'</code>, provided <code>context.nationalSecurityDivision</code> is not <code>true</code>. It shows a "Complete an OASys review" prompt and hides the next-appointment section and action buttons until the package is confirmed.</p>      {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
@@ -445,8 +440,6 @@ const html = env.renderString(
         crn: 'X991651',
         oasysReviewHref: '#',
         nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
           href: '#'
         },
         currentPhase: {
@@ -457,9 +450,9 @@ const html = env.renderString(
         },
         currentYear: {
           startDate: '2026-07-08',
-          endDate: '2027-01-07',
+          endDate: '2026-12-31',
           isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
+          appointments: { allowance: 22, scheduled: 0, completed: 0 }
         },
         context: {
           name: {
