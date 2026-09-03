@@ -64,25 +64,7 @@ describe('person-header', () => {
     expect(document.querySelector('[data-qa="riskBadges"]')).toBeNull()
   })
 
-  it('renders the risk alert badges title', () => {
-    const document = renderComponent({ riskFlags: [{ text: 'Victim contact' }, { text: 'Street gangs' }] })
-
-    expect(document.querySelector('[data-qa="riskAlertBadges"]')?.textContent?.trim()).toBe('Risk alert badges')
-  })
-
-  it('does not render the risk alert badges title when not provided', () => {
-    const document = renderComponent({ name: 'Andrew Langley' })
-
-    expect(document.querySelector('[data-qa="riskAlertBadges"]')).toBeNull()
-  })
-
-  it('does not render the risk alert badges title when riskFlags is empty', () => {
-    const document = renderComponent({ riskFlags: [] })
-
-    expect(document.querySelector('[data-qa="riskAlertBadges"]')).toBeNull()
-  })
-
-  it('does not render the risk panel at all when there are no risk badges or flags', () => {
+  it('does not render the risk panel at all when there are no risk badges', () => {
     const document = renderComponent({ name: 'Andrew Langley' })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()

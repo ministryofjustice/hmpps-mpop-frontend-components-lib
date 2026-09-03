@@ -70,11 +70,7 @@ const html = env.renderString(
         tier: "B4",
         historyHref: "#",
         managedBy: "Jack Frost (Worksop Probation Office)",
-        riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
-        riskFlags: [
-          { text: "Victim contact" },
-          { text: "Street gangs" }
-        ]
+        riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

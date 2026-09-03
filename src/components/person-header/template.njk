@@ -19,15 +19,9 @@
         </ul>
     </div>
 
-    {% if params.riskBadges or (params.riskFlags and params.riskFlags.length) %}
+    {% if params.riskBadges %}
         <div class='person-header__risk-panel'>
-            {% if params.riskBadges %}
-                <div class='person-header__risk-tags' data-qa='riskBadges'>{{ params.riskBadges | safe }}</div>
-            {% endif %}
-
-            {% if params.riskFlags and params.riskFlags.length %}
-                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h2>
-            {% endif %}
+            <div class='person-header__risk-tags' data-qa='riskBadges'>{{ params.riskBadges | safe }}</div>
         </div>
     {% endif %}
 </div>
