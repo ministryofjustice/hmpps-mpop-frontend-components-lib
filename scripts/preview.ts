@@ -9,6 +9,9 @@ import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
   loadPaths: [process.cwd(), 'node_modules'],
+  // The library (and govuk-frontend itself) still uses the legacy @import syntax throughout,
+  // so this is expected noise rather than something to fix here.
+  silenceDeprecations: ['import'],
 }).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
