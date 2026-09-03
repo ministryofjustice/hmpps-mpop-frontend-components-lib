@@ -42,9 +42,9 @@
             {% include './partials/_warnings.njk' %}
 
             {% if not params.currentPhase and params.oasysReviewHref %}
-                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state'>Start an OASys review (opens in new tab)</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
+                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='_blank' rel='noopener noreferrer'>Start an OASys review (opens in new tab)</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
             {% elseif phaseCode == 'SPNS' and params.oasysReviewHref %}
-                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state'>Complete an OASys review (opens in new tab)</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments. </p>
+                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='_blank' rel='noopener noreferrer'>Complete an OASys review (opens in new tab)</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments. </p>
                 <p class='govuk-body'>
                     Appointments do not count towards the package until it is confirmed.
                 </p>
