@@ -90,6 +90,9 @@ You can view the npm page for this package here https://www.npmjs.com/package/@m
 
 5. Publish the GitHub release (i.e. mark it as not a draft) to trigger the publish workflow and publish the package to npm.
 
+   This can be done by navigating to the [releases page](https://github.com/ministryofjustice/hmpps-mpop-frontend-components-lib/releases),
+   selecting the pencil icon in the top right corner of the release, and confirming the release by clicking "Publish release".
+
 ### Notes
 
 - The GitHub release tag should be `v<version>`, where `<version>` matches the version in `package.json`.
