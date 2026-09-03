@@ -1,0 +1,37 @@
+<div class='person-header'>
+    <div class='person-header__band'>
+        <h1 class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name' data-qa='personName'>{{ params.name }}</h1>
+
+        <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
+            <span class='govuk-!-font-weight-bold'>CRN:</span> <span data-qa='crn'>{{ params.crn }}</span>
+        </p>
+
+        <ul class='govuk-list person-header__meta'>
+            <li>
+                <span class='govuk-!-font-weight-bold'>Date of birth:</span> <span data-qa='dob'>{{ params.dob }}</span>
+            </li>
+            <li>
+                <span class='govuk-!-font-weight-bold'>Tier:</span> <a class='govuk-link govuk-link--inverse' href='{{ params.historyHref }}' data-qa='tier'>{{ params.tier }}</a>
+            </li>
+            <li>
+                <span class='govuk-!-font-weight-bold'>Managed by:</span> <span class='person-header__managed-by' data-qa='managedBy'>{{ params.managedBy }}</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class='person-header__risk-panel'>
+        <div class='person-header__risk-tags'>
+            {% if params.ogrs %}
+                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='ogrsLabel'>OGRS</h2>
+            {% endif %}
+
+            {% if params.rosh %}
+                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='roshLabel'>ROSH</h2>
+            {% endif %}
+        </div>
+
+        {% if params.riskFlags and params.riskFlags.length %}
+            <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h2>
+        {% endif %}
+    </div>
+</div>
