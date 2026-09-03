@@ -70,9 +70,12 @@ const html = env.renderString(
         tier: "B4",
         historyHref: "#",
         managedBy: "Jack Frost (Worksop Probation Office)",
-        rosh: true,
-        ogrs: true,
-        riskFlags: true
+        rosh: { level: "Medium" },
+        ogrs: { level: "Low", percentage: "5.67%" },
+        riskFlags: [
+          { text: "Victim contact" },
+          { text: "Street gangs" }
+        ]
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

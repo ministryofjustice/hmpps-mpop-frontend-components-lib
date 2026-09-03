@@ -87,4 +87,10 @@ describe('person-header', () => {
 
     expect(document.querySelector('[data-qa="riskAlertBadges"]')).toBeNull()
   })
+
+  it('does not render the risk alert badges title when riskFlags is empty', () => {
+    const document = renderComponent({ riskFlags: [] })
+
+    expect(document.querySelector('[data-qa="riskAlertBadges"]')).toBeNull()
+  })
 })

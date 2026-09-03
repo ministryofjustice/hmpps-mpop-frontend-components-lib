@@ -22,16 +22,16 @@
     <div class='person-header__risk-panel'>
         <div class='person-header__risk-tags'>
             {% if params.ogrs %}
-                <h3 class='govuk-heading-s govuk-!-margin-0' data-qa='ogrsLabel'>OGRS</h3>
+                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='ogrsLabel'>OGRS</h2>
             {% endif %}
 
             {% if params.rosh %}
-                <h3 class='govuk-heading-s govuk-!-margin-0' data-qa='roshLabel'>ROSH</h3>
+                <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='roshLabel'>ROSH</h2>
             {% endif %}
         </div>
 
-        {% if params.riskFlags %}
-            <h3 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h3>
+        {% if params.riskFlags and params.riskFlags.length %}
+            <h2 class='govuk-heading-s govuk-!-margin-0' data-qa='riskAlertBadges'>Risk alert badges</h2>
         {% endif %}
     </div>
 </div>
