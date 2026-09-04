@@ -460,6 +460,21 @@ describe('supervision-package', () => {
     )
   })
 
+  it('renders the Supervision appointments heading for red IOM cases', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h4')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Supervision appointments')
+  })
+
   it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and currentPhase.phase.code INIT are true', () => {
     const document = renderComponent({
       tierScore: 'C',

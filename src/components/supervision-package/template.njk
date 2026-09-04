@@ -72,7 +72,7 @@
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_opd.njk' %}
                 {% elseif params.context.integratedOffenderManagementRedRated %}
-                    <h4 class='govuk-heading-s'>Red rated IOM</h4>
+                    <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_red-iom.njk' %}
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
                     <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
