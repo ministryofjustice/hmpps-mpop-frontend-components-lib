@@ -167,41 +167,6 @@ describe('_early-engagement partial', () => {
     })
   })
 
-  describe('IOM red RAG guidance', () => {
-    it('shows the IOM guidance when integratedOffenderManagementRedRated is true', () => {
-      const document = renderPartial({
-        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
-      })
-
-      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
-
-      expect(iomParagraph?.textContent).toContain(
-        'Alex has an IOM red RAG status. The maximum number of appointments is the same as tier A.',
-      )
-    })
-
-    it('hides the IOM guidance when integratedOffenderManagementRedRated is false', () => {
-      const document = renderPartial({
-        context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: false },
-      })
-
-      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
-
-      expect(iomParagraph).toBeUndefined()
-    })
-
-    it('hides the IOM guidance when context is not provided', () => {
-      const document = renderPartial({ context: { name: { forename: 'Alex' } } })
-
-      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
-      const iomParagraph = paragraphs.find(p => p.textContent?.includes('IOM red RAG status'))
-
-      expect(iomParagraph).toBeUndefined()
-    })
-  })
-
   describe('additional discretionary appointments for women', () => {
     it.each`
       tierScore

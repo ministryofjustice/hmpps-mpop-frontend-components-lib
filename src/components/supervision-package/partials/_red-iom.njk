@@ -2,7 +2,6 @@
 
 <p class='govuk-body'>{{ forename }} has an IOM red RAG status. The maximum number of appointments is the same as tier A.</p>
 
-
 {% if forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
     <p class='govuk-body'>
         {{ forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
@@ -24,7 +23,3 @@
 {% endif %}
 
 {% include './_progress-bar.njk' %}
-
-{% if params.context | isEligibleForDiscretionaryAppointments(params.tierScore) %}
-    <p class='govuk-body'>As a woman in tier {{ params.tierScore }}, {{ forename }} can have up to 5 additional discretionary appointments.</p>
-{% endif %}

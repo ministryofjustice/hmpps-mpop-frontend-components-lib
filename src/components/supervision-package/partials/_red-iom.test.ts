@@ -148,19 +148,6 @@ describe('_red-iom partial', () => {
     )
   })
 
-  it('shows the discretionary appointments paragraph when eligible', () => {
-    const document = renderPartial({
-      context: { name: { forename: 'Alex' }, sentences: [], gender: 'Female' },
-      tierScore: 'D',
-    })
-
-    const paragraph = paragraphsOf(document).find(p => p.textContent?.includes('discretionary appointments'))
-
-    expect(paragraph?.textContent).toContain(
-      'As a woman in tier D, Alex can have up to 5 additional discretionary appointments.',
-    )
-  })
-
   it('does not show the discretionary appointments paragraph when not eligible', () => {
     const document = renderPartial({
       context: { name: { forename: 'Alex' }, sentences: [], gender: 'Male' },
