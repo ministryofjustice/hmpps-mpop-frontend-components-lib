@@ -61,7 +61,7 @@ const html = env.renderString(
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l">Person Header</h1>
-      <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by, and non-interactive ROSH/OGRS risk labels).</p>
+      <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by). <code>riskBadges</code> is a layout slot for pre-rendered risk badge markup (e.g. from the ARNS component library's <code>predictorBadge</code>) rather than something this component renders itself.</p>
 
       {{ personHeader({
         name: "Andrew Langley",
@@ -70,12 +70,7 @@ const html = env.renderString(
         tier: "B4",
         historyHref: "#",
         managedBy: "Jack Frost (Worksop Probation Office)",
-        rosh: { level: "Medium" },
-        ogrs: { level: "Low", percentage: "5.67%" },
-        riskFlags: [
-          { text: "Victim contact" },
-          { text: "Street gangs" }
-        ]
+        riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
