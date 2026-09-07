@@ -390,7 +390,7 @@ describe('supervision-package', () => {
     })
 
     it('renders the OASys review link even though currentPhase is present', () => {
-      const document = renderComponent(spnsParams)
+      const document = renderComponent({ ...spnsParams, openInNewTab: true })
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
       expect(oasysLink).not.toBeNull()
@@ -419,6 +419,24 @@ describe('supervision-package', () => {
       const document = renderComponent(spnsParams)
 
       expect(document.body.textContent).not.toContain('Start an OASys review')
+    })
+
+    it('sets target="_blank" and rel="noopener noreferrer" on the OASys review link when openInNewTab is true', () => {
+      const document = renderComponent({ ...spnsParams, openInNewTab: true })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink?.getAttribute('target')).toBe('_blank')
+      expect(oasysLink?.getAttribute('rel')).toBe('noopener noreferrer')
+      expect(oasysLink?.textContent?.trim()).toBe('Complete an OASys review (opens in new tab)')
+    })
+
+    it('does not set target or rel on the OASys review link when openInNewTab is absent', () => {
+      const document = renderComponent(spnsParams)
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink?.getAttribute('target')).toBe('')
+      expect(oasysLink?.getAttribute('rel')).toBe('')
+      expect(oasysLink?.textContent?.trim()).toBe('Complete an OASys review')
     })
   })
 
@@ -460,6 +478,21 @@ describe('supervision-package', () => {
     )
   })
 
+  it('renders the Supervision appointments heading for red IOM cases', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h4')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Supervision appointments')
+  })
+
   it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and currentPhase.phase.code INIT are true', () => {
     const document = renderComponent({
       tierScore: 'C',
@@ -499,6 +532,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         context: { name: { forename: 'Alex' } },
         oasysReviewHref: '/oasys/review/123',
+        openInNewTab: true,
       })
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
@@ -531,6 +565,7 @@ describe('supervision-package', () => {
         currentPhase: null,
         context: { name: { forename: 'Alex' } },
         oasysReviewHref: '/oasys/review/123',
+        openInNewTab: true,
       })
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
@@ -554,6 +589,53 @@ describe('supervision-package', () => {
       })
 
       expect(document.body.textContent).not.toContain('Start an OASys review')
+    })
+
+    it('sets target="_blank" and rel="noopener noreferrer" on the OASys review link when openInNewTab is true', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+        openInNewTab: true,
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink?.getAttribute('target')).toBe('_blank')
+      expect(oasysLink?.getAttribute('rel')).toBe('noopener noreferrer')
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
+    })
+
+    it('does not set target or rel on the OASys review link when openInNewTab is false', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+        openInNewTab: false,
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink?.getAttribute('target')).toBe('')
+      expect(oasysLink?.getAttribute('rel')).toBe('')
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review')
+    })
+
+    it('does not set target or rel on the OASys review link when openInNewTab is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink?.getAttribute('target')).toBe('')
+      expect(oasysLink?.getAttribute('rel')).toBe('')
+      expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review')
     })
   })
 

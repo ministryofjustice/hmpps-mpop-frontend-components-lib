@@ -139,6 +139,7 @@ async function main() {
     deliusBaseURL: ndeliusBaseUrl,
     nextAppointmentHref: '#',
     oasysReviewHref: oasysReviewLink,
+    openInNewTab: true,
     ...(supervisionPackageFrontendContextResponse ?? {}),
   }
 
