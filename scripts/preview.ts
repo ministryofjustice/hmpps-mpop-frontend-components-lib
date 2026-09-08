@@ -44,6 +44,7 @@ const html = env.renderString(
 </head>
 
 <body class="govuk-template__body">
+  <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '')</script>
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
@@ -76,1211 +77,1116 @@ const html = env.renderString(
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l">Supervision Package</h1>
 
-      <h2 class="govuk-heading-m">Early engagement</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
-}</code></pre>
-      <p class="govuk-body">This variant is triggered purely by <code>currentPhase.phase.code === 'INIT'</code>, with <code>earlyEngagement.completed &lt; earlyEngagement.weeks</code> (still in progress, not yet at the required number of weekly appointments).</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-                nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
-        context: {
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h2 class="govuk-fieldset__heading">Select a stage</h2>
+          </legend>
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-early-engagement" name="stage" type="radio" value="early-engagement" data-aria-controls="stage-early-engagement-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-early-engagement">Early engagement stage</label>
+            </div>
 
-      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and max number of appointments is reached</p>
-      <p class="govuk-body">This is triggered when <code>earlyEngagement.completed</code> reaches <code>earlyEngagement.weeks</code> (i.e. <code>completed &gt;= weeks</code>) in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
-  "earlyEngagement": { "weeks": 12, "completed": 12 }
-}</code></pre>
-      <p class="govuk-body">This variant happens in early engagement (<code>currentPhase.phase.code === 'INIT'</code>) if <code>earlyEngagement.weeks</code> is the same as <code>earlyEngagement.completed</code>. If it's not early engagement, the equivalent "max reached" condition instead compares <code>currentYear.appointments.completed</code> against <code>currentYear.appointments.allowance</code> (completed &gt;= allowance).</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 12
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 12 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-supervision" name="stage" type="radio" value="supervision" data-aria-controls="stage-supervision-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-supervision">Supervision stage</label>
+            </div>
 
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-opd" name="stage" type="radio" value="opd" data-aria-controls="stage-opd-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-opd">OPD</label>
+            </div>
 
-      <p class="govuk-body">Display the supervision package when the PoP is serving for IPP or life imprisonment</p>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-red-rated-iom" name="stage" type="radio" value="red-rated-iom" data-aria-controls="stage-red-rated-iom-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-red-rated-iom">Red rated IOM</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-custodial-final-third" name="stage" type="radio" value="custodial-final-third" data-aria-controls="stage-custodial-final-third-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-custodial-final-third">Custodial Final third stage</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-in-flight" name="stage" type="radio" value="in-flight" data-aria-controls="stage-in-flight-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-in-flight">In Flight</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-early-engagement-conditional">
+
+      <h3 class="govuk-heading-s">Community</h3>
+      <p class="govuk-body">Triggered by <code>currentPhase.phase.code</code> of "INIT" (still in early engagement) and a non-custodial sentence, <code>context.sentences[].type.isCustodial: false</code>:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": <mark style="background:#ffdd00;">"INIT"</mark>,
+      "description": "Early Engagement"
+    },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 0
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 0
+    }
+  },
   "context": {
-    "liferCategory": { "code": "LF01" }
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.liferCategory.code</code> being one of <code>'LF01'</code>, <code>'LF02'</code>, <code>'LF03'</code> or <code>'x9'</code>, regardless of what <code>currentPhase.phase.code</code> is set to (unless <code>context.offenderPersonalDisorderPathway</code> is also true, which takes priority).</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 5
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 12 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          liferCategory: { code: 'LF01' },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is a woman</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response, alongside a tier score of C:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
-  "context": {
-    "gender": "Female",
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.gender === 'Female'</code>, <code>tierScore</code> being one of <code>C</code>/<code>D</code>/<code>E</code>/<code>F</code>/<code>G</code>, and <code>context.integratedOffenderManagementRedRated === false</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 0
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 0 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Female',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">In Flight (OASys not started)</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is not in a National Security Division sentence and no <code>currentPhase</code> is present in the supervision package API response</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": null,
-  "context": {
-    "nationalSecurityDivision": false
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>params.currentPhase</code> being falsy (no phase has been calculated yet), provided <code>context.nationalSecurityDivision</code> is not <code>true</code> and <code>phaseCode !== 'SPNA'</code>. It shows the "Start an OASys review" prompt in place of a phase column, since <code>showPhaseColumn</code> also evaluates falsy when there is no <code>currentPhase</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        oasysReviewHref: '#',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: null,
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
-        context: {
-          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-
-
-      <h2 class="govuk-heading-m">In Flight (OASys started but not completed)</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is not in a National Security Division sentence and <code>currentPhase.phase.code</code> is <code>SPNS</code> in the supervision package API response</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-      "currentPhase": { "phase": { "code": "SPNS" } },
-      "context": { "nationalSecurityDivision": false }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentPhase.phase.code === 'SPNS'</code>, provided <code>context.nationalSecurityDivision</code> is not <code>true</code>. It shows a "Complete an OASys review" prompt and hides the next-appointment section and action buttons until the package is confirmed.</p>      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        oasysReviewHref: '#',
-        nextAppointment: {
-          href: '#'
-        },
-        currentPhase: {
-          phase: {
-            code: 'SPNS',
-            description: 'Not yet started'
-          }
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2026-12-31',
-          isFirstYear: true,
-          appointments: { allowance: 22, scheduled: 0, completed: 0 }
-        },
-        context: {
-          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">Final third</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is in the Final third phase of the sentence</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "FTHRD" } },
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentPhase.phase.code === 'FTHRD'</code>.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'FTHRD', description: 'Final Third' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 12
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 20 }
-        },
-        context: {
-          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">In breach</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is in the Early engagement phase of the sentence and is in breach</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": { "phase": { "code": "INIT" } },
-  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "inBreach": true }
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">false</mark> },
+        "inBreach": false,
+        "endDate": "2028-08-30"
+      }
     ]
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by any sentence in <code>context.sentences</code> having <code>inBreach === true</code> with a <code>supervisionPackage.code</code> other than <code>'SPX'</code>.</p>
       {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 0
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 0 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
+          name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: true
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: false },
+          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
+        },
+        earlyEngagement: { weeks: 3, completed: 0 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
       }) }}
 
-      <h2 class="govuk-heading-m">OPD</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is receiving Offender personality disorder (OPD) treatment</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <h3 class="govuk-heading-s">Woman</h3>
+      <p class="govuk-body">Triggered by <code>context.gender: "Female"</code> plus <code>integratedOffenderManagementRedRated: false</code>, and a <code>tierScore</code> macro param of "C"-"G", which together show the "discretionary appointments" text for women:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "offenderPersonalDisorderPathway": true
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.offenderPersonalDisorderPathway === true</code>, regardless of <code>currentPhase.phase.code</code> or the IPP/life-sentence flags.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 0
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 0 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: true,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">No appointments remaining</h2>
-      <p class="govuk-body">Display the supervision package when this year's appointment allowance has been used up</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 0
+  },
   "currentYear": {
-    "appointments": { "allowance": 46, "completed": 46 }
-  }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not true.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
-        arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        phase: {
-          name: { code: 'INIT', description: 'Early Engagement' },
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 12
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 46 }
-        },
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">Unlawfully at large</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is unlawfully at large</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 0
+    }
+  },
   "context": {
-    "sentences": { "custody": { "location": { "code": "UATLRG" } } }
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": <mark style="background:#ffdd00;">"Female"</mark>,
+    "integratedOffenderManagementRedRated": <mark style="background:#ffdd00;">false</mark>,
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": false },
+        "inBreach": false,
+        "endDate": "2028-08-30"
+      }
+    ]
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.location.code === 'UATLRG'</code>, and takes priority over the "In custody" badge.</p>
       {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
+        tierScore: 'D',
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
-          gender: 'Male',
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Female',
           integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              custody: { location: { code: 'UATLRG' } }
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: false },
+          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
+        },
+        earlyEngagement: { weeks: 3, completed: 0 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
       }) }}
 
-      <h2 class="govuk-heading-m">In custody</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is in custody</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <h3 class="govuk-heading-s">Custodial</h3>
+      <p class="govuk-body">Triggered by <code>context.sentences[].type.isCustodial: true</code> with <code>custody.status.code: "B"</code> (Released - On Licence), during early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 1
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 1
+    }
+  },
   "context": {
-    "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } }
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": {
+            "code": <mark style="background:#ffdd00;">"B"</mark>,
+            "description": "Released - On Licence"
+          },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-02-18"
+      }
+    ]
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.status.code</code> being one of <code>D</code> (In Custody), <code>I</code> (In Custody - IRC) or <code>R</code> (In Custody - RoTL), provided neither the "Unlawfully at large" condition is met.</p>
       {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
+          name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              custody: { status: { code: 'D', description: 'In Custody' } }
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-02-18'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 1 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h2 class="govuk-heading-m">IOM: Red</h2>
-      <p class="govuk-body">Display the supervision package when the PoP is rated red under Integrated Offender Management (IOM)</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while still in early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 1
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 1
+    }
+  },
   "context": {
-    "integratedOffenderManagementRedRated": true
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": <mark style="background:#ffdd00;">"2026-08-06"</mark>
+        },
+        "inBreach": false,
+        "endDate": "2027-02-18"
+      }
+    ]
   }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.integratedOffenderManagementRedRated === true</code>.</p>
       {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'INIT', description: 'Early Engagement' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2026-04-01'
-        },
-        earlyEngagement: {
-          startDate: '2026-07-10T00:00:00Z',
-          endDate: '2026-10-31T00:00:00Z',
-          weeks: 12,
-          completed: 2
-        },
-        currentYear: {
-
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 2, completed: 2 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
+          name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          integratedOffenderManagementRedRated: true,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-07-08',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-07-10' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: true },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-02-18'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 1 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h2 class="govuk-heading-m">No appointments remaining</h2>
-      <p class="govuk-body">Display the supervision package when the PoP has used all of their allowed appointments for the current year</p>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
+      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite still being on a custodial licence, during early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentYear": { "appointments": { "allowance": 46, "completed": 46 } }
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 1
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 1
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">false</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-02-18"
+      }
+    ]
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>currentYear.appointments.completed</code> being greater than or equal to <code>currentYear.appointments.allowance</code>, provided <code>context.offenderPersonalDisorderPathway</code> is not <code>true</code> (OPD takes priority and suppresses this badge).</p>
       {{ supervisionPackage({
-        tierScore: 'B',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'STD', description: 'Standard Supervision' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2027-01-07'
-        },
-        earlyEngagement: {
-          startDate: '2026-01-01T00:00:00Z',
-          endDate: '2026-03-26T00:00:00Z',
-          weeks: 12,
-          completed: 12
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 46 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
+          name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          integratedOffenderManagementRedRated: false,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-01-01',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-01-01' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
-      }) }}
-
-      <h2 class="govuk-heading-m">Custody status</h2>
-      <p class="govuk-body">Displays a status badge derived from the PoP's custody location, recall status and custody status, in that priority order.</p>
-
-      <h3 class="govuk-heading-s">Unlawfully at large</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": { "sentences": { "custody": { "location": { "code": "UATLRG" } } } }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.location.code === 'UATLRG'</code>, which takes priority over the recall and in-custody statuses below.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          offenderPersonalDisorderPathway: false,
-          integratedOffenderManagementRedRated: false,
-          sentences: [
-            {
-              custody: { location: { code: 'UATLRG' } }
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-02-18'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 1 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
       <h3 class="govuk-heading-s">In custody</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (Recalled to custody), which overrides the normal early engagement text with an in-custody/recalled tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": { "sentences": { "custody": { "status": { "code": "D", "description": "In Custody" } } } }
-}</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.sentences.custody.status.code</code> being one of <code>'D'</code>, <code>'I'</code> or <code>'R'</code> (shown here as <code>'D'</code>, "In Custody"), provided the location and recall statuses above do not apply.</p>
-      {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        historyText: 'View tier change history',
-        context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 1
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 1
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": {
+            "code": <mark style="background:#ffdd00;">"R"</mark>,
+            "description": <mark style="background:#ffdd00;">"Recalled to custody"</mark>
           },
-          offenderPersonalDisorderPathway: false,
-          integratedOffenderManagementRedRated: false,
-          sentences: [
-            {
-              custody: { status: { code: 'D', description: 'In Custody' } }
-            }
-          ]
-        }
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-02-18"
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'R', description: 'Recalled to custody' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-02-18'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 1 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h2 class="govuk-heading-m">IOM (Integrated Offender Management) red rated</h2>
-      <p class="govuk-body">Display the supervision package when the PoP has an IOM red RAG status</p>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-supervision-conditional">
+
+      <h3 class="govuk-heading-s">Lifer/IPP</h3>
+      <p class="govuk-body">Triggered by <code>context.liferCategory.code: "LF01"</code>, which removes the end/reset date and shows "There is no supervision end date" instead:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": { "integratedOffenderManagementRedRated": true }
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "liferCategory": {
+      <mark style="background:#ffdd00;">"code": "LF01"</mark>,
+      "description": "Imprisonment for Public Protection"
+    },
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-31"
+      }
+    ]
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by <code>context.integratedOffenderManagementRedRated === true</code>. Note that when <code>context.nationalSecurityDivision</code> is also <code>true</code> alongside eligibility for the final third stage, the final third progress card is shown instead (see below) and this badge is not rendered.</p>
       {{ supervisionPackage({
-        tierScore: 'C',
-        tag: { text: null, color: null },
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
-        historyText: 'View tier change history',
-        allAppointmentsHref: '#',
         arrangeAppointmentHref: '#',
-        deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
-        crn: 'X991651',
-        nextAppointment: {
-          date: '2026-08-19T15:15:00+01:00',
-          description: 'Planned Telephone Contact (NS)',
-          href: '#'
-        },
-        currentPhase: {
-          phase: { code: 'STD', description: 'Standard Supervision' },
-          supervisionPackage: { code: 'SPA', description: 'A' },
-          eventNumber: '1',
-          startDate: '2026-01-01',
-          endDate: '2027-01-07'
-        },
-        earlyEngagement: {
-          startDate: '2026-01-01T00:00:00Z',
-          endDate: '2026-03-26T00:00:00Z',
-          weeks: 12,
-          completed: 12
-        },
-        currentYear: {
-          startDate: '2026-07-08',
-          endDate: '2027-01-07',
-          isFirstYear: true,
-          appointments: { allowance: 46, scheduled: 0, completed: 14 }
-        },
+        allAppointmentsHref: '#',
         context: {
-                  name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          },
-          date: '2026-07-15T10:02:47.256918704+01:00',
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          liferCategory: { code: 'LF01', description: 'Imprisonment for Public Protection' },
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-31'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      <h3 class="govuk-heading-s">End date</h3>
+      <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2027-08-30") falls before <code>currentYear.endDate</code> ("2027-08-31"), so the sentence ends first and the package shows an "ends on" date:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": <mark style="background:#ffdd00;">"2027-08-31"</mark>,
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": <mark style="background:#ffdd00;">"2027-08-30"</mark>
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      <h3 class="govuk-heading-s">Reset Date</h3>
+      <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2028-08-30") falls after <code>currentYear.endDate</code> ("2027-08-31"), so the sentence year resets first and the package shows a "resets on" date:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": <mark style="background:#ffdd00;">"2027-08-31"</mark>,
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": <mark style="background:#ffdd00;">"2028-08-30"</mark>
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2028-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, during standard supervision (<code>currentPhase.phase.code: "STD"</code>):</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD",
+      "description": "Standard Supervision"
+    },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": <mark style="background:#ffdd00;">"2026-08-06"</mark>
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: true },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, during standard supervision:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": <mark style="background:#ffdd00;">"Female"</mark>,
+    "integratedOffenderManagementRedRated": <mark style="background:#ffdd00;">false</mark>,
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
+}</code></pre>
+      <p class="govuk-body">Triggered by <code>context.gender: "Female"</code> plus <code>integratedOffenderManagementRedRated: false</code> and a <code>tierScore</code> macro param of "C"-"G", shown here as <mark style="background:#ffdd00;">tierScore: "D"</mark> (any of C-G).</p>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
+        tierScore: 'D',
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Female',
+          integratedOffenderManagementRedRated: false,
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-opd-conditional">
+
+      <h3 class="govuk-heading-s">OPD</h3>
+      <p class="govuk-body">Triggered by <code>context.offenderPersonalDisorderPathway: true</code>, which shows OPD treatment text instead of the normal stage text:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "offenderPersonalDisorderPathway": <mark style="background:#ffdd00;">true</mark>,
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": false },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          offenderPersonalDisorderPathway: true,
+          finalThirdEligibility: { eligible: false },
+          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2027-08-30' }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-red-rated-iom-conditional">
+
+      <h3 class="govuk-heading-s">End date</h3>
+      <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> with <code>currentPhase.phase.code: "IOM"</code>, and a sentence <code>endDate</code> ("2027-08-30") before <code>currentYear.endDate</code> ("2027-08-31") so it shows an "ends on" date:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": <mark style="background:#ffdd00;">"IOM"</mark>,
+      "description": "Red Rated IOM"
+    },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": <mark style="background:#ffdd00;">"2027-08-31"</mark>,
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "integratedOffenderManagementRedRated": <mark style="background:#ffdd00;">true</mark>,
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": <mark style="background:#ffdd00;">"2027-08-30"</mark>
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
-          offenderPersonalDisorderPathway: false,
-          intensiveSupervisionCourt: false,
-          nationalSecurityDivision: false,
-          finalThirdEligibility: { eligible: false, since: '2026-07-10' },
-          sentences: [
-            {
-              eventNumber: '1',
-              startDate: '2026-01-01',
-              endDate: '2027-01-07',
-              supervisionPackage: { code: 'SPA', description: 'A' },
-              type: {
-                code: '307',
-                description: 'Adult Custody < 12m',
-                isCustodial: true
-              },
-              custody: {
-                status: { code: 'B', description: 'Released - On Licence' },
-                finalThirdDate: '2026-11-07',
-                releases: [ { releaseDate: '2026-01-01' } ]
-              },
-              inBreach: false
-            }
-          ]
-        }
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h2 class="govuk-heading-m">Provisional tier</h2>
-      <p class="govuk-body">A tier score has been calculated but is still provisional, so it is shown with an orange "Provisional" tag and has a phase</p>
-      <p class="govuk-body">This is triggered by the <code>provisional</code> field on the Tier API's <code>GET /v3/crn/{crn}/tier</code> response, and the <code>phase</code> field on the Supervision Package API response:</p>
+      <h3 class="govuk-heading-s">Reset Date</h3>
+      <p class="govuk-body">Triggered by a sentence <code>endDate</code> ("2028-08-30") after <code>currentYear.endDate</code> ("2027-08-31") while red-rated IOM, so the sentence year resets first and shows a "resets on" date:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "D2",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": true
+  "currentPhase": {
+    "phase": { "code": "IOM", "description": "Red Rated IOM" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": <mark style="background:#ffdd00;">"2027-08-31"</mark>,
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "integratedOffenderManagementRedRated": true,
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": <mark style="background:#ffdd00;">"2028-08-30"</mark>
+      }
+    ]
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API's <code>provisional === true</code>, reflected here as <code>tag: { text: "Provisional" }</code>.</p>
       {{ supervisionPackage({
-        tierScore: "C",
-        tag: { text: "Provisional", color: "orange" },
-        historyHref: "#",
+        currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
         context: {
-          name: {
-            forename: 'Stuart',
-            surname: 'Morris'
-          }
-        }
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2028-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h2 class="govuk-heading-m">Missing tier</h2>
-      <p class="govuk-body">No tier score is available for this case, so it is shown with a red "Missing" tag.</p>
-      <p class="govuk-body">This is triggered when the Tier API's <code>GET /v3/crn/{crn}/tier</code> response has a <code>tierScore</code> of <code>"MISSING"</code>:</p>
+      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> plus <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while red-rated IOM:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "MISSING",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": false
+  "currentPhase": {
+    "phase": { "code": "IOM", "description": "Red Rated IOM" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "integratedOffenderManagementRedRated": <mark style="background:#ffdd00;">true</mark>,
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": <mark style="background:#ffdd00;">"2026-08-06"</mark>
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API's <code>tierScore === 'MISSING'</code>, reflected here as <code>tag: { text: "Missing" }</code>.</p>
       {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Missing", color: "red" },
-        historyHref: "#"
+        currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          finalThirdEligibility: { eligible: true },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h2 class="govuk-heading-m">Unavailable tier</h2>
-      <p class="govuk-body">The tier could not be retrieved, so it is shown with a grey "Unavailable" tag. This is not something the Tier API returns directly &mdash; it is what <code>getTierDetails</code> in <code>MPoPComponents.ts</code> falls back to when the <code>GET /v3/crn/{crn}/tier</code> call errors or resolves to no data (for example a 404 or 500 response).</p>
-      <p class="govuk-body">This variant is triggered when the Tier API call errors or resolves to no data (404/500), which <code>getTierDetails</code> maps to <code>tag: { text: "Unavailable" }</code>.</p>
-      {{ supervisionPackage({
-        tierScore: "",
-        tag: { text: "Unavailable", color: "grey" },
-        historyHref: "#"
-      }) }}
-
-      <h2 class="govuk-heading-m">Confirmed tier with history link</h2>
-      <p class="govuk-body">A confirmed tier score with no tag, including a link to view the tier change history.</p>
-      <p class="govuk-body">This is the standard shape returned by the Tier API's <code>GET /v3/crn/{crn}/tier</code> when a tier has been confirmed (not missing or provisional):</p>
+      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, while red-rated IOM:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "tierScore": "C",
-  "calculationId": "123e4567-e89b-12d3-a456-426614174000",
-  "calculationDate": "2021-04-23T18:25:43.511Z",
-  "changeReason": "A registration was added",
-  "provisional": false
+  "currentPhase": {
+    "phase": { "code": "IOM", "description": "Red Rated IOM" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "integratedOffenderManagementRedRated": true,
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">false</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
 }</code></pre>
-      <p class="govuk-body">This variant is triggered by the Tier API returning a <code>tierScore</code> with <code>provisional === false</code> (and not <code>'MISSING'</code>), reflected here as <code>tag: { text: null }</code>.</p>
       {{ supervisionPackage({
-        tierScore: "C",
-        tag: { text: null, color: null },
-        historyHref: "#",
-        historyText: "View tier change history"
+        currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          integratedOffenderManagementRedRated: true,
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h2 class="govuk-heading-m">Final third progress</h2>
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-custodial-final-third-conditional">
+
+      <h3 class="govuk-heading-s">Custodial Final third stage</h3>
+      <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "FTHRD"</code> on a custodial sentence that is eligible for the final third (not a National Security Division case, so it uses the normal supervision package view rather than the final third progress table):</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": <mark style="background:#ffdd00;">"FTHRD"</mark>,
+      "description": "Final Third"
+    },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": true },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'FTHRD', description: 'Final Third' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: true },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      </div>
+
+      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-in-flight-conditional">
+
+      <h3 class="govuk-heading-s">Day 1</h3>
+      <p class="govuk-body">Triggered by a missing <code>currentPhase</code> ("currentPhase": null), shown on day 1 before any phase has been calculated:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  <mark style="background:#ffdd00;">"currentPhase": null</mark>,
+  "earlyEngagement": {
+    "weeks": 0,
+    "completed": 0
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 0,
+      "scheduled": 0,
+      "completed": 0
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": []
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: null,
+        oasysReviewHref: '#',
+        historyHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: []
+        },
+        earlyEngagement: { weeks: 0, completed: 0 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 0, scheduled: 0, completed: 0 } }
+      }) }}
+
+      <h3 class="govuk-heading-s">Day 1 or shortly after</h3>
+      <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "SPNS"</code> (not yet started), shown on day 1 or shortly after once a phase has been calculated but supervision hasn't started:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": <mark style="background:#ffdd00;">"SPNS"</mark>,
+      "description": "Not yet started"
+    },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 0,
+    "completed": 0
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 0,
+      "scheduled": 0,
+      "completed": 0
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": []
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' }, endDate: '2027-08-31' },
+        oasysReviewHref: '#',
+        historyHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: []
+        },
+        earlyEngagement: { weeks: 0, completed: 0 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 0, scheduled: 0, completed: 0 } }
+      }) }}
+
+      </div>
+
+
+        <h2 class="govuk-heading-m">Final third progress</h2>
       <p class="govuk-body">Displays the final third progress card.</p>
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
@@ -2049,6 +1955,11 @@ const html = env.renderString(
   }) }}
     </div>
   </main>
+
+  <script type="module">
+    import { initAll } from 'https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.js'
+    initAll()
+  </script>
 </body>
 </html>
 `,
