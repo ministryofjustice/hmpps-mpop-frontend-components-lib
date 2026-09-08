@@ -515,6 +515,9 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s">End date</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2027-08-30") falls before <code>currentYear.endDate</code> ("2027-08-31"), so the sentence ends first and the package shows an "ends on" date:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
   },
   "earlyEngagement": {
@@ -568,6 +571,9 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s">Reset Date</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2028-08-30") falls after <code>currentYear.endDate</code> ("2027-08-31"), so the sentence year resets first and the package shows a "resets on" date:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
   },
   "earlyEngagement": {
@@ -621,6 +627,10 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s">Final Third eligible</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, during standard supervision (<code>currentPhase.phase.code: "STD"</code>):</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": {
+      "code": "STD",
       "description": "Standard Supervision"
     },
     "endDate": "2027-08-31"
@@ -1175,275 +1185,6 @@ const html = env.renderString(
 
       </div>
 
-       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">Supervision Package Summary</h1>
-       <h3 class="govuk-heading-s">Early engagement</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    "phase": {
-      "code": "INIT"
-    }
-  }
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'INIT' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 4,
-    completed: 2
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 0,
-      scheduled: 1,
-      completed: 0
-    }
-  }
-  }) }}
-
-   <h3 class="govuk-heading-s">Supervision stage</h3>
-      <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    "phase": {
-      "code": "STD"
-    }
-  }
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
-
-  <h3 class="govuk-heading-s">Supervision stage with breach warning</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    "phase": {
-      "code": "STD"
-    }
-  },
-  "context": {
-    sentences: [
-      {
-        inBreach: true
-      }
-    ]
-  }
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    },
-    sentences: [
-      {
-        inBreach: true
-      }
-    ]
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
-
-  <h3 class="govuk-heading-s">Supervision stage with recall warning</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    "phase": {
-      "code": "STD"
-    }
-  },
-  "context": {
-    "recallStatus": {
-      "code": "R",
-      "description": "Recall"
-    }
-  }
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    },
-    recallStatus: {
-      code: 'R',
-      description: 'Recall'
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
-
-  <h3 class="govuk-heading-s">Supervision stage with all appointments used</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "currentPhase": {
-    "phase": {
-      "code": "STD"
-    }
-  },
-  "earlyEngagement": {
-    "weeks": 0,
-    "completed": 0
-  },
-  "currentYear": {
-    "appointments": {
-      "allowance": 4,
-      "scheduled": 1,
-      "completed": 4
-    }
-  }
-
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 4
-    }
-  }
-  }) }}
-
-  <h3 class="govuk-heading-s">Final third</h3>
-      <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  "context": {
-    "finalThirdEligibility": {
-      "eligible": true
-    },
-    "nationalSecurityDivision": true,
-    "sentences": [
-      {
-        "type": {
-          "isCustodial": true
-        },
-        "custody": {
-          "finalThirdDate": "2026-08-06"
-        }
-      }
-    ]
-  }
-}</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    nationalSecurityDivision: true,
-    finalThirdEligibility: {
-      eligible: true
-    },
-    sentences: [
-      {
-        type: { isCustodial: true },
-        custody: { finalThirdDate: '2026-08-06' }
-      }
-    ]
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
 
         <h2 class="govuk-heading-m">Final third progress</h2>
       <p class="govuk-body">Displays the final third progress card.</p>
