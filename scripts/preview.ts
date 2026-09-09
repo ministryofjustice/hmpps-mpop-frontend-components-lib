@@ -389,8 +389,8 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">In custody</h3>
-      <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (Recalled to custody), which overrides the normal early engagement text with an in-custody/recalled tag:</p>
+      <h3 class="govuk-heading-s">In Custody</h3>
+      <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (In Custody), which overrides the normal early engagement text with an in-custody/recalled tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
@@ -418,7 +418,7 @@ const html = env.renderString(
         "custody": {
           "status": {
             "code": <mark style="background:#ffdd00;">"R"</mark>,
-            "description": <mark style="background:#ffdd00;">"Recalled to custody"</mark>
+            "description": <mark style="background:#ffdd00;">"In Custody"</mark>
           },
           "finalThirdDate": "2026-08-06"
         },
@@ -439,7 +439,7 @@ const html = env.renderString(
           finalThirdEligibility: { eligible: false },
           sentences: [{
             type: { isCustodial: true },
-            custody: { status: { code: 'R', description: 'Recalled to custody' }, finalThirdDate: '2026-08-06' },
+            custody: { status: { code: 'R', description: 'In Custody' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
             endDate: '2027-02-18'
           }]

@@ -19,8 +19,8 @@
     supervisionPackage: params
 }) }}
 </div>
-{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase) %}
-<div class='govuk-width-container supervision-package' role='region' aria-label='Supervision package'>
+{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase) and sentence %}
+<div class='supervision-package' role='region' aria-label='Supervision package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
         <h3 class='govuk-heading-m govuk-!-margin-bottom-0'>{{ 'Supervision package: ' ~ sentenceTypeValue if sentenceTypeValue else 'Supervision package' }}</h3>

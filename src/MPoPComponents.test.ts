@@ -284,7 +284,7 @@ describe('MPoPComponents', () => {
   describe('getSupervisionPackage', () => {
     const mockSupervisionPackage = {
       phase: {
-        name: { code: 'SENT', description: 'In Custody' },
+        name: { code: 'SENT', description: 'In custody' },
         startDate: '2026-07-08T00:00:00Z',
         endDate: '2026-08-10T00:00:00Z',
       },
@@ -521,7 +521,7 @@ describe('MPoPComponents', () => {
     const mockFrontendContext = {
       currentPhase: {
         supervisionPackage: { code: 'SPA', description: 'A' },
-        phase: { code: 'SENT', description: 'In Custody' },
+        phase: { code: 'SENT', description: 'In custody' },
         eventNumber: '1',
         startDate: '2026-07-08',
         endDate: '2027-01-07',
