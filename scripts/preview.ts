@@ -70,7 +70,19 @@ const html = env.renderString(
         tier: "B4",
         historyHref: "#",
         managedBy: "Jack Frost (Worksop Probation Office)",
+        managedByHref: "#",
         riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
+      }) }}
+
+      <h2 class="govuk-heading-m">Managed by: Unallocated (not clickable)</h2>
+      <p class="govuk-body">When there's no responsible officer, or the managed by data failed to load, <code>managedByHref</code> is omitted and the field renders as plain text instead of a link.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated"
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

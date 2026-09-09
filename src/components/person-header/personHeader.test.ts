@@ -41,12 +41,24 @@ describe('person-header', () => {
     expect(link?.getAttribute('href')).toBe('/tier-history/D004851')
   })
 
-  it('renders the managed by value as plain (non-clickable) text', () => {
-    const document = renderComponent({ managedBy: 'Jack Frost (Worksop Probation Office)' })
+  it('renders the managed by value as plain (non-clickable) text when no href is given', () => {
+    const document = renderComponent({ managedBy: 'Unallocated' })
 
     const managedBy = document.querySelector('[data-qa="managedBy"]')
     expect(managedBy?.tagName).toBe('SPAN')
-    expect(managedBy?.textContent?.trim()).toBe('Jack Frost (Worksop Probation Office)')
+    expect(managedBy?.textContent?.trim()).toBe('Unallocated')
+  })
+
+  it('renders the managed by value as a link when managedByHref is given', () => {
+    const document = renderComponent({
+      managedBy: 'Jack Frost (Worksop Probation Office)',
+      managedByHref: '/case/D004851/personal-details/staff-contacts',
+    })
+
+    const link = document.querySelector('[data-qa="managedBy"]')
+    expect(link?.tagName).toBe('A')
+    expect(link?.textContent?.trim()).toBe('Jack Frost (Worksop Probation Office)')
+    expect(link?.getAttribute('href')).toBe('/case/D004851/personal-details/staff-contacts')
   })
 
   it('renders pre-rendered risk badge markup as-is', () => {
