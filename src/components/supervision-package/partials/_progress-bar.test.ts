@@ -24,7 +24,7 @@ describe('_progress-bar partial', () => {
         const document = renderPartial({
           currentPhase: { phase: { code: 'INIT' } },
           earlyEngagement: { completed: appointmentsEarlyEngagementCompleted, weeks: earlyEngagementWeeks },
-          currentYear: { appointments: { scheduled: 0 } },
+          currentYear: { appointments: { scheduled: 0, completed: appointmentsEarlyEngagementCompleted } },
         })
 
         const bar = document.querySelector(
@@ -71,7 +71,7 @@ describe('_progress-bar partial', () => {
         const document = renderPartial({
           currentPhase: { phase: { code: 'INIT' } },
           earlyEngagement: { completed: appointmentsEarlyEngagementCompleted, weeks: earlyEngagementWeeks },
-          currentYear: { appointments: { scheduled: 0 } },
+          currentYear: { appointments: { scheduled: 0, completed: appointmentsEarlyEngagementCompleted } },
         })
 
         const paragraphs = Array.from(document.querySelectorAll('p.govuk-body-l'))
@@ -140,7 +140,7 @@ describe('_progress-bar partial', () => {
       const document = renderPartial({
         currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 3, weeks: 0 },
-        currentYear: { appointments: { scheduled: 0 } },
+        currentYear: { appointments: { scheduled: 0, completed: 3 } },
       })
 
       const bar = document.querySelector(
@@ -153,8 +153,8 @@ describe('_progress-bar partial', () => {
     it('renders 0% width when appointmentsAllowance equals earlyEngagementCompleted (non-early)', () => {
       const document = renderPartial({
         currentPhase: { phase: { code: 'STD' } },
-        currentYear: { appointments: { allowance: 5, completed: 3, scheduled: 0 } },
-        earlyEngagement: { completed: 5 },
+        currentYear: { appointments: { completed: 5, scheduled: 0 } },
+        earlyEngagement: { completed: 3 },
       })
 
       const bar = document.querySelector(
@@ -170,7 +170,7 @@ describe('_progress-bar partial', () => {
       const document = renderPartial({
         currentPhase: { phase: { code: 'INIT' } },
         earlyEngagement: { completed: 7, weeks: 5 },
-        currentYear: { appointments: { scheduled: 0 } },
+        currentYear: { appointments: { scheduled: 0, completed: 7 } },
       })
 
       const bar = document.querySelector(
