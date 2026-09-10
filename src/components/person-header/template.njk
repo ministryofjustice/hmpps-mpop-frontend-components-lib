@@ -14,7 +14,12 @@
                 <span class='govuk-!-font-weight-bold'>Tier:</span> <a class='govuk-link govuk-link--inverse' href='{{ params.historyHref }}' data-qa='tier'>{{ params.tier }}</a>
             </li>
             <li>
-                <span class='govuk-!-font-weight-bold'>Managed by:</span> <span class='person-header__managed-by' data-qa='managedBy'>{{ params.managedBy }}</span>
+                <span class='govuk-!-font-weight-bold'>Managed by:</span>
+                {% if params.managedByHref %}
+                    <a class='govuk-link govuk-link--inverse' href='{{ params.managedByHref }}' data-qa='managedBy'>{{ params.managedBy }}</a>
+                {% else %}
+                    <span data-qa='managedBy'>{{ params.managedBy }}</span>
+                {% endif %}
             </li>
         </ul>
     </div>
