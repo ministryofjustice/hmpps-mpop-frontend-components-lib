@@ -5,9 +5,9 @@ describe('isInCustody', () => {
   it.each(['D', 'I', 'R'])('returns the description when a sentence has custody status code %s', code => {
     expect(
       isInCustody([
-        { supervisionPackage: { code: 'SPA' }, custody: { status: { code, description: 'In Custody' } } },
+        { supervisionPackage: { code: 'SPA' }, custody: { status: { code, description: 'In custody' } } },
       ] as FrontendSentence[]),
-    ).toBe('In Custody')
+    ).toBe('In custody')
   })
 
   it('returns undefined when no sentence has a custody status code', () => {
@@ -19,11 +19,11 @@ describe('isInCustody', () => {
   it('returns the description of the first matching sentence when multiple sentences qualify', () => {
     expect(
       isInCustody([
-        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In Custody' } } },
+        { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In custody' } } },
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'C', description: 'Community custody' } } },
-        { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'I', description: 'In Custody - IRC' } } },
+        { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'I', description: 'In custody - IRC' } } },
       ] as FrontendSentence[]),
-    ).toBe('In Custody')
+    ).toBe('In custody')
   })
 
   it('returns undefined when sentences is undefined', () => {
@@ -50,7 +50,7 @@ describe('isInCustody', () => {
       isInCustody(
         [
           { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'B', description: 'Bailed' } } },
-          { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'D', description: 'In Custody' } } },
+          { supervisionPackage: { code: 'SPB' }, custody: { status: { code: 'D', description: 'In custody' } } },
         ] as FrontendSentence[],
         ['X'],
       ),

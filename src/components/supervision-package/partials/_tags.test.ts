@@ -138,9 +138,9 @@ describe('_tags partial', () => {
   describe('In custody badge', () => {
     it.each`
       code   | description
-      ${'D'} | ${'In Custody'}
-      ${'I'} | ${'In Custody - IRC'}
-      ${'R'} | ${'In Custody - RoTL'}
+      ${'D'} | ${'In custody'}
+      ${'I'} | ${'In custody - IRC'}
+      ${'R'} | ${'In custody - RoTL'}
       ${'C'} | ${'Community custody'}
     `('shows the "$description" badge when sentences.custody.status.code is $code', ({ code, description }) => {
       const document = renderPartial({ context: { sentences: [{ custody: { status: { code, description } } }] } })
@@ -162,16 +162,16 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).not.toContain('In custody')
     })
 
-    it('shows the "In Custody" badge when the only matching sentence has code SPX', () => {
+    it('shows the "In custody" badge when the only matching sentence has code SPX', () => {
       const document = renderPartial({
         context: {
           sentences: [
-            { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In Custody' } } },
+            { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In custody' } } },
           ],
         },
       })
 
-      expect(getBadgeText(document)).toContain('In Custody')
+      expect(getBadgeText(document)).toContain('In custody')
     })
 
     it('shows the "Unlawfully at large" badge when sentences.custody.location.code is UATLRG', () => {

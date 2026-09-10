@@ -9,7 +9,7 @@
 {% if params.context.sentences | isAtLarge  %}
     <strong class='app-status-badge govuk-tag govuk-tag--yellow'>Unlawfully at large</strong>
 {% elseif params.context.sentences | isInCustody %}
-    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.context.sentences | isInCustody }}</strong>
+    <strong class='app-status-badge govuk-tag govuk-tag--yellow'>{{ params.context.sentences | isInCustody | toTitleCase }}</strong>
 {% endif %}
 
 {% if params.context.offenderPersonalDisorderPathway %}

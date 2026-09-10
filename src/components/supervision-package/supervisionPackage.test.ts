@@ -29,6 +29,7 @@ describe('supervision-package', () => {
       tag,
       historyHref: '#',
       currentPhase: { phase: { code: 'STD' } },
+      context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -59,6 +60,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-01-15',
       })
@@ -73,6 +75,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-03-20',
       })
@@ -89,6 +92,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
         createdAt: '2026-01-15',
       })
 
@@ -102,6 +106,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
         updatedAt: '2026-03-20',
       })
 
@@ -125,7 +130,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
       allAppointmentsHref: '#',
@@ -144,7 +149,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'STD', description: 'Standard' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       currentYear: {
         isFirstYear: true,
         endDate: '2026-08-15',
@@ -170,7 +175,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'FTHRD', description: 'Final third' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       allAppointmentsHref: '#',
     })
 
@@ -189,7 +194,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'FTHRD', description: 'Final third' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       allAppointmentsHref: '#',
     })
 
@@ -209,7 +214,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: phaseCode, description: 'Other' } },
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
         allAppointmentsHref: '#',
       })
 
@@ -343,6 +348,7 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD', description: 'Standard' } },
         context: {
           nationalSecurityDivision: false,
+          sentences: [{ supervisionPackage: { code: 'INIT' } }],
         },
       })
 
@@ -357,7 +363,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
       oasysReviewHref: '/oasys/review/123',
       allAppointmentsHref: '#',
@@ -446,7 +452,7 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'STD' } },
-      context: { name: { forename: 'Alex' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
       oasysReviewHref: '/oasys/review/123',
     })
 
@@ -461,7 +467,11 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' }, offenderPersonalDisorderPathway: true },
+      context: {
+        name: { forename: 'Alex' },
+        offenderPersonalDisorderPathway: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+      },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -484,7 +494,11 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' }, integratedOffenderManagementRedRated: true },
+      context: {
+        name: { forename: 'Alex' },
+        integratedOffenderManagementRedRated: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+      },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -499,7 +513,11 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' }, offenderPersonalDisorderPathway: true },
+      context: {
+        name: { forename: 'Alex' },
+        offenderPersonalDisorderPathway: true,
+        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+      },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
     })
@@ -514,7 +532,11 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' }, liferCategory: { code: 'LF99' } },
+      context: {
+        name: { forename: 'Alex' },
+        liferCategory: { code: 'LF99' },
+        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+      },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
     })
@@ -530,7 +552,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -549,7 +571,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -563,7 +585,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: null,
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -585,7 +607,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
       })
 
       expect(document.body.textContent).not.toContain('Start an OASys review')
@@ -596,7 +618,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -612,7 +634,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: false,
       })
@@ -628,7 +650,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' } },
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -651,6 +673,10 @@ describe('supervision-package', () => {
           startTime: '12:00:00',
           type: { code: 'COAP', description: 'Planned Office Visit (NS)' },
         },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        },
         nextAppointmentHref: '/appointments/123',
       })
 
@@ -670,6 +696,10 @@ describe('supervision-package', () => {
         tag: tierTags.none,
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        },
       })
 
       const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
@@ -684,6 +714,10 @@ describe('supervision-package', () => {
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
         nextAppointment: { date: '2026-08-13', type: { description: 'Home visit' } },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        },
       })
 
       const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
@@ -698,6 +732,10 @@ describe('supervision-package', () => {
       tag: tierTags.missing,
       historyHref: '#',
       currentPhase: { phase: { code: 'STD' } },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+      },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -718,7 +756,7 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD' } },
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, inBreach: true }],
         },
       })
 
@@ -767,6 +805,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
         arrangeAppointmentHref: '/arrange-appointment',
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
       })
 
       expect(document.querySelector('.govuk-button-group')).not.toBeNull()
@@ -818,7 +857,9 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
+          sentences: [
+            { supervisionPackage: { code: 'INIT' }, custody: { status: { code: 'B', description: 'Bailed' } } },
+          ],
         },
       })
 
@@ -878,7 +919,9 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { status: { code: 'B', description: 'Bailed' } } }],
+          sentences: [
+            { supervisionPackage: { code: 'INIT' }, custody: { status: { code: 'B', description: 'Bailed' } } },
+          ],
         },
       })
 

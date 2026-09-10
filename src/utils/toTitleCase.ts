@@ -1,6 +1,6 @@
 export const toTitleCase = (value: string | null | undefined): string => {
   if (!value) return ''
-  const preservedWords = ['(NS)', '(Non', 'NS)']
+  const preservedWords = ['(NS)', '(Non', 'NS)', 'IRC', 'RoTL']
   const lower = value.toLowerCase()
   const titleCased = `${lower.charAt(0).toUpperCase()}${lower.substring(1)}`
 
