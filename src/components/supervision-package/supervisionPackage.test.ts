@@ -953,4 +953,87 @@ describe('supervision-package', () => {
       expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
   })
+
+  describe('provisional tier (SPNK phase with a Provisional tag)', () => {
+    const provisionalTierParams = {
+      tierScore: 'C',
+      tag: tierTags.provisional,
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNK', description: 'Not yet known' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      createdAt: '2026-01-15',
+      updatedAt: '2026-01-15',
+      nextAppointment: { date: '2026-09-10' },
+      arrangeAppointmentHref: '/arrange-appointment',
+    }
+
+    it('still renders the supervision package and the tier tag', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const tagElement = document.querySelector('.govuk-tag')
+      expect(tagElement?.textContent?.trim()).toBe('Provisional')
+      expect(document.body.textContent).toContain(
+        'We will calculate the supervision package once the tier is confirmed.',
+      )
+    })
+
+    it('does not render the package created/changed text', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Next appointment')
+      expect(document.body.textContent).not.toContain('No appointments scheduled')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('still renders the tier change history link', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+    })
+
+    it('renders the package created text when the phase is SPNK but the tag is not Provisional', () => {
+      const document = renderComponent({ ...provisionalTierParams, tag: tierTags.none })
+
+      expect(document.body.textContent).toContain('The supervision package was created on 15 January 2026.')
+    })
+
+    it('renders the next appointment section when the phase is SPNK but the tag is not Provisional', () => {
+      const document = renderComponent({ ...provisionalTierParams, tag: tierTags.none })
+
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Next appointment')
+    })
+
+    it('renders the action button group when the phase is SPNK but the tag is not Provisional', () => {
+      const document = renderComponent({ ...provisionalTierParams, tag: tierTags.none })
+
+      expect(document.querySelector('.govuk-button-group')).not.toBeNull()
+    })
+
+    it('renders the package created text and next appointment section when the tag is Provisional but the phase is not SPNK', () => {
+      const document = renderComponent({
+        ...provisionalTierParams,
+        currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+      })
+
+      expect(document.body.textContent).toContain('The supervision package was created on 15 January 2026.')
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).toContain('Next appointment')
+      expect(document.querySelector('.govuk-button-group')).not.toBeNull()
+    })
+  })
 })

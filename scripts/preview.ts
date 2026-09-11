@@ -124,6 +124,11 @@ const html = env.renderString(
               <input class="govuk-radios__input" id="stage-in-flight" name="stage" type="radio" value="in-flight" data-aria-controls="stage-in-flight-conditional">
               <label class="govuk-label govuk-radios__label" for="stage-in-flight">In Flight</label>
             </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-provisional" name="stage" type="radio" value="provisional" data-aria-controls="stage-provisional-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-provisional">Provisional</label>
+            </div>
           </div>
         </fieldset>
       </div>
@@ -166,6 +171,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -270,6 +276,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -326,6 +333,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -382,6 +390,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -441,6 +450,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -505,6 +515,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -562,6 +573,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -618,6 +630,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -677,6 +690,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -794,6 +808,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -854,6 +869,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -912,6 +928,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -970,6 +987,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -1028,6 +1046,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -1092,6 +1111,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'FTHRD', description: 'Final Third' }, endDate: '2027-08-31' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
@@ -1139,6 +1159,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: null,
         oasysReviewHref: '#',
         historyHref: '#',
@@ -1182,6 +1203,7 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
+        tierScore: 'C',
         currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' }, endDate: '2027-08-31' },
         oasysReviewHref: '#',
         historyHref: '#',
@@ -1198,7 +1220,66 @@ const html = env.renderString(
       </div>
 
 
-        <h2 class="govuk-heading-m">Final third progress</h2>
+
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-provisional-conditional">
+
+      <h3 class="govuk-heading-s">Provisional</h3>
+
+      <p class="govuk-body">The provisional tier is displayed when the current phase code is SPNK (Not Yet Known) and the tier is provisional.</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  currentPhase: {
+    phase: {
+      code: 'SPNK', description: 'Not yet known'
+    },
+    endDate: '2027-08-31'
+    },
+    oasysReviewHref: '#',
+    historyHref: '#',
+    tierScore: 'C',
+    tag: {
+      text: 'Provisional',
+      color: 'blue'
+    },
+    context: {
+      name: { forename: 'Gracie', surname: 'Beatty' },
+      gender: 'Male',
+      finalThirdEligibility: { eligible: false },
+      sentences: []
+    },
+    earlyEngagement: { weeks: 0, completed: 0 },
+    currentYear: {
+      endDate: '2027-08-31',
+      appointments: { allowance: 0, scheduled: 0, completed: 0 }
+    }
+  }
+}</code></pre>
+
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'SPNK', description: 'Not yet known' }, endDate: '2027-08-31' },
+        oasysReviewHref: '#',
+        historyHref: '#',
+        tierScore: 'C',
+        tag: { text: 'Provisional', color: 'orange' },
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 0, completed: 0 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 0, scheduled: 0, completed: 0 } }
+      }) }}
+
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h2 class="govuk-heading-m">Final third progress National Security Division cases</h2>
       <p class="govuk-body">Displays the final third progress card.</p>
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
