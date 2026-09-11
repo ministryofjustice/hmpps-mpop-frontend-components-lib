@@ -278,6 +278,76 @@ describe('supervision-package-summary', () => {
     )
   })
 
+  it('renders the supervision stage with in-custody warning', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        sentences: [{ custody: { status: { description: 'In custody', code: 'D' } } }],
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toContain(
+      'Stuart is in custody. Their appointments are paused.',
+    )
+  })
+
+  it('renders the supervision stage with at large warning', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'STD' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 0,
+        completed: 0,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 4,
+          scheduled: 1,
+          completed: 2,
+        },
+      },
+    })
+    expect(document.querySelector('.govuk-warning-text')?.textContent?.trim()).toContain(
+      'Stuart is unlawfully at large. You should continue to offer appointments.',
+    )
+  })
+
   it('renders the supervision stage with all appointments used', () => {
     const document = renderComponent({
       currentPhase: {
