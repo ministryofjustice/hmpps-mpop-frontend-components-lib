@@ -12,7 +12,10 @@ import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents from '../src/MPoPComponents'
 import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
-const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
+const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url)), {
+  loadPaths: [process.cwd(), 'node_modules'],
+  silenceDeprecations: ['import'],
+}).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
@@ -153,6 +156,7 @@ async function main() {
     dob: personalDetails?.dateOfBirth ?? '',
     age: personalDetails?.age ?? null,
     tierScore,
+    tag,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
   }
 

@@ -16,6 +16,8 @@
        url("https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/assets/fonts/bold-affa96571d-v2.woff") format("woff");
 }
 
+@import "govuk-frontend/dist/govuk/base.import";
+
 .supervision-package {
   border-top: 5px solid #1d70b8;
   border-left: 1px solid #cecece;

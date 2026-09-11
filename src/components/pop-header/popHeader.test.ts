@@ -47,6 +47,25 @@ describe('pop-header', () => {
     expect(document.querySelector('[data-qa="tierLink"]')?.getAttribute('href')).toBe('/tier-history/X123456')
   })
 
+  it('renders the tier tag when both tag text and color are provided', () => {
+    const document = renderComponent({
+      crn: 'X123456',
+      dob: '',
+      tierScore: 'A1',
+      historyHref: '#',
+      tag: { text: 'Provisional', color: 'orange' },
+    })
+
+    const link = document.querySelector('[data-qa="tierLink"]')
+    expect(link?.getAttribute('aria-label')).toBe('Tier: A1 Provisional')
+
+    const tag = document.querySelector('strong.govuk-tag')
+
+    expect(tag?.textContent?.trim()).toBe('Provisional')
+    expect(tag?.classList.contains('govuk-tag--orange')).toBe(true)
+    expect(tag?.getAttribute('aria-hidden')).toBe('true')
+  })
+
   it('renders an empty age when date of birth is blank', () => {
     const document = renderComponent({ crn: 'X123456', dob: '', age: null, tierScore: '', historyHref: '#' })
 
