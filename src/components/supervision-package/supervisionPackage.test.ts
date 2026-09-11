@@ -161,7 +161,7 @@ describe('supervision-package', () => {
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
     const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
-    expect(headings).toContain('Standard stage')
+    expect(headings).toContain('Supervision stage')
 
     expect(document.body.textContent).toContain(
       'Alex has 15 supervision appointments remaining until the supervision stage ends on 15 August 2026.',
