@@ -1260,7 +1260,17 @@ const html = env.renderString(
       name: { forename: 'Gracie', surname: 'Beatty' },
       gender: 'Male',
       finalThirdEligibility: { eligible: false },
-      sentences: []
+      sentences: [
+        {
+          type: { isCustodial: true },
+          custody: {
+            status: { code: 'B', description: 'Released - On Licence' },
+            finalThirdDate: '2026-08-06'
+          },
+          inBreach: false,
+          endDate: '2027-08-30'
+        }
+      ]
     },
     earlyEngagement: { weeks: 0, completed: 0 },
     currentYear: {
