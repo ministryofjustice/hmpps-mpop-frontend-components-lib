@@ -61,6 +61,21 @@ describe('person-header', () => {
     expect(link?.getAttribute('href')).toBe('/case/D004851/personal-details/staff-contacts')
   })
 
+  it('renders the photo when provided', () => {
+    const document = renderComponent({ name: 'Andrew Langley', photo: '/search/prisoner-image/A1234BC' })
+
+    const photo = document.querySelector('[data-qa="personPhoto"]')
+    expect(photo?.tagName).toBe('IMG')
+    expect(photo?.getAttribute('src')).toBe('/search/prisoner-image/A1234BC')
+    expect(photo?.getAttribute('alt')).toBe('Andrew Langley')
+  })
+
+  it('does not render a photo element when not provided', () => {
+    const document = renderComponent({ name: 'Andrew Langley' })
+
+    expect(document.querySelector('[data-qa="personPhoto"]')).toBeNull()
+  })
+
   it('renders pre-rendered risk badge markup as-is', () => {
     const document = renderComponent({
       riskBadges: '<span class="arns-badge-base--medium" data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',

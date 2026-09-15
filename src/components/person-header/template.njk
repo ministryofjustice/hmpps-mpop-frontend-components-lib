@@ -1,27 +1,33 @@
 <div class='person-header'>
     <div class='person-header__band'>
-        <h1 class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name' data-qa='personName'>{{ params.name }}</h1>
+        {% if params.photo %}
+            <img class='person-header__photo' data-qa='personPhoto' src='{{ params.photo }}' alt='{{ params.name }}'>
+        {% endif %}
 
-        <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
-            <span class='govuk-!-font-weight-bold'>CRN:</span> <span data-qa='crn'>{{ params.crn }}</span>
-        </p>
+        <div class='person-header__details'>
+            <h1 class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name' data-qa='personName'>{{ params.name }}</h1>
 
-        <ul class='govuk-list person-header__meta'>
-            <li>
-                <span class='govuk-!-font-weight-bold'>Date of birth:</span> <span data-qa='dob'>{{ params.dob }}</span>
-            </li>
-            <li>
-                <span class='govuk-!-font-weight-bold'>Tier:</span> <a class='govuk-link govuk-link--inverse' href='{{ params.historyHref }}' data-qa='tier'>{{ params.tier }}</a>
-            </li>
-            <li>
-                <span class='govuk-!-font-weight-bold'>Managed by:</span>
-                {% if params.managedByHref %}
-                    <a class='govuk-link govuk-link--inverse' href='{{ params.managedByHref }}' data-qa='managedBy'>{{ params.managedBy }}</a>
-                {% else %}
-                    <span data-qa='managedBy'>{{ params.managedBy }}</span>
-                {% endif %}
-            </li>
-        </ul>
+            <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
+                <span class='govuk-!-font-weight-bold'>CRN:</span> <span data-qa='crn'>{{ params.crn }}</span>
+            </p>
+
+            <ul class='govuk-list person-header__meta'>
+                <li>
+                    <span class='govuk-!-font-weight-bold'>Date of birth:</span> <span data-qa='dob'>{{ params.dob }}</span>
+                </li>
+                <li>
+                    <span class='govuk-!-font-weight-bold'>Tier:</span> <a class='govuk-link govuk-link--inverse' href='{{ params.historyHref }}' data-qa='tier'>{{ params.tier }}</a>
+                </li>
+                <li>
+                    <span class='govuk-!-font-weight-bold'>Managed by:</span>
+                    {% if params.managedByHref %}
+                        <a class='govuk-link govuk-link--inverse' href='{{ params.managedByHref }}' data-qa='managedBy'>{{ params.managedBy }}</a>
+                    {% else %}
+                        <span data-qa='managedBy'>{{ params.managedBy }}</span>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
     </div>
 
     {% if params.riskBadges and (params.riskBadges | trim) %}
