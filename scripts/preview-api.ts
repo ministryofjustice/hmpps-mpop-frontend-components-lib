@@ -117,7 +117,7 @@ async function main() {
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
-  const { changeReason, tierScore, tag } = result.calculation
+  const { calculation } = result
   const personalDetailsResponse = await mpopComponents.getPersonalDetails(authToken, crn)
   const supervisionPackageFrontendContextResponse = await mpopComponents.getSupervisionPackageFrontendContext(
     authToken,
@@ -131,9 +131,6 @@ async function main() {
   const { personalDetails } = personalDetailsResponse
 
   const supervisionPackageParams = {
-    tierScore,
-    tag,
-    changeReason,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
     historyText: 'View tier change history',
     allAppointmentsHref: '#',
@@ -144,6 +141,7 @@ async function main() {
     oasysReviewHref: oasysReviewLink,
     openInNewTab: true,
     ...(supervisionPackageFrontendContextResponse ?? {}),
+    ...(calculation ?? {}),
   }
 
   const supervisionPackageSummaryParams = {
@@ -155,9 +153,8 @@ async function main() {
     crn,
     dob: personalDetails?.dateOfBirth ?? '',
     age: personalDetails?.age ?? null,
-    tierScore,
-    tag,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
+    ...(calculation ?? {}),
   }
 
   const html = env.renderString(

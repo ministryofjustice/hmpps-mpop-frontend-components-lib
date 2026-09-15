@@ -2,7 +2,8 @@
     <div>
         <ul class='govuk-list govuk-caption-m inline-list-from-tablet'>
             <li>CRN:
-                <span data-qa='crn'>{{ params.crn }}</span>
+                <span data-qa='crn' aria-hidden='true'>{{ params.crn }}</span>
+                <span class='govuk-visually-hidden'>{{ params.crn | spaceOutChars }}</span>
                 <span class='govuk-!-padding-left-3 govuk-!-padding-right-3 hide-mobile'>|</span>
             </li>
             <li>Date of birth:
@@ -11,7 +12,8 @@
                 <span class='govuk-!-padding-left-3 govuk-!-padding-right-3 hide-mobile'>|</span>
             </li>
             <li>
-                <a href='{{ params.historyHref }}' data-qa='tierLink' class='govuk-link' aria-label='Tier:{% if params.tierScore and params.tierScore != 'MISSING' %} {{ params.tierScore }}{% endif %}{% if params.tag and params.tag.text and params.tag.color %} {{ params.tag.text }}{% endif %}'>Tier:{% if params.tierScore and params.tierScore != 'MISSING' %} {{ params.tierScore }}{% endif %}</a>                {% if params.tag and params.tag.text and params.tag.color %}
+                <a href='{{ params.historyHref }}' data-qa='tierLink' class='govuk-link' aria-label='Tier: {{ params.tierScore }}{% if params.provisional %} {{ params.tag.text }}{% endif %}'>Tier: {{ params.tierScore | toTitleCase }}</a>
+                {% if params.provisional %}
                     <strong class='govuk-tag govuk-tag--{{ params.tag.color }} govuk-!-margin-left-1' aria-hidden='true'>{{ params.tag.text }}</strong>
                 {% endif %}
             </li>

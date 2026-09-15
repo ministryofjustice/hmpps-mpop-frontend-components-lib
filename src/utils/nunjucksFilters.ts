@@ -12,6 +12,7 @@ import { isAtLarge } from './isAtLarge'
 import { sentenceType } from './sentenceType'
 import { getPrimarySentence } from './getPrimarySentence'
 import { supervisionAppointmentsReset } from './supervisionAppointmentsReset'
+import { spaceOutChars } from './spaceOutChars'
 
 export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('dateWithYear', dateWithYear)
@@ -27,4 +28,5 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('sentenceType', sentenceType)
   env.addFilter('getPrimarySentence', getPrimarySentence)
   env.addFilter('supervisionAppointmentsReset', supervisionAppointmentsReset)
+  env.addFilter('spaceOutChars', spaceOutChars)
 }
