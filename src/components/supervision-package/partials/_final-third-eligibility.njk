@@ -1,0 +1,13 @@
+{% if sentence.type.isCustodial %}
+    {% if params.context.finalThirdEligibility.eligible == true and sentence.custody.finalThirdDate %}
+        <p class='govuk-body'>
+            {{ forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.
+        </p>
+    {% elseif params.context.finalThirdEligibility.eligible == true and not sentence.custody.finalThirdDate %}
+        <p class='govuk-body'>
+            {{ forename }} is eligible to start the final third stage. The start date is not yet available.
+        </p>
+    {% elseif params.context.finalThirdEligibility.eligible == false %}
+        <p class='govuk-body'>{{ forename }} is not eligible for the final third stage.</p>
+    {% endif %}
+{% endif %}

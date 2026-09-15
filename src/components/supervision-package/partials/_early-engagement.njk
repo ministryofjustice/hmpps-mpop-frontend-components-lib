@@ -16,15 +16,7 @@
     </p>
 {% endif %}
 
-{% if sentence.type.isCustodial %}
-    {% if params.context.finalThirdEligibility.eligible == true %}
-        <p class='govuk-body'>
-            {{ forename }} is eligible to start the final third stage on {{ sentence.custody.finalThirdDate | dateWithYear }}.
-        </p>
-    {% elseif params.context.finalThirdEligibility.eligible == false%}
-        <p class='govuk-body'>{{ forename }} is not eligible for the final third stage.</p>
-    {% endif %}
-{% endif %}
+{% include './_final-third-eligibility.njk'%}
 
 {% include './_progress-bar.njk' %}
 
