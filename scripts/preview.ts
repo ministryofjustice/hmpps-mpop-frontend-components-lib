@@ -62,7 +62,7 @@ const html = env.renderString(
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l">Person Header</h1>
-      <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by). <code>riskBadges</code> is a layout slot for pre-rendered risk badge markup (e.g. from the ARNS component library's <code>predictorBadge</code>) rather than something this component renders itself.</p>
+      <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by). <code>riskBadges</code> is a layout slot for pre-rendered risk badge markup (e.g. from the ARNS component library's <code>predictorBadge</code>) rather than something this component renders itself. <code>photo</code> is only rendered when provided - there's no placeholder image when it's absent.</p>
 
       {{ personHeader({
         name: "Andrew Langley",
@@ -72,11 +72,12 @@ const html = env.renderString(
         historyHref: "#",
         managedBy: "Jack Frost (Worksop Probation Office)",
         managedByHref: "#",
+        photo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='120' viewBox='0 0 90 120'%3E%3Crect width='90' height='120' fill='%23b1b4b6'/%3E%3Ccircle cx='45' cy='45' r='22' fill='%23ffffff'/%3E%3Cpath d='M10 110c5-25 25-35 35-35s30 10 35 35' fill='%23ffffff'/%3E%3C/svg%3E",
         riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
       }) }}
 
-      <h2 class="govuk-heading-m">Managed by: Unallocated (not clickable)</h2>
-      <p class="govuk-body">When there's no responsible officer, or the managed by data failed to load, <code>managedByHref</code> is omitted and the field renders as plain text instead of a link.</p>
+      <h2 class="govuk-heading-m">Managed by: Unallocated (not clickable), no photo</h2>
+      <p class="govuk-body">When there's no responsible officer, or the managed by data failed to load, <code>managedByHref</code> is omitted and the field renders as plain text instead of a link. This variant also omits <code>photo</code>, to show the layout when no image is available - the header collapses to full-width text with no gap or placeholder left behind.</p>
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
