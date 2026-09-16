@@ -76,7 +76,7 @@ describe('pop-header', () => {
     expect(tag?.getAttribute('aria-hidden')).toBe('true')
   })
 
-  it('renders render "Tier: Missing" when the tier score is MISSING', () => {
+  it('render "Tier: Missing" when the tier score is MISSING', () => {
     const document = renderComponent({ crn: 'X123456', dob: '', tierScore: 'MISSING', historyHref: '#' })
 
     const link = document.querySelector('[data-qa="tierLink"]')
