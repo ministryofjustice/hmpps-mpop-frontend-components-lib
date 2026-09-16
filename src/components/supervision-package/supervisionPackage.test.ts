@@ -122,6 +122,53 @@ describe('supervision-package', () => {
       expect(document.body.textContent).not.toContain('was changed on')
       expect(document.body.textContent).not.toContain('was created on')
     })
+
+    it('does not render the package creation date when phaseCode is not defined', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the package creation date when phaseCode is SPNK', () => {
+      const document = renderComponent({
+        currentPhase: { phase: { code: 'SPNK', description: 'Early engagement' } },
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'SPNK' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the package creation date when phaseCode is SPNS', () => {
+      const document = renderComponent({
+        currentPhase: { phase: { code: 'SPNS', description: 'Early engagement' } },
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'SPNS' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
   })
 
   it('renders the early engagement stage when phaseName is Early engagement', () => {
@@ -498,7 +545,7 @@ describe('supervision-package', () => {
       const document = renderComponent({ ...spnkParams, createdAt: '2026-01-01' })
 
       expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.body.textContent).not.toContain('Package created')
+      expect(document.body.textContent).not.toContain('supervision package was created')
     })
 
     it('does not render the action button group', () => {
