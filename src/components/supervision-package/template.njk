@@ -7,6 +7,7 @@
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
 {% set sentence = params.context.sentences | getPrimarySentence %}
 {% set forename = params.context.name.forename %}
+{% set provisionalTier = params.provisional == true %}
 
 {% if
   params.context.nationalSecurityDivision
@@ -19,7 +20,7 @@
     supervisionPackage: params
 }) }}
 </div>
-{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase or phaseCode == 'SPNK') and sentence %}
+{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase or phaseCode == 'SPNK' or provisionalTier) and sentence %}
 <div class='supervision-package' role='region' aria-label='Supervision package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>
@@ -51,7 +52,7 @@
             {% endif %}
 
             {% include './partials/_tier.njk' %}
-            {% if phaseCode and (phaseCode != 'SPNS' and phaseCode != 'SPNK') %}
+            {% if phaseCode and (phaseCode != 'SPNS' and phaseCode != 'SPNK' and not provisionalTier) %}
                 {% include './partials/_package-creation-date.njk' %}
             {% endif %}
 
@@ -64,7 +65,7 @@
                 </p>
             {% endif %}
 
-            {% if params.currentPhase and (phaseCode != 'SPNS' and phaseCode != 'SPNK') %}
+            {% if params.currentPhase and (phaseCode != 'SPNS' and phaseCode != 'SPNK' and not provisionalTier) %}
                 {% include './partials/_next-appointment.njk' %}
             {% endif %}
         </div>
@@ -99,7 +100,7 @@
         {% endif %}
     </div>
 
-    {% if phaseCode and (phaseCode != 'SPNS' and phaseCode != 'SPNK') %}
+    {% if phaseCode and (phaseCode != 'SPNS' and phaseCode != 'SPNK' and not provisionalTier) %}
         {% include './partials/_action-buttons.njk' %}
     {% endif %}
 </div>

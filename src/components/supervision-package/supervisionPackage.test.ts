@@ -1074,4 +1074,57 @@ describe('supervision-package', () => {
       expect(findButton(document, 'Update risk flags on NDelius')).toBeUndefined()
     })
   })
+
+  describe('provisional tier', () => {
+    const provisionalTierParams = {
+      provisional: true,
+      tierScore: 'C',
+      tag: tierTags.provisional,
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNK', description: 'Not yet known' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      createdAt: '2026-01-15',
+      updatedAt: '2026-01-15',
+      nextAppointment: { date: '2026-09-10' },
+      arrangeAppointmentHref: '/arrange-appointment',
+    }
+
+    it('still renders the supervision package and the tier tag', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const tagElement = document.querySelector('.govuk-tag')
+      expect(tagElement?.textContent?.trim()).toBe('Provisional')
+      expect(document.body.textContent).toContain(
+        'We will calculate the supervision package once the tier is confirmed.',
+      )
+    })
+
+    it('does not render the package created/changed text', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Next appointment')
+      expect(document.body.textContent).not.toContain('No appointments scheduled')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('still renders the tier change history link', () => {
+      const document = renderComponent(provisionalTierParams)
+
+      expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+    })
+  })
 })

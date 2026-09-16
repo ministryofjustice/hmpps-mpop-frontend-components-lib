@@ -112,14 +112,6 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).toContain('In breach')
     })
 
-    it('shows the badge when the breached sentence has code SPX', () => {
-      const document = renderPartial({
-        context: { sentences: [{ supervisionPackage: { code: 'SPX' }, inBreach: true }] },
-      })
-
-      expect(getBadgeText(document)).toContain('In breach')
-    })
-
     it('does not show the badge when no sentences are in breach', () => {
       const document = renderPartial({
         context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }] },

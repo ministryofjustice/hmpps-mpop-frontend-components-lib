@@ -8,12 +8,6 @@ describe('hasBreachedSentence', () => {
     )
   })
 
-  it('returns true when a sentence is in breach', () => {
-    expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPX' }, inBreach: true }] as FrontendSentence[])).toBe(
-      true,
-    )
-  })
-
   it('returns false when no sentences are in breach', () => {
     expect(hasBreachedSentence([{ supervisionPackage: { code: 'SPA' }, inBreach: false }] as FrontendSentence[])).toBe(
       false,
@@ -27,6 +21,15 @@ describe('hasBreachedSentence', () => {
         { supervisionPackage: { code: 'SPA' }, inBreach: true },
       ] as FrontendSentence[]),
     ).toBe(true)
+  })
+
+  it('returns false when only an SPX sentence is in breach and the primary sentence is not', () => {
+    expect(
+      hasBreachedSentence([
+        { supervisionPackage: { code: 'SPX' }, inBreach: true },
+        { supervisionPackage: { code: 'SPA' }, inBreach: false },
+      ] as FrontendSentence[]),
+    ).toBe(false)
   })
 
   it('returns false when sentences is undefined', () => {

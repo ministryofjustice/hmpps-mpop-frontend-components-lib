@@ -1,4 +1,5 @@
 import { FrontendSentence } from '../types/SupervisionPackage'
+import { getPrimarySentence } from './getPrimarySentence'
 
 export const hasBreachedSentence = (sentences?: Array<FrontendSentence> | null): boolean =>
-  sentences?.some(sentence => sentence.inBreach === true) ?? false
+  getPrimarySentence(sentences)?.inBreach === true

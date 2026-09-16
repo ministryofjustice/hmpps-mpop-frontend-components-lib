@@ -140,6 +140,7 @@ async function main() {
     nextAppointmentHref: '#',
     oasysReviewHref: oasysReviewLink,
     openInNewTab: true,
+    ...(calculation ?? {}),
     ...(supervisionPackageFrontendContextResponse ?? {}),
     ...(calculation ?? {}),
   }
@@ -153,6 +154,7 @@ async function main() {
     crn,
     dob: personalDetails?.dateOfBirth ?? '',
     age: personalDetails?.age ?? null,
+    ...(calculation ?? {}),
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
     ...(calculation ?? {}),
   }

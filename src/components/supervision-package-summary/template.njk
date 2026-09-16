@@ -34,8 +34,12 @@
 {% set warning = null %}
 {% if params.context.sentences | hasBreachedSentence %}
   {% set warning = forename + " is in breach. You should continue to offer appointments." %}
- {% elif params.context.sentences | isInCustody %}
+{% elif params.context.sentences | isInCustody(['C']) %}
   {% set warning = forename + " has been recalled. Their appointments are paused." %}
+{% elif params.context.sentences | isInCustody %}
+  {% set warning = forename + " is in custody. Their appointments are paused." %}
+{% elif params.context.sentences | isAtLarge %}
+  {% set warning = forename + " is unlawfully at large. You should continue to offer appointments." %}
 {% endif %}
 
 <section class="supervision-package-summary">
