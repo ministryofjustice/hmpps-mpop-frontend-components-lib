@@ -122,6 +122,53 @@ describe('supervision-package', () => {
       expect(document.body.textContent).not.toContain('was changed on')
       expect(document.body.textContent).not.toContain('was created on')
     })
+
+    it('does not render the package creation date when phaseCode is not defined', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the package creation date when phaseCode is SPNK', () => {
+      const document = renderComponent({
+        currentPhase: { phase: { code: 'SPNK', description: 'Early engagement' } },
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'SPNK' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
+
+    it('does not render the package creation date when phaseCode is SPNS', () => {
+      const document = renderComponent({
+        currentPhase: { phase: { code: 'SPNS', description: 'Early engagement' } },
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { sentences: [{ supervisionPackage: { code: 'SPNS' } }] },
+        createdAt: '2026-01-15',
+        updatedAt: '2026-01-15',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('was created on')
+      expect(document.body.textContent).not.toContain('was changed on')
+    })
   })
 
   it('renders the early engagement stage when phaseName is Early engagement', () => {
@@ -443,6 +490,80 @@ describe('supervision-package', () => {
       expect(oasysLink?.getAttribute('target')).toBe('')
       expect(oasysLink?.getAttribute('rel')).toBe('')
       expect(oasysLink?.textContent?.trim()).toBe('Complete an OASys review')
+    })
+  })
+
+  describe('currentPhase.phase.code is SPNK', () => {
+    const spnkParams = {
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNK', description: 'Not yet started' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
+      oasysReviewHref: '/oasys/review/123',
+      allAppointmentsHref: '#',
+    }
+
+    it('renders the supervision package in a two-thirds column, with no phase column', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-two-thirds')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-one-half')).toBeNull()
+    })
+
+    it('does not render an "Appointments" heading or any of the phase-specific guidance', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Appointments')
+      expect(document.body.textContent).not.toContain('supervision appointments remaining')
+    })
+
+    it('does not render the OASys review link or confirmation text', () => {
+      const document = renderComponent({ ...spnkParams, openInNewTab: true })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain(
+        'Appointments do not count towards the package until it is confirmed.',
+      )
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent({ ...spnkParams, nextAppointment: { date: '2026-09-10' } })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('Next appointment')
+    })
+
+    it('does not render the package creation date', () => {
+      const document = renderComponent({ ...spnkParams, createdAt: '2026-01-01' })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('supervision package was created')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent({
+        ...spnkParams,
+        arrangeAppointmentHref: '/arrange-appointment',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('does not render the "View all appointments" link', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const links = Array.from(document.querySelectorAll('a')).map(a => a.textContent?.trim())
+      expect(links).not.toContain('View all appointments')
     })
   })
 
