@@ -12,7 +12,10 @@ import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents from '../src/MPoPComponents'
 import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
-const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url))).css
+const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url)), {
+  loadPaths: [process.cwd(), 'node_modules'],
+  silenceDeprecations: ['import'],
+}).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
   autoescape: true,
@@ -114,7 +117,7 @@ async function main() {
   )
 
   const result = await mpopComponents.getTierDetails(authToken, crn)
-  const { changeReason, tierScore, tag } = result.calculation
+  const { calculation } = result
   const personalDetailsResponse = await mpopComponents.getPersonalDetails(authToken, crn)
   const supervisionPackageFrontendContextResponse = await mpopComponents.getSupervisionPackageFrontendContext(
     authToken,
@@ -128,9 +131,6 @@ async function main() {
   const { personalDetails } = personalDetailsResponse
 
   const supervisionPackageParams = {
-    tierScore,
-    tag,
-    changeReason,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
     historyText: 'View tier change history',
     allAppointmentsHref: '#',
@@ -141,6 +141,7 @@ async function main() {
     oasysReviewHref: oasysReviewLink,
     openInNewTab: true,
     ...(supervisionPackageFrontendContextResponse ?? {}),
+    ...(calculation ?? {}),
   }
 
   const supervisionPackageSummaryParams = {
@@ -152,8 +153,8 @@ async function main() {
     crn,
     dob: personalDetails?.dateOfBirth ?? '',
     age: personalDetails?.age ?? null,
-    tierScore,
     historyHref: `${tierHistoryUrl}/v3/case/${crn}`,
+    ...(calculation ?? {}),
   }
 
   const html = env.renderString(

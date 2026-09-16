@@ -1,8 +1,10 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { yearsSince } from '../../utils/yearsSince'
+import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(['src/components'], { autoescape: true })
+mpopNunjucksSetup(env)
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
@@ -19,6 +21,13 @@ describe('pop-header', () => {
     const document = renderComponent({ crn: 'X123456', dob: '', tierScore: '', historyHref: '#' })
 
     expect(document.querySelector('[data-qa="crn"]')?.textContent?.trim()).toBe('X123456')
+  })
+
+  it('hides the visual CRN from assistive tech and exposes a spaced-out version so each character is read individually', () => {
+    const document = renderComponent({ crn: 'X123456', dob: '', tierScore: '', historyHref: '#' })
+
+    expect(document.querySelector('[data-qa="crn"]')?.getAttribute('aria-hidden')).toBe('true')
+    expect(document.querySelector('.govuk-visually-hidden')?.textContent?.trim()).toBe('X 1 2 3 4 5 6')
   })
 
   it('renders the date of birth', () => {
@@ -47,9 +56,31 @@ describe('pop-header', () => {
     expect(document.querySelector('[data-qa="tierLink"]')?.getAttribute('href')).toBe('/tier-history/X123456')
   })
 
-  it('renders an empty age when date of birth is blank', () => {
-    const document = renderComponent({ crn: 'X123456', dob: '', age: null, tierScore: '', historyHref: '#' })
+  it('renders the tier tag when both tag text and color are provided', () => {
+    const document = renderComponent({
+      crn: 'X123456',
+      dob: '',
+      tierScore: 'A1',
+      historyHref: '#',
+      provisional: true,
+      tag: { text: 'Provisional', color: 'orange' },
+    })
 
-    expect(document.querySelector('[data-qa="headerDateOfBirthAge"]')).toBeNull()
+    const link = document.querySelector('[data-qa="tierLink"]')
+    expect(link?.getAttribute('aria-label')).toBe('Tier: A1 Provisional')
+
+    const tag = document.querySelector('strong.govuk-tag')
+
+    expect(tag?.textContent?.trim()).toBe('Provisional')
+    expect(tag?.classList.contains('govuk-tag--orange')).toBe(true)
+    expect(tag?.getAttribute('aria-hidden')).toBe('true')
+  })
+
+  it('render "Tier: Missing" when the tier score is MISSING', () => {
+    const document = renderComponent({ crn: 'X123456', dob: '', tierScore: 'MISSING', historyHref: '#' })
+
+    const link = document.querySelector('[data-qa="tierLink"]')
+    expect(link?.textContent?.trim()).toBe('Tier: Missing')
+    expect(link?.getAttribute('aria-label')).toBe('Tier: MISSING')
   })
 })
