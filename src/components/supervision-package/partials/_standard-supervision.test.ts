@@ -118,7 +118,7 @@ describe('_standard-supervision partial', () => {
       },
     )
 
-    it('does not render the "no supervision end date" message for a lifeCategoryCode that is not a lifer code', () => {
+    it('render the "no supervision end date" message for a lifeCategoryCode that is not a lifer code', () => {
       const document = renderPartial(
         {
           context: { name: { forename: 'Alex' } },
@@ -130,7 +130,7 @@ describe('_standard-supervision partial', () => {
       const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
       const noEndDateParagraph = paragraphs.find(p => p.textContent?.includes('no supervision end date'))
 
-      expect(noEndDateParagraph).toBeUndefined()
+      expect(noEndDateParagraph?.textContent).toBe('There is no supervision end date.')
     })
 
     it('does not render the "no supervision end date" message when lifeCategoryCode is not provided', () => {

@@ -12,7 +12,7 @@
     <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>
 {% endif %}
 
-{% if lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
+{% if lifeCategoryCode %}
     {% include './_no-end-date.njk' %}
 {% endif %}
 
