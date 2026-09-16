@@ -5,10 +5,11 @@ import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params: Record<string, unknown> = {}) => {
+const renderPartial = (params: Record<string, unknown> = {}, extraContext: Record<string, unknown> = {}) => {
   const html = env.render('supervision-package/partials/_standard-supervision.njk', {
     params,
     forename: (params as { context?: { name?: { forename?: string } } }).context?.name?.forename,
+    ...extraContext,
   })
   return new JSDOM(html).window.document
 }
@@ -95,6 +96,53 @@ describe('_standard-supervision partial', () => {
       const finalThirdParagraph = paragraphs.find(p => p.textContent?.includes('final third stage'))
 
       expect(finalThirdParagraph).toBeUndefined()
+    })
+  })
+
+  describe('no end date', () => {
+    it.each(['LF01', 'LF02', 'LF03', 'x9'])(
+      'renders the "no supervision end date" message when lifeCategoryCode is %s',
+      lifeCategoryCode => {
+        const document = renderPartial(
+          {
+            context: { name: { forename: 'Alex' } },
+            currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+          },
+          { lifeCategoryCode },
+        )
+
+        const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+        const noEndDateParagraph = paragraphs.find(p => p.textContent?.includes('no supervision end date'))
+
+        expect(noEndDateParagraph?.textContent).toBe('There is no supervision end date.')
+      },
+    )
+
+    it('render the "no supervision end date" message for a lifeCategoryCode that is not a lifer code', () => {
+      const document = renderPartial(
+        {
+          context: { name: { forename: 'Alex' } },
+          currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+        },
+        { lifeCategoryCode: 'LF04' },
+      )
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const noEndDateParagraph = paragraphs.find(p => p.textContent?.includes('no supervision end date'))
+
+      expect(noEndDateParagraph?.textContent).toBe('There is no supervision end date.')
+    })
+
+    it('does not render the "no supervision end date" message when lifeCategoryCode is not provided', () => {
+      const document = renderPartial({
+        context: { name: { forename: 'Alex' } },
+        currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+      const noEndDateParagraph = paragraphs.find(p => p.textContent?.includes('no supervision end date'))
+
+      expect(noEndDateParagraph).toBeUndefined()
     })
   })
 
