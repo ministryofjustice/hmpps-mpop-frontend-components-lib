@@ -27,7 +27,7 @@ type LiferCategory = {
 type FrontendCustody = {
   status: CodeDescription
   location: CodeDescription
-  finalThirdDate: string
+  finalThirdDate?: string
   releases: Array<Release>
 }
 

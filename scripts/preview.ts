@@ -345,6 +345,60 @@ const html = env.renderString(
         earlyEngagement: { weeks: 3, completed: 1 },
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
+              <h3 class="govuk-heading-s">Final Third eligible without start date</h3>
+      <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> not set, while still in early engagement:</p>
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": "INIT", "description": "Early Engagement" },
+    "endDate": "2026-09-28"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 1
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 0,
+      "completed": 1
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
+    "sentences": [
+      {
+        "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+        },
+        "inBreach": false,
+        "endDate": "2027-02-18"
+      }
+    ]
+  }
+}</code></pre>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: true },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' } },
+            inBreach: false,
+            endDate: '2027-02-18'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 1 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
+      }) }}
 
       <h3 class="govuk-heading-s">Final Third ineligible</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite still being on a custodial licence, during early engagement:</p>

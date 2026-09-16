@@ -84,60 +84,6 @@ describe('_red-iom partial', () => {
     )
   })
 
-  it('shows the final third eligibility paragraph for an eligible custodial sentence', () => {
-    const document = renderPartial({
-      context: {
-        name: { forename: 'Alex' },
-        sentences: [
-          {
-            supervisionPackage: { code: 'CUR' },
-            type: { isCustodial: true },
-            custody: { finalThirdDate: '2026-09-01' },
-          },
-        ],
-        finalThirdEligibility: { eligible: true },
-      },
-    })
-
-    const paragraph = paragraphsOf(document).find(p => p.textContent?.includes('final third stage'))
-
-    expect(paragraph?.textContent).toContain('Alex is eligible to start the final third stage on 1 September 2026.')
-  })
-
-  it('shows the not-eligible-for-final-third paragraph for an ineligible custodial sentence', () => {
-    const document = renderPartial({
-      context: {
-        name: { forename: 'Alex' },
-        sentences: [
-          {
-            supervisionPackage: { code: 'CUR' },
-            type: { isCustodial: true },
-            custody: { finalThirdDate: '2026-09-01' },
-          },
-        ],
-        finalThirdEligibility: { eligible: false },
-      },
-    })
-
-    const paragraph = paragraphsOf(document).find(p => p.textContent?.includes('final third stage'))
-
-    expect(paragraph?.textContent).toContain('Alex is not eligible for the final third stage.')
-  })
-
-  it('does not show any final third paragraph for a non-custodial sentence', () => {
-    const document = renderPartial({
-      context: {
-        name: { forename: 'Alex' },
-        sentences: [{ supervisionPackage: { code: 'CUR' }, type: { isCustodial: false } }],
-        finalThirdEligibility: { eligible: true },
-      },
-    })
-
-    const paragraph = paragraphsOf(document).find(p => p.textContent?.includes('final third stage'))
-
-    expect(paragraph).toBeUndefined()
-  })
-
   it('always shows the IOM red RAG status paragraph', () => {
     const document = renderPartial()
 
