@@ -446,6 +446,66 @@ describe('supervision-package', () => {
     })
   })
 
+  describe('currentPhase.phase.code is SPNK', () => {
+    const spnkParams = {
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNK', description: 'Not yet started' } },
+      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
+      oasysReviewHref: '/oasys/review/123',
+      allAppointmentsHref: '#',
+    }
+
+    it('does not render an "Appointments" heading or any of the phase-specific guidance', () => {
+      const document = renderComponent(spnkParams)
+
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Appointments')
+      expect(document.body.textContent).not.toContain('supervision appointments remaining')
+    })
+
+    it('does not render the OASys review link or confirmation text', () => {
+      const document = renderComponent({ ...spnkParams, openInNewTab: true })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain(
+        'Appointments do not count towards the package until it is confirmed.',
+      )
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent({ ...spnkParams, nextAppointment: { date: '2026-09-10' } })
+
+      expect(document.body.textContent).not.toContain('Next appointment')
+    })
+
+    it('does not render the package creation date', () => {
+      const document = renderComponent({ ...spnkParams, createdAt: '2026-01-01' })
+
+      expect(document.body.textContent).not.toContain('Package created')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent({
+        ...spnkParams,
+        arrangeAppointmentHref: '/arrange-appointment',
+      })
+
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('does not render the "View all appointments" link', () => {
+      const document = renderComponent(spnkParams)
+
+      const links = Array.from(document.querySelectorAll('a')).map(a => a.textContent?.trim())
+      expect(links).not.toContain('View all appointments')
+    })
+  })
+
   it('does not render the SPNS OASys prompt or confirmation text when currentPhase is present but not SPNS', () => {
     const document = renderComponent({
       tierScore: 'C',
