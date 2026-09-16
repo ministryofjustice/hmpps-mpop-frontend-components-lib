@@ -10,10 +10,6 @@
     <p class='govuk-body'>Early engagement is expected to end on {{ params.currentPhase.endDate | dateWithYear }}{% if (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %} if {{ params.context.name.forename }} attends the required appointments by then{% endif %}.</p>
 {% endif %}
 
-{% if lifeCategoryCode == 'LF01' or lifeCategoryCode == 'LF02' or lifeCategoryCode == 'LF03' or lifeCategoryCode == 'x9'  %}
-    {% include './_no-end-date.njk' %}
-{% endif %}
-
 {% if params.currentYear.appointments.allowance is defined and params.earlyEngagement.weeks is defined %}
     <p class='govuk-body'>
         {{ forename }} will then have a maximum of {{ (params.currentYear.appointments.allowance | int) - (params.earlyEngagement.weeks | int) }} supervision appointments for the rest of this sentence year.
