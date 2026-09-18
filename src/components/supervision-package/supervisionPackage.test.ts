@@ -647,7 +647,7 @@ describe('supervision-package', () => {
     const headings = document.querySelectorAll('h4')
     const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
     expect(headingTexts).toContain('Supervision stage')
-    expect(headingTexts).not.toContain('Supervision} stage')
+    expect(headingTexts).not.toContain('Standard stage')
   })
 
   it('renders the "Supervision stage" heading when the sentence is in custody', () => {
@@ -672,7 +672,7 @@ describe('supervision-package', () => {
     const headings = document.querySelectorAll('h4')
     const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
     expect(headingTexts).toContain('Supervision stage')
-    expect(headingTexts).not.toContain('Supervision} stage')
+    expect(headingTexts).not.toContain('Standard stage')
   })
 
   it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and currentPhase.phase.code INIT are true', () => {
