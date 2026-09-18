@@ -57,7 +57,13 @@ describe('_standard-supervision partial', () => {
         context: {
           name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: true },
-          sentences: [{ custody: { finalThirdDate: '2026-11-07' }, type: { isCustodial: true } }],
+          sentences: [
+            {
+              supervisionPackage: { code: 'SPA' },
+              custody: { finalThirdDate: '2026-11-07' },
+              type: { isCustodial: true },
+            },
+          ],
         },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
@@ -75,7 +81,7 @@ describe('_standard-supervision partial', () => {
         context: {
           name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { isCustodial: true } }],
+          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }],
         },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })

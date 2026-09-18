@@ -218,6 +218,7 @@ describe('supervision-package-summary', () => {
         },
         sentences: [
           {
+            supervisionPackage: { code: 'SPA' },
             inBreach: true,
           },
         ],
@@ -397,6 +398,7 @@ describe('supervision-package-summary', () => {
         },
         sentences: [
           {
+            supervisionPackage: { code: 'SPA' },
             type: { isCustodial: true },
             custody: { finalThirdDate: '2026-08-06' },
           },
@@ -477,6 +479,7 @@ describe('supervision-package-summary', () => {
         },
         sentences: [
           {
+            supervisionPackage: { code: 'SPA' },
             type: { isCustodial: true },
             custody: { finalThirdDate: '2026-08-06' },
           },

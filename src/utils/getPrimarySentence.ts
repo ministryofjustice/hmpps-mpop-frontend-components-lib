@@ -5,5 +5,7 @@ export const getPrimarySentence = <T extends FrontendSentence>(sentences?: T[] |
     return null
   }
 
-  return sentences.find(sentence => sentence?.supervisionPackage?.code !== 'SPX') || null
+  return (
+    sentences.find(sentence => sentence?.supervisionPackage && sentence?.supervisionPackage?.code !== 'SPX') || null
+  )
 }

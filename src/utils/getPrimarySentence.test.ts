@@ -5,6 +5,7 @@ describe('getPrimarySentence', () => {
   it('returns the first sentence whose supervisionPackage code is not SPX', () => {
     expect(
       getPrimarySentence([
+        {},
         { supervisionPackage: { code: 'SPX' } },
         { supervisionPackage: { code: 'SPA' } },
         { supervisionPackage: { code: 'SPB' } },
