@@ -33,6 +33,10 @@ $supervision-package-accent-colour: govuk-colour("blue");
   }
 }
 
+.supervision-package__tier-tag {
+  margin-left: 15px;
+}
+
 .appointment-progress {
   background-color: govuk-colour("teal", $variant: "tint-80");
   border-radius: 20px;
