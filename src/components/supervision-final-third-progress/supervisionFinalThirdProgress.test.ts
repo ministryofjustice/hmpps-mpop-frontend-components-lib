@@ -40,6 +40,7 @@ describe('supervision-final-third-progress', () => {
         },
         sentences: [
           {
+            supervisionPackage: { code: 'SPA' },
             endDate: '2027-01-07',
             type: {
               isCustodial: true,

@@ -297,6 +297,7 @@ describe('supervision-package', () => {
         },
         sentences: [
           {
+            supervisionPackage: { code: 'SPA' },
             type: {
               isCustodial: true,
             },
@@ -329,6 +330,7 @@ describe('supervision-package', () => {
           },
           sentences: [
             {
+              supervisionPackage: { code: 'SPA' },
               type: {
                 isCustodial: true,
               },

@@ -8,6 +8,7 @@ describe('getPrimarySentence', () => {
         { supervisionPackage: { code: 'SPX' } },
         { supervisionPackage: { code: 'SPA' } },
         { supervisionPackage: { code: 'SPB' } },
+        {},
       ] as FrontendSentence[]),
     ).toEqual({ supervisionPackage: { code: 'SPA' } })
   })
