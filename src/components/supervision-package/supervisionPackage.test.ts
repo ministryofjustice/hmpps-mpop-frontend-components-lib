@@ -630,6 +630,51 @@ describe('supervision-package', () => {
     expect(headingTexts).toContain('Supervision appointments')
   })
 
+  it('renders the "Supervision stage" heading when the sentence is at large', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+      currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, custody: { location: { code: 'UATLRG' } } }],
+      },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h4')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Supervision stage')
+    expect(headingTexts).not.toContain('Standard stage')
+  })
+
+  it('renders the "Supervision stage" heading when the sentence is in custody', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+      currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [
+          {
+            supervisionPackage: { code: 'INIT' },
+            custody: { status: { code: 'D', description: 'Recalled' } },
+          },
+        ],
+      },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = document.querySelectorAll('h4')
+    const headingTexts = Array.from(headings).map(h => h.textContent?.trim())
+    expect(headingTexts).toContain('Supervision stage')
+    expect(headingTexts).not.toContain('Standard stage')
+  })
+
   it('renders the OPD stage instead of early engagement when both offenderPersonalDisorderPathway and currentPhase.phase.code INIT are true', () => {
     const document = renderComponent({
       tierScore: 'C',
