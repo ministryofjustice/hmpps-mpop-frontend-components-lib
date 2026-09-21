@@ -44,6 +44,7 @@ describe('supervision-package', () => {
     if (expectedTagText) {
       expect(tagElement?.textContent?.trim()).toBe(expectedTagText)
       expect(tagElement?.classList.contains(expectedTagClass)).toBe(true)
+      expect(tagElement?.classList.contains('supervision-package__tier-tag')).toBe(true)
     } else {
       expect(tagElement).toBeNull()
     }

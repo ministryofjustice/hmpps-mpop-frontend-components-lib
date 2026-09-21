@@ -4,7 +4,7 @@
     <h4 class='govuk-heading-s govuk-!-margin-bottom-0' aria-label='{{ tierHeadingText ~ tagHeadingText }}'>
         <span aria-hidden='true'>Tier {{ '' if params.tierScore == 'MISSING' else params.tierScore }}</span>
        {% if params.tag and params.tag.text and params.tag.color %}
-            <strong class='govuk-tag govuk-tag--{{ params.tag.color }} govuk-!-margin-left-1' aria-hidden='true'>{{ params.tag.text }}</strong>
+            <strong class='govuk-tag govuk-tag--{{ params.tag.color }} supervision-package__tier-tag' aria-hidden='true'>{{ params.tag.text }}</strong>
         {% endif %}
     </h4>
 </div>
