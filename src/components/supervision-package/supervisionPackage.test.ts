@@ -1175,4 +1175,52 @@ describe('supervision-package', () => {
       expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
     })
   })
+
+  describe('sentence state rules', () => {
+    it('renders the supervision package when there is no sentence and no currentPhase', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' } },
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+    })
+
+    it('renders the supervision package when there is no sentence and currentPhase.phase.code is SPNS', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' } },
+        context: { name: { forename: 'Alex' } },
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+    })
+
+    it('does not render the supervision package when there is no sentence and currentPhase.phase.code is not SPNS', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+        context: { name: { forename: 'Alex' } },
+      })
+
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+
+    it('renders the supervision package when there is a sentence and no currentPhase', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+    })
+  })
 })

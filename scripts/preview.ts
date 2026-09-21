@@ -1487,12 +1487,18 @@ const html = env.renderString(
       "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
       "inBreach": false,
       "endDate": "2027-08-30"
-    }]
+    },
+    {
+      "type": { "isCustodial": true },
+      "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
+      "inBreach": false,
+      "endDate": "2027-08-30"
+    }
+  ]
   }
 }</code></pre>
       {{ supervisionPackage({
         tierScore: 'C',
-        currentPhase: null,
         oasysReviewHref: '#',
         historyHref: '#',
         context: {
@@ -1500,6 +1506,12 @@ const html = env.renderString(
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
           sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          },
+          {
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1536,12 +1548,18 @@ const html = env.renderString(
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
     "finalThirdEligibility": { "eligible": false },
-    "sentences": [{
-            type: { isCustodial: true },
-            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
-            inBreach: false,
-            endDate: '2027-08-30'
-          }]
+    "sentences": [ {
+      "type": { "isCustodial": true },
+      "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
+      "inBreach": false,
+      "endDate": "2027-08-30"
+    },
+    {
+      "type": { "isCustodial": true },
+      "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
+      "inBreach": false,
+      "endDate": "2027-08-30"
+    }]
   }
 }</code></pre>
       {{ supervisionPackage({
@@ -1554,6 +1572,12 @@ const html = env.renderString(
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
           sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          },
+          {
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,

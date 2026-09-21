@@ -8,7 +8,7 @@
         {% endif %}
     </h4>
 </div>
-{% if params.tag.text == 'Provisional' %}
+{% if params.tag.text == 'Provisional' and params.currentPhase %}
     <p class='govuk-body'>
         We will calculate the supervision package once the tier is confirmed.
     </p>

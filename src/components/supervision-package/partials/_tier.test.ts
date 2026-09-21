@@ -103,8 +103,12 @@ describe('_tier partial', () => {
   })
 
   describe('provisional message', () => {
-    it('renders the provisional message when the tag text is Provisional', () => {
-      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Provisional', color: 'yellow' } })
+    it('renders the provisional message when the tag text is Provisional and currentPhase is present', () => {
+      const document = renderPartial({
+        tierScore: 'A2',
+        tag: { text: 'Provisional', color: 'yellow' },
+        currentPhase: { phase: { code: 'STD' } },
+      })
 
       const paragraph = document.querySelector('p.govuk-body')
 
@@ -114,7 +118,18 @@ describe('_tier partial', () => {
     })
 
     it('does not render the provisional message for other tag text', () => {
-      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Confirmed', color: 'green' } })
+      const document = renderPartial({
+        tierScore: 'A2',
+        tag: { text: 'Confirmed', color: 'green' },
+        currentPhase: { phase: { code: 'STD' } },
+      })
+
+      expect(document.querySelector('p.govuk-body')).toBeNull()
+    })
+
+    // Regression test: message must not render once the phase has ended, even if the tag is still Provisional
+    it('does not render the provisional message when currentPhase is missing', () => {
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Provisional', color: 'yellow' } })
 
       expect(document.querySelector('p.govuk-body')).toBeNull()
     })
