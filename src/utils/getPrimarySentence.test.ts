@@ -30,9 +30,9 @@ describe('getPrimarySentence', () => {
     expect(getPrimarySentence([])).toBeNull()
   })
 
-  it('returns the single sentence when there is only one and it is not SPX', () => {
-    expect(getPrimarySentence([{ supervisionPackage: { code: 'SPA' } }] as FrontendSentence[])).toEqual({
-      supervisionPackage: { code: 'SPA' },
-    })
+  it('returns the single sentence when there is only one and it has no supervision package', () => {
+    const sentence = {} as FrontendSentence
+
+    expect(getPrimarySentence([sentence])).toBe(sentence)
   })
 })
