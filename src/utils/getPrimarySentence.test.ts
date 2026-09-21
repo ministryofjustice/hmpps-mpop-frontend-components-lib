@@ -13,7 +13,8 @@ describe('getPrimarySentence', () => {
     ).toEqual({ supervisionPackage: { code: 'SPA' } })
   })
 
-  it('returns null when all sentences have code SPX', () => {
+  // Regression test: a single SPX sentence must not be returned as the primary sentence
+  it('returns null when there is only one sentence and it is SPX', () => {
     expect(getPrimarySentence([{ supervisionPackage: { code: 'SPX' } }] as FrontendSentence[])).toBeNull()
   })
 
@@ -27,5 +28,11 @@ describe('getPrimarySentence', () => {
 
   it('returns null when sentences is empty', () => {
     expect(getPrimarySentence([])).toBeNull()
+  })
+
+  it('returns the single sentence when there is only one and it is not SPX', () => {
+    expect(getPrimarySentence([{ supervisionPackage: { code: 'SPA' } }] as FrontendSentence[])).toEqual({
+      supervisionPackage: { code: 'SPA' },
+    })
   })
 })
