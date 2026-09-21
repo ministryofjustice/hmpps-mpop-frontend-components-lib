@@ -85,6 +85,33 @@ describe('person-header', () => {
     expect(wrapper?.querySelector('[data-qa="ogrsBadge"]')?.textContent?.trim()).toBe('OGRS LOW')
   })
 
+  it('renders structured riskBadgeData with the remaining risk count link', () => {
+    const document = renderComponent({
+      crn: 'D004851',
+      riskBadgeData: {
+        groups: [{ badges: [{ id: 'ogrs', text: 'OGRS LOW', badgeClass: 'risk-badge--low' }] }],
+        remainingCount: 2,
+      },
+    })
+
+    const wrapper = document.querySelector('[data-qa="riskBadges"]')
+    const link = wrapper?.querySelector('[data-qa="risk-badge-ogrs"]')
+
+    expect(wrapper).not.toBeNull()
+    expect(link?.tagName).toBe('A')
+    expect(link?.getAttribute('href')).toBe('/case/D004851/risk/flag/ogrs')
+    expect(link?.querySelector('.moj-badge')?.textContent?.trim()).toBe('OGRS LOW')
+    expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
+  })
+
+  it('does not render the risk panel when riskBadgeData has no groups', () => {
+    const document = renderComponent({
+      riskBadgeData: { groups: [], remainingCount: 0 },
+    })
+
+    expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+  })
+
   it('does not render the risk badges wrapper when not provided', () => {
     const document = renderComponent({ name: 'Andrew Langley' })
 
