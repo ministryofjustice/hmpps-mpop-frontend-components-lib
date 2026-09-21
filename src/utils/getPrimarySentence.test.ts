@@ -18,6 +18,17 @@ describe('getPrimarySentence', () => {
     expect(getPrimarySentence([{ supervisionPackage: { code: 'SPX' } }] as FrontendSentence[])).toBeNull()
   })
 
+  // Regression test: must return null, not undefined, when no sentence matches
+  it('returns null (not undefined) when multiple sentences exist but none is a valid primary', () => {
+    const result = getPrimarySentence([
+      { supervisionPackage: { code: 'SPX' } },
+      { supervisionPackage: { code: 'SPX' } },
+    ] as FrontendSentence[])
+
+    expect(result).toBe(null)
+    expect(result).not.toBeUndefined()
+  })
+
   it('returns null when sentences is undefined', () => {
     expect(getPrimarySentence(undefined)).toBeNull()
   })
