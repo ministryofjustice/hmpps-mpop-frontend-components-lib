@@ -79,16 +79,16 @@
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_red-iom.njk' %}
                 {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
-                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
+                    <h4 class='govuk-heading-s'>Supervision stage</h4>
                     {% include './partials/_progress-bar.njk' %}
                 {% elseif phaseCode == 'INIT' %}
-                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
+                    <h4 class='govuk-heading-s'>Early engagement stage</h4>
                     {% include './partials/_early-engagement.njk' %}
                 {% elseif phaseCode == 'STD' %}
                     <h4 class='govuk-heading-s'>Supervision stage</h4>
                     {% include './partials/_standard-supervision.njk' %}
                 {% elseif phaseCode == 'FTHRD' %}
-                    <h4 class='govuk-heading-s'>{{ params.currentPhase.phase.description | toTitleCase }} stage</h4>
+                    <h4 class='govuk-heading-s'>Final third stage</h4>
                     {% include './partials/_final-third.njk' %}
                 {% elseif phaseCode == 'SPNS' %}
                     <h4 class='govuk-heading-s'>Appointments</h4>
