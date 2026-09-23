@@ -54,6 +54,20 @@ describe('supervision-package', () => {
     }
   })
 
+  describe('sentence type heading', () => {
+    it('renders "Supervision package: suspended sentence" for a suspended sentence', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, type: { code: '203' } }] },
+      })
+
+      expect(document.querySelector('h3')?.textContent?.trim()).toBe('Supervision package: suspended sentence')
+    })
+  })
+
   describe('created/updated text', () => {
     it('renders the "created on" text when createdAt equals updatedAt', () => {
       const document = renderComponent({

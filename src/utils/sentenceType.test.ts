@@ -79,13 +79,33 @@ describe('sentenceType', () => {
     ).toBe('community sentence')
   })
 
-  it('returns undefined when a sentence has no type (custodial status is unknown)', () => {
+  it('returns false when a sentence has no type (custodial status is unknown) and code is not a suspended sentence code', () => {
     expect(
       sentenceType(
         buildContextDetails({
           sentences: [{ supervisionPackage: { code: 'SPA' } }] as ContextDetails['sentences'],
         }),
       ),
-    ).toBeUndefined()
+    ).toBe(false)
+  })
+
+  it('returns false when there is no primary sentence', () => {
+    expect(
+      sentenceType(
+        buildContextDetails({
+          sentences: [{ supervisionPackage: { code: 'SPX' } }] as ContextDetails['sentences'],
+        }),
+      ),
+    ).toBe(false)
+  })
+
+  it('returns "suspended sentence" when the primary sentence type code is a suspended sentence code', () => {
+    expect(
+      sentenceType(
+        buildContextDetails({
+          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { code: '203' } }] as ContextDetails['sentences'],
+        }),
+      ),
+    ).toBe('suspended sentence')
   })
 })

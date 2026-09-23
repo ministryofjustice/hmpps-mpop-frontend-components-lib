@@ -1,7 +1,9 @@
 import { ContextDetails } from '../types/SupervisionPackage'
 import { getPrimarySentence } from './getPrimarySentence'
 
-export const sentenceType = (context?: ContextDetails) => {
+export const sentenceType: (context?: ContextDetails) => string | false = (context?: ContextDetails) => {
+  const suspendedSentenceCodes = ['203', '216', '330', '341', '408']
+
   if (!context || !context.sentences) {
     return false
   }
@@ -17,6 +19,10 @@ export const sentenceType = (context?: ContextDetails) => {
   }
   const primarySentence = getPrimarySentence(context.sentences)
 
+  if (!primarySentence) {
+    return false
+  }
+
   if (primarySentence?.type?.isCustodial === false) {
     return 'community sentence'
   }
@@ -24,5 +30,9 @@ export const sentenceType = (context?: ContextDetails) => {
     return 'custodial sentence'
   }
 
-  return undefined
+  if (suspendedSentenceCodes.includes(primarySentence.type?.code)) {
+    return 'suspended sentence'
+  }
+
+  return false
 }
