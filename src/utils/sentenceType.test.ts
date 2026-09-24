@@ -99,13 +99,30 @@ describe('sentenceType', () => {
     ).toBe(false)
   })
 
-  it('returns "suspended sentence" when the primary sentence type code is a suspended sentence code', () => {
+  it.each(['203', '216', '330', '341', '408'])(
+    'returns "suspended sentence" when the primary sentence type code is %s',
+    code => {
+      expect(
+        sentenceType(
+          buildContextDetails({
+            sentences: [
+              { supervisionPackage: { code: 'SPA' }, type: { code, isCustodial: false } },
+            ] as ContextDetails['sentences'],
+          }),
+        ),
+      ).toBe('suspended sentence')
+    },
+  )
+
+  it('returns "custodial sentence" when the primary sentence type code is a suspended sentence code but isCustodial is true', () => {
     expect(
       sentenceType(
         buildContextDetails({
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { code: '203' } }] as ContextDetails['sentences'],
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { code: '203', isCustodial: true } },
+          ] as ContextDetails['sentences'],
         }),
       ),
-    ).toBe('suspended sentence')
+    ).toBe('custodial sentence')
   })
 })

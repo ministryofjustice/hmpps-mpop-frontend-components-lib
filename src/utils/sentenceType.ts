@@ -23,15 +23,14 @@ export const sentenceType: (context?: ContextDetails) => string | false = (conte
     return false
   }
 
-  if (primarySentence?.type?.isCustodial === false) {
+  if (suspendedSentenceCodes.includes(primarySentence.type?.code) && primarySentence?.type?.isCustodial === false) {
+    return 'suspended sentence'
+  }
+  if (primarySentence.type?.isCustodial === false) {
     return 'community sentence'
   }
-  if (primarySentence?.type?.isCustodial === true) {
+  if (primarySentence.type?.isCustodial === true) {
     return 'custodial sentence'
-  }
-
-  if (suspendedSentenceCodes.includes(primarySentence.type?.code)) {
-    return 'suspended sentence'
   }
 
   return false

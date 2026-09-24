@@ -61,7 +61,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, type: { code: '203' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, type: { code: '203', isCustodial: false } }] },
       })
 
       expect(document.querySelector('h3')?.textContent?.trim()).toBe('Supervision package: suspended sentence')
