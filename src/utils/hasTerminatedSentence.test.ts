@@ -18,14 +18,14 @@ describe('hasTerminatedSentence', () => {
     ).toBe(false)
   })
 
-  it('returns true when SPA primary sentence is terminated', () => {
+  it('returns false when the terminated SPA sentence is excluded from primary selection', () => {
     expect(
       hasTerminatedSentence([
         { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'C' } } },
         { supervisionPackage: { code: 'SPA' }, custody: { status: { code: 'T' } } },
         { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'A' } } },
       ] as FrontendSentence[]),
-    ).toBe(true)
+    ).toBe(false)
   })
 
   it('returns false when sentences is undefined', () => {

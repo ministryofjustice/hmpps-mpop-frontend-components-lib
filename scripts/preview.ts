@@ -1463,9 +1463,8 @@ const html = env.renderString(
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-in-flight-conditional">
 
       <h3 class="govuk-heading-s">Day 1</h3>
-      <p class="govuk-body">Triggered by a missing <code>currentPhase</code> ("currentPhase": null), shown on day 1 before any phase has been calculated:</p>
+      <p class="govuk-body">Triggered by a missing <code>currentPhase</code> ("currentPhase" object will not be returned from the API), shown on day 1 before any phase has been calculated:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  <mark style="background:#ffdd00;">"currentPhase": null</mark>,
   "earlyEngagement": {
     "weeks": 0,
     "completed": 0

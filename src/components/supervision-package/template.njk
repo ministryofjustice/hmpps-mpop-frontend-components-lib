@@ -46,7 +46,11 @@
             {% include './partials/_warnings.njk' %}
 
             {% if not params.currentPhase and params.oasysReviewHref %}
-                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Start an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
+                {% if provisionalTier or params.tierScore == 'MISSING' %}
+                    <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a>. This confirms {{ forename}}’s tier so we can calculate the supervision package.</p>
+                {% else %}
+                    <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Start an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
+                {% endif %}
             {% elseif phaseCode == 'SPNS' and params.oasysReviewHref %}
                 <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments. </p>
                 <p class='govuk-body'>
