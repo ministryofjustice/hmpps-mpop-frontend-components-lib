@@ -175,6 +175,68 @@ describe('_tags partial', () => {
     })
   })
 
+  describe('at large / custody / breach badge priority', () => {
+    it('shows only "Unlawfully at large" when a sentence is both at large and in breach', () => {
+      const document = renderPartial({
+        context: {
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, inBreach: true, custody: { location: { code: 'UATLRG' } } },
+          ],
+        },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('Unlawfully at large')
+      expect(badges).not.toContain('In breach')
+    })
+
+    it('shows only the custody badge when a sentence is both in custody and in breach', () => {
+      const document = renderPartial({
+        context: {
+          sentences: [
+            {
+              supervisionPackage: { code: 'SPA' },
+              inBreach: true,
+              custody: { status: { code: 'D', description: 'In custody' } },
+            },
+          ],
+        },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('In custody')
+      expect(badges).not.toContain('In breach')
+    })
+
+    it('shows only "Unlawfully at large" when a sentence is both at large and in custody', () => {
+      const document = renderPartial({
+        context: {
+          sentences: [
+            {
+              supervisionPackage: { code: 'SPA' },
+              custody: { location: { code: 'UATLRG' }, status: { code: 'D', description: 'In custody' } },
+            },
+          ],
+        },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('Unlawfully at large')
+      expect(badges).not.toContain('In custody')
+    })
+
+    it('shows "In breach" when a sentence is in breach but not at large or in custody', () => {
+      const document = renderPartial({
+        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }] },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('In breach')
+      expect(badges).not.toContain('Unlawfully at large')
+      expect(badges.filter(badge => badge?.startsWith('In custody'))).toHaveLength(0)
+    })
+  })
+
   describe('IOM badge', () => {
     it('shows the badge when isRedIOM is true', () => {
       const document = renderPartial({ context: { integratedOffenderManagementRedRated: true } })

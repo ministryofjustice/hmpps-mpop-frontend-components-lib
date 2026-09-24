@@ -8,19 +8,22 @@
 {% set sentence = params.context.sentences | getPrimarySentence %}
 {% set forename = params.context.name.forename %}
 {% set provisionalTier = params.provisional == true %}
+{% set isFinalThirdProgress = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and sentence.type.isCustodial and sentence.custody.finalThirdDate %}
+{% set isEligiblePhase = showPhaseColumn or not params.currentPhase or phaseCode == 'SPNK' or provisionalTier %}
+{% set hasSentenceInList = sentence and params.context.sentences.length %}
+{% set isSpxOnlySentenceList = params.context.sentences | isSpxOnlySentenceList %}
+{% set isEarlyOrInFlightWithoutSentence = not sentence and not isSpxOnlySentenceList and (not params.currentPhase or phaseCode == 'SPNS') %}
+{% set isValidSentenceState = hasSentenceInList or isEarlyOrInFlightWithoutSentence %}
+{% set isSupervisionPackage = phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and isEligiblePhase and isValidSentenceState %}
 
-{% if
-  params.context.nationalSecurityDivision
-  and params.context.finalThirdEligibility.eligible
-  and sentence.type.isCustodial
-  and sentence.custody.finalThirdDate
-%}
+{% if isFinalThirdProgress %}
 <div role='region' aria-label='Supervision package'>
 {{ supervisionFinalThirdProgress({
     supervisionPackage: params
 }) }}
 </div>
-{% elif phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and (showPhaseColumn or not params.currentPhase or phaseCode == 'SPNK' or provisionalTier) and sentence %}
+{% elif isSupervisionPackage %}
+
 <div class='supervision-package' role='region' aria-label='Supervision package'>
     {% if standardAppointmentsComplete or hasSpecialStatus %}
     <div class='app-tier-header'>

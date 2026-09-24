@@ -1,4 +1,4 @@
-import { getPrimarySentence } from './getPrimarySentence'
+import { getPrimarySentence, isSpxOnlySentenceList } from './getPrimarySentence'
 import { FrontendSentence } from '../types/SupervisionPackage'
 
 describe('getPrimarySentence', () => {
@@ -45,5 +45,47 @@ describe('getPrimarySentence', () => {
     const sentence = {} as FrontendSentence
 
     expect(getPrimarySentence([sentence])).toBe(sentence)
+  })
+
+  it('returns the single sentence when there is only one and it is not SPX', () => {
+    expect(getPrimarySentence([{ supervisionPackage: { code: 'SPA' } }] as FrontendSentence[])).toEqual({
+      supervisionPackage: { code: 'SPA' },
+    })
+  })
+})
+
+describe('isSpxOnlySentenceList', () => {
+  it('returns false when sentences is undefined', () => {
+    expect(isSpxOnlySentenceList(undefined)).toBe(false)
+  })
+
+  it('returns false when sentences is null', () => {
+    expect(isSpxOnlySentenceList(null)).toBe(false)
+  })
+
+  it('returns false when sentences is empty', () => {
+    expect(isSpxOnlySentenceList([])).toBe(false)
+  })
+
+  it('returns true when every sentence is SPX', () => {
+    expect(
+      isSpxOnlySentenceList([
+        { supervisionPackage: { code: 'SPX' } },
+        { supervisionPackage: { code: 'SPX' } },
+      ] as FrontendSentence[]),
+    ).toBe(true)
+  })
+
+  it('returns false when at least one sentence is not SPX', () => {
+    expect(
+      isSpxOnlySentenceList([
+        { supervisionPackage: { code: 'SPX' } },
+        { supervisionPackage: { code: 'SPA' } },
+      ] as FrontendSentence[]),
+    ).toBe(false)
+  })
+
+  it('returns false when a sentence has no supervisionPackage', () => {
+    expect(isSpxOnlySentenceList([{} as FrontendSentence])).toBe(false)
   })
 })
