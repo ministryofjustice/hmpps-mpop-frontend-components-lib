@@ -129,4 +129,18 @@ describe('person-header', () => {
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
   })
+
+  it('renders the person status tag', () => {
+    const document = renderComponent({ personStatusTag: 'In custody' })
+
+    const statusTag = document.querySelector('[data-qa="personStatusTag"]')
+
+    expect(statusTag?.textContent?.trim()).toBe('In custody')
+  })
+
+  it('does not render the person status tag when no status is provided', () => {
+    const document = renderComponent({ personStatusTag: undefined })
+
+    expect(document.querySelector('[data-qa="personStatusTag"]')).toBeNull()
+  })
 })

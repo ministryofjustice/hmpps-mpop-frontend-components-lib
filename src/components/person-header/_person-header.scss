@@ -58,3 +58,8 @@
   align-items: center;
   gap: govuk-spacing(2);
 }
+
+.person-header__name .app-status-badge {
+  position: relative;
+  top: -8px;
+}

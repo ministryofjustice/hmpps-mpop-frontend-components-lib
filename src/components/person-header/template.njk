@@ -7,8 +7,12 @@
         {% endif %}
 
         <div class='person-header__details'>
-            <h1 class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name' data-qa='personName'>{{ params.name }}</h1>
-
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-2 person-header__name" data-qa="personName">
+                {{ params.name }}
+                {% if params.personStatusTag %}
+                    <strong class="app-status-badge govuk-tag govuk-tag--yellow" data-qa="personStatusTag">{{ params.personStatusTag }}</strong>
+                {%endif%}
+            </h1>
             <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
                 <span class='govuk-!-font-weight-bold'>CRN:</span> <span data-qa='crn'>{{ params.crn }}</span>
             </p>
