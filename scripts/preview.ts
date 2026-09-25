@@ -197,7 +197,8 @@ const html = env.renderString(
         managedByLocation: "Worksop Probation Office",
         managedByHref: "#",
         photo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='120' viewBox='0 0 90 120'%3E%3Crect width='90' height='120' fill='%23b1b4b6'/%3E%3Ccircle cx='45' cy='45' r='22' fill='%23ffffff'/%3E%3Cpath d='M10 110c5-25 25-35 35-35s30 10 35 35' fill='%23ffffff'/%3E%3C/svg%3E",
-        riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
+        riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',    
+        personStatusTag: "In custody"
       }) }}
 
       <h2 class="govuk-heading-m" id="managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</h2>
