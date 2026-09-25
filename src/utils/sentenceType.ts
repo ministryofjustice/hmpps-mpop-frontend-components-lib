@@ -17,12 +17,18 @@ export const sentenceType = (context?: ContextDetails) => {
   }
   const primarySentence = getPrimarySentence(context.sentences)
 
-  if (primarySentence?.type?.isCustodial === false) {
-    return 'community sentence'
-  }
-  if (primarySentence?.type?.isCustodial === true) {
-    return 'custodial sentence'
+  if (!primarySentence) {
+    return false
   }
 
-  return undefined
+  if (primarySentence.type?.isSuspendedSentence === true) {
+    return 'suspended sentence'
+  }
+  if (primarySentence.type?.isCustodial === true) {
+    return 'custodial sentence'
+  }
+  if (primarySentence.type?.isCustodial === false) {
+    return 'community sentence'
+  }
+  return false
 }

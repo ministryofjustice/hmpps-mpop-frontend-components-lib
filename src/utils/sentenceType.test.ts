@@ -55,6 +55,30 @@ describe('sentenceType', () => {
     ).toBe('extended determinate sentence')
   })
 
+  it('returns "suspended sentence" when the primary sentence type is a suspended sentence', () => {
+    expect(
+      sentenceType(
+        buildContextDetails({
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true, isSuspendedSentence: true } },
+          ] as ContextDetails['sentences'],
+        }),
+      ),
+    ).toBe('suspended sentence')
+  })
+
+  it('returns "custodial sentence" when isSuspendedSentence is false, not undefined', () => {
+    expect(
+      sentenceType(
+        buildContextDetails({
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true, isSuspendedSentence: false } },
+          ] as ContextDetails['sentences'],
+        }),
+      ),
+    ).toBe('custodial sentence')
+  })
+
   it('returns "custodial sentence" when a sentence is custodial and not SPX', () => {
     expect(
       sentenceType(
@@ -79,13 +103,13 @@ describe('sentenceType', () => {
     ).toBe('community sentence')
   })
 
-  it('returns undefined when a sentence has no type (custodial status is unknown)', () => {
+  it('returns false when a sentence has no type (custodial status is unknown)', () => {
     expect(
       sentenceType(
         buildContextDetails({
           sentences: [{ supervisionPackage: { code: 'SPA' } }] as ContextDetails['sentences'],
         }),
       ),
-    ).toBeUndefined()
+    ).toBe(false)
   })
 })
