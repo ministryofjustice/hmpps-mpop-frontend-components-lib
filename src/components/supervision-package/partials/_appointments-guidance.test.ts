@@ -44,6 +44,32 @@ describe('_appointments-guidance partial', () => {
     expect(paragraph).toBeUndefined()
   })
 
+  it('shows the package-resets message when all appointments are used and the package resets before the sentence ends', () => {
+    const document = renderPartial({
+      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }] },
+      currentYear: { endDate: '2026-12-01', appointments: { completed: 10, allowance: 10 } },
+    })
+
+    const paragraphs = paragraphsOf(document)
+    expect(paragraphs).toHaveLength(2)
+    expect(paragraphs[0].textContent).toContain('Alex has used all the supervision package appointments.')
+    expect(paragraphs[1].textContent).toBe('The supervision package resets on 1 December 2026.')
+    expect(paragraphs.some(p => p.textContent?.includes('stage ends'))).toBe(false)
+  })
+
+  it('shows the stage-ends message when all appointments are used and the sentence ends before the reset', () => {
+    const document = renderPartial({
+      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2026-06-01' }] },
+      currentYear: { endDate: '2026-12-01', appointments: { completed: 10, allowance: 10 } },
+    })
+
+    const paragraphs = paragraphsOf(document)
+    expect(paragraphs).toHaveLength(2)
+    expect(paragraphs[0].textContent).toContain('Alex has used all the supervision package appointments.')
+    expect(paragraphs[1].textContent).toBe('The supervision stage ends on 1 December 2026.')
+    expect(paragraphs.some(p => p.textContent?.includes('package resets'))).toBe(false)
+  })
+
   it('shows the remaining-appointments-until-reset paragraph when the package resets before the sentence ends', () => {
     const document = renderPartial({
       context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }] },
