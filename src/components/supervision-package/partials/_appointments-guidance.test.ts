@@ -29,6 +29,8 @@ describe('_appointments-guidance partial', () => {
     expect(paragraphsOf(document)[0].textContent).toContain(
       'Alex has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.',
     )
+
+    expect(paragraphsOf(document).some(p => p.textContent?.includes('appointments remaining'))).toBe(false)
   })
 
   it('does not show the used-all-appointments paragraph without a forename', () => {
