@@ -1,22 +1,11 @@
 {% set sentence = params.context.sentences | getPrimarySentence %}
-
-{% if forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
-    <p class='govuk-body'>
-        {{ forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
-    </p>
-{% endif %}
-
-{% if params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
-    <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
-{% else %}
-    <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>
-{% endif %}
+{% include './_appointments-guidance.njk' %}
 
 {% if lifeCategoryCode %}
     {% include './_no-end-date.njk' %}
 {% endif %}
 
-{% include './_final-third-eligibility.njk'%}
+{% include './_final-third-eligibility.njk' %}
 
 {% include './_progress-bar.njk' %}
 
