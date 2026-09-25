@@ -8,7 +8,7 @@ export const supervisionAppointmentsReset = (
 ): boolean => {
   const primarySentence = getPrimarySentence(sentences)
 
-  if (!primarySentence?.endDate) {
+  if (!primarySentence || !primarySentence.endDate) {
     return false
   }
 

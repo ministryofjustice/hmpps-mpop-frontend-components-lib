@@ -734,6 +734,39 @@ describe('supervision-package', () => {
       )
     })
 
+    it('renders the provisional tier OASys review text when currentPhase is absent and provisional is true', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.provisional,
+        historyHref: '#',
+        provisional: true,
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink).not.toBeNull()
+      expect(document.body.textContent).toContain(
+        'Complete an OASys review. This confirms Alex’s tier so we can calculate the supervision package.',
+      )
+    })
+
+    it('renders the provisional tier OASys review text when currentPhase is absent and tierScore is MISSING', () => {
+      const document = renderComponent({
+        tierScore: 'MISSING',
+        tag: tierTags.missing,
+        historyHref: '#',
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
+      expect(oasysLink).not.toBeNull()
+      expect(document.body.textContent).toContain(
+        'Complete an OASys review. This confirms Alex’s tier so we can calculate the supervision package',
+      )
+    })
+
     it('does not render the OASys review link when currentPhase is present', () => {
       const document = renderComponent({
         tierScore: 'C',
@@ -769,6 +802,47 @@ describe('supervision-package', () => {
 
       expect(document.body.textContent).not.toContain('Next appointment')
       expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('renders the "Start an OASys review" wording rather than "Complete an OASys review" when currentPhase is absent and tier is not provisional or missing', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+      expect(document.body.textContent).toContain(
+        'Start an OASys review to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
+      )
+    })
+
+    it('renders the OASys review link with the exact href provided', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        oasysReviewHref: '/oasys/review/456',
+      })
+
+      const oasysLink = document.querySelector('a[href="/oasys/review/456"]')
+      expect(oasysLink).not.toBeNull()
+    })
+
+    it('renders the "Start an OASys review" wording when tierScore is absent and tier is not provisional or missing', () => {
+      const document = renderComponent({
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.body.textContent).toContain(
+        'Start an OASys review to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
+      )
     })
 
     it('does not render the OASys review link when oasysReviewHref is absent', () => {

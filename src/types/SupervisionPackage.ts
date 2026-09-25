@@ -104,7 +104,8 @@ type NextAppointment = {
 }
 
 export type SupervisionPackageFrontendContextResponse = {
-  currentPhase: CurrentPhase | null
+  // Omitted entirely on day 1, before any phase has been calculated
+  currentPhase?: CurrentPhase | null
   earlyEngagement: EarlyEngagement
   currentYear: CurrentYear
   nextAppointment: NextAppointment
