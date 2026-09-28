@@ -4,7 +4,7 @@
     {% if nextAppointmentDateTime and params.nextAppointment.type.description %}
         <p class='govuk-body'>
             {% if params.nextAppointmentHref %}
-                <a href='{{ params.nextAppointmentHref }}' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}</a>
+                <a href='{{ params.nextAppointmentHref }}' data-ai-id='supervisionPackageNextAppointmentLink' class='govuk-link govuk-link--no-visited-state'>{{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}</a>
             {% else %}
                 {{ params.nextAppointment.type.description | toTitleCase }}: {{ nextAppointmentDateTime }}
             {% endif %}

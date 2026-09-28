@@ -256,8 +256,8 @@ const html = env.renderString(
       "completed": 1
     }
   },
-  createdAt: "2026-09-12T11:37:12+01:00",
-	updatedAt: "2026-09-12T11:37:12+01:00",
+  "createdAt": "2026-09-12T11:37:12+01:00",
+  "updatedAt": "2026-09-12T11:37:12+01:00",
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
@@ -284,6 +284,8 @@ const html = env.renderString(
         historyHref: '#',
         arrangeAppointmentHref: '#',
         allAppointmentsHref: '#',
+        createdAt: '2026-09-12T11:37:12+01:00',
+        updatedAt: '2026-09-12T11:37:12+01:00',
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
@@ -339,7 +341,7 @@ const html = env.renderString(
 }</code></pre>
       {{ supervisionPackage({
         createdAt: "2026-09-12T11:37:12+01:00",
-	      updatedAt: "2026-09-12T11:37:12+01:00",
+        updatedAt: "2026-09-12T11:37:12+01:00",
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -386,7 +388,7 @@ const html = env.renderString(
       {
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
-          "status": { "code": "B", "description": "Released - On Licence" },
+          "status": { "code": "B", "description": "Released - On Licence" }
         },
         "inBreach": false,
         "endDate": "2027-02-18"
@@ -490,8 +492,8 @@ const html = env.renderString(
       "completed": 1
     }
   },
-  createdAt: "2026-09-12T11:37:12+01:00",
-  updatedAt: "2026-09-12T11:37:12+01:00",
+  "createdAt": "2026-09-12T11:37:12+01:00",
+  "updatedAt": "2026-09-12T11:37:12+01:00",
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
@@ -513,8 +515,8 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
-        createdAt: "2026-09-12T11:37:12+01:00",
-	      updatedAt: "2026-09-12T11:37:12+01:00",
+        createdAt: '2026-09-12T11:37:12+01:00',
+        updatedAt: '2026-09-12T11:37:12+01:00',
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -576,8 +578,8 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
-       	createdAt: "2026-09-12T11:37:12+01:00",
-	      updatedAt: "2026-09-12T11:37:12+01:00",
+        createdAt: "2026-09-12T11:37:12+01:00",
+        updatedAt: "2026-09-12T11:37:12+01:00",
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -625,7 +627,8 @@ const html = env.renderString(
       {
         "type": { "isCustodial": true },
         "custody": {
-          "finalThirdDate": "2026-08-06"
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "location": { "code": "COMMUN", "description": "In the Community" }
         },
         "inBreach": true,
         "endDate": "2027-02-18"
@@ -634,8 +637,8 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
-        createdAt: "2026-09-12T11:37:12+01:00",
-	      updatedAt: "2026-09-12T11:37:12+01:00",
+        createdAt: '2026-09-12T11:37:12+01:00',
+        updatedAt: '2026-09-12T11:37:12+01:00',
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -647,6 +650,7 @@ const html = env.renderString(
           finalThirdEligibility: { eligible: false },
           sentences: [{
             type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, location: { code: 'COMMUN', description: 'In the Community' } },
             inBreach: true,
             endDate: '2027-02-18'
           }]
@@ -682,8 +686,8 @@ const html = env.renderString(
       {
         "type": { "isCustodial": true },
         "custody": {
-          "finalThirdDate": "2026-08-06",
-          "location": { "code": "UATLRG" }
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "location": { "code": "UATLRG", "description": "Unlawfully at Large" }
         },
         "inBreach": false,
         "endDate": "2027-02-18"
@@ -692,8 +696,8 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
-        createdAt: "2026-09-12T11:37:12+01:00",
-	      updatedAt: "2026-09-12T11:37:12+01:00",
+        createdAt: '2026-09-12T11:37:12+01:00',
+        updatedAt: '2026-09-12T11:37:12+01:00',
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -702,14 +706,14 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          finalThirdEligibility: { eligible: true },
+          finalThirdEligibility: { eligible: false },
           sentences: [{
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
             custody: {
-              finalThirdDate: '2026-08-06',
-              location: { code: 'UATLRG' }
+              status: { code: 'B', description: 'Released - On Licence' },
+              location: { code: 'UATLRG', description: 'Unlawfully at Large' }
             }
           }]
         },
@@ -729,6 +733,7 @@ const html = env.renderString(
       {
         "type": { "isCustodial": true },
         "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
           "finalThirdDate": "2026-08-06"
         },
         "inBreach": false,
@@ -738,19 +743,20 @@ const html = env.renderString(
   }
 }</code></pre>
       {{ supervisionPackage({
-        tag: {text: 'Missing', color: 'red'},
+        tag: { text: 'Missing', color: 'red' },
         historyHref: '#',
         arrangeAppointmentHref: '#',
         allAppointmentsHref: '#',
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          finalThirdEligibility: { eligible: true },
+          finalThirdEligibility: { eligible: false },
           sentences: [{
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
             custody: {
+              status: { code: 'B', description: 'Released - On Licence' },
               finalThirdDate: '2026-08-06'
             }
           }]
@@ -760,7 +766,7 @@ const html = env.renderString(
       <h3 class="govuk-heading-s">Tier service unavailable</h3>
       <p class="govuk-body">Triggered by <code>response from the tier API error</code></p>
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-  tag: { text: 'Unavailable', color: 'grey' },
+  "tag": { "text": "Unavailable", "color": "grey" },
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
@@ -769,6 +775,7 @@ const html = env.renderString(
       {
         "type": { "isCustodial": true },
         "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
           "finalThirdDate": "2026-08-06"
         },
         "inBreach": false,
@@ -785,12 +792,13 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
-          finalThirdEligibility: { eligible: true },
+          finalThirdEligibility: { eligible: false },
           sentences: [{
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
             custody: {
+              status: { code: 'B', description: 'Released - On Licence' },
               finalThirdDate: '2026-08-06'
             }
           }]
@@ -1598,41 +1606,40 @@ const html = env.renderString(
       <p class="govuk-body">The provisional tier is displayed when <code>provisional: true</code>.</p>
       <p class="govuk-body">The provisional flag is supplied by the tier API calculation.</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
-    provisional: true,
-    currentPhase: {
-    phase: {
-      code: 'SPNK', description: 'Not yet known'
+  "provisional": true,
+  "currentPhase": {
+    "phase": {
+      "code": "SPNK", "description": "Not yet known"
     },
-    endDate: '2027-08-31'
-    },
-    oasysReviewHref: '#',
-    historyHref: '#',
-    tierScore: 'C',
-    tag: {
-      text: 'Provisional',
-      color: 'orange'
-    },
-    context: {
-      name: { forename: 'Gracie', surname: 'Beatty' },
-      gender: 'Male',
-      finalThirdEligibility: { eligible: false },
-      sentences: [
-        {
-          type: { isCustodial: true },
-          custody: {
-            status: { code: 'B', description: 'Released - On Licence' },
-            finalThirdDate: '2026-08-06'
-          },
-          inBreach: false,
-          endDate: '2027-08-30'
-        }
-      ]
-    },
-    earlyEngagement: { weeks: 0, completed: 0 },
-    currentYear: {
-      endDate: '2027-08-31',
-      appointments: { allowance: 0, scheduled: 0, completed: 0 }
-    }
+    "endDate": "2027-08-31"
+  },
+  "oasysReviewHref": "#",
+  "historyHref": "#",
+  "tierScore": "C",
+  "tag": {
+    "text": "Provisional",
+    "color": "orange"
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  },
+  "earlyEngagement": { "weeks": 0, "completed": 0 },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": { "allowance": 0, "scheduled": 0, "completed": 0 }
   }
 }</code></pre>
 
@@ -1967,15 +1974,15 @@ const html = env.renderString(
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         crn: 'X991651',
         nextAppointmentHref: '#',
-	nextAppointment: {
-		id: '2511051671',
-		date: "2026-08-25",
-		startTime: "12:00:00",
-		type: {
-			code: "COAP",
-			description: "Planned Office Visit (NS)"
-		}
-	},
+        nextAppointment: {
+          id: '2511051671',
+          date: "2026-08-25",
+          startTime: "12:00:00",
+          type: {
+            code: "COAP",
+            description: "Planned Office Visit (NS)"
+          }
+        },
         currentPhase: {
           phase: { code: 'STD', description: 'Standard Supervision' },
           supervisionPackage: { code: 'SPA', description: 'A' },
@@ -2242,9 +2249,9 @@ const html = env.renderString(
     }
   },
   "context": {
-    sentences: [
+    "sentences": [
       {
-        inBreach: true
+        "inBreach": true
       }
     ]
   }
