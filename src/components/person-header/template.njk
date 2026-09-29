@@ -21,11 +21,19 @@
                     <span class='govuk-!-font-weight-bold'>Tier:</span> <a class='govuk-link govuk-link--inverse' href='{{ params.historyHref }}' data-qa='tier'>{{ params.tier }}</a>
                 </li>
                 <li>
+                    {% if params.managedByName %}
+                        {% set managedByText = params.managedByName | formatName %}
+                        {% if params.managedByLocation %}
+                            {% set managedByText = managedByText + ' (' + params.managedByLocation + ')' %}
+                        {% endif %}
+                    {% else %}
+                        {% set managedByText = params.managedBy %}
+                    {% endif %}
                     <span class='govuk-!-font-weight-bold'>Managed by:</span>
                     {% if params.managedByHref %}
-                        <a class='govuk-link govuk-link--inverse' href='{{ params.managedByHref }}' data-qa='managedBy'>{{ params.managedBy }}</a>
+                        <a class='govuk-link govuk-link--inverse' href='{{ params.managedByHref }}' data-qa='managedBy'>{{ managedByText }}</a>
                     {% else %}
-                        <span data-qa='managedBy'>{{ params.managedBy }}</span>
+                        <span data-qa='managedBy'>{{ managedByText }}</span>
                     {% endif %}
                 </li>
             </ul>
