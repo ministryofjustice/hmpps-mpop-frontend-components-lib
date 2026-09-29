@@ -49,8 +49,71 @@ const html = env.renderString(
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
 
+      <nav class="govuk-body" aria-label="Contents">
+        <h2 class="govuk-heading-m">Contents</h2>
+        <ul class="govuk-list govuk-list--bullet">
+          <li><a class="govuk-link" href="#pop-header">PoP Header</a></li>
+          <li><a class="govuk-link" href="#person-header">Person Header</a>
+            <ul class="govuk-list govuk-list--bullet">
+              <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
+            </ul>
+          </li>
+          <li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
+            <ul class="govuk-list govuk-list--bullet">
+              <li><a class="govuk-link" href="#glossary">Glossary: phase codes and enums</a></li>
+              <li><a class="govuk-link" href="#community">Community</a></li>
+              <li><a class="govuk-link" href="#woman">Woman</a></li>
+              <li><a class="govuk-link" href="#custodial">Custodial</a></li>
+              <li><a class="govuk-link" href="#final-third-eligible-early-engagement">Final Third eligible (early engagement)</a></li>
+              <li><a class="govuk-link" href="#final-third-eligible-without-start-date">Final Third eligible without start date</a></li>
+              <li><a class="govuk-link" href="#final-third-ineligible-early-engagement">Final Third ineligible (early engagement)</a></li>
+              <li><a class="govuk-link" href="#in-custody">In Custody</a></li>
+              <li><a class="govuk-link" href="#recalled">Recalled</a></li>
+              <li><a class="govuk-link" href="#in-breach">In Breach</a></li>
+              <li><a class="govuk-link" href="#unlawfully-at-large">Unlawfully at Large</a></li>
+              <li><a class="govuk-link" href="#tier-missing">Tier Missing</a></li>
+              <li><a class="govuk-link" href="#tier-service-unavailable">Tier service unavailable</a></li>
+              <li><a class="govuk-link" href="#lifer-ipp">Lifer/IPP</a></li>
+              <li><a class="govuk-link" href="#end-date-standard-supervision">End date (standard supervision)</a></li>
+              <li><a class="govuk-link" href="#reset-date-standard-supervision">Reset Date (standard supervision)</a></li>
+              <li><a class="govuk-link" href="#final-third-eligible-standard-supervision">Final Third eligible (standard supervision)</a></li>
+              <li><a class="govuk-link" href="#final-third-ineligible-standard-supervision">Final Third ineligible (standard supervision)</a></li>
+              <li><a class="govuk-link" href="#opd">OPD</a></li>
+              <li><a class="govuk-link" href="#end-date-red-rated-iom">End date (red-rated IOM)</a></li>
+              <li><a class="govuk-link" href="#reset-date-red-rated-iom">Reset Date (red-rated IOM)</a></li>
+              <li><a class="govuk-link" href="#final-third-eligible-red-rated-iom">Final Third eligible (red-rated IOM)</a></li>
+              <li><a class="govuk-link" href="#final-third-ineligible-red-rated-iom">Final Third ineligible (red-rated IOM)</a></li>
+              <li><a class="govuk-link" href="#custodial-final-third-stage">Custodial Final third stage</a></li>
+              <li><a class="govuk-link" href="#day-1">Day 1</a></li>
+              <li><a class="govuk-link" href="#day-1-or-shortly-after">Day 1 or shortly after</a></li>
+              <li><a class="govuk-link" href="#provisional">Provisional</a></li>
+              <li><a class="govuk-link" href="#final-third-progress-national-security-division-cases">Final third progress National Security Division cases</a></li>
+              <li><a class="govuk-link" href="#sentence-type-heading">Sentence type heading</a>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li><a class="govuk-link" href="#custodial-sentence">Custodial sentence</a></li>
+                  <li><a class="govuk-link" href="#community-sentence">Community sentence</a></li>
+                  <li><a class="govuk-link" href="#life-sentence">Life sentence</a></li>
+                  <li><a class="govuk-link" href="#imprisonment-for-public-protection">Imprisonment for Public Protection</a></li>
+                  <li><a class="govuk-link" href="#extended-determinate-sentence">Extended determinate sentence</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a class="govuk-link" href="#supervision-package-summary">Supervision Package Summary</a>
+            <ul class="govuk-list govuk-list--bullet">
+              <li><a class="govuk-link" href="#early-engagement">Early engagement</a></li>
+              <li><a class="govuk-link" href="#supervision-stage">Supervision stage</a></li>
+              <li><a class="govuk-link" href="#supervision-stage-with-breach-warning">Supervision stage with breach warning</a></li>
+              <li><a class="govuk-link" href="#supervision-stage-with-recall-warning">Supervision stage with recall warning</a></li>
+              <li><a class="govuk-link" href="#supervision-stage-with-all-appointments-used">Supervision stage with all appointments used</a></li>
+              <li><a class="govuk-link" href="#final-third">Final third</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">PoP Header</h1>
+      <h1 class="govuk-heading-l" id="pop-header">PoP Header</h1>
 
       {{ popHeader({
         crn: "X123456",
@@ -61,7 +124,7 @@ const html = env.renderString(
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">Person Header</h1>
+      <h1 class="govuk-heading-l" id="person-header">Person Header</h1>
       <p class="govuk-body">Placeholder for the redesigned persistent person header (name, CRN, date of birth, tier, managed by). <code>riskBadges</code> is a layout slot for pre-rendered risk badge markup (e.g. from the ARNS component library's <code>predictorBadge</code>) rather than something this component renders itself. <code>photo</code> is only rendered when provided - there's no placeholder image when it's absent.</p>
 
       {{ personHeader({
@@ -76,7 +139,7 @@ const html = env.renderString(
         riskBadges: '<span class="govuk-tag govuk-tag--green">OGRS <strong>LOW 5.67%</strong></span> <span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>'
       }) }}
 
-      <h2 class="govuk-heading-m">Managed by: Unallocated (not clickable), no photo</h2>
+      <h2 class="govuk-heading-m" id="managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</h2>
       <p class="govuk-body">When there's no responsible officer, or the managed by data failed to load, <code>managedByHref</code> is omitted and the field renders as plain text instead of a link. This variant also omits <code>photo</code>, to show the layout when no image is available - the header collapses to full-width text with no gap or placeholder left behind.</p>
       {{ personHeader({
         name: "Andrew Langley",
@@ -88,7 +151,139 @@ const html = env.renderString(
       }) }}
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">Supervision Package</h1>
+      <h1 class="govuk-heading-l" id="supervision-package">Supervision Package</h1>
+
+      <h2 class="govuk-heading-m" id="glossary">Glossary: phase codes and enums</h2>
+      <p class="govuk-body">Reference for the coded values used throughout <code>currentPhase.phase.code</code> and related fields in the scenarios below. Descriptions are taken from the supervision-packages-api reference data, not just this library's own logic.</p>
+
+      <h3 class="govuk-heading-s">Phase codes (<code>currentPhase.phase.code</code>)</h3>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Code</th>
+            <th scope="col" class="govuk-table__header">Backend description</th>
+            <th scope="col" class="govuk-table__header">Meaning in this component</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>INIT</code></td>
+            <td class="govuk-table__cell">Early engagement</td>
+            <td class="govuk-table__cell">Shows the <a class="govuk-link" href="#community">early engagement</a> section of the supervision package - the box that shows weeks/appointments progress for this stage.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>STD</code></td>
+            <td class="govuk-table__cell">Standard supervision / Licence supervision</td>
+            <td class="govuk-table__cell">Shows the <a class="govuk-link" href="#end-date-standard-supervision">standard supervision</a> section of the supervision package - end date/reset date and appointments progress.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>FTHRD</code></td>
+            <td class="govuk-table__cell">Final third</td>
+            <td class="govuk-table__cell">Shows the <a class="govuk-link" href="#custodial-final-third-stage">final third</a> section of the supervision package, and hides the "arrange appointment" button.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>IOM</code></td>
+            <td class="govuk-table__cell">Integrated Offender Management</td>
+            <td class="govuk-table__cell">Makes this section of the supervision package visible, but the red-rated IOM display itself (<a class="govuk-link" href="#end-date-red-rated-iom">example</a>) only appears when a separate flag, <code>context.integratedOffenderManagementRedRated</code>, is also set to true.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>OPD</code></td>
+            <td class="govuk-table__cell">In OPD treatment</td>
+            <td class="govuk-table__cell">Makes this section of the supervision package visible, but the <a class="govuk-link" href="#opd">OPD display</a> itself only appears when a separate flag, <code>context.offenderPersonalDisorderPathway</code>, is also set to true.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>SPNS</code></td>
+            <td class="govuk-table__cell">Not started</td>
+            <td class="govuk-table__cell">"In flight" - a phase has been calculated but supervision hasn't started yet. Shows the <a class="govuk-link" href="#day-1-or-shortly-after">in-flight</a> version of the supervision package, and hides the action buttons/next appointment.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>SPNK</code></td>
+            <td class="govuk-table__cell">Not yet known</td>
+            <td class="govuk-table__cell">Used alongside <code>provisional: true</code> (see <a class="govuk-link" href="#provisional">Provisional</a>) - the tier/phase calculation hasn't completed yet, so action buttons/appointments are suppressed.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>SPNA</code></td>
+            <td class="govuk-table__cell">Does not apply</td>
+            <td class="govuk-table__cell">The person is not eligible for a supervision package at all - nothing renders (<code>isSupervisionPackage</code> is false). No scenario currently demonstrates this in this file.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="govuk-heading-s">Status/tag enums</h3>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Tag text</th>
+            <th scope="col" class="govuk-table__header">Colour</th>
+            <th scope="col" class="govuk-table__header">Triggered by</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">No appointments remaining</td>
+            <td class="govuk-table__cell"><code>govuk-tag--red</code></td>
+            <td class="govuk-table__cell"><code>currentYear.appointments.completed &gt;= allowance</code> (and not OPD)</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Unlawfully at large</td>
+            <td class="govuk-table__cell"><code>govuk-tag--yellow</code></td>
+            <td class="govuk-table__cell">a sentence's <code>custody.location.code</code> is <code>UATLRG</code></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">In custody / on remand (title-cased)</td>
+            <td class="govuk-table__cell"><code>govuk-tag--yellow</code></td>
+            <td class="govuk-table__cell">a sentence's <code>custody.status</code> indicates custody (takes priority over "In breach")</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">In breach</td>
+            <td class="govuk-table__cell"><code>govuk-tag--yellow</code></td>
+            <td class="govuk-table__cell">a sentence has <code>inBreach: true</code></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Offender personality disorder</td>
+            <td class="govuk-table__cell"><code>govuk-tag--purple</code></td>
+            <td class="govuk-table__cell"><code>context.offenderPersonalDisorderPathway: true</code></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">IOM (Integrated Offender Management): Red</td>
+            <td class="govuk-table__cell"><code>govuk-tag--red</code></td>
+            <td class="govuk-table__cell"><code>context.integratedOffenderManagementRedRated: true</code></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Provisional</td>
+            <td class="govuk-table__cell"><code>orange</code></td>
+            <td class="govuk-table__cell"><code>params.provisional: true</code> (supplied by the tier API calculation)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="govuk-heading-s">Other flags/fields</h3>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Field</th>
+            <th scope="col" class="govuk-table__header">Meaning</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>sentences[].type.isCustodial</code> / <code>isSuspendedSentence</code> / <code>isFirstYear</code></td>
+            <td class="govuk-table__cell">Booleans on a sentence's type. Note: the swagger-ui page for this API can render these without the <code>is</code> prefix (a Springdoc/Kotlin boolean-getter quirk) - the real JSON payload always includes it.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>sentences[].custody.status</code> / <code>.location</code></td>
+            <td class="govuk-table__cell"><code>status</code> is always present when <code>custody</code> is present (required by the API); <code>location</code> is optional. <code>UATLRG</code> is the location code used for "unlawfully at large".</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>sentences[].inBreach</code> and <code>custody</code></td>
+            <td class="govuk-table__cell">Independent fields - a sentence can be in breach and in custody at the same time.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>tierScore</code> (PoP Header)</td>
+            <td class="govuk-table__cell">A single-letter probation tier (A-G in practice). Discretionary appointment eligibility only applies for tiers <code>C</code>, <code>D</code>, <code>E</code>, <code>F</code> or <code>G</code> combined with <code>gender: 'Female'</code> and not IOM red-rated.</td>
+          </tr>
+        </tbody>
+      </table>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
@@ -136,7 +331,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-early-engagement-conditional">
 
-      <h3 class="govuk-heading-s">Community</h3>
+      <h3 class="govuk-heading-s" id="community">Community</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code</code> of "INIT" (still in early engagement) and a non-custodial sentence, <code>context.sentences[].type.isCustodial: false</code>:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -187,7 +382,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Woman</h3>
+      <h3 class="govuk-heading-s" id="woman">Woman</h3>
       <p class="govuk-body">Triggered by <code>context.gender: "Female"</code> plus <code>integratedOffenderManagementRedRated: false</code>, and a <code>tierScore</code> macro param of "C"-"G", which together show the "discretionary appointments" text for women:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -237,7 +432,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Custodial</h3>
+      <h3 class="govuk-heading-s" id="custodial">Custodial</h3>
       <p class="govuk-body">Triggered by <code>context.sentences[].type.isCustodial: true</code> with <code>custody.status.code: "B"</code> (Released - On Licence), during early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -301,7 +496,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-eligible-early-engagement">Final Third eligible (early engagement)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while still in early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -361,7 +556,8 @@ const html = env.renderString(
         earlyEngagement: { weeks: 3, completed: 1 },
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
-              <h3 class="govuk-heading-s">Final Third eligible without start date</h3>
+
+      <h3 class="govuk-heading-s" id="final-third-eligible-without-start-date">Final Third eligible without start date</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> not set, while still in early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -416,7 +612,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-ineligible-early-engagement">Final Third ineligible (early engagement)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite still being on a custodial licence, during early engagement:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -473,7 +669,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">In Custody</h3>
+      <h3 class="govuk-heading-s" id="in-custody">In Custody</h3>
       <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (In Custody), which overrides the normal early engagement text with an in-custody/recalled tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -538,7 +734,7 @@ const html = env.renderString(
       }) }}
 
 
-      <h3 class="govuk-heading-s">Recalled</h3>
+      <h3 class="govuk-heading-s" id="recalled">Recalled</h3>
       <p class="govuk-body">Triggered by <code>custody.status.code: "C"</code> (Recalled), which overrides the normal early engagement text with an in-custody/recalled tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -600,7 +796,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">In Breach</h3>
+      <h3 class="govuk-heading-s" id="in-breach">In Breach</h3>
       <p class="govuk-body">Triggered by <code>inBreach: true</code> (In Breach), which overrides the normal early engagement text with an In breach tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -659,7 +855,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Unlawfully at Large</h3>
+      <h3 class="govuk-heading-s" id="unlawfully-at-large">Unlawfully at Large</h3>
       <p class="govuk-body">Triggered by <code>custody.location.code == 'UATLRG'</code> (Unlawfully at Large), which overrides the normal early engagement text with an Unlawfully at Large tag:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -721,7 +917,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 1 } }
       }) }}
 
-            <h3 class="govuk-heading-s">Tier Missing</h3>
+      <h3 class="govuk-heading-s" id="tier-missing">Tier Missing</h3>
       <p class="govuk-body">Triggered by <code>"Tier": "Missing"</code></p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tag": { "text": "Missing", "color": "red" },
@@ -763,7 +959,7 @@ const html = env.renderString(
         }
       }) }}
 
-      <h3 class="govuk-heading-s">Tier service unavailable</h3>
+      <h3 class="govuk-heading-s" id="tier-service-unavailable">Tier service unavailable</h3>
       <p class="govuk-body">Triggered by <code>response from the tier API error</code></p>
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tag": { "text": "Unavailable", "color": "grey" },
@@ -809,7 +1005,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-supervision-conditional">
 
-      <h3 class="govuk-heading-s">Lifer/IPP</h3>
+      <h3 class="govuk-heading-s" id="lifer-ipp">Lifer/IPP</h3>
       <p class="govuk-body">Triggered by <code>context.liferCategory.code: "LF01"</code>, which removes the end/reset date and shows "There is no supervision end date" instead:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -871,7 +1067,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">End date</h3>
+      <h3 class="govuk-heading-s" id="end-date-standard-supervision">End date (standard supervision)</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2027-08-30") falls before <code>currentYear.endDate</code> ("2027-08-31"), so the sentence ends first and the package shows an "ends on" date:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -928,7 +1124,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Reset Date</h3>
+      <h3 class="govuk-heading-s" id="reset-date-standard-supervision">Reset Date (standard supervision)</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2028-08-30") falls after <code>currentYear.endDate</code> ("2027-08-31"), so the sentence year resets first and the package shows a "resets on" date:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -985,7 +1181,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-eligible-standard-supervision">Final Third eligible (standard supervision)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, during standard supervision (<code>currentPhase.phase.code: "STD"</code>):</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1045,7 +1241,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-ineligible-standard-supervision">Final Third ineligible (standard supervision)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, during standard supervision:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1109,7 +1305,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-opd-conditional">
 
-      <h3 class="govuk-heading-s">OPD</h3>
+      <h3 class="govuk-heading-s" id="opd">OPD</h3>
       <p class="govuk-body">Triggered by <code>context.offenderPersonalDisorderPathway: true</code>, which shows OPD treatment text instead of the normal stage text:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1163,7 +1359,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-red-rated-iom-conditional">
 
-      <h3 class="govuk-heading-s">End date</h3>
+      <h3 class="govuk-heading-s" id="end-date-red-rated-iom">End date (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> with <code>currentPhase.phase.code: "IOM"</code>, and a sentence <code>endDate</code> ("2027-08-30") before <code>currentYear.endDate</code> ("2027-08-31") so it shows an "ends on" date:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1225,7 +1421,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Reset Date</h3>
+      <h3 class="govuk-heading-s" id="reset-date-red-rated-iom">Reset Date (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by a sentence <code>endDate</code> ("2028-08-30") after <code>currentYear.endDate</code> ("2027-08-31") while red-rated IOM, so the sentence year resets first and shows a "resets on" date:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1284,7 +1480,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third eligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-eligible-red-rated-iom">Final Third eligible (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> plus <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while red-rated IOM:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1343,7 +1539,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Final Third ineligible</h3>
+      <h3 class="govuk-heading-s" id="final-third-ineligible-red-rated-iom">Final Third ineligible (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, while red-rated IOM:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1406,7 +1602,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-custodial-final-third-conditional">
 
-      <h3 class="govuk-heading-s">Custodial Final third stage</h3>
+      <h3 class="govuk-heading-s" id="custodial-final-third-stage">Custodial Final third stage</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "FTHRD"</code> on a custodial sentence that is eligible for the final third (not a National Security Division case, so it uses the normal supervision package view rather than the final third progress table):</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1470,7 +1666,7 @@ const html = env.renderString(
 
       <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-in-flight-conditional">
 
-      <h3 class="govuk-heading-s">Day 1</h3>
+      <h3 class="govuk-heading-s" id="day-1">Day 1</h3>
       <p class="govuk-body">Triggered by a missing <code>currentPhase</code> ("currentPhase" object will not be returned from the API), shown on day 1 before any phase has been calculated:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "earlyEngagement": {
@@ -1529,7 +1725,7 @@ const html = env.renderString(
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 0, scheduled: 0, completed: 0 } }
       }) }}
 
-      <h3 class="govuk-heading-s">Day 1 or shortly after</h3>
+      <h3 class="govuk-heading-s" id="day-1-or-shortly-after">Day 1 or shortly after</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "SPNS"</code> (not yet started), shown on day 1 or shortly after once a phase has been calculated but supervision hasn't started:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -1601,7 +1797,7 @@ const html = env.renderString(
 
     <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-provisional-conditional">
 
-      <h3 class="govuk-heading-s">Provisional</h3>
+      <h3 class="govuk-heading-s" id="provisional">Provisional</h3>
 
       <p class="govuk-body">The provisional tier is displayed when <code>provisional: true</code>.</p>
       <p class="govuk-body">The provisional flag is supplied by the tier API calculation.</p>
@@ -1668,7 +1864,7 @@ const html = env.renderString(
     </div>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h2 class="govuk-heading-m">Final third progress National Security Division cases</h2>
+      <h2 class="govuk-heading-m" id="final-third-progress-national-security-division-cases">Final third progress National Security Division cases</h2>
       <p class="govuk-body">Displays the final third progress card.</p>
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
@@ -2036,10 +2232,10 @@ const html = env.renderString(
         }
       }) }}
 
-      <h2 class="govuk-heading-m">Sentence type heading</h2>
+      <h2 class="govuk-heading-m" id="sentence-type-heading">Sentence type heading</h2>
       <p class="govuk-body">The "Supervision package" heading is suffixed with a sentence type description, derived from <code>context</code> via the <code>sentenceType</code> filter.</p>
 
-      <h3 class="govuk-heading-s">Custodial sentence</h3>
+      <h3 class="govuk-heading-s" id="custodial-sentence">Custodial sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2065,7 +2261,7 @@ const html = env.renderString(
         }
       }) }}
 
-      <h3 class="govuk-heading-s">Community sentence</h3>
+      <h3 class="govuk-heading-s" id="community-sentence">Community sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2091,7 +2287,7 @@ const html = env.renderString(
         }
       }) }}
 
-      <h3 class="govuk-heading-s">Life sentence</h3>
+      <h3 class="govuk-heading-s" id="life-sentence">Life sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2116,7 +2312,7 @@ const html = env.renderString(
         }
       }) }}
 
-      <h3 class="govuk-heading-s">Imprisonment for Public Protection</h3>
+      <h3 class="govuk-heading-s" id="imprisonment-for-public-protection">Imprisonment for Public Protection</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2141,7 +2337,7 @@ const html = env.renderString(
         }
       }) }}
 
-      <h3 class="govuk-heading-s">Extended determinate sentence</h3>
+      <h3 class="govuk-heading-s" id="extended-determinate-sentence">Extended determinate sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2166,9 +2362,9 @@ const html = env.renderString(
         }
       }) }}
 
-       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      <h1 class="govuk-heading-l">Supervision Package Summary</h1>
-       <h3 class="govuk-heading-s">Early engagement</h3>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l" id="supervision-package-summary">Supervision Package Summary</h1>
+      <h3 class="govuk-heading-s" id="early-engagement">Early engagement</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -2177,34 +2373,34 @@ const html = env.renderString(
     }
   }
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'INIT' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 4,
-    completed: 2
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 0,
-      scheduled: 1,
-      completed: 0
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'INIT' }
+        },
+        forename: 'Stuart',
+        context: {
+          finalThirdEligibility: {
+            eligible: false
+          }
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 4,
+          completed: 2
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 0,
+            scheduled: 1,
+            completed: 0
+          }
+        }
+      }) }}
 
-   <h3 class="govuk-heading-s">Supervision stage</h3>
+      <h3 class="govuk-heading-s" id="supervision-stage">Supervision stage</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -2213,34 +2409,34 @@ const html = env.renderString(
     }
   }
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'STD' }
+        },
+        forename: 'Stuart',
+        context: {
+          finalThirdEligibility: {
+            eligible: false
+          }
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 0,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 4,
+            scheduled: 1,
+            completed: 2
+          }
+        }
+      }) }}
 
-  <h3 class="govuk-heading-s">Supervision stage with breach warning</h3>
+      <h3 class="govuk-heading-s" id="supervision-stage-with-breach-warning">Supervision stage with breach warning</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -2256,39 +2452,39 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    },
-    sentences: [
-      {
-        inBreach: true
-      }
-    ]
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'STD' }
+        },
+        forename: 'Stuart',
+        context: {
+          finalThirdEligibility: {
+            eligible: false
+          },
+          sentences: [
+            {
+              inBreach: true
+            }
+          ]
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 0,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 4,
+            scheduled: 1,
+            completed: 2
+          }
+        }
+      }) }}
 
-  <h3 class="govuk-heading-s">Supervision stage with recall warning</h3>
+      <h3 class="govuk-heading-s" id="supervision-stage-with-recall-warning">Supervision stage with recall warning</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -2303,38 +2499,38 @@ const html = env.renderString(
     }
   }
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    },
-    recallStatus: {
-      code: 'R',
-      description: 'Recall'
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'STD' }
+        },
+        forename: 'Stuart',
+        context: {
+          finalThirdEligibility: {
+            eligible: false
+          },
+          recallStatus: {
+            code: 'R',
+            description: 'Recall'
+          }
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 0,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 4,
+            scheduled: 1,
+            completed: 2
+          }
+        }
+      }) }}
 
-  <h3 class="govuk-heading-s">Supervision stage with all appointments used</h3>
+      <h3 class="govuk-heading-s" id="supervision-stage-with-all-appointments-used">Supervision stage with all appointments used</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
@@ -2353,36 +2549,35 @@ const html = env.renderString(
       "completed": 4
     }
   }
-
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    finalThirdEligibility: {
-      eligible: false
-    }
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 4
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'STD' }
+        },
+        forename: 'Stuart',
+        context: {
+          finalThirdEligibility: {
+            eligible: false
+          }
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 0,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 4,
+            scheduled: 1,
+            completed: 4
+          }
+        }
+      }) }}
 
-  <h3 class="govuk-heading-s">Final third</h3>
+      <h3 class="govuk-heading-s" id="final-third">Final third</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
       <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
@@ -2402,45 +2597,64 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
- {{ supervisionPackageSummary({
-  currentPhase: {
-    phase: { code: 'STD' }
-  },
-  forename: 'Stuart',
-  context: {
-    nationalSecurityDivision: true,
-    finalThirdEligibility: {
-      eligible: true
-    },
-    sentences: [
-      {
-        type: { isCustodial: true },
-        custody: { finalThirdDate: '2026-08-06' }
-      }
-    ]
-  },
-  earlyEngagement: {
-    startDate: '2026-08-06T13:46:16.916Z',
-    endDate: '2026-08-06T13:46:16.916Z',
-    weeks: 0,
-    completed: 0
-  },
-  currentYear: {
-    startDate: '2026-08-06',
-    endDate: '2026-08-06',
-    appointments: {
-      allowance: 4,
-      scheduled: 1,
-      completed: 2
-    }
-  }
-  }) }}
+      {{ supervisionPackageSummary({
+        currentPhase: {
+          phase: { code: 'STD' }
+        },
+        forename: 'Stuart',
+        context: {
+          nationalSecurityDivision: true,
+          finalThirdEligibility: {
+            eligible: true
+          },
+          sentences: [
+            {
+              type: { isCustodial: true },
+              custody: { finalThirdDate: '2026-08-06' }
+            }
+          ]
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 0,
+          completed: 0
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 4,
+            scheduled: 1,
+            completed: 2
+          }
+        }
+      }) }}
     </div>
   </main>
 
   <script type="module">
     import { initAll } from 'https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.js'
     initAll()
+
+    // Contents links can point inside a hidden radio "conditional reveal" panel
+    // (e.g. the Supervision Package scenarios). Select the matching radio first,
+    // so govuk-frontend's own radios script reveals the panel before we scroll to it.
+    function revealAndScrollToHash() {
+      const hash = window.location.hash
+      if (!hash || hash.length < 2) return
+      const target = document.getElementById(hash.slice(1))
+      if (!target) return
+      const conditional = target.closest('.govuk-radios__conditional')
+      if (conditional && conditional.id) {
+        const radio = document.getElementById(conditional.id.replace(/-conditional$/, ''))
+        if (radio) radio.click()
+      }
+      target.scrollIntoView()
+    }
+
+    revealAndScrollToHash()
+    window.addEventListener('hashchange', revealAndScrollToHash)
   </script>
 </body>
 </html>
