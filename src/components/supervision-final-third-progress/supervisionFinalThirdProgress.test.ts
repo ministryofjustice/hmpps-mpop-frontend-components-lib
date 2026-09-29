@@ -69,6 +69,7 @@ describe('supervision-final-third-progress', () => {
 
     expect(link?.textContent?.trim()).toBe('View tier change history')
     expect(link?.getAttribute('href')).toBe('/tier-history')
+    expect(link?.getAttribute('data-ai-id')).toBe('supervisionPackageTierHistoryLink')
   })
 
   it('renders the formatted final third date', () => {

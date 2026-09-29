@@ -26,6 +26,7 @@ describe('_view-appointments partial', () => {
 
       expect(link?.textContent?.trim()).toBe('View all appointments')
       expect(link?.getAttribute('href')).toBe('/appointments')
+      expect(link?.getAttribute('data-ai-id')).toBe('supervisionPackageViewAllAppointmentsLink')
     })
 
     it('renders the "View all appointments" link for other phase codes', () => {
@@ -51,6 +52,7 @@ describe('_view-appointments partial', () => {
 
       expect(link?.textContent?.trim()).toBe('View last appointment')
       expect(link?.getAttribute('href')).toBe('/appointments')
+      expect(link?.getAttribute('data-ai-id')).toBe('supervisionPackageViewLastAppointmentLink')
     })
   })
 })
