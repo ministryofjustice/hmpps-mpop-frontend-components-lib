@@ -65,6 +65,7 @@ describe('_action-buttons partial', () => {
       )
 
       expect(button?.getAttribute('href')).toBe('/arrange-appointment')
+      expect(button?.getAttribute('data-ai-id')).toBe('supervisionPackageArrangeAppointmentLink')
     })
 
     it('does not render the arrange an appointment button when arrangeAppointmentHref is missing', () => {
@@ -90,6 +91,7 @@ describe('_action-buttons partial', () => {
         'https://delius.example.com/NDelius-war/delius/JSP/deeplink.xhtml?component=RegisterSummary&CRN=X123456',
       )
       expect(button?.classList.contains('govuk-button--secondary')).toBe(true)
+      expect(button?.getAttribute('data-ai-id')).toBe('supervisionPackageUpdateRiskFlagsLink')
     })
 
     it('does not render the Update risk flags on NDelius button when crn is missing', () => {

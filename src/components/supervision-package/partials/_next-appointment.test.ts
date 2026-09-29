@@ -50,6 +50,7 @@ describe('_next-appointment partial', () => {
       const link = document.querySelector('a.govuk-link')
 
       expect(link?.getAttribute('href')).toBe('/appointments/1')
+      expect(link?.getAttribute('data-ai-id')).toBe('supervisionPackageNextAppointmentLink')
       expect(link?.textContent?.trim()).toBe('Home visit: Thursday 13 Aug at 9:15am')
     })
 

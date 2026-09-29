@@ -87,7 +87,11 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#day-1">Day 1</a></li>
               <li><a class="govuk-link" href="#day-1-or-shortly-after">Day 1 or shortly after</a></li>
               <li><a class="govuk-link" href="#provisional">Provisional</a></li>
-              <li><a class="govuk-link" href="#final-third-progress-national-security-division-cases">Final third progress National Security Division cases</a></li>
+              <li><a class="govuk-link" href="#final-third-progress-national-security-division-cases">Final third progress National Security Division cases</a>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li><a class="govuk-link" href="#final-third-progress-spna">Final third progress still renders when phase code is SPNA (Does not apply)</a></li>
+                </ul>
+              </li>
               <li><a class="govuk-link" href="#sentence-type-heading">Sentence type heading</a>
                 <ul class="govuk-list govuk-list--bullet">
                   <li><a class="govuk-link" href="#custodial-sentence">Custodial sentence</a></li>
@@ -204,7 +208,7 @@ const html = env.renderString(
           <tr class="govuk-table__row">
             <td class="govuk-table__cell"><code>SPNA</code></td>
             <td class="govuk-table__cell">Does not apply</td>
-            <td class="govuk-table__cell">The person is not eligible for a supervision package at all - nothing renders (<code>isSupervisionPackage</code> is false). No scenario currently demonstrates this in this file.</td>
+            <td class="govuk-table__cell">The person is not eligible for the standard supervision package - it doesn't render (<code>isSupervisionPackage</code> is false). <strong>Exception:</strong> if <code>context.nationalSecurityDivision</code> is true and <code>context.finalThirdEligibility.eligible</code>, a sentence's <code>type.isCustodial</code>, and <code>custody.finalThirdDate</code> are all set, the separate Final Third Progress component still renders instead (<a class="govuk-link" href="#final-third-progress-spna">example</a>).</td>
           </tr>
         </tbody>
       </table>
@@ -222,7 +226,7 @@ const html = env.renderString(
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">No appointments remaining</td>
             <td class="govuk-table__cell"><code>govuk-tag--red</code></td>
-            <td class="govuk-table__cell"><code>currentYear.appointments.completed &gt;= allowance</code> (and not OPD)</td>
+            <td class="govuk-table__cell"><code>allowance &gt; 0</code> and <code>currentYear.appointments.completed &gt;= allowance</code> (and not OPD)</td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">Unlawfully at large</td>
@@ -2029,6 +2033,72 @@ const html = env.renderString(
               eventNumber: '1',
               startDate: '2024-01-07',
               endDate: '2024-01-07',
+              supervisionPackage: { code: 'SPA', description: 'A' },
+              type: {
+                code: '307',
+                description: 'Adult Custody < 12m',
+                isCustodial: true
+              },
+              custody: {
+                status: { code: 'B', description: 'Released - On Licence' },
+                finalThirdDate: '2025-11-07',
+                releases: [ { releaseDate: '2026-07-10' } ]
+              }
+            }
+          ]
+        }
+      }) }}
+
+      <h3 class="govuk-heading-s" id="final-third-progress-spna">Final third progress still renders when phase code is SPNA (Does not apply)</h3>
+      <p class="govuk-body">Even when <code>currentPhase.phase.code</code> is <code>SPNA</code> ("Does not apply" - normally meaning no supervision package renders at all), the final third progress card still renders if <code>context.nationalSecurityDivision</code> is <code>true</code> and the person is eligible for the final third with a custodial sentence. This check happens before the standard supervision package eligibility check.</p>
+      <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
+
+      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+        "currentPhase": { "phase": { "code": "SPNA", "description": "Does not apply" } },
+        "context": {
+          "nationalSecurityDivision": true,
+          "finalThirdEligibility": {
+            "eligible": true,
+            "since": "2026-07-10"
+          },
+          "sentences": [
+            {
+              "endDate": "2027-01-07",
+              "type": {
+                "isCustodial": true
+              },
+              "custody": {
+                "finalThirdDate": "2025-11-07"
+              }
+            }
+          ]
+        }
+      }</code></pre>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        historyText: 'View tier change history',
+        currentPhase: {
+          phase: { code: 'SPNA', description: 'Does not apply' }
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+            surname: 'Morris'
+          },
+          date: '2026-07-15T10:02:47.256918704+01:00',
+          gender: 'Male',
+          integratedOffenderManagementRedRated: false,
+          offenderPersonalDisorderPathway: false,
+          intensiveSupervisionCourt: false,
+          nationalSecurityDivision: true,
+          finalThirdEligibility: { eligible: true, since: '2026-07-10' },
+          sentences: [
+            {
+              eventNumber: '1',
+              startDate: '2026-07-08',
+              endDate: '2027-01-07',
               supervisionPackage: { code: 'SPA', description: 'A' },
               type: {
                 code: '307',

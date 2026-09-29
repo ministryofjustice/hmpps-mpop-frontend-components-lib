@@ -450,6 +450,7 @@ describe('supervision-package', () => {
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
       expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.getAttribute('data-ai-id')).toBe('supervisionPackageOasysReviewLink')
       expect(oasysLink?.textContent?.trim()).toBe('Complete an OASys review (opens in new tab)')
       expect(document.body.textContent).toContain(
         'Complete an OASys review (opens in new tab) to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
@@ -728,6 +729,7 @@ describe('supervision-package', () => {
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
       expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.getAttribute('data-ai-id')).toBe('supervisionPackageOasysReviewLink')
       expect(oasysLink?.textContent?.trim()).toBe('Start an OASys review (opens in new tab)')
       expect(document.body.textContent).toContain(
         'Start an OASys review (opens in new tab) to confirm Alex\u2019s supervision package. Until then, follow national standards for appointments.',
@@ -746,6 +748,7 @@ describe('supervision-package', () => {
 
       const oasysLink = document.querySelector('a[href="/oasys/review/123"]')
       expect(oasysLink).not.toBeNull()
+      expect(oasysLink?.getAttribute('data-ai-id')).toBe('supervisionPackageOasysReviewLink')
       expect(document.body.textContent).toContain(
         'Complete an OASys review. This confirms Alex’s tier so we can calculate the supervision package.',
       )
