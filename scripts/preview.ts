@@ -271,8 +271,12 @@ const html = env.renderString(
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><code>sentences[].type.isCustodial</code> / <code>isSuspendedSentence</code> / <code>isFirstYear</code></td>
+            <td class="govuk-table__cell"><code>sentences[].type.isCustodial</code> / <code>isSuspendedSentence</code></td>
             <td class="govuk-table__cell">Booleans on a sentence's type. Note: the swagger-ui page for this API can render these without the <code>is</code> prefix (a Springdoc/Kotlin boolean-getter quirk) - the real JSON payload always includes it.</td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"><code>currentYear.isFirstYear</code></td>
+            <td class="govuk-table__cell">A boolean on <code>currentYear</code> (not on a sentence) indicating whether this is the person's first year on this supervision package.</td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell"><code>sentences[].custody.status</code> / <code>.location</code></td>
@@ -2447,8 +2451,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'INIT' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           finalThirdEligibility: {
             eligible: false
           }
@@ -2483,8 +2487,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'STD' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           finalThirdEligibility: {
             eligible: false
           }
@@ -2526,8 +2530,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'STD' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           finalThirdEligibility: {
             eligible: false
           },
@@ -2573,8 +2577,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'STD' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           finalThirdEligibility: {
             eligible: false
           },
@@ -2624,8 +2628,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'STD' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           finalThirdEligibility: {
             eligible: false
           }
@@ -2671,8 +2675,8 @@ const html = env.renderString(
         currentPhase: {
           phase: { code: 'STD' }
         },
-        forename: 'Stuart',
         context: {
+          name: { forename: 'Stuart' },
           nationalSecurityDivision: true,
           finalThirdEligibility: {
             eligible: true
