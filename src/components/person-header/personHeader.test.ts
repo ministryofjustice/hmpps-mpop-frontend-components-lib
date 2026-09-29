@@ -1,7 +1,9 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(['src/components'], { autoescape: true })
+mpopNunjucksSetup(env)
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
@@ -59,6 +61,36 @@ describe('person-header', () => {
     expect(link?.tagName).toBe('A')
     expect(link?.textContent?.trim()).toBe('Jack Frost (Worksop Probation Office)')
     expect(link?.getAttribute('href')).toBe('/case/D004851/personal-details/staff-contacts')
+  })
+
+  it('capitalises the first letter of the forename and surname when managedByName is given', () => {
+    const document = renderComponent({ managedByName: 'jack frost' })
+
+    expect(document.querySelector('[data-qa="managedBy"]')?.textContent?.trim()).toBe('Jack Frost')
+  })
+
+  it('appends managedByLocation in brackets without changing its casing', () => {
+    const document = renderComponent({
+      managedByName: 'jack frost',
+      managedByLocation: 'HMP Leeds and district',
+      managedByHref: '/case/D004851/personal-details/staff-contacts',
+    })
+
+    const link = document.querySelector('[data-qa="managedBy"]')
+    expect(link?.tagName).toBe('A')
+    expect(link?.textContent?.trim()).toBe('Jack Frost (HMP Leeds and district)')
+  })
+
+  it('prefers managedByName over managedBy when both are given', () => {
+    const document = renderComponent({ managedBy: 'Unallocated', managedByName: 'jack frost' })
+
+    expect(document.querySelector('[data-qa="managedBy"]')?.textContent?.trim()).toBe('Jack Frost')
+  })
+
+  it('renders managedBy as-is when managedByName is not given', () => {
+    const document = renderComponent({ managedBy: 'jack frost (worksop)' })
+
+    expect(document.querySelector('[data-qa="managedBy"]')?.textContent?.trim()).toBe('jack frost (worksop)')
   })
 
   it('renders the photo when provided', () => {
