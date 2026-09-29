@@ -38,6 +38,7 @@ describe('supervision-package', () => {
       expectedTagText ? `Tier C ${expectedTagText}` : 'Tier C',
     )
     expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+    expect(document.querySelector('a')?.getAttribute('data-ai-id')).toBe('supervisionPackageTierHistoryLink')
 
     const tagElement = document.querySelector('.govuk-tag')
 
@@ -1250,6 +1251,7 @@ describe('supervision-package', () => {
       const document = renderComponent(provisionalTierParams)
 
       expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+      expect(document.querySelector('a')?.getAttribute('data-ai-id')).toBe('supervisionPackageTierHistoryLink')
     })
   })
 

@@ -283,7 +283,7 @@ const html = env.renderString(
             <td class="govuk-table__cell">Independent fields - a sentence can be in breach and in custody at the same time.</td>
           </tr>
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><code>tierScore</code> (PoP Header)</td>
+            <td class="govuk-table__cell"><code>tierScore</code></td>
             <td class="govuk-table__cell">A single-letter probation tier (A-G in practice). Discretionary appointment eligibility only applies for tiers <code>C</code>, <code>D</code>, <code>E</code>, <code>F</code> or <code>G</code> combined with <code>gender: 'Female'</code> and not IOM red-rated.</td>
           </tr>
         </tbody>
