@@ -1184,7 +1184,7 @@ const html = env.renderString(
         earlyEngagement: { weeks: 12, completed: 0 },
         currentYear: { appointments: { allowance: 46, scheduled: 0, completed: 0 } }
       }) }}
-      <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data. Whether someone is in custody is shown separately via the tag in the <a class="govuk-link" href="#in-custody">In Custody</a> example above, driven by <code>context.sentences[].custody</code> fields alongside a recognised phase code like <code>STD</code> - not by <code>currentPhase.phase.code</code> itself.)</em></p>
+      <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data. Whether someone is in custody is shown separately via the tag in the <a class="govuk-link" href="#in-custody">In Custody</a> example above, driven purely by <code>context.sentences[].custody</code> fields regardless of whether <code>currentPhase</code> is present at all - not by <code>currentPhase.phase.code</code> itself.)</em></p>
 
       </div>
 
@@ -2962,7 +2962,7 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="negative-max-appointments">Negative maximum appointments (early engagement)</h3>
       <p class="govuk-body">Jira reference: <a class="govuk-link" href="https://dsdmoj.atlassian.net/browse/MAN-3473">MAN-3473</a> - "Early engagement text can show a negative number of appointments".</p>
-      <p class="govuk-body"><strong>Bug:</strong> during early engagement (<code>phaseCode: "INIT"</code>), <code>_early-engagement.njk</code> calculates "maximum appointments for the rest of this sentence year" as <code>currentYear.appointments.allowance - earlyEngagement.weeks</code>. <code>allowance</code> is already a pro-rated total that accounts for early engagement, while <code>weeks</code> is a fixed policy duration - subtracting one from the other is a unit mismatch, not just a missing floor at 0. It shows a negative number whenever a sentence ends before the fixed early-engagement window would finish, so the pro-rated allowance drops below the number of weeks. The same calculation is duplicated in <code>supervision-package-summary/template.njk</code>.</p>
+      <p class="govuk-body"><strong>Bug:</strong> during early engagement (<code>phaseCode: "INIT"</code>), <code>_early-engagement.njk</code> calculates "maximum appointments for the rest of this sentence year" as <code>currentYear.appointments.allowance - earlyEngagement.weeks</code>. <code>allowance</code> is already a pro-rated total that accounts for early engagement, while <code>weeks</code> is a fixed policy duration - subtracting one from the other is a unit mismatch, not just a missing floor at 0. It shows a negative number whenever a sentence ends before the fixed early-engagement window would finish, so the pro-rated allowance drops below the number of weeks. The same calculation is duplicated in <code>supervision-package-summary/template.njk</code>: <code>{% raw %}{{ (params.currentYear.appointments.allowance | int(0)) - (params.earlyEngagement.weeks | int(0)) }}{% endraw %}</code>.</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">View example JSON</span>
