@@ -80,6 +80,11 @@ const html = env.renderString(
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
 
+      <div class="govuk-button-group">
+        <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" id="reveal-all-json">Reveal all JSON</button>
+        <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" id="hide-all-json">Hide all JSON</button>
+      </div>
+
       <nav class="govuk-body" aria-label="Contents">
         <h2 class="govuk-heading-m">Contents</h2>
         <ul class="govuk-list govuk-list--bullet">
@@ -396,7 +401,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="community">Community</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code</code> of "INIT" (still in early engagement) and a non-custodial sentence, <code>context.sentences[].type.isCustodial: false</code>:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": <mark style="background:#ffdd00;">"INIT"</mark>,
@@ -429,6 +439,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
@@ -447,7 +459,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="woman">Woman</h3>
       <p class="govuk-body">Triggered by <code>context.gender: "Female"</code> plus <code>integratedOffenderManagementRedRated: false</code>, and a <code>tierScore</code> macro param of "C"-"G", which together show the "discretionary appointments" text for women:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -478,6 +495,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         tierScore: 'D',
@@ -497,7 +516,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="custodial">Custodial</h3>
       <p class="govuk-body">Triggered by <code>context.sentences[].type.isCustodial: true</code> with <code>custody.status.code: "B"</code> (Released - On Licence), during early engagement:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -536,6 +560,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
@@ -561,7 +587,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-eligible-early-engagement">Final Third eligible (early engagement)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while still in early engagement:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -597,6 +628,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         createdAt: "2026-09-12T11:37:12+01:00",
         updatedAt: "2026-09-12T11:37:12+01:00",
@@ -622,7 +655,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-eligible-without-start-date">Final Third eligible without start date</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> not set, while still in early engagement:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -655,6 +693,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
         historyHref: '#',
@@ -677,7 +717,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-ineligible-early-engagement">Final Third ineligible (early engagement)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite still being on a custodial licence, during early engagement:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -711,6 +756,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'INIT', description: 'Early Engagement' }, endDate: '2026-09-28' },
@@ -734,7 +781,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="in-custody">In Custody</h3>
       <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (In Custody), which shows an in-custody tag and warning text. In real data, being in custody drives the backend's own <code>currentPhase.phase.code: "SENT"</code> (see the <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>), which this component doesn't recognise - so realistically <code>currentPhase</code> is entirely absent here, and the early engagement/progress-bar panel on the right does not render:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
@@ -755,6 +807,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         historyHref: '#',
@@ -774,7 +828,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="recalled">Recalled</h3>
       <p class="govuk-body">Triggered by <code>custody.status.code: "C"</code> (Recalled), which shows an in-custody/recalled tag and warning text. Same as above - a recall period also counts as being in custody in the backend, so realistically <code>currentPhase</code> is absent here too, and the early engagement/progress-bar panel does not render. In real in-flight recall cases the tier is also frequently <code>MISSING</code> (not yet recalculated) - when that's combined with a missing <code>currentPhase</code> and an <code>oasysReviewHref</code>, the component additionally prompts to complete an OASys review:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
@@ -795,6 +854,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'MISSING',
         historyHref: '#',
@@ -815,7 +876,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="in-breach">In Breach</h3>
       <p class="govuk-body">Triggered by <code>inBreach: true</code> (In Breach), which overrides the normal early engagement text with an In breach tag:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -849,6 +915,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         createdAt: '2026-09-12T11:37:12+01:00',
         updatedAt: '2026-09-12T11:37:12+01:00',
@@ -874,7 +942,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="unlawfully-at-large">Unlawfully at Large</h3>
       <p class="govuk-body">Triggered by <code>custody.location.code == 'UATLRG'</code> (Unlawfully at Large), which overrides the normal early engagement text with an Unlawfully at Large tag:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-09-28"
@@ -908,6 +981,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         createdAt: '2026-09-12T11:37:12+01:00',
         updatedAt: '2026-09-12T11:37:12+01:00',
@@ -936,7 +1011,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="tier-missing">Tier Missing</h3>
       <p class="govuk-body">Triggered by <code>"Tier": "Missing"</code></p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tag": { "text": "Missing", "color": "red" },
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
@@ -955,6 +1035,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tag: { text: 'Missing', color: 'red' },
         historyHref: '#',
@@ -978,6 +1060,11 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="tier-service-unavailable">Tier service unavailable</h3>
       <p class="govuk-body">Triggered by <code>response from the tier API error</code></p>
+  <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tag": { "text": "Unavailable", "color": "grey" },
   "context": {
@@ -997,6 +1084,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tag: { text: 'Unavailable', color: 'grey' },
         historyHref: '#',
@@ -1021,7 +1110,12 @@ const html = env.renderString(
       <h3 class="govuk-heading-s" id="spx-only-sentence-list">SPX-only sentence list (nothing renders)</h3>
       <p class="govuk-body">A sentence's <code>supervisionPackage.code</code> is <code>"SPX"</code> when the supervision package "does not apply" to that sentence - this is genuinely assigned by the API to any active sentence that isn't the primary one, when someone has multiple concurrent sentences. If <strong>every</strong> sentence for a person has this code and none of them is currently active (for example, they've all ended/been terminated), the component correctly renders nothing at all - it does not fall back to showing an "early engagement" or "not yet started" message, which would be misleading since there's no sentence the package could ever apply to:</p>
       <p class="govuk-body"><strong>Note:</strong> this exact combination (SPX + a terminated sentence still appearing in <code>context.sentences</code>) hasn't yet been confirmed against real/live API data - sentences that have fully ended may be filtered out by the API before reaching the frontend. Documented here as a type-contract edge case; remove if it's confirmed not to occur in practice.</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "sentences": [
@@ -1034,6 +1128,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
@@ -1047,7 +1143,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="sent-not-a-recognised-phase-code">SENT is not a recognised phase code (nothing renders)</h3>
       <p class="govuk-body">The backend has its own internal "In custody" phase, sent to this component as <code>currentPhase.phase.code: "SENT"</code>. This component only recognises a specific list of codes (<code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code>) - <code>SENT</code> is not one of them, so by design nothing renders, even with an otherwise valid, in-custody sentence:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": { "phase": { "code": <mark style="background:#ffdd00;">"SENT"</mark>, "description": "In custody" } },
   "context": {
     "name": { "forename": "Gracie" },
@@ -1062,6 +1163,8 @@ const html = env.renderString(
   "earlyEngagement": { "weeks": 12, "completed": 0 },
   "currentYear": { "appointments": { "allowance": 46, "scheduled": 0, "completed": 0 } }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         historyHref: '#',
@@ -1085,7 +1188,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="lifer-ipp">Lifer/IPP</h3>
       <p class="govuk-body">Triggered by <code>context.liferCategory.code: "LF01"</code>, which removes the end/reset date and shows "There is no supervision end date" instead:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
@@ -1123,6 +1231,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1147,7 +1257,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="end-date-standard-supervision">End date (standard supervision)</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2027-08-30") falls before <code>currentYear.endDate</code> ("2027-08-31"), so the sentence ends first and the package shows an "ends on" date:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
@@ -1181,6 +1296,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1204,7 +1321,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="reset-date-standard-supervision">Reset Date (standard supervision)</h3>
       <p class="govuk-body">Triggered when the sentence <code>endDate</code> ("2028-08-30") falls after <code>currentYear.endDate</code> ("2027-08-31"), so the sentence year resets first and the package shows a "resets on" date:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
@@ -1238,6 +1360,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1261,7 +1385,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-eligible-standard-supervision">Final Third eligible (standard supervision)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, during standard supervision (<code>currentPhase.phase.code: "STD"</code>):</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "STD",
@@ -1298,6 +1427,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1321,7 +1452,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-ineligible-standard-supervision">Final Third ineligible (standard supervision)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, during standard supervision:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
@@ -1356,6 +1492,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">Triggered by <code>context.gender: "Female"</code> plus <code>integratedOffenderManagementRedRated: false</code> and a <code>tierScore</code> macro param of "C"-"G", shown here as <mark style="background:#ffdd00;">tierScore: "D"</mark> (any of C-G).</p>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1385,7 +1523,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="opd">OPD</h3>
       <p class="govuk-body">Triggered by <code>context.offenderPersonalDisorderPathway: true</code>, which shows OPD treatment text instead of the normal stage text:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "STD", "description": "Standard Supervision" },
     "endDate": "2027-08-31"
@@ -1416,6 +1559,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'STD', description: 'Standard Supervision' }, endDate: '2027-08-31' },
@@ -1439,7 +1584,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="end-date-red-rated-iom">End date (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> with <code>currentPhase.phase.code: "IOM"</code>, and a sentence <code>endDate</code> ("2027-08-30") before <code>currentYear.endDate</code> ("2027-08-31") so it shows an "ends on" date:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": <mark style="background:#ffdd00;">"IOM"</mark>,
@@ -1477,6 +1627,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
@@ -1501,7 +1653,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="reset-date-red-rated-iom">Reset Date (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by a sentence <code>endDate</code> ("2028-08-30") after <code>currentYear.endDate</code> ("2027-08-31") while red-rated IOM, so the sentence year resets first and shows a "resets on" date:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "IOM", "description": "Red Rated IOM" },
     "endDate": "2027-08-31"
@@ -1536,6 +1693,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
@@ -1560,7 +1719,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-eligible-red-rated-iom">Final Third eligible (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.integratedOffenderManagementRedRated: true</code> plus <code>context.finalThirdEligibility.eligible: true</code> on a custodial sentence with <code>custody.finalThirdDate</code> set, while red-rated IOM:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "IOM", "description": "Red Rated IOM" },
     "endDate": "2027-08-31"
@@ -1595,6 +1759,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
@@ -1619,7 +1785,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third-ineligible-red-rated-iom">Final Third ineligible (red-rated IOM)</h3>
       <p class="govuk-body">Triggered by <code>context.finalThirdEligibility.eligible: false</code> despite being on a custodial licence, while red-rated IOM:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "IOM", "description": "Red Rated IOM" },
     "endDate": "2027-08-31"
@@ -1654,6 +1825,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'IOM', description: 'Red Rated IOM' }, endDate: '2027-08-31' },
@@ -1682,7 +1855,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="custodial-final-third-stage">Custodial Final third stage</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "FTHRD"</code> on a custodial sentence that is eligible for the final third (not a National Security Division case, so it uses the normal supervision package view rather than the final third progress table):</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": <mark style="background:#ffdd00;">"FTHRD"</mark>,
@@ -1719,6 +1897,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'FTHRD', description: 'Final Third' }, endDate: '2027-08-31' },
@@ -1746,7 +1926,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="day-1">Day 1</h3>
       <p class="govuk-body">Triggered by a missing <code>currentPhase</code> ("currentPhase" object will not be returned from the API), shown on day 1 before any phase has been calculated:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "earlyEngagement": {
     "weeks": 0,
     "completed": 0
@@ -1778,6 +1963,8 @@ const html = env.renderString(
   ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         oasysReviewHref: '#',
@@ -1805,7 +1992,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="day-1-or-shortly-after">Day 1 or shortly after</h3>
       <p class="govuk-body">Triggered by <code>currentPhase.phase.code: "SPNS"</code> (not yet started), shown on day 1 or shortly after once a phase has been calculated but supervision hasn't started:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": <mark style="background:#ffdd00;">"SPNS"</mark>,
@@ -1843,6 +2035,8 @@ const html = env.renderString(
     }]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' }, endDate: '2027-08-31' },
@@ -1879,7 +2073,12 @@ const html = env.renderString(
 
       <p class="govuk-body">The provisional tier is displayed when <code>provisional: true</code>.</p>
       <p class="govuk-body">The provisional flag is supplied by the tier API calculation.</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "provisional": true,
   "currentPhase": {
     "phase": {
@@ -1916,6 +2115,8 @@ const html = env.renderString(
     "appointments": { "allowance": 0, "scheduled": 0, "completed": 0 }
   }
 }</code></pre>
+  </div>
+</details>
 
       {{ supervisionPackage({
         provisional: true,
@@ -1941,7 +2142,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="provisional-in-custody-no-phase">Provisional and in custody (no currentPhase)</h3>
       <p class="govuk-body"><code>provisional</code>/<code>tierScore</code> and <code>currentPhase</code>/custody both ultimately reflect the same Delius case record for this person - they're just fetched via two separate downstream calls (the tier calculation API and the supervision package API) that the frontend merges, so both can genuinely be true for the same person at once (see the <a class="govuk-link" href="#in-custody">In Custody</a> example). Here, <code>currentPhase</code> is absent (before the supervision package go-live date), so the panel is full width and, because the tier is provisional, the OASys review prompt reads "Complete an OASys review" (the same wording as a <code>MISSING</code> tier, see <a class="govuk-link" href="#recalled">Recalled</a>):</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "tierScore": "C",
   "tag": { "text": "Provisional", "color": "orange" },
   "provisional": <mark style="background:#ffdd00;">true</mark>,
@@ -1964,6 +2170,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: 'Provisional', color: 'orange' },
@@ -1985,7 +2193,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="provisional-in-custody-sent">Provisional and in custody (currentPhase SENT)</h3>
       <p class="govuk-body">Once the supervision package has gone live, a person genuinely in custody has <code>currentPhase.phase.code: "SENT"</code> (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>). Normally <code>SENT</code> renders nothing, but the <code>provisional: true</code> flag overrides that check, so the panel still renders - now at two-thirds width, without the OASys review prompt (suppressed because <code>currentPhase</code> is present), and with an extra message not seen elsewhere: "We will calculate the supervision package once the tier is confirmed."</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": <mark style="background:#ffdd00;">"SENT"</mark>, "description": "In custody" }
   },
@@ -2011,6 +2224,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'SENT', description: 'In custody' } },
         tierScore: 'C',
@@ -2039,7 +2254,12 @@ const html = env.renderString(
       <p class="govuk-body">The status is "In progress" when the final third date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -2059,6 +2279,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2096,7 +2318,12 @@ const html = env.renderString(
       <p class="govuk-body">The status is "Not started" when the final third date is after today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -2116,6 +2343,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2159,7 +2388,12 @@ const html = env.renderString(
       <p class="govuk-body">The status is "Ended" when the sentence end date is before today's date</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "context": {
           "nationalSecurityDivision": true,
           "finalThirdEligibility": {
@@ -2179,6 +2413,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2219,7 +2455,12 @@ const html = env.renderString(
       <p class="govuk-body">Even when <code>currentPhase.phase.code</code> is <code>SPNA</code> ("Does not apply" - normally meaning no supervision package renders at all), the final third progress card still renders if <code>context.nationalSecurityDivision</code> is <code>true</code> and the person is eligible for the final third with a custodial sentence. This check happens before the standard supervision package eligibility check.</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "currentPhase": { "phase": { "code": "SPNA", "description": "Does not apply" } },
         "context": {
           "nationalSecurityDivision": true,
@@ -2240,6 +2481,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2284,7 +2527,12 @@ const html = env.renderString(
       <p class="govuk-body">The final third progress card is only shown when <code>context.nationalSecurityDivision</code> is <code>true</code>. When it is <code>false</code>, the standard supervision package is shown instead, with the "Final third" stage panel.</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "currentPhase": { "phase": { "code": "FTHRD" } },
         "context": {
           "nationalSecurityDivision": false,
@@ -2305,6 +2553,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2375,7 +2625,12 @@ const html = env.renderString(
       <p class="govuk-body">The stage panel is driven by <code>currentPhase.phase.code</code>, not by <code>context.finalThirdEligibility</code>. So a PoP can be eligible for the final third while <code>currentPhase.phase.code</code> is still <code>'STD'</code>, in which case the "Standard supervision" stage panel is shown rather than the "Final third" one.</p>
       <p class="govuk-body">This is triggered by the following fields in the current phase supervision package api</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
         "currentPhase": { "phase": { "code": "STD" } },
         "context": {
           "nationalSecurityDivision": false,
@@ -2396,6 +2651,8 @@ const html = env.renderString(
           ]
         }
       }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -2471,7 +2728,12 @@ const html = env.renderString(
       <h3 class="govuk-heading-s" id="spna-does-not-apply">SPNA for an Intensive Supervision Court case (nothing renders)</h3>
       <p class="govuk-body"><code>currentPhase.phase.code: "SPNA"</code> ("Does not apply") is also set for Intensive Supervision Court (ISC) cases, not just National Security Division ones. Since the exception above specifically requires <code>context.nationalSecurityDivision</code> to be <code>true</code>, an ISC-only case doesn't qualify for it, and correctly renders nothing at all - there is no supervision package to show:</p>
 
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": { "phase": { "code": <mark style="background:#ffdd00;">"SPNA"</mark>, "description": "Does not apply" } },
   "context": {
     "intensiveSupervisionCourt": <mark style="background:#ffdd00;">true</mark>,
@@ -2481,6 +2743,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'SPNA', description: 'Does not apply' } },
         context: {
@@ -2494,7 +2758,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="spna-nsd-not-final-third-eligible">SPNA for a National Security Division case, not final third eligible (nothing renders)</h3>
       <p class="govuk-body"><code>currentPhase.phase.code: "SPNA"</code> always suppresses the standard supervision package, regardless of <code>context.nationalSecurityDivision</code> - the final third progress card is the <strong>only</strong> exception, and it additionally requires <code>finalThirdEligibility.eligible: true</code>, a custodial sentence, and a <code>custody.finalThirdDate</code> (see <a class="govuk-link" href="#final-third-progress-spna">Final third progress still renders when phase code is SPNA</a>). A community sentence with <code>nationalSecurityDivision: true</code> but <code>finalThirdEligibility.eligible: false</code> meets none of those, so it correctly renders nothing:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": { "phase": { "code": <mark style="background:#ffdd00;">"SPNA"</mark>, "description": "SP Do Not Apply" } },
   "context": {
     "nationalSecurityDivision": <mark style="background:#ffdd00;">true</mark>,
@@ -2504,6 +2773,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         currentPhase: { phase: { code: 'SPNA', description: 'SP Do Not Apply' } },
         context: {
@@ -2521,13 +2792,20 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="custodial-sentence">Custodial sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
       { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
     ]
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">This is triggered when at least one non-<code>SPX</code> sentence has <code>type.isCustodial === true</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
@@ -2547,13 +2825,20 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="community-sentence">Community sentence</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
       { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
     ]
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">This is triggered when every primary sentence has <code>type.isCustodial === false</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
@@ -2573,11 +2858,18 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="life-sentence">Life sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "liferCategory": { "code": "LF03" }
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">This is triggered by <code>context.liferCategory</code> being present with a code other than <code>'LF01'</code> or <code>'LF02'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
@@ -2598,11 +2890,18 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="imprisonment-for-public-protection">Imprisonment for Public Protection</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "liferCategory": { "code": "LF01" }
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF01'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
@@ -2623,11 +2922,18 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="extended-determinate-sentence">Extended determinate sentence</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "liferCategory": { "code": "LF02" }
   }
 }</code></pre>
+  </div>
+</details>
       <p class="govuk-body">This is triggered by <code>context.liferCategory.code === 'LF02'</code>.</p>
       {{ supervisionPackage({
         tierScore: 'C',
@@ -2653,7 +2959,12 @@ const html = env.renderString(
       <h3 class="govuk-heading-s" id="negative-max-appointments">Negative maximum appointments (early engagement)</h3>
       <p class="govuk-body">Jira reference: <a class="govuk-link" href="https://dsdmoj.atlassian.net/browse/MAN-3473">MAN-3473</a> - "Early engagement text can show a negative number of appointments".</p>
       <p class="govuk-body"><strong>Bug:</strong> during early engagement (<code>phaseCode: "INIT"</code>), <code>_early-engagement.njk</code> calculates "maximum appointments for the rest of this sentence year" as <code>currentYear.appointments.allowance - earlyEngagement.weeks</code>. <code>allowance</code> is already a pro-rated total that accounts for early engagement, while <code>weeks</code> is a fixed policy duration - subtracting one from the other is a unit mismatch, not just a missing floor at 0. It shows a negative number whenever a sentence ends before the fixed early-engagement window would finish, so the pro-rated allowance drops below the number of weeks. The same calculation is duplicated in <code>supervision-package-summary/template.njk</code>.</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-10-15"
@@ -2684,6 +2995,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         historyHref: '#',
@@ -2708,7 +3021,12 @@ const html = env.renderString(
       <h3 class="govuk-heading-s" id="negative-remaining-appointments">Negative "Remaining" appointments (early engagement progress bar)</h3>
       <p class="govuk-body">Jira reference: <a class="govuk-link" href="https://dsdmoj.atlassian.net/browse/MAN-3478">MAN-3478</a> - "Early engagement progress can show more appointments completed than required (negative "Remaining")".</p>
       <p class="govuk-body"><strong>Bug:</strong> in <code>_progress-bar.njk</code>, during early engagement (<code>phaseCode: "INIT"</code>), <code>allowance</code> correctly switches to <code>earlyEngagement.weeks</code>, but <code>completed</code> always uses <code>currentYear.appointments.completed</code> (the whole sentence year's total) instead of <code>earlyEngagement.completed</code>. This mismatch can show "X of Y used" with X greater than Y, and "Remaining" (<code>allowance - completed</code>) has no floor at 0, so it can go negative.</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": { "code": "INIT", "description": "Early Engagement" },
     "endDate": "2026-10-15"
@@ -2739,6 +3057,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackage({
         tierScore: 'C',
         historyHref: '#',
@@ -2767,13 +3087,20 @@ const html = env.renderString(
       <h1 class="govuk-heading-l" id="supervision-package-summary">Supervision Package Summary</h1>
       <h3 class="govuk-heading-s" id="early-engagement">Early engagement</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "INIT"
     }
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'INIT' }
@@ -2803,13 +3130,20 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="supervision-stage">Supervision stage</h3>
       <p class="govuk-body">This is triggered by the following field in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "STD"
     }
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'STD' }
@@ -2839,7 +3173,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="supervision-stage-with-breach-warning">Supervision stage with breach warning</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "STD"
@@ -2853,6 +3192,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'STD' }
@@ -2887,7 +3228,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="supervision-stage-with-recall-warning">Supervision stage with recall warning</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "STD"
@@ -2900,6 +3246,8 @@ const html = env.renderString(
     }
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'STD' }
@@ -2933,7 +3281,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="supervision-stage-with-all-appointments-used">Supervision stage with all appointments used</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "currentPhase": {
     "phase": {
       "code": "STD"
@@ -2951,6 +3304,8 @@ const html = env.renderString(
     }
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'STD' }
@@ -2980,7 +3335,12 @@ const html = env.renderString(
 
       <h3 class="govuk-heading-s" id="final-third">Final third</h3>
       <p class="govuk-body">This is triggered by the following fields in the supervision package API response:</p>
-      <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "finalThirdEligibility": {
       "eligible": true
@@ -2998,6 +3358,8 @@ const html = env.renderString(
     ]
   }
 }</code></pre>
+  </div>
+</details>
       {{ supervisionPackageSummary({
         currentPhase: {
           phase: { code: 'STD' }
@@ -3057,6 +3419,14 @@ const html = env.renderString(
 
     revealAndScrollToHash()
     window.addEventListener('hashchange', revealAndScrollToHash)
+
+    // Reveal all / hide all JSON example <details> blocks at once.
+    document.getElementById('reveal-all-json').addEventListener('click', () => {
+      document.querySelectorAll('.app-json-details').forEach(details => { details.open = true })
+    })
+    document.getElementById('hide-all-json').addEventListener('click', () => {
+      document.querySelectorAll('.app-json-details').forEach(details => { details.open = false })
+    })
   </script>
 </body>
 </html>
