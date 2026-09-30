@@ -64,7 +64,7 @@ const html = env.renderString(
 <html lang="en" class="govuk-template">
 <head>
   <meta charset="utf-8">
-  <title>MPOP Component Preview</title>
+  <title>MPoP Component Scenarios</title>
 
   <link
     rel="stylesheet"
@@ -78,8 +78,12 @@ const html = env.renderString(
   <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '')</script>
   <main class="govuk-main-wrapper">
     <div class="govuk-width-container">
-      <h1 class="govuk-heading-l">MPOP Component Preview</h1>
+      <h1 class="govuk-heading-l">MPoP Component Scenarios</h1>
 
+      <p class="govuk-body">
+        This page shows how MPoP components behave across different scenarios using mock data and the real component code.
+      </p>
+      
       <div class="govuk-button-group">
         <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" id="reveal-all-json">Reveal all JSON</button>
         <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button" id="hide-all-json">Hide all JSON</button>
