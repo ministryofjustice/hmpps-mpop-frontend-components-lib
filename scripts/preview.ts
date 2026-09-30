@@ -36,7 +36,7 @@ const requestedComponents = (process.env.COMPONENT ?? '')
 
 const unknownComponents = requestedComponents.filter(component => !validComponents.includes(component))
 if (unknownComponents.length) {
-  console.warn(
+  throw new Error(
     `Unknown COMPONENT value(s): ${unknownComponents.join(', ')}. Valid values: ${validComponents.join(', ')}`,
   )
 }
@@ -50,7 +50,7 @@ const showSupervisionPackageSummary = showAllComponents || requestedComponents.i
 console.info(
   showAllComponents
     ? 'Showing all components (set COMPONENT=... to filter, e.g. COMPONENT=supervision-package npm run preview)'
-    : `Showing: ${requestedComponents.filter(component => validComponents.includes(component)).join(', ')}`,
+    : `Showing: ${requestedComponents.join(', ')}`,
 )
 
 const html = env.renderString(
@@ -272,7 +272,7 @@ const html = env.renderString(
           <tr class="govuk-table__row">
             <td class="govuk-table__cell"><code>SENT</code></td>
             <td class="govuk-table__cell">In custody</td>
-            <td class="govuk-table__cell">A real backend value, but <strong>not one of the codes this component checks for</strong> - by design, only <code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code> are recognised, so <code>SENT</code> renders nothing (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">example</a>). Whether someone is in custody/at large is shown separately, via a tag driven by <code>context.sentences[].custody</code> fields (see <a class="govuk-link" href="#in-custody">In Custody</a>) - it does not depend on <code>currentPhase.phase.code</code>.</td>
+            <td class="govuk-table__cell">A real backend value, but <strong>not one of the codes this component checks for</strong> - by design, only <code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code> are recognised, so <code>SENT</code> renders nothing (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">example</a>) - <strong>unless</strong> <code>provisional: true</code> is also set, in which case the panel still renders (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>). Whether someone is in custody/at large is shown separately, via a tag driven by <code>context.sentences[].custody</code> fields (see <a class="govuk-link" href="#in-custody">In Custody</a>) - it does not depend on <code>currentPhase.phase.code</code>.</td>
           </tr>
         </tbody>
       </table>
@@ -784,7 +784,7 @@ const html = env.renderString(
       }) }}
 
       <h3 class="govuk-heading-s" id="in-custody">In Custody</h3>
-      <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (In Custody), which shows an in-custody tag and warning text. In real data, being in custody drives the backend's own <code>currentPhase.phase.code: "SENT"</code> (see the <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>), which this component doesn't recognise - so realistically <code>currentPhase</code> is entirely absent here, and the early engagement/progress-bar panel on the right does not render:</p>
+      <p class="govuk-body">Triggered by <code>custody.status.code: "R"</code> (In Custody), which shows an in-custody tag and warning text. In real data, being in custody drives the backend's own <code>currentPhase.phase.code: "SENT"</code> (see the <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>), which this component doesn't recognise unless <code>provisional: true</code> is also set (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>) - so realistically <code>currentPhase</code> is entirely absent here, and the early engagement/progress-bar panel on the right does not render:</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">View example JSON</span>
@@ -1146,7 +1146,7 @@ const html = env.renderString(
       <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data.)</em></p>
 
       <h3 class="govuk-heading-s" id="sent-not-a-recognised-phase-code">SENT is not a recognised phase code (nothing renders)</h3>
-      <p class="govuk-body">The backend has its own internal "In custody" phase, sent to this component as <code>currentPhase.phase.code: "SENT"</code>. This component only recognises a specific list of codes (<code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code>) - <code>SENT</code> is not one of them, so by design nothing renders, even with an otherwise valid, in-custody sentence:</p>
+      <p class="govuk-body">The backend has its own internal "In custody" phase, sent to this component as <code>currentPhase.phase.code: "SENT"</code>. This component only recognises a specific list of codes (<code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code>) - <code>SENT</code> is not one of them, so by design nothing renders, even with an otherwise valid, in-custody sentence. <strong>Exception:</strong> if <code>provisional: true</code> is also set, the panel renders anyway (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>):</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">View example JSON</span>
