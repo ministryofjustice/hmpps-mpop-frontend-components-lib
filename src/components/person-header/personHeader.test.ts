@@ -99,13 +99,15 @@ describe('person-header', () => {
     const photo = document.querySelector('[data-qa="personPhoto"]')
     expect(photo?.tagName).toBe('IMG')
     expect(photo?.getAttribute('src')).toBe('/search/prisoner-image/A1234BC')
-    expect(photo?.getAttribute('alt')).toBe('Andrew Langley')
+    expect(photo?.getAttribute('alt')).toBe('Photo of Andrew Langley')
+    expect(document.querySelector('.person-header__band--with-photo')).not.toBeNull()
   })
 
   it('does not render a photo element when not provided', () => {
     const document = renderComponent({ name: 'Andrew Langley' })
 
     expect(document.querySelector('[data-qa="personPhoto"]')).toBeNull()
+    expect(document.querySelector('.person-header__band--with-photo')).toBeNull()
   })
 
   it('renders pre-rendered risk badge markup as-is', () => {

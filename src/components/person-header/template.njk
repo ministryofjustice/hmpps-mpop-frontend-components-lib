@@ -1,9 +1,9 @@
 
 
 <div class='person-header'>
-    <div class='person-header__band'>
+    <div class='person-header__band{% if params.photo %} person-header__band--with-photo{% endif %}'>
         {% if params.photo %}
-            <img class='person-header__photo' data-qa='personPhoto' src='{{ params.photo }}' alt='{{ params.name }}'>
+            <img class='person-header__photo' data-qa='personPhoto' src='{{ params.photo }}' alt='Photo of {{ params.name }}'>
         {% endif %}
 
         <div class='person-header__details'>

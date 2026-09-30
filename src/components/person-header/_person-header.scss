@@ -11,10 +11,14 @@
   padding: govuk-spacing(4) govuk-spacing(4) govuk-spacing(3);
 }
 
+.person-header__band--with-photo {
+  padding-bottom: govuk-spacing(4);
+}
+
 .person-header__photo {
   flex-shrink: 0;
-  width: 90px;
-  height: 120px;
+  width: 120px;
+  height: 160px;
   object-fit: cover;
   border-radius: 4px;
 }
