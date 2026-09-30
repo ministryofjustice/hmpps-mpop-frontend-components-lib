@@ -128,7 +128,7 @@ describe('person-header', () => {
       },
     })
 
-    const wrapper = document.querySelector('[data-qa="riskBadges"]')
+    const wrapper = document.querySelector('[data-qa="personRiskBadges"]')
     const link = wrapper?.querySelector('[data-qa="risk-badge-ogrs"]')
 
     expect(wrapper).not.toBeNull()
