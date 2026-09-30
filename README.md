@@ -151,6 +151,13 @@ This generates `preview/index.html`. Open the file directly in your browser, e.g
 open preview/index.html
 ```
 
+By default `preview` renders every component. To only render specific sections, set `COMPONENT` (comma-separated) to one or more of `pop-header`, `person-header`, `supervision-package`, `supervision-package-summary`:
+
+```bash
+COMPONENT=supervision-package npm run preview
+COMPONENT=pop-header,person-header npm run preview
+```
+
 ### preview-api
 
 `preview-api` renders the components using real data fetched from the upstream APIs (tier, MAS, supervision packages) for the CRN you provide, so it's useful for checking how components look with real-world data.
@@ -165,6 +172,12 @@ Run:
 
 ```bash
 npm run preview:api
+```
+
+You can also set `CRN` and `ENVIRONMENT` inline instead of (or as well as) using `.env` - `ENVIRONMENT` selects which environment's APIs to call (`dev`, `preprod` or `prod`; defaults to `dev`):
+
+```bash
+CRN={{CRN}} ENVIRONMENT=dev npm run preview:api
 ```
 
 This generates `preview/index-api.html`. Open the file directly in your browser, e.g.:
