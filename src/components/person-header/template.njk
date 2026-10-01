@@ -7,8 +7,12 @@
         {% endif %}
 
         <div class='person-header__details'>
-            <h1 class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name' data-qa='personName'>{{ params.name }}</h1>
-
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-2 person-header__name" data-qa="personName">
+                {{ params.name }}
+                {% if params.personStatusTag %}
+                    <strong class="app-status-badge govuk-tag govuk-tag--yellow" data-qa="personStatusTag">{{ params.personStatusTag }}</strong>
+                {%endif%}
+            </h1>
             <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
                 <span class='govuk-!-font-weight-bold'>CRN:</span> <span data-qa='crn'>{{ params.crn }}</span>
             </p>
@@ -46,25 +50,31 @@
                 {{ params.riskBadges | safe }}
             </div>
         </div>
-    {% elif params.riskBadgeData and params.riskBadgeData.groups and (params.riskBadgeData.groups | length) > 0 %}
-        <div class='person-header__risk-panel'>
-            <div class='person-header__risk-tags' data-qa='riskBadges'>
-                {% for group in params.riskBadgeData.groups %}
-                    {% for risk in group.badges %}
-                        <a href='/case/{{ params.crn }}/risk/flag/{{ risk.id }}' class='risk-badge-link' data-qa='risk-badge-{{ risk.id }}'>
-                            <span class='moj-badge {{ risk.badgeClass }}'>
-                                {{ risk.text }}
-                            </span>
-                        </a>
-                    {% endfor %}
-                {% endfor %}
+    {% endif %}
 
-                {% if params.riskBadgeData.remainingCount > 0 %}
-                    <a href='/case/{{ params.crn }}/risk' class='govuk-link risk-badge-more' data-qa='risk-badge-more'>
-                        +{{ params.riskBadgeData.remainingCount }} active risk flags
-                    </a>
-                {% endif %}
-            </div>
+    {% if params.riskBadgeData and params.riskBadgeData.groups and (params.riskBadgeData.groups | length) > 0 %}
+        <div class='person-header__risk-panel'>
+        <div class='person-header__risk-tags' data-qa='personRiskBadges'>
+            {% for group in params.riskBadgeData.groups %}
+            {% for risk in group.badges %}
+            <a href='/case/{{ params.crn }}/risk/flag/{{ risk.id }}'
+               class='risk-badge-link'
+               data-qa='risk-badge-{{ risk.id }}'>
+                        <span class='moj-badge {{ risk.badgeClass }}'>
+                            {{ risk.text }}
+                        </span>
+            </a>
+            {% endfor %}
+            {% endfor %}
+
+            {% if params.riskBadgeData.remainingCount > 0 %}
+            <a href='/case/{{ params.crn }}/risk'
+               class='govuk-link risk-badge-more'
+               data-qa='risk-badge-more'>
+                +{{ params.riskBadgeData.remainingCount }} active risk flags
+            </a>
+            {% endif %}
         </div>
+    </div>
     {% endif %}
 </div>

@@ -128,7 +128,7 @@ describe('person-header', () => {
       },
     })
 
-    const wrapper = document.querySelector('[data-qa="riskBadges"]')
+    const wrapper = document.querySelector('[data-qa="personRiskBadges"]')
     const link = wrapper?.querySelector('[data-qa="risk-badge-ogrs"]')
 
     expect(wrapper).not.toBeNull()
@@ -162,5 +162,19 @@ describe('person-header', () => {
     const document = renderComponent({ riskBadges: '\n    \n' })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+  })
+
+  it('renders the person status tag', () => {
+    const document = renderComponent({ personStatusTag: 'In custody' })
+
+    const statusTag = document.querySelector('[data-qa="personStatusTag"]')
+
+    expect(statusTag?.textContent?.trim()).toBe('In custody')
+  })
+
+  it('does not render the person status tag when no status is provided', () => {
+    const document = renderComponent({ personStatusTag: undefined })
+
+    expect(document.querySelector('[data-qa="personStatusTag"]')).toBeNull()
   })
 })
