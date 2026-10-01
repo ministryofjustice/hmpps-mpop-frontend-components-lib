@@ -60,9 +60,22 @@
             <a href='/case/{{ params.crn }}/risk/flag/{{ risk.id }}'
                class='risk-badge-link'
                data-qa='risk-badge-{{ risk.id }}'>
-                        <span class='moj-badge {{ risk.badgeClass }}'>
-                            {{ risk.text }}
-                        </span>
+
+                    <span class='moj-badge {{ risk.badgeClass }}'>
+                            {% if risk.text | replace(' - Low', ' - <strong>Low</strong>') != risk.text %}
+                                {{ risk.text | replace(' - Low', ' - <strong>Low</strong>') | safe }}
+                            {% elif risk.text | replace(' - Medium', ' - <strong>Medium</strong>') != risk.text %}
+                                {{ risk.text | replace(' - Medium', ' - <strong>Medium</strong>') | safe }}
+                            {% elif risk.text | replace(' - High', ' - <strong>High</strong>') != risk.text %}
+                                {{ risk.text | replace(' - High', ' - <strong>High</strong>') | safe }}
+                            {% elif risk.text | replace(' - Very High', ' - <strong>Very High</strong>') != risk.text %}
+                                {{ risk.text | replace(' - Very High', ' - <strong>Very High</strong>') | safe }}
+                            {% else %}
+                                {{ risk.text }}
+                            {% endif %}
+                    </span>
+
+
             </a>
             {% endfor %}
             {% endfor %}
