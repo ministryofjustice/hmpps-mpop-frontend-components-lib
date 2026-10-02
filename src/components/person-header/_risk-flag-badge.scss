@@ -38,13 +38,28 @@
   }
 }
 
-.person-header__risk-tags {
-  flex-direction: column;
-  align-items: flex-start;
-}
 .pop-header-risk-badges .moj-badge,
 .pop-header-risk-flags .moj-badge {
   /* Ensure badges in the header preserve original casing - override moj-frontend defaults */
   text-transform: none !important;
   font-weight: 400;
+}
+
+.person-header__risk-tags .moj-badge {
+  border-radius: 5px;
+}
+
+.person-header__risk-panel {
+  display: flex;
+  flex-direction: column;
+  gap: govuk-spacing(2);
+  background-color: govuk-colour("black", $variant: "tint-95");
+  padding: govuk-spacing(3) govuk-spacing(4);
+}
+
+.person-header__risk-tags {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: govuk-spacing(2);
 }
