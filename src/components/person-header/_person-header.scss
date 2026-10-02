@@ -47,21 +47,6 @@
   }
 }
 
-.person-header__risk-panel {
-  display: flex;
-  flex-direction: column;
-  gap: govuk-spacing(2);
-  background-color: govuk-colour("black", $variant: "tint-95");
-  padding: govuk-spacing(3) govuk-spacing(4);
-}
-
-.person-header__risk-tags {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: govuk-spacing(2);
-}
-
 .person-header__name .app-status-badge {
   position: relative;
   top: -8px;

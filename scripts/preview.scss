@@ -127,31 +127,3 @@ body {
     display: inline;
   }
 }
-
-
-.moj-badge.risk-badge--very-high {
-  background-color: #ffffff;
-  color: #0b0c0c;
-  border: 2px solid #711a0d;
-}
-
-.moj-badge.risk-badge--high {
-  background-color: #ffffff;
-  color: #0b0c0c;
-  border: 2px solid #d4351c;
-}
-
-.moj-badge.risk-badge--medium {
-  background-color: #ffffff;
-  color: #0b0c0c;
-  border: 2px solid #f2590d;
-}
-
-.moj-badge.risk-badge--low {
-  background-color: #ffffff;
-  color: #0b0c0c;
-  border: 2px solid #85994b;
-}
-.person-header__risk-tags .moj-badge {
-  border-radius: 5px;
-}
