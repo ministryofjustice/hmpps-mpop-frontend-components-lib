@@ -49,20 +49,17 @@
   border-radius: 5px;
 }
 
-//
-//.person-header__risk-panel {
-//  flex-direction: column;
-//
-//  padding: govuk-spacing(3) govuk-spacing(4);
-//}
-
-.person-header__risk-tags {
+.person-header__risk-panel {
+  display: flex;
+  flex-direction: column;
   gap: govuk-spacing(2);
+  background-color: govuk-colour("black", $variant: "tint-95");
+  padding: govuk-spacing(3) govuk-spacing(4);
 }
 
 .person-header__risk-tags {
   display: flex;
-  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: govuk-spacing(2);
-  align-items: flex-start;
 }
