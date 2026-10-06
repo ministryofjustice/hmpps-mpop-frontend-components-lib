@@ -64,6 +64,7 @@ export type ContextDetails = {
   finalThirdEligibility: FinalThirdEligibility
   liferCategory?: LiferCategory
   recallStatus?: CodeDescription
+  preventConcerns?: boolean
 }
 
 export type CurrentPhase = {
