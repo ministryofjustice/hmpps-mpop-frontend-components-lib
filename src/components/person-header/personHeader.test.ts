@@ -119,11 +119,21 @@ describe('person-header', () => {
     expect(wrapper?.querySelector('[data-qa="ogrsBadge"]')?.textContent?.trim()).toBe('OGRS LOW')
   })
 
-  it('renders structured riskBadgeData with the remaining risk count link', () => {
+  it('renders structured personRiskFlags with the remaining risk count link', () => {
     const document = renderComponent({
       crn: 'D004851',
-      riskBadgeData: {
-        groups: [{ badges: [{ id: 'ogrs', text: 'OGRS LOW', badgeClass: 'risk-badge--low' }] }],
+      personRiskFlags: {
+        groups: [
+          {
+            badges: [
+              {
+                id: 'ogrs',
+                text: 'OGRS LOW',
+                badgeClass: 'risk-badge--low',
+              },
+            ],
+          },
+        ],
         remainingCount: 2,
       },
     })
@@ -134,7 +144,10 @@ describe('person-header', () => {
     expect(wrapper).not.toBeNull()
     expect(link?.tagName).toBe('A')
     expect(link?.getAttribute('href')).toBe('/case/D004851/risk/flag/ogrs')
-    expect(link?.querySelector('.moj-badge')?.textContent?.trim()).toBe('OGRS LOW')
+    expect(link?.textContent?.trim()).toBe('OGRS LOW')
+    expect(link?.classList.contains('dps-alert-status')).toBe(true)
+    expect(link?.classList.contains('dps-alert-status--risk')).toBe(true)
+    expect(link?.classList.contains('risk-badge--low')).toBe(true)
     expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
   })
 

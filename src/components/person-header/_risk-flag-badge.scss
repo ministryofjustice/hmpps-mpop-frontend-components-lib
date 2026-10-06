@@ -81,3 +81,82 @@
   border-radius: 5px;
   white-space: nowrap;
 }
+.person-header__risk-tags .dps-alert-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border: 3px solid;
+  padding: 5px 10px;
+  height: initial;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  border-radius: 5px;
+  color: #0b0c0c;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* Risk flag colours */
+.person-header__risk-tags .risk-badge--very-high {
+  border-color: #711a0d;
+}
+
+.person-header__risk-tags .risk-badge--high {
+  border-color: #d4351c;
+}
+
+.person-header__risk-tags .risk-badge--medium {
+  border-color: #f2590d;
+}
+
+.person-header__risk-tags .risk-badge--low {
+  border-color: #85994b;
+}
+
+/* Hover */
+.person-header__risk-tags .dps-alert-status:hover {
+  text-decoration-thickness: 2px;
+  color: #fff;
+}
+
+/* Keyboard focus / tab */
+.person-header__risk-tags .dps-alert-status:focus {
+  outline: 3px solid transparent;
+  color: #0b0c0c;
+  background-color: #ffdd00;
+  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+  text-decoration: none;
+}
+
+/* Hover colours by risk level */
+.person-header__risk-tags .risk-badge--very-high:hover {
+  background-color: #711a0d;
+}
+
+.person-header__risk-tags .risk-badge--high:hover {
+  background-color: #d4351c;
+}
+
+.person-header__risk-tags .risk-badge--medium:hover {
+  background-color: #f2590d;
+}
+
+.person-header__risk-tags .risk-badge--low:hover {
+  background-color: #85994b;
+}
+
+/* More link */
+.person-header__risk-tags .risk-badge-more {
+  white-space: nowrap;
+}
+
+.dps-alert-status--risk:hover {
+  text-decoration-thickness: 2px;
+  background-color: #d4351c;
+  color: #fff;
+}
