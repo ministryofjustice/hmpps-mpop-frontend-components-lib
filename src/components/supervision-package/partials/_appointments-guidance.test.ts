@@ -21,6 +21,48 @@ const renderPartial = (params: Record<string, unknown> = {}, forename = 'Alex') 
 const paragraphsOf = (document: Document) => Array.from(document.querySelectorAll('p.govuk-body'))
 
 describe('_appointments-guidance partial', () => {
+  it('shows only the stage-ends message when preventConcerns is true and the sentence ends before the reset', () => {
+    const document = renderPartial({
+      context: {
+        preventConcerns: true,
+        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2026-06-01' }],
+      },
+      currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10 } },
+    })
+
+    const paragraphs = paragraphsOf(document)
+    expect(paragraphs).toHaveLength(1)
+    expect(paragraphs[0].textContent).toBe('The supervision stage ends on 1 December 2026.')
+  })
+
+  it('shows only the package-resets message when preventConcerns is true and the package resets before the sentence ends', () => {
+    const document = renderPartial({
+      context: {
+        preventConcerns: true,
+        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }],
+      },
+      currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10 } },
+    })
+
+    const paragraphs = paragraphsOf(document)
+    expect(paragraphs).toHaveLength(1)
+    expect(paragraphs[0].textContent).toBe('The supervision package resets on 1 December 2026.')
+  })
+
+  it('takes priority over the used-all-appointments message when preventConcerns is true', () => {
+    const document = renderPartial({
+      context: {
+        preventConcerns: true,
+        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2026-06-01' }],
+      },
+      currentYear: { endDate: '2026-12-01', appointments: { completed: 10, allowance: 10 } },
+    })
+
+    const paragraphs = paragraphsOf(document)
+    expect(paragraphs).toHaveLength(1)
+    expect(paragraphs[0].textContent).not.toContain('has used all the supervision package appointments')
+  })
+
   it('shows the used-all-appointments paragraph when the allowance has been used', () => {
     const document = renderPartial({
       currentYear: { endDate: '2026-12-01', appointments: { completed: 10, allowance: 10 } },

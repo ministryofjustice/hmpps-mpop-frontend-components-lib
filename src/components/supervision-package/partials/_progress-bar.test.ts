@@ -196,6 +196,37 @@ describe('_progress-bar partial', () => {
       expect(document.querySelector('.appointment-progress__bar-maximum')).not.toBeNull()
       expect(document.querySelector('.appointment-progress__bar')).toBeNull()
     })
+
+    it('does not use the bar-maximum class at 100% when preventConcerns is true (non-early)', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'STD' } },
+        currentYear: { appointments: { allowance: 10, completed: 12, scheduled: 0 } },
+        context: { preventConcerns: true },
+      })
+
+      const bar = document.querySelector(
+        '.appointment-progress__bar, .appointment-progress__bar-maximum',
+      ) as HTMLElement
+      expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
+      expect(document.querySelector('.appointment-progress__bar')).not.toBeNull()
+      expect(document.querySelector('.appointment-progress__bar-maximum')).toBeNull()
+    })
+
+    it('does not use the bar-maximum class at 100% when preventConcerns is true (Early engagement)', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'INIT' } },
+        earlyEngagement: { completed: 5, weeks: 5 },
+        currentYear: { appointments: { scheduled: 0, completed: 5 } },
+        context: { preventConcerns: true },
+      })
+
+      const bar = document.querySelector(
+        '.appointment-progress__bar, .appointment-progress__bar-maximum',
+      ) as HTMLElement
+      expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
+      expect(document.querySelector('.appointment-progress__bar')).not.toBeNull()
+      expect(document.querySelector('.appointment-progress__bar-maximum')).toBeNull()
+    })
   })
 
   describe('label text', () => {

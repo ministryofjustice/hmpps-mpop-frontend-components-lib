@@ -1,5 +1,3 @@
-{% set sentence = params.context.sentences | getPrimarySentence %}
-
 {% if forename and (params.earlyEngagement.completed | int < params.earlyEngagement.weeks | int) %}
     <p class='govuk-body'>
         You should see {{ forename }} every week for the first {{ params.earlyEngagement.weeks }} weeks of the sentence.

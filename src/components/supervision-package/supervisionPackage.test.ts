@@ -633,6 +633,50 @@ describe('supervision-package', () => {
     expect(headingTexts).toContain('Supervision appointments')
   })
 
+  it('renders the Prevent concerns guidance when context.preventConcerns is true', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 2 } },
+      context: {
+        name: { forename: 'Alex' },
+        preventConcerns: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+      },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+    expect(headings).toContain('Supervision appointments')
+
+    expect(document.body.textContent).toContain(
+      'Alex has a Prevent concerns risk flag and can receive additional appointments while this flag is active.',
+    )
+    expect(document.body.textContent).toContain('The supervision stage ends on 15 August 2026.')
+    expect(document.body.textContent).not.toContain('supervision appointments remaining')
+  })
+
+  it('renders the Prevent concerns guidance instead of the OPD guidance when both are true', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
+      currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 2 } },
+      context: {
+        name: { forename: 'Alex' },
+        preventConcerns: true,
+        offenderPersonalDisorderPathway: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+      },
+    })
+
+    expect(document.body.textContent).toContain('Alex has a Prevent concerns risk flag')
+    expect(document.body.textContent).not.toContain('offender personality disorder (OPD) treatment')
+  })
+
   it('renders the "Supervision stage" heading when the sentence is at large', () => {
     const document = renderComponent({
       tierScore: 'C',
