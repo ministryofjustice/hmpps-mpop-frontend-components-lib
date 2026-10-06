@@ -51,3 +51,8 @@
   position: relative;
   top: -8px;
 }
+
+.person-header__risk-panel + .person-header__risk-panel {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}

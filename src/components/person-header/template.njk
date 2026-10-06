@@ -44,50 +44,52 @@
         </div>
     </div>
 
+    {% if (params.riskBadges and (params.riskBadges | trim)) or
+      (params.personRiskFlags and params.personRiskFlags.groups and (params.personRiskFlags.groups | length) > 0) %}
+
     {% if params.riskBadges and (params.riskBadges | trim) %}
-        <div class='person-header__risk-panel'>
-            <div class='person-header__risk-tags' data-qa='riskBadges'>
-                {{ params.riskBadges | safe }}
-            </div>
+    <div class='person-header__risk-panel'>
+        <div class='person-header__risk-tags' data-qa='riskBadges'>
+            {{ params.riskBadges | safe }}
         </div>
+    </div>
     {% endif %}
 
-    {% if params.riskBadgeData and params.riskBadgeData.groups and (params.riskBadgeData.groups | length) > 0 %}
-        <div class='person-header__risk-panel'>
+    {% if params.personRiskFlags and params.personRiskFlags.groups and (params.personRiskFlags.groups | length) > 0 %}
+    <div class='person-header__risk-panel'>
         <div class='person-header__risk-tags' data-qa='personRiskBadges'>
-            {% for group in params.riskBadgeData.groups %}
+            {% for group in params.personRiskFlags.groups %}
             {% for risk in group.badges %}
             <a href='/case/{{ params.crn }}/risk/flag/{{ risk.id }}'
                class='risk-badge-link'
                data-qa='risk-badge-{{ risk.id }}'>
 
-                    <span class='moj-badge {{ risk.badgeClass }}'>
-                            {% if risk.text | replace(' - Low', ' - <strong>Low</strong>') != risk.text %}
-                                {{ risk.text | replace(' - Low', ' - <strong>Low</strong>') | safe }}
-                            {% elif risk.text | replace(' - Medium', ' - <strong>Medium</strong>') != risk.text %}
-                                {{ risk.text | replace(' - Medium', ' - <strong>Medium</strong>') | safe }}
-                            {% elif risk.text | replace(' - High', ' - <strong>High</strong>') != risk.text %}
-                                {{ risk.text | replace(' - High', ' - <strong>High</strong>') | safe }}
-                            {% elif risk.text | replace(' - Very High', ' - <strong>Very High</strong>') != risk.text %}
-                                {{ risk.text | replace(' - Very High', ' - <strong>Very High</strong>') | safe }}
-                            {% else %}
-                                {{ risk.text }}
-                            {% endif %}
-                    </span>
-
-
+                            <span class='moj-badge {{ risk.badgeClass }}'>
+                                {% if risk.text | replace(' - Low', ' - <strong>Low</strong>') != risk.text %}
+                                    {{ risk.text | replace(' - Low', ' - <strong>Low</strong>') | safe }}
+                                {% elif risk.text | replace(' - Medium', ' - <strong>Medium</strong>') != risk.text %}
+                                    {{ risk.text | replace(' - Medium', ' - <strong>Medium</strong>') | safe }}
+                                {% elif risk.text | replace(' - High', ' - <strong>High</strong>') != risk.text %}
+                                    {{ risk.text | replace(' - High', ' - <strong>High</strong>') | safe }}
+                                {% elif risk.text | replace(' - Very High', ' - <strong>Very High</strong>') != risk.text %}
+                                    {{ risk.text | replace(' - Very High', ' - <strong>Very High</strong>') | safe }}
+                                {% else %}
+                                    {{ risk.text }}
+                                {% endif %}
+                            </span>
             </a>
             {% endfor %}
             {% endfor %}
 
-            {% if params.riskBadgeData.remainingCount > 0 %}
+            {% if params.personRiskFlags.remainingCount > 0 %}
             <a href='/case/{{ params.crn }}/risk'
                class='govuk-link risk-badge-more'
                data-qa='risk-badge-more'>
-                +{{ params.riskBadgeData.remainingCount }} active risk flags
+                +{{ params.personRiskFlags.remainingCount }} active risk flags
             </a>
             {% endif %}
         </div>
     </div>
+    {% endif %}
     {% endif %}
 </div>

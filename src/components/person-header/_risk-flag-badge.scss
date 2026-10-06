@@ -32,21 +32,11 @@
   border: 2px solid #85994b;
 }
 
-.pop-header-risk-badges {
-  &:not(:empty) {
-    margin-bottom: govuk-spacing(2);
-  }
-}
-
 .pop-header-risk-badges .moj-badge,
 .pop-header-risk-flags .moj-badge {
   /* Ensure badges in the header preserve original casing - override moj-frontend defaults */
   text-transform: none !important;
   font-weight: 400;
-}
-
-.person-header__risk-tags .moj-badge {
-  border-radius: 5px;
 }
 
 .person-header__risk-panel {
@@ -57,9 +47,37 @@
   padding: govuk-spacing(3) govuk-spacing(4);
 }
 
+
+.pop-header-risk-badges {
+  &:not(:empty) {
+    margin-bottom: govuk-spacing(2);
+  }
+}
+
+.pop-header-risk-badges .moj-badge,
+.pop-header-risk-flags .moj-badge,
+.person-header__risk-tags .moj-badge {
+  text-transform: none !important;
+  font-weight: 400;
+}
+
+.person-header__risk-tags .risk-badge-link {
+  font-weight: 400;
+  text-transform: none;
+}
+
+.person-header__risk-tags .moj-badge strong {
+  font-weight: 700;
+}
+
 .person-header__risk-tags {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
-  gap: govuk-spacing(2);
+  gap: 10px;
+}
+
+.person-header__risk-tags .moj-badge {
+  border-radius: 5px;
+  white-space: nowrap;
 }
