@@ -132,6 +132,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#provisional-in-custody-no-phase">Provisional and in custody (no currentPhase)</a></li>
               <li><a class="govuk-link" href="#provisional-in-custody-sent">Provisional and in custody (currentPhase SENT)</a></li>
               <li><a class="govuk-link" href="#prevent-concerns">Prevent Concerns</a></li>
+              <li><a class="govuk-link" href="#prevent-concerns-final-third">Prevent Concerns (final third)</a></li>
               <li><a class="govuk-link" href="#final-third-progress-national-security-division-cases">Final third progress National Security Division cases</a>
                 <ul class="govuk-list govuk-list--bullet">
                   <li><a class="govuk-link" href="#final-third-progress-spna">Final third progress still renders when phase code is SPNA (Does not apply)</a></li>
@@ -2154,6 +2155,72 @@ const html = env.renderString(
           gender: 'Male',
           preventConcerns: true,
           finalThirdEligibility: { eligible: false },
+          sentences: [{
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        earlyEngagement: { weeks: 3, completed: 3 },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
+      }) }}
+
+      <h3 class="govuk-heading-s" id="prevent-concerns-final-third">Prevent Concerns (final third)</h3>
+      <p class="govuk-body">The same <code>context.preventConcerns: true</code> flag also applies during the final third phase (<code>currentPhase.phase.code: "FTHRD"</code>):</p>
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": <mark style="background:#ffdd00;">"FTHRD"</mark>, "description": "Final Third" },
+    "endDate": "2027-08-31"
+  },
+  "earlyEngagement": {
+    "weeks": 3,
+    "completed": 3
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": {
+      "allowance": 12,
+      "scheduled": 1,
+      "completed": 4
+    }
+  },
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "preventConcerns": <mark style="background:#ffdd00;">true</mark>,
+    "finalThirdEligibility": { "eligible": true },
+    "sentences": [
+      {
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  }
+}</code></pre>
+  </div>
+</details>
+      {{ supervisionPackage({
+        tierScore: 'C',
+        currentPhase: { phase: { code: 'FTHRD', description: 'Final Third' }, endDate: '2027-08-31' },
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          preventConcerns: true,
+          finalThirdEligibility: { eligible: true },
           sentences: [{
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },

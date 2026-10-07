@@ -80,7 +80,8 @@
         {% if showPhaseColumn and params.currentPhase %}
             <div class='govuk-grid-column-one-half'>
                 {% if params.context.preventConcerns %}
-                    <h4 class='govuk-heading-s'>Supervision appointments</h4>
+                    <h4 class='govuk-heading-s'>{{ 'Final third stage' if phaseCode == 'FTHRD' else 'Supervision appointments' }}</h4>
+
                     {% include './partials/_prevent-concerns.njk' %}
                 {% elseif params.context.offenderPersonalDisorderPathway %}
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>

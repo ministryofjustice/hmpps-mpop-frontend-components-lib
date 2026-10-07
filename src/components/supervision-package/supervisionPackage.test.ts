@@ -658,6 +658,26 @@ describe('supervision-package', () => {
     expect(document.body.textContent).not.toContain('supervision appointments remaining')
   })
 
+  it('renders the "Final third stage" heading when context.preventConcerns is true and phase is FTHRD', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'FTHRD', description: 'Final third' } },
+      currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 2 } },
+      context: {
+        name: { forename: 'Alex' },
+        preventConcerns: true,
+        sentences: [{ supervisionPackage: { code: 'FTHRD' } }],
+      },
+    })
+
+    expect(document.querySelector('.supervision-package')).not.toBeNull()
+    const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+    expect(headings).toContain('Final third stage')
+    expect(headings).not.toContain('Supervision appointments')
+  })
+
   it('renders the Prevent concerns guidance instead of the OPD guidance when both are true', () => {
     const document = renderComponent({
       tierScore: 'C',
