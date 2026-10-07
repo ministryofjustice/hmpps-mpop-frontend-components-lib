@@ -1,4 +1,4 @@
-{% set resets = params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
+{% set resets = params.currentYear.endDate | supervisionAppointmentsReset(sentence) %}
 {% set stageEndDate = ("The supervision package resets on " if resets else "The supervision stage ends on ") + (params.currentYear.endDate | dateWithYear) + "." %}
 
 {% if params.context.preventConcerns %}

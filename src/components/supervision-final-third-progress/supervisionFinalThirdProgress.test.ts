@@ -48,6 +48,7 @@ describe('supervision-final-third-progress', () => {
             custody: {
               finalThirdDate: '2026-11-07',
             },
+            isPrimarySentence: true,
           },
         ],
       },

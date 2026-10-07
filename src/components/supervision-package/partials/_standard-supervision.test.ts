@@ -41,7 +41,7 @@ describe('_standard-supervision partial', () => {
       const document = renderPartial({
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01' }],
+          sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01', isPrimarySentence: true }],
         },
         currentYear: { endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })
@@ -66,6 +66,7 @@ describe('_standard-supervision partial', () => {
               supervisionPackage: { code: 'SPA' },
               custody: { finalThirdDate: '2026-11-07' },
               type: { isCustodial: true },
+              isPrimarySentence: true,
             },
           ],
         },
@@ -85,7 +86,7 @@ describe('_standard-supervision partial', () => {
         context: {
           name: { forename: 'Alex' },
           finalThirdEligibility: { eligible: false },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }],
+          sentences: [{ supervisionPackage: { code: 'SPA' }, type: { isCustodial: true }, isPrimarySentence: true }],
         },
         currentYear: { isFirstYear: true, endDate: '2026-08-15', appointments: { allowance: 20, completed: 5 } },
       })

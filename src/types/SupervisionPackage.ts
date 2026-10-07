@@ -44,6 +44,7 @@ export type FrontendSentence = {
   type: FrontendSentenceType
   custody: FrontendCustody
   inBreach: boolean
+  isPrimarySentence: boolean
 }
 
 type PersonName = {
@@ -65,6 +66,7 @@ export type ContextDetails = {
   liferCategory?: LiferCategory
   recallStatus?: CodeDescription
   preventConcerns?: boolean
+  inFlight?: boolean
 }
 
 export type CurrentPhase = {

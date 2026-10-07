@@ -3,14 +3,14 @@ import { dateWithYear } from './dateWithYear'
 import { govukTime } from './govukTime'
 import { appointmentDateTime } from './appointmentDateTime'
 import { toTitleCase } from './toTitleCase'
-import { hasBreachedSentence } from './hasBreachedSentence'
 import { hasTerminatedSentence } from './hasTerminatedSentence'
+import { hasRestrictedCustodyStatus } from './hasRestrictedCustodyStatus'
+import { isUnlawfullyAtLarge } from './isUnlawfullyAtLarge'
+import { isRecalled } from './isRecalled'
 import { isEligibleForDiscretionaryAppointments } from './isEligibleForDiscretionaryAppointments'
 import { finalThirdStatus } from './finalThirdStatus'
-import { isInCustody } from './isInCustody'
-import { isAtLarge } from './isAtLarge'
 import { sentenceType } from './sentenceType'
-import { getPrimarySentence, isSpxOnlySentenceList } from './getPrimarySentence'
+import { getPrimarySentence } from './getPrimarySentence'
 import { supervisionAppointmentsReset } from './supervisionAppointmentsReset'
 import { spaceOutChars } from './spaceOutChars'
 import { formatName } from './formatName'
@@ -20,16 +20,15 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('govukTime', govukTime)
   env.addFilter('appointmentDateTime', appointmentDateTime)
   env.addFilter('toTitleCase', toTitleCase)
-  env.addFilter('hasBreachedSentence', hasBreachedSentence)
   env.addFilter('hasTerminatedSentence', hasTerminatedSentence)
+  env.addFilter('hasRestrictedCustodyStatus', hasRestrictedCustodyStatus)
+  env.addFilter('isUnlawfullyAtLarge', isUnlawfullyAtLarge)
+  env.addFilter('isRecalled', isRecalled)
   env.addFilter('isEligibleForDiscretionaryAppointments', isEligibleForDiscretionaryAppointments)
   env.addFilter('finalThirdStatus', finalThirdStatus)
-  env.addFilter('isInCustody', isInCustody)
-  env.addFilter('isAtLarge', isAtLarge)
   env.addFilter('sentenceType', sentenceType)
   env.addFilter('getPrimarySentence', getPrimarySentence)
   env.addFilter('supervisionAppointmentsReset', supervisionAppointmentsReset)
   env.addFilter('spaceOutChars', spaceOutChars)
-  env.addFilter('isSpxOnlySentenceList', isSpxOnlySentenceList)
   env.addFilter('formatName', formatName)
 }

@@ -105,7 +105,7 @@ describe('supervision-package-summary', () => {
         finalThirdEligibility: {
           eligible: false,
         },
-        sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01' }],
+        sentences: [{ supervisionPackage: { code: 'SPA' }, endDate: '2027-01-01', isPrimarySentence: true }],
       },
       earlyEngagement: {
         startDate: '2026-08-06T13:46:16.916Z',
@@ -220,6 +220,7 @@ describe('supervision-package-summary', () => {
           {
             supervisionPackage: { code: 'SPA' },
             inBreach: true,
+            isPrimarySentence: true,
           },
         ],
       },
@@ -253,7 +254,7 @@ describe('supervision-package-summary', () => {
         name: {
           forename: 'Stuart',
         },
-        sentences: [{ custody: { status: { description: 'Recalled', code: 'C' } } }],
+        sentences: [{ isPrimarySentence: true, custody: { status: { description: 'Recalled', code: 'C' } } }],
         finalThirdEligibility: {
           eligible: false,
         },
@@ -288,7 +289,7 @@ describe('supervision-package-summary', () => {
         name: {
           forename: 'Stuart',
         },
-        sentences: [{ custody: { status: { description: 'In custody', code: 'D' } } }],
+        sentences: [{ isPrimarySentence: true, custody: { status: { description: 'In custody', code: 'D' } } }],
         finalThirdEligibility: {
           eligible: false,
         },
@@ -323,7 +324,7 @@ describe('supervision-package-summary', () => {
         name: {
           forename: 'Stuart',
         },
-        sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+        sentences: [{ isPrimarySentence: true, custody: { location: { code: 'UATLRG' } } }],
         finalThirdEligibility: {
           eligible: false,
         },
@@ -401,6 +402,7 @@ describe('supervision-package-summary', () => {
             supervisionPackage: { code: 'SPA' },
             type: { isCustodial: true },
             custody: { finalThirdDate: '2026-08-06' },
+            isPrimarySentence: true,
           },
         ],
       },
@@ -464,6 +466,75 @@ describe('supervision-package-summary', () => {
     expect(document.querySelector('.supervision-package-summary')).toBeNull()
   })
 
+  it('does not render when the phase code is SPNK and the sentence is not in the final third', () => {
+    const document = renderComponent({
+      currentPhase: {
+        phase: { code: 'SPNK' },
+      },
+      context: {
+        name: {
+          forename: 'Stuart',
+        },
+        finalThirdEligibility: {
+          eligible: false,
+        },
+      },
+      earlyEngagement: {
+        startDate: '2026-08-06T13:46:16.916Z',
+        endDate: '2026-08-06T13:46:16.916Z',
+        weeks: 4,
+        completed: 2,
+      },
+      currentYear: {
+        startDate: '2026-08-06',
+        endDate: '2026-08-06',
+        appointments: {
+          allowance: 8,
+          scheduled: 1,
+          completed: 0,
+        },
+      },
+    })
+
+    expect(document.querySelector('.supervision-package-summary')).toBeNull()
+  })
+
+  it.each(['INIT', 'STD', 'FTHRD', 'IOM', 'OPD'])(
+    'renders when the phase code is %s (not SPNK) and the sentence is not in the final third',
+    phaseCode => {
+      const document = renderComponent({
+        currentPhase: {
+          phase: { code: phaseCode },
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+          },
+          finalThirdEligibility: {
+            eligible: false,
+          },
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 4,
+          completed: 2,
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 8,
+            scheduled: 1,
+            completed: 0,
+          },
+        },
+      })
+
+      expect(document.querySelector('.supervision-package-summary')).not.toBeNull()
+    },
+  )
+
   it('renders when in the final third even with an unsupported phase code', () => {
     const document = renderComponent({
       currentPhase: {
@@ -482,6 +553,7 @@ describe('supervision-package-summary', () => {
             supervisionPackage: { code: 'SPA' },
             type: { isCustodial: true },
             custody: { finalThirdDate: '2026-08-06' },
+            isPrimarySentence: true,
           },
         ],
       },

@@ -20,7 +20,10 @@ const spnsParams = {
   tag: { text: null, color: null },
   historyHref: '#',
   currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' } },
-  context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+  context: {
+    name: { forename: 'Alex' },
+    sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+  },
   currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
   oasysReviewHref: '/oasys/review/123',
   allAppointmentsHref: '#',

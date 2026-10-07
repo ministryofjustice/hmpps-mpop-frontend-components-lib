@@ -1,20 +1,17 @@
 {% from "../supervision-final-third-progress/macro.njk" import supervisionFinalThirdProgress %}
+{% set sentence = params.context.sentences | getPrimarySentence %}
 {% set standardAppointmentsComplete = params.currentYear.appointments.allowance is defined and params.currentYear.appointments.completed is defined and (params.currentYear.appointments.completed | int) >= (params.currentYear.appointments.allowance| int) %}
-{% set hasSpecialStatus = params.context.offenderPersonalDisorderPathway or params.context.preventConcerns or params.context.sentences | hasBreachedSentence or params.context.sentences | isInCustody or params.context.sentences | isAtLarge or params.context.integratedOffenderManagementRedRated %}
+{% set hasSpecialStatus = params.context.offenderPersonalDisorderPathway or params.context.preventConcerns or sentence.inBreach or sentence | hasRestrictedCustodyStatus or sentence | isUnlawfullyAtLarge or params.context.integratedOffenderManagementRedRated %}
 {% set sentenceTypeValue = params.context | sentenceType %}
 {% set phaseCode = params.currentPhase.phase.code | upper %}
 {% set showPhaseColumn = phaseCode == 'INIT' or phaseCode == 'STD' or phaseCode == 'FTHRD' or phaseCode == 'IOM' or phaseCode == 'OPD' or phaseCode == 'SPNS' %}
 {% set lifeCategoryCode = params.context.liferCategory.code | upper %}
-{% set sentence = params.context.sentences | getPrimarySentence %}
 {% set forename = params.context.name.forename %}
 {% set provisionalTier = params.provisional == true %}
 {% set isFinalThirdProgress = params.context.nationalSecurityDivision and params.context.finalThirdEligibility.eligible and sentence.type.isCustodial and sentence.custody.finalThirdDate %}
+{% set isInFlight = params.context.inFlight and (phaseCode == 'SPNS' or not phaseCode) %}
 {% set isEligiblePhase = showPhaseColumn or not params.currentPhase or phaseCode == 'SPNK' or provisionalTier %}
-{% set hasSentenceInList = sentence and params.context.sentences.length %}
-{% set isSpxOnlySentenceList = params.context.sentences | isSpxOnlySentenceList %}
-{% set isEarlyOrInFlightWithoutSentence = not sentence and not isSpxOnlySentenceList and (not params.currentPhase or phaseCode == 'SPNS') %}
-{% set isValidSentenceState = hasSentenceInList or isEarlyOrInFlightWithoutSentence %}
-{% set isSupervisionPackage = phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and isEligiblePhase and isValidSentenceState %}
+{% set isSupervisionPackage = phaseCode != 'SPNA' and not params.context.nationalSecurityDivision and isEligiblePhase and sentence %}
 {% set error = params.status == 500 %}
 
 {% if error %}
@@ -47,17 +44,19 @@
         <div class='{{ columnClass }}'>
             {% include './partials/_warnings.njk' %}
 
-            {% if not params.currentPhase and params.oasysReviewHref %}
-                {% if provisionalTier or params.tierScore == 'MISSING' %}
-                    <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a>. This confirms {{ forename}}’s tier so we can calculate the supervision package.</p>
-                {% else %}
-                    <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Start an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
+            {% if isInFlight and params.oasysReviewHref %}
+                {% if phaseCode == 'SPNS' %}
+                    <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments. </p>
+                    <p class='govuk-body'>
+                        Appointments do not count towards the package until it is confirmed.
+                    </p>
+                {% elseif not phaseCode %}
+                    {% if provisionalTier or params.tierScore == 'MISSING' %}
+                        <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a>. This confirms {{ forename}}’s tier so we can calculate the supervision package.</p>
+                    {% else %}
+                        <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Start an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments.</p>
+                    {% endif %}
                 {% endif %}
-            {% elseif phaseCode == 'SPNS' and params.oasysReviewHref %}
-                <p class='govuk-body'><a href='{{ params.oasysReviewHref }}' data-ai-id='supervisionPackageOasysReviewLink' class='govuk-link govuk-link--no-visited-state' target='{{ "_blank" if params.openInNewTab }}' rel='{{ "noopener noreferrer" if params.openInNewTab }}'>Complete an OASys review{{ ' (opens in new tab)' if params.openInNewTab }}</a> to confirm {{ forename}}’s supervision package. Until then, follow national standards for appointments. </p>
-                <p class='govuk-body'>
-                    Appointments do not count towards the package until it is confirmed.
-                </p>
             {% endif %}
 
             {% include './partials/_tier.njk' %}
@@ -83,7 +82,6 @@
             <div class='govuk-grid-column-one-half'>
                 {% if params.context.preventConcerns %}
                     <h4 class='govuk-heading-s'>{{ 'Final third stage' if phaseCode == 'FTHRD' else 'Supervision appointments' }}</h4>
-
                     {% include './partials/_prevent-concerns.njk' %}
                 {% elseif params.context.offenderPersonalDisorderPathway %}
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
@@ -91,7 +89,7 @@
                 {% elseif params.context.integratedOffenderManagementRedRated %}
                     <h4 class='govuk-heading-s'>Supervision appointments</h4>
                     {% include './partials/_red-iom.njk' %}
-                {% elseif params.context.sentences | isAtLarge or params.context.sentences | isInCustody %}
+                {% elseif sentence | isUnlawfullyAtLarge or sentence | hasRestrictedCustodyStatus %}
                     <h4 class='govuk-heading-s'>Supervision stage</h4>
                     {% include './partials/_progress-bar.njk' %}
                 {% elseif phaseCode == 'INIT' %}

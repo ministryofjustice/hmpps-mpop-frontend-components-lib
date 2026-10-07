@@ -32,13 +32,13 @@
 {% set remaining = required - completed %}
  {% set upcoming = params.currentYear.appointments.scheduled | int(0) %}
 {% set warning = null %}
-{% if params.context.sentences | hasBreachedSentence %}
+{% if sentence.inBreach %}
   {% set warning = forename + " is in breach. You should continue to offer appointments." %}
-{% elif params.context.sentences | isInCustody(['C']) %}
+{% elif sentence | isRecalled %}
   {% set warning = forename + " has been recalled. Their appointments are paused." %}
-{% elif params.context.sentences | isInCustody %}
+{% elif sentence | hasRestrictedCustodyStatus %}
   {% set warning = forename + " is in custody. Their appointments are paused." %}
-{% elif params.context.sentences | isAtLarge %}
+{% elif sentence | isUnlawfullyAtLarge %}
   {% set warning = forename + " is unlawfully at large. You should continue to offer appointments." %}
 {% endif %}
 
@@ -104,7 +104,7 @@
     {% if params.currentPhase.phase.code == 'STD' %}
       <p class="govuk-body">{{ forename }} has a maximum of {{ remaining }} appointments remaining.</p>
       <p class="govuk-body">
-        {% if params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
+        {% if params.currentYear.endDate | supervisionAppointmentsReset(sentence) %}
  Appointments reset with the supervision package on {{ params.currentYear.endDate | dateWithYear }}.
     {% else %}
 The supervision package ends on {{ params.currentYear.endDate | dateWithYear }}.

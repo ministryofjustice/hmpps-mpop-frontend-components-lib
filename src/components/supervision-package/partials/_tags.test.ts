@@ -1,12 +1,16 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_tags.njk', { params })
+const renderPartial = (params: Record<string, unknown> = {}) => {
+  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
+  const sentence = getPrimarySentence((params as { context?: { sentences?: FrontendSentence[] } }).context?.sentences)
+  const html = env.render('supervision-package/partials/_tags.njk', { params, sentence })
   return new JSDOM(html).window.document
 }
 
@@ -140,14 +144,6 @@ describe('_tags partial', () => {
   })
 
   describe('In breach badge', () => {
-    it('shows the badge when a sentence is in breach and its code is not SPX', () => {
-      const document = renderPartial({
-        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }] },
-      })
-
-      expect(getBadgeText(document)).toContain('In breach')
-    })
-
     it('does not show the badge when no sentences are in breach', () => {
       const document = renderPartial({
         context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }] },
@@ -170,15 +166,22 @@ describe('_tags partial', () => {
       ${'I'} | ${'In custody - IRC'}
       ${'R'} | ${'In custody - RoTL'}
       ${'C'} | ${'Community custody'}
-    `('shows the "$description" badge when sentences.custody.status.code is $code', ({ code, description }) => {
-      const document = renderPartial({ context: { sentences: [{ custody: { status: { code, description } } }] } })
+    `(
+      'shows the "$description" badge when the primary sentence has custody status code $code',
+      ({ code, description }) => {
+        const document = renderPartial({
+          context: { sentences: [{ isPrimarySentence: true, custody: { status: { code, description } } }] },
+        })
 
-      expect(getBadgeText(document)).toContain(description)
-    })
+        expect(getBadgeText(document)).toContain(description)
+      },
+    )
 
-    it('does not show the "In custody" badge when sentences.custody.status.code is not set', () => {
+    it('does not show the "In custody" badge when the primary sentence has no custody status code', () => {
       const document = renderPartial({
-        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, custody: { status: {} } }] },
+        context: {
+          sentences: [{ supervisionPackage: { code: 'SPA' }, isPrimarySentence: true, custody: { status: {} } }],
+        },
       })
 
       expect(getBadgeText(document)).not.toContain('In custody')
@@ -190,21 +193,29 @@ describe('_tags partial', () => {
       expect(getBadgeText(document)).not.toContain('In custody')
     })
 
-    it('shows the "In custody" badge when the only matching sentence has code SPX', () => {
+    it('does not show the "In custody" badge when only a non-primary sentence is in custody', () => {
       const document = renderPartial({
         context: {
           sentences: [
-            { supervisionPackage: { code: 'SPX' }, custody: { status: { code: 'D', description: 'In custody' } } },
+            {
+              supervisionPackage: { code: 'SPX' },
+              isPrimarySentence: false,
+              custody: { status: { code: 'D', description: 'In custody' } },
+            },
           ],
         },
       })
 
-      expect(getBadgeText(document)).toContain('In custody')
+      expect(getBadgeText(document)).not.toContain('In custody')
     })
 
-    it('shows the "Unlawfully at large" badge when sentences.custody.location.code is UATLRG', () => {
+    it('shows the "Unlawfully at large" badge when the primary sentence has custody location code UATLRG', () => {
       const document = renderPartial({
-        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, custody: { location: { code: 'UATLRG' } } }] },
+        context: {
+          sentences: [
+            { supervisionPackage: { code: 'SPA' }, isPrimarySentence: true, custody: { location: { code: 'UATLRG' } } },
+          ],
+        },
       })
 
       expect(getBadgeText(document)).toContain('Unlawfully at large')
@@ -212,11 +223,16 @@ describe('_tags partial', () => {
   })
 
   describe('at large / custody / breach badge priority', () => {
-    it('shows only "Unlawfully at large" when a sentence is both at large and in breach', () => {
+    it('shows only "Unlawfully at large" when the primary sentence is both at large and in breach', () => {
       const document = renderPartial({
         context: {
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, inBreach: true, custody: { location: { code: 'UATLRG' } } },
+            {
+              supervisionPackage: { code: 'SPA' },
+              isPrimarySentence: true,
+              inBreach: true,
+              custody: { location: { code: 'UATLRG' } },
+            },
           ],
         },
       })
@@ -226,12 +242,13 @@ describe('_tags partial', () => {
       expect(badges).not.toContain('In breach')
     })
 
-    it('shows only the custody badge when a sentence is both in custody and in breach', () => {
+    it('shows only the custody badge when the primary sentence is both in custody and in breach', () => {
       const document = renderPartial({
         context: {
           sentences: [
             {
               supervisionPackage: { code: 'SPA' },
+              isPrimarySentence: true,
               inBreach: true,
               custody: { status: { code: 'D', description: 'In custody' } },
             },
@@ -244,12 +261,13 @@ describe('_tags partial', () => {
       expect(badges).not.toContain('In breach')
     })
 
-    it('shows only "Unlawfully at large" when a sentence is both at large and in custody', () => {
+    it('shows only "Unlawfully at large" when the primary sentence is both at large and in custody', () => {
       const document = renderPartial({
         context: {
           sentences: [
             {
               supervisionPackage: { code: 'SPA' },
+              isPrimarySentence: true,
               custody: { location: { code: 'UATLRG' }, status: { code: 'D', description: 'In custody' } },
             },
           ],
@@ -263,7 +281,7 @@ describe('_tags partial', () => {
 
     it('shows "In breach" when a sentence is in breach but not at large or in custody', () => {
       const document = renderPartial({
-        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }] },
+        context: { sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true, isPrimarySentence: true }] },
       })
 
       const badges = getBadgeText(document)
@@ -299,7 +317,7 @@ describe('_tags partial', () => {
         context: {
           offenderPersonalDisorderPathway: true,
           integratedOffenderManagementRedRated: true,
-          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true }],
+          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: true, isPrimarySentence: true }],
         },
       })
 
