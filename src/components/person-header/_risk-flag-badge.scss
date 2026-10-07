@@ -102,44 +102,16 @@
 }
 
 /* Risk flag colours */
-.person-header__risk-tags .risk-badge--very-high {
-  border-color: #711a0d;
-}
-
-.person-header__risk-tags .risk-badge--high {
-  border-color: #d4351c;
-}
-
-.person-header__risk-tags .risk-badge--medium {
-  border-color: #f2590d;
-}
-
-.person-header__risk-tags .risk-badge--low {
-  border-color: #85994b;
-}
-
-/* Hover */
-.person-header__risk-tags .dps-alert-status:hover {
-  text-decoration-thickness: 2px;
-  color: #fff;
-}
-
-/* Keyboard focus / tab */
-.person-header__risk-tags .dps-alert-status:focus {
-  outline: 3px solid transparent;
-  color: #0b0c0c;
-  background-color: #ffdd00;
-  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
-  text-decoration: none;
-}
-
-/* Hover colours by risk level */
+$risk-badge-very-high: #711a0d;
+$risk-badge-high: #d4351c;
+$risk-badge-medium: #f2590d;
+$risk-badge-low: #85994b;
 
 $risk-badge-colours: (
-        "very-high": #711a0d,
-        "high": #d4351c,
-        "medium": #f2590d,
-        "low": #85994b,
+        'very-high': $risk-badge-very-high,
+        'high': $risk-badge-high,
+        'medium': $risk-badge-medium,
+        'low': $risk-badge-low,
 );
 
 @each $level, $colour in $risk-badge-colours {
@@ -152,6 +124,14 @@ $risk-badge-colours: (
       text-decoration-thickness: 2px;
     }
   }
+}
+
+.person-header__risk-tags .dps-alert-status:focus {
+  outline: 3px solid transparent;
+  color: #0b0c0c;
+  background-color: #ffdd00;
+  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
+  text-decoration: none;
 }
 
 .person-header__risk-tags .risk-badge-more {
