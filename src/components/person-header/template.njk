@@ -1,49 +1,49 @@
 
-<div class="person-header">
-    <div class="person-header__band{% if params.photo %} person-header__band--with-photo{% endif %}">
+<div class='person-header'>
+    <div class='person-header__band{% if params.photo %} person-header__band--with-photo{% endif %}'>
         {% if params.photo %}
         <img
-                class="person-header__photo"
-                data-qa="personPhoto"
-                src="{{ params.photo }}"
-                alt="Photo of {{ params.name }}"
+                class='person-header__photo'
+                data-qa='personPhoto'
+                src='{{ params.photo }}'
+                alt='Photo of {{ params.name }}'
         >
         {% endif %}
 
-        <div class="person-header__details">
+        <div class='person-header__details'>
             <h1
-                    class="govuk-heading-xl govuk-!-margin-bottom-2 person-header__name"
-                    data-qa="personName"
+                    class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name'
+                    data-qa='personName'
             >
                 {{ params.name }}
 
                 {% if params.personStatusTag %}
                 <strong
-                        class="app-status-badge govuk-tag govuk-tag--yellow"
-                        data-qa="personStatusTag"
+                        class='app-status-badge govuk-tag govuk-tag--yellow'
+                        data-qa='personStatusTag'
                 >
                     {{ params.personStatusTag }}
                 </strong>
                 {% endif %}
             </h1>
 
-            <p class="govuk-caption-l govuk-!-margin-bottom-3 person-header__crn">
-                <span class="govuk-!-font-weight-bold">CRN:</span>
-                <span data-qa="crn">{{ params.crn }}</span>
+            <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
+                <span class='govuk-!-font-weight-bold'>CRN:</span>
+                <span data-qa='crn'>{{ params.crn }}</span>
             </p>
 
-            <ul class="govuk-list person-header__meta">
+            <ul class='govuk-list person-header__meta'>
                 <li>
-                    <span class="govuk-!-font-weight-bold">Date of birth:</span>
-                    <span data-qa="dob">{{ params.dob }}</span>
+                    <span class='govuk-!-font-weight-bold'>Date of birth:</span>
+                    <span data-qa='dob'>{{ params.dob }}</span>
                 </li>
 
                 <li>
-                    <span class="govuk-!-font-weight-bold">Tier:</span>
+                    <span class='govuk-!-font-weight-bold'>Tier:</span>
                     <a
-                            class="govuk-link govuk-link--inverse"
-                            href="{{ params.historyHref }}"
-                            data-qa="tier"
+                            class='govuk-link govuk-link--inverse'
+                            href='{{ params.historyHref }}'
+                            data-qa='tier'
                     >
                         {{ params.tier }}
                     </a>
@@ -60,18 +60,18 @@
                     {% set managedByText = params.managedBy %}
                     {% endif %}
 
-                    <span class="govuk-!-font-weight-bold">Managed by:</span>
+                    <span class='govuk-!-font-weight-bold'>Managed by:</span>
 
                     {% if params.managedByHref %}
                     <a
-                            class="govuk-link govuk-link--inverse"
-                            href="{{ params.managedByHref }}"
-                            data-qa="managedBy"
+                            class='govuk-link govuk-link--inverse'
+                            href='{{ params.managedByHref }}'
+                            data-qa='managedBy'
                     >
                         {{ managedByText }}
                     </a>
                     {% else %}
-                    <span data-qa="managedBy">{{ managedByText }}</span>
+                    <span data-qa='managedBy'>{{ managedByText }}</span>
                     {% endif %}
                 </li>
             </ul>
@@ -88,10 +88,10 @@
     {# RSR / ROSH risk badges #}
 
     {% if params.riskBadges and (params.riskBadges | trim) %}
-    <div class="person-header__risk-panel">
+    <div class='person-header__risk-panel'>
         <div
-                class="person-header__risk-tags"
-                data-qa="riskBadges"
+                class='person-header__risk-tags'
+                data-qa='riskBadges'
         >
             {{ params.riskBadges | safe }}
         </div>
@@ -104,17 +104,17 @@
             params.personRiskFlags.groups and
             (params.personRiskFlags.groups | length) > 0 %}
 
-    <div class="person-header__risk-panel">
+    <div class='person-header__risk-panel'>
         <div
-                class="person-header__risk-tags"
-                data-qa="personRiskBadges"
+                class='person-header__risk-tags'
+                data-qa='personRiskBadges'
         >
             {% for group in params.personRiskFlags.groups %}
             {% for risk in group.badges %}
             <a
-                    href="/case/{{ params.crn }}/risk/flag/{{ risk.id }}"
-                    class="govuk-link govuk-link--no-underline govuk-link--text-colour dps-alert-status dps-alert-status--risk {{ risk.badgeClass }}"
-                    data-qa="risk-badge-{{ risk.id }}"
+                    href='/case/{{ params.crn }}/risk/flag/{{ risk.id }}'
+                    class='govuk-link govuk-link--no-underline govuk-link--text-colour dps-alert-status dps-alert-status--risk {{ risk.badgeClass }}'
+                    data-qa='risk-badge-{{ risk.id }}'
             >
                 {{ risk.text | safe }}
             </a>
@@ -123,9 +123,9 @@
 
             {% if params.personRiskFlags.remainingCount > 0 %}
             <a
-                    href="/case/{{ params.crn }}/risk"
-                    class="govuk-link risk-badge-more"
-                    data-qa="risk-badge-more"
+                    href='/case/{{ params.crn }}/risk'
+                    class='govuk-link risk-badge-more'
+                    data-qa='risk-badge-more'
             >
                 +{{ params.personRiskFlags.remainingCount }} active risk flags
             </a>

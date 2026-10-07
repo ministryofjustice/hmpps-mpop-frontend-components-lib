@@ -134,29 +134,26 @@
 }
 
 /* Hover colours by risk level */
-.person-header__risk-tags .risk-badge--very-high:hover {
-  background-color: #711a0d;
+
+$risk-badge-colours: (
+        "very-high": #711a0d,
+        "high": #d4351c,
+        "medium": #f2590d,
+        "low": #85994b,
+);
+
+@each $level, $colour in $risk-badge-colours {
+  .person-header__risk-tags .risk-badge--#{$level} {
+    border-color: $colour;
+
+    &:hover {
+      background-color: $colour;
+      color: #fff;
+      text-decoration-thickness: 2px;
+    }
+  }
 }
 
-.person-header__risk-tags .risk-badge--high:hover {
-  background-color: #d4351c;
-}
-
-.person-header__risk-tags .risk-badge--medium:hover {
-  background-color: #f2590d;
-}
-
-.person-header__risk-tags .risk-badge--low:hover {
-  background-color: #85994b;
-}
-
-/* More link */
 .person-header__risk-tags .risk-badge-more {
   white-space: nowrap;
-}
-
-.dps-alert-status--risk:hover {
-  text-decoration-thickness: 2px;
-  background-color: #d4351c;
-  color: #fff;
 }
