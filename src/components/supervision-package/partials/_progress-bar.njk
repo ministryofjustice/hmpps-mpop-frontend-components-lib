@@ -13,11 +13,13 @@
 {% endif %}
 
 {% set widthPercent = 100 if rawPercent > 100 else (0 if rawPercent < 0 else rawPercent) %}
+{% set remaining = allowance - completed %}
+{% set remaining = 0 if remaining < 0 else remaining %}
 
 <p class='govuk-body'>{{ completed }} of {{ allowance }} appointments used</p>
 
 <div class="appointment-progress" aria-hidden="true">
-    <div class="{{ 'appointment-progress__bar-maximum' if phaseCode != 'INIT' and widthPercent == 100 else 'appointment-progress__bar' }} appointment-progress__bar--width-{{ widthPercent }}"></div>
+    <div class="{{ 'appointment-progress__bar-maximum' if (phaseCode != 'INIT' and not params.context.preventConcerns) and widthPercent == 100 else 'appointment-progress__bar' }} appointment-progress__bar--width-{{ widthPercent }}"></div>
 </div>
 <span class="govuk-visually-hidden">progress indicator, {{ widthPercent }}%</span>
 
@@ -29,7 +31,7 @@
 
     <div class='govuk-grid-column-one-third'>
         <p class='govuk-body govuk-!-margin-bottom-2'>Remaining</p>
-        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ allowance - completed }}</p>
+        <p class='govuk-body-l govuk-!-font-weight-bold'>{{ remaining }}</p>
     </div>
 
     <div class='govuk-grid-column-one-third'>

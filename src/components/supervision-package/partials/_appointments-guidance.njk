@@ -1,13 +1,14 @@
-{% if forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
+{% set resets = params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
+{% set stageEndDate = ("The supervision package resets on " if resets else "The supervision stage ends on ") + (params.currentYear.endDate | dateWithYear) + "." %}
+
+{% if params.context.preventConcerns %}
+    <p class='govuk-body'>{{ stageEndDate }}</p>
+{% elseif forename and (params.currentYear.appointments.completed  | int >= params.currentYear.appointments.allowance | int)%}
     <p class='govuk-body'>
         {{ forename }} has used all the supervision package appointments. If new risks emerge or there are exceptional circumstances, you can arrange contingency appointments.
     </p>
-    {% if params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
-        <p class='govuk-body'>The supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
-    {% else %}
-        <p class='govuk-body'>The supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>
-    {% endif %}
-{% elseif params.currentYear.endDate | supervisionAppointmentsReset(params.context.sentences) %}
+    <p class='govuk-body'>{{ stageEndDate }}</p>
+{% elseif resets %}
     <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision package resets on {{ params.currentYear.endDate | dateWithYear }}.</p>
 {% else %}
     <p class='govuk-body'>{{ forename }} has {{ (params.currentYear.appointments.allowance | int) - (params.currentYear.appointments.completed | int) }} supervision appointments remaining until the supervision stage ends on {{ params.currentYear.endDate | dateWithYear }}.</p>

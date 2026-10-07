@@ -83,6 +83,42 @@ describe('_tags partial', () => {
     })
   })
 
+  describe('Additional appointments needed badge', () => {
+    it('shows the badge when preventConcerns is true', () => {
+      const document = renderPartial({ context: { preventConcerns: true } })
+
+      expect(getBadgeText(document)).toContain('Additional appointments needed')
+    })
+
+    it('does not show the badge when preventConcerns is false', () => {
+      const document = renderPartial({ context: { preventConcerns: false } })
+
+      expect(getBadgeText(document)).not.toContain('Additional appointments needed')
+    })
+
+    it('does not show the badge when preventConcerns is not set', () => {
+      const document = renderPartial({})
+
+      expect(getBadgeText(document)).not.toContain('Additional appointments needed')
+    })
+
+    it('shows "Additional appointments needed" instead of "No appointments remaining" when both conditions would otherwise apply', () => {
+      const document = renderPartial({
+        currentYear: {
+          appointments: {
+            completed: 10,
+            allowance: 10,
+          },
+        },
+        context: { preventConcerns: true },
+      })
+
+      const badges = getBadgeText(document)
+      expect(badges).toContain('Additional appointments needed')
+      expect(badges).not.toContain('No appointments remaining')
+    })
+  })
+
   describe('Offender personality disorder badge', () => {
     it('shows the badge when offenderPersonalDisorderPathway is true', () => {
       const document = renderPartial({ context: { offenderPersonalDisorderPathway: true } })

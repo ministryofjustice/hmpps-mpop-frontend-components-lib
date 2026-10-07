@@ -1,14 +1,18 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
 const renderPartial = (params: Record<string, unknown> = {}, extraContext: Record<string, unknown> = {}) => {
+  const { context } = params as { context?: { name?: { forename?: string }; sentences?: FrontendSentence[] } }
   const html = env.render('supervision-package/partials/_standard-supervision.njk', {
     params,
-    forename: (params as { context?: { name?: { forename?: string } } }).context?.name?.forename,
+    forename: context?.name?.forename,
+    sentence: getPrimarySentence(context?.sentences),
     ...extraContext,
   })
   return new JSDOM(html).window.document
