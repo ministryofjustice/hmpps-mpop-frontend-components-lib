@@ -210,6 +210,12 @@ describe('_progress-bar partial', () => {
       expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
       expect(document.querySelector('.appointment-progress__bar')).not.toBeNull()
       expect(document.querySelector('.appointment-progress__bar-maximum')).toBeNull()
+
+      const labels = Array.from(document.querySelectorAll('p.govuk-body.govuk-\\!-margin-bottom-2'))
+      const values = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(labels[0]?.textContent?.trim()).toBe('Maximum')
+      expect(labels[1]?.textContent?.trim()).toBe('Remaining')
+      expect(values[1]?.textContent?.trim()).toBe('0')
     })
 
     it('does not use the bar-maximum class at 100% when preventConcerns is true (Early engagement)', () => {
@@ -226,6 +232,38 @@ describe('_progress-bar partial', () => {
       expect(bar.classList.contains('appointment-progress__bar--width-100')).toBe(true)
       expect(document.querySelector('.appointment-progress__bar')).not.toBeNull()
       expect(document.querySelector('.appointment-progress__bar-maximum')).toBeNull()
+
+      const values = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(values[1]?.textContent?.trim()).toBe('0')
+    })
+  })
+
+  describe('remaining count clamping (Prevent over-allowance)', () => {
+    it('clamps Remaining to 0 instead of going negative when completed exceeds allowance (non-early)', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'STD' } },
+        currentYear: { appointments: { allowance: 10, completed: 12, scheduled: 0 } },
+        context: { preventConcerns: true },
+      })
+
+      const labels = Array.from(document.querySelectorAll('p.govuk-body.govuk-\\!-margin-bottom-2'))
+      const values = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(labels[1]?.textContent?.trim()).toBe('Remaining')
+      expect(values[1]?.textContent?.trim()).toBe('0')
+    })
+
+    it('clamps Remaining to 0 instead of going negative when completed exceeds weeks (Early engagement)', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'INIT' } },
+        earlyEngagement: { completed: 7, weeks: 5 },
+        currentYear: { appointments: { scheduled: 0, completed: 7 } },
+        context: { preventConcerns: true },
+      })
+
+      const labels = Array.from(document.querySelectorAll('p.govuk-body.govuk-\\!-margin-bottom-2'))
+      const values = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(labels[1]?.textContent?.trim()).toBe('Remaining')
+      expect(values[1]?.textContent?.trim()).toBe('0')
     })
   })
 
