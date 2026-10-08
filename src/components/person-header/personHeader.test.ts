@@ -39,7 +39,7 @@ describe('person-header', () => {
 
     const link = document.querySelector('[data-qa="tier"]')
     expect(link?.tagName).toBe('A')
-    expect(link?.textContent?.trim()).toBe('B4')
+    expect(link?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier: B4')
     expect(link?.getAttribute('href')).toBe('/tier-history/D004851')
   })
 
