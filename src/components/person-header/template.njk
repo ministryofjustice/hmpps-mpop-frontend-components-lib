@@ -115,7 +115,17 @@
                     class='govuk-link govuk-link--no-underline govuk-link--text-colour dps-alert-status dps-alert-status--risk {{ risk.badgeClass }}'
                     data-qa='risk-badge-{{ risk.id }}'
             >
-                {{ risk.text | safe }}
+                {% if risk.text | replace(' - Very High', '') != risk.text %}
+                {{ risk.text | replace(' - Very High', ' -&nbsp;<strong>Very High</strong>') | safe }}
+                {% elif risk.text | replace(' - High', '') != risk.text %}
+                {{ risk.text | replace(' - High', ' -&nbsp;<strong>High</strong>') | safe }}
+                {% elif risk.text | replace(' - Medium', '') != risk.text %}
+                {{ risk.text | replace(' - Medium', ' -&nbsp;<strong>Medium</strong>') | safe }}
+                {% elif risk.text | replace(' - Low', '') != risk.text %}
+                {{ risk.text | replace(' - Low', ' -&nbsp;<strong>Low</strong>') | safe }}
+                {% else %}
+                {{ risk.text }}
+                {% endif %}
             </a>
             {% endfor %}
             {% endfor %}
