@@ -104,8 +104,16 @@ type NextAppointment = {
   description: string
 }
 
-export type SupervisionPackageFrontendContextResponse = {
-  // Omitted entirely on day 1, before any phase has been calculated
+export type ApiError = {
+  timestamp: string
+  status: number
+  error: string
+  path: string
+}
+
+export type SupervisionPackageFrontendContextSuccess = {
+  outcome: 'success'
+  // currentPhase is omitted entirely on day 1, before any phase has been calculated
   currentPhase?: CurrentPhase | null
   earlyEngagement: EarlyEngagement
   currentYear: CurrentYear
@@ -114,3 +122,9 @@ export type SupervisionPackageFrontendContextResponse = {
   updatedAt: string
   context: ContextDetails
 }
+
+type SupervisionPackageFrontendContextFailure = ApiError & { outcome: 'error' }
+
+// Discriminated on `outcome` so consumers can narrow explicitly instead of probing for fields like `status`
+export type SupervisionPackageFrontendContextResponse =
+  SupervisionPackageFrontendContextSuccess | SupervisionPackageFrontendContextFailure

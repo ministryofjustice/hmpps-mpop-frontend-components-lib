@@ -1099,6 +1099,86 @@ describe('supervision-package', () => {
     })
   })
 
+  describe('error warning text', () => {
+    it('renders the warning text when status is 500', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#', status: 500 })
+
+      const warningText = document.querySelector('.govuk-warning-text__text')
+      expect(warningText).not.toBeNull()
+      expect(warningText?.textContent?.trim()).toContain(
+        'Supervision package information is currently unavailable while the package is being recalculated.',
+      )
+    })
+
+    it('does not render the warning text when status is not 500', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        status: 200,
+      })
+
+      expect(document.querySelector('.govuk-warning-text')).toBeNull()
+    })
+
+    it('does not render the tier heading when status is 500', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#', status: 500 })
+
+      expect(document.querySelector('h4')).toBeNull()
+    })
+
+    it('renders the supervision package block when status is 500 even though isSupervisionPackage would otherwise be false', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        currentPhase: { phase: { code: 'SPNA' } },
+        status: 500,
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+    })
+
+    it('does not render the supervision package block when status is not 500 and isSupervisionPackage is false', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        currentPhase: { phase: { code: 'SPNA' } },
+        status: 200,
+      })
+
+      expect(document.querySelector('.supervision-package')).toBeNull()
+    })
+
+    it('renders the "app-tier-header" heading row when status is 500 even though standardAppointmentsComplete and hasSpecialStatus are false', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#', status: 500 })
+
+      expect(document.querySelector('.app-tier-header h3')?.textContent?.trim()).toBe('Supervision package')
+    })
+
+    it('does not render the tier change history link when historyHref is present and status is 500', () => {
+      const document = renderComponent({ tierScore: 'C', tag: tierTags.none, historyHref: '#', status: 500 })
+
+      expect(document.querySelector('a')).toBeNull()
+    })
+
+    it('renders the tier change history link when historyHref is present and status is not 500', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: tierTags.none,
+        historyHref: '#',
+        currentPhase: { phase: { code: 'STD' } },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        status: 200,
+      })
+
+      expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
+    })
+  })
+
   describe('button group', () => {
     const findButton = (document: Document, text: string) =>
       Array.from(document.querySelectorAll('.govuk-button-group a')).find(a => a.textContent?.trim() === text)
