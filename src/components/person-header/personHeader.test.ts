@@ -190,4 +190,23 @@ describe('person-header', () => {
 
     expect(document.querySelector('[data-qa="personStatusTag"]')).toBeNull()
   })
+
+  it('renders provisional after the tier inside the tier link when the tier is provisional', () => {
+    const document = renderComponent({
+      tier: 'B',
+      historyHref: '#',
+      provisional: true,
+    })
+
+    const link = document.querySelector('[data-qa="tier"]')
+    expect(link?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier: B (provisional)')
+    expect(link?.querySelector('[data-qa="tierProvisional"]')).not.toBeNull()
+  })
+
+  it('does not render provisional when the tier is not provisional', () => {
+    const document = renderComponent({ tier: 'B', provisional: false })
+
+    expect(document.querySelector('[data-qa="tierProvisional"]')).toBeNull()
+    expect(document.querySelector('[data-qa="tier"]')?.textContent?.replace(/\s+/g, ' ').trim()).toBe('Tier: B')
+  })
 })
