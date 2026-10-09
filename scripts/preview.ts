@@ -277,6 +277,20 @@ const html = env.renderString(
         managedBy: "Unallocated"
       }) }}
 
+      <h2 class="govuk-heading-m" id="person-header-provisional-tier">Provisional tier</h2>
+      <p class="govuk-body">When the tier calculation is provisional (<code>provisional: true</code>, supplied by the tier API calculation), the tier link reads e.g. "Tier: G (provisional)".</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "G",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#",
+        provisional: true
+      }) }}
+
       {% endif %}
 
       {% if showSupervisionPackage %}
