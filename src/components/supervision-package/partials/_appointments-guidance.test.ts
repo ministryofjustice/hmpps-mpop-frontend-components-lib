@@ -1,6 +1,8 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
@@ -11,9 +13,14 @@ const renderPartial = (params: Record<string, unknown> = {}, forename = 'Alex') 
     currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10 } },
     ...params,
   }
+  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
+  const sentence = getPrimarySentence(
+    (mergedParams as { context?: { sentences?: FrontendSentence[] } }).context?.sentences,
+  )
   const html = env.render('supervision-package/partials/_appointments-guidance.njk', {
     params: mergedParams,
     forename,
+    sentence,
   })
   return new JSDOM(html).window.document
 }
@@ -39,7 +46,7 @@ describe('_appointments-guidance partial', () => {
     const document = renderPartial({
       context: {
         preventConcerns: true,
-        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }],
+        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01', isPrimarySentence: true }],
       },
       currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10 } },
     })
@@ -88,7 +95,7 @@ describe('_appointments-guidance partial', () => {
 
   it('shows the package-resets message when all appointments are used and the package resets before the sentence ends', () => {
     const document = renderPartial({
-      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }] },
+      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01', isPrimarySentence: true }] },
       currentYear: { endDate: '2026-12-01', appointments: { completed: 10, allowance: 10 } },
     })
 
@@ -114,7 +121,7 @@ describe('_appointments-guidance partial', () => {
 
   it('shows the remaining-appointments-until-reset paragraph when the package resets before the sentence ends', () => {
     const document = renderPartial({
-      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }] },
+      context: { sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01', isPrimarySentence: true }] },
       currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10 } },
     })
 

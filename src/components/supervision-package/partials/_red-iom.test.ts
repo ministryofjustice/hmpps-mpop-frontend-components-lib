@@ -1,6 +1,8 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
@@ -12,9 +14,12 @@ const renderPartial = (params: Record<string, unknown> = {}) => {
     currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10, scheduled: 0 } },
     ...params,
   }
+  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
+  const sentence = getPrimarySentence((mergedParams.context as { sentences?: FrontendSentence[] }).sentences)
   const html = env.render('supervision-package/partials/_red-iom.njk', {
     params: mergedParams,
     forename: (mergedParams.context as { name?: { forename?: string } }).name?.forename,
+    sentence,
   })
   return new JSDOM(html).window.document
 }
@@ -56,7 +61,7 @@ describe('_red-iom partial', () => {
     const document = renderPartial({
       context: {
         name: { forename: 'Alex' },
-        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01' }],
+        sentences: [{ supervisionPackage: { code: 'CUR' }, endDate: '2027-06-01', isPrimarySentence: true }],
       },
       currentYear: { endDate: '2026-12-01', appointments: { completed: 2, allowance: 10, scheduled: 0 } },
     })

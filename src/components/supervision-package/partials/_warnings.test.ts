@@ -1,13 +1,18 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
 const renderPartial = (params: Record<string, unknown> = {}) => {
+  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
+  const sentence = getPrimarySentence((params as { context?: { sentences?: FrontendSentence[] } }).context?.sentences)
   const html = env.render('supervision-package/partials/_warnings.njk', {
     params,
+    sentence,
     forename: (params as { context?: { name?: { forename?: string } } }).context?.name?.forename,
   })
   return new JSDOM(html).window.document
@@ -17,24 +22,28 @@ const breachedSentence = {
   supervisionPackage: { code: 'STD' },
   inBreach: true,
   custody: { status: { code: 'B' } },
+  isPrimarySentence: true,
 }
 
 const recalledSentence = {
   supervisionPackage: { code: 'STD' },
   inBreach: false,
   custody: { status: { code: 'C', description: 'Recalled' } },
+  isPrimarySentence: true,
 }
 
 const inCustodySentence = {
   supervisionPackage: { code: 'STD' },
   inBreach: false,
   custody: { status: { code: 'R', description: 'In custody' } },
+  isPrimarySentence: true,
 }
 
 const atLargeSentence = {
   supervisionPackage: { code: 'STD' },
   inBreach: false,
   custody: { location: { code: 'UATLRG' } },
+  isPrimarySentence: true,
 }
 
 const context = (sentences: object[]) => ({
@@ -53,8 +62,8 @@ describe('_warnings partial', () => {
       )
     })
 
-    it('renders the breach warning even when the person is also in custody', () => {
-      const document = renderPartial(context([breachedSentence, inCustodySentence]))
+    it('renders the breach warning even when a non-primary sentence is also in custody', () => {
+      const document = renderPartial(context([breachedSentence, { ...inCustodySentence, isPrimarySentence: false }]))
 
       const warnings = document.querySelectorAll('.govuk-warning-text')
 
@@ -74,8 +83,8 @@ describe('_warnings partial', () => {
       )
     })
 
-    it('renders the recall warning even when the person is also in general custody', () => {
-      const document = renderPartial(context([recalledSentence, inCustodySentence]))
+    it('renders the recall warning even when a non-primary sentence is in general custody', () => {
+      const document = renderPartial(context([recalledSentence, { ...inCustodySentence, isPrimarySentence: false }]))
 
       const warnings = document.querySelectorAll('.govuk-warning-text')
 
@@ -107,8 +116,15 @@ describe('_warnings partial', () => {
       )
     })
 
-    it('renders the in-custody warning instead when the person is also in custody', () => {
-      const document = renderPartial(context([atLargeSentence, inCustodySentence]))
+    it('renders the in-custody warning instead when the primary sentence is both at large and in custody', () => {
+      const document = renderPartial(
+        context([
+          {
+            ...atLargeSentence,
+            custody: { ...atLargeSentence.custody, status: { code: 'R', description: 'In custody' } },
+          },
+        ]),
+      )
 
       const warnings = document.querySelectorAll('.govuk-warning-text')
 

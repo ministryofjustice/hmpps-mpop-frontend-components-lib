@@ -29,7 +29,7 @@ describe('supervision-package', () => {
       tag,
       historyHref: '#',
       currentPhase: { phase: { code: 'STD' } },
-      context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
     })
 
     expect(document.querySelector('.supervision-package')).not.toBeNull()
@@ -62,7 +62,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-01-15',
       })
@@ -77,7 +77,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-03-20',
       })
@@ -94,7 +94,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         createdAt: '2026-01-15',
       })
 
@@ -108,7 +108,7 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         updatedAt: '2026-03-20',
       })
 
@@ -130,23 +130,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
-        createdAt: '2026-01-15',
-        updatedAt: '2026-01-15',
-      })
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.body.textContent).not.toContain('was created on')
-      expect(document.body.textContent).not.toContain('was changed on')
-    })
-
-    it('does not render the package creation date when phaseCode is SPNK', () => {
-      const document = renderComponent({
-        currentPhase: { phase: { code: 'SPNK', description: 'Early engagement' } },
-        tierScore: 'C',
-        tag: { text: null, color: null },
-        historyHref: '#',
-        context: { sentences: [{ supervisionPackage: { code: 'SPNK' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-01-15',
       })
@@ -162,7 +146,7 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { sentences: [{ supervisionPackage: { code: 'SPNS' } }] },
+        context: { inFlight: true, sentences: [{ supervisionPackage: { code: 'SPNS' }, isPrimarySentence: true }] },
         createdAt: '2026-01-15',
         updatedAt: '2026-01-15',
       })
@@ -179,7 +163,10 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'INIT', description: 'Early engagement' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
       allAppointmentsHref: '#',
@@ -198,7 +185,10 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'STD', description: 'Standard' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       currentYear: {
         isFirstYear: true,
         endDate: '2026-08-15',
@@ -224,7 +214,10 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'FTHRD', description: 'Final third' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       allAppointmentsHref: '#',
     })
 
@@ -243,7 +236,10 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'FTHRD', description: 'Final third' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       allAppointmentsHref: '#',
     })
 
@@ -263,7 +259,10 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: phaseCode, description: 'Other' } },
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+        },
         allAppointmentsHref: '#',
       })
 
@@ -287,6 +286,117 @@ describe('supervision-package', () => {
     expect(document.querySelector('.supervision-final-third-progress')).toBeNull()
   })
 
+  it('does not render the supervision package when context.inFlight is true if currentPhase.phase.code does not match a phase column code', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SENT', description: 'Other' } },
+      context: {
+        name: { forename: 'Alex' },
+        inFlight: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
+      allAppointmentsHref: '#',
+    })
+
+    expect(document.querySelector('.supervision-package')).toBeNull()
+  })
+
+  it('does not render the supervision package when context.inFlight is false and currentPhase.phase.code does not match a phase column code', () => {
+    const document = renderComponent({
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SENT', description: 'Other' } },
+      context: {
+        name: { forename: 'Alex' },
+        inFlight: false,
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
+      allAppointmentsHref: '#',
+    })
+
+    expect(document.querySelector('.supervision-package')).toBeNull()
+  })
+
+  describe('currentPhase.phase.code is SPNK', () => {
+    const spnkParams = {
+      tierScore: 'C',
+      tag: { text: null, color: null },
+      historyHref: '#',
+      currentPhase: { phase: { code: 'SPNK', description: 'Not yet started' } },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
+      currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
+      oasysReviewHref: '/oasys/review/123',
+      allAppointmentsHref: '#',
+    }
+
+    it('renders the supervision package in a two-thirds column, with no phase column', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-two-thirds')).not.toBeNull()
+      expect(document.querySelector('.govuk-grid-column-one-half')).toBeNull()
+    })
+
+    it('does not render an "Appointments" heading or any of the phase-specific guidance', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
+      expect(headings).not.toContain('Appointments')
+      expect(document.body.textContent).not.toContain('supervision appointments remaining')
+    })
+
+    it('does not render the OASys review link or confirmation text', () => {
+      const document = renderComponent({ ...spnkParams, openInNewTab: true })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain(
+        'Appointments do not count towards the package until it is confirmed.',
+      )
+    })
+
+    it('does not render the next appointment section', () => {
+      const document = renderComponent({ ...spnkParams, nextAppointment: { date: '2026-09-10' } })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('Next appointment')
+    })
+
+    it('does not render the package creation date', () => {
+      const document = renderComponent({ ...spnkParams, createdAt: '2026-01-01' })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.body.textContent).not.toContain('supervision package was created')
+    })
+
+    it('does not render the action button group', () => {
+      const document = renderComponent({
+        ...spnkParams,
+        arrangeAppointmentHref: '/arrange-appointment',
+      })
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.govuk-button-group')).toBeNull()
+    })
+
+    it('does not render the "View all appointments" link', () => {
+      const document = renderComponent(spnkParams)
+
+      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      const links = Array.from(document.querySelectorAll('a')).map(a => a.textContent?.trim())
+      expect(links).not.toContain('View all appointments')
+    })
+  })
+
   it('renders the Final Third Progress component instead of the Supervision Package when eligible', () => {
     const document = renderComponent({
       tierScore: 'C',
@@ -307,6 +417,7 @@ describe('supervision-package', () => {
               finalThirdDate: '2026-11-07',
             },
             endDate: '2027-01-07',
+            isPrimarySentence: true,
           },
         ],
       },
@@ -340,6 +451,7 @@ describe('supervision-package', () => {
                 finalThirdDate: '2026-11-07',
               },
               endDate: '2027-01-07',
+              isPrimarySentence: true,
             },
           ],
         },
@@ -399,7 +511,7 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD', description: 'Standard' } },
         context: {
           nationalSecurityDivision: false,
-          sentences: [{ supervisionPackage: { code: 'INIT' } }],
+          sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
         },
       })
 
@@ -414,7 +526,11 @@ describe('supervision-package', () => {
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'SPNS', description: 'Not yet started' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        inFlight: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
       oasysReviewHref: '/oasys/review/123',
       allAppointmentsHref: '#',
@@ -498,87 +614,16 @@ describe('supervision-package', () => {
     })
   })
 
-  describe('currentPhase.phase.code is SPNK', () => {
-    const spnkParams = {
-      tierScore: 'C',
-      tag: { text: null, color: null },
-      historyHref: '#',
-      currentPhase: { phase: { code: 'SPNK', description: 'Not yet started' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
-      currentYear: { appointments: { allowance: 4 }, endDate: '2026-08-15' },
-      oasysReviewHref: '/oasys/review/123',
-      allAppointmentsHref: '#',
-    }
-
-    it('renders the supervision package in a two-thirds column, with no phase column', () => {
-      const document = renderComponent(spnkParams)
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.querySelector('.govuk-grid-column-two-thirds')).not.toBeNull()
-      expect(document.querySelector('.govuk-grid-column-one-half')).toBeNull()
-    })
-
-    it('does not render an "Appointments" heading or any of the phase-specific guidance', () => {
-      const document = renderComponent(spnkParams)
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      const headings = Array.from(document.querySelectorAll('h4')).map(h => h.textContent?.trim())
-      expect(headings).not.toContain('Appointments')
-      expect(document.body.textContent).not.toContain('supervision appointments remaining')
-    })
-
-    it('does not render the OASys review link or confirmation text', () => {
-      const document = renderComponent({ ...spnkParams, openInNewTab: true })
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
-      expect(document.body.textContent).not.toContain('Complete an OASys review')
-      expect(document.body.textContent).not.toContain('Start an OASys review')
-      expect(document.body.textContent).not.toContain(
-        'Appointments do not count towards the package until it is confirmed.',
-      )
-    })
-
-    it('does not render the next appointment section', () => {
-      const document = renderComponent({ ...spnkParams, nextAppointment: { date: '2026-09-10' } })
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.body.textContent).not.toContain('Next appointment')
-    })
-
-    it('does not render the package creation date', () => {
-      const document = renderComponent({ ...spnkParams, createdAt: '2026-01-01' })
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.body.textContent).not.toContain('supervision package was created')
-    })
-
-    it('does not render the action button group', () => {
-      const document = renderComponent({
-        ...spnkParams,
-        arrangeAppointmentHref: '/arrange-appointment',
-      })
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      expect(document.querySelector('.govuk-button-group')).toBeNull()
-    })
-
-    it('does not render the "View all appointments" link', () => {
-      const document = renderComponent(spnkParams)
-
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
-      const links = Array.from(document.querySelectorAll('a')).map(a => a.textContent?.trim())
-      expect(links).not.toContain('View all appointments')
-    })
-  })
-
   it('does not render the SPNS OASys prompt or confirmation text when currentPhase is present but not SPNS', () => {
     const document = renderComponent({
       tierScore: 'C',
       tag: { text: null, color: null },
       historyHref: '#',
       currentPhase: { phase: { code: 'STD' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+      },
       oasysReviewHref: '/oasys/review/123',
     })
 
@@ -596,7 +641,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         offenderPersonalDisorderPathway: true,
-        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
       },
     })
 
@@ -623,7 +668,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         integratedOffenderManagementRedRated: true,
-        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
       },
     })
 
@@ -643,7 +688,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         preventConcerns: true,
-        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
       },
     })
 
@@ -668,7 +713,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         preventConcerns: true,
-        sentences: [{ supervisionPackage: { code: 'FTHRD' } }],
+        sentences: [{ supervisionPackage: { code: 'FTHRD' }, isPrimarySentence: true }],
       },
     })
 
@@ -689,7 +734,7 @@ describe('supervision-package', () => {
         name: { forename: 'Alex' },
         preventConcerns: true,
         offenderPersonalDisorderPathway: true,
-        sentences: [{ supervisionPackage: { code: 'INIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
       },
     })
 
@@ -706,7 +751,9 @@ describe('supervision-package', () => {
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
       context: {
         name: { forename: 'Alex' },
-        sentences: [{ supervisionPackage: { code: 'INIT' }, custody: { location: { code: 'UATLRG' } } }],
+        sentences: [
+          { supervisionPackage: { code: 'INIT' }, custody: { location: { code: 'UATLRG' } }, isPrimarySentence: true },
+        ],
       },
     })
 
@@ -730,6 +777,7 @@ describe('supervision-package', () => {
           {
             supervisionPackage: { code: 'INIT' },
             custody: { status: { code: 'D', description: 'Recalled' } },
+            isPrimarySentence: true,
           },
         ],
       },
@@ -751,7 +799,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         offenderPersonalDisorderPathway: true,
-        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
       },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
@@ -770,7 +818,7 @@ describe('supervision-package', () => {
       context: {
         name: { forename: 'Alex' },
         liferCategory: { code: 'LF99' },
-        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
       },
       earlyEngagement: { weeks: 5, completed: 2 },
       currentYear: { appointments: { allowance: 20, scheduled: 0, completed: 2 } },
@@ -787,7 +835,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -807,7 +859,11 @@ describe('supervision-package', () => {
         tag: tierTags.provisional,
         historyHref: '#',
         provisional: true,
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -824,7 +880,11 @@ describe('supervision-package', () => {
         tierScore: 'MISSING',
         tag: tierTags.missing,
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -841,7 +901,10 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -855,7 +918,11 @@ describe('supervision-package', () => {
         tag: { text: null, color: null },
         historyHref: '#',
         currentPhase: null,
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -877,7 +944,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -892,7 +963,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/456',
       })
 
@@ -904,7 +979,11 @@ describe('supervision-package', () => {
       const document = renderComponent({
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -913,12 +992,52 @@ describe('supervision-package', () => {
       )
     })
 
+    it('does not render the OASys review link when context.inFlight is false and currentPhase.phase.code is SPNS', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'SPNS' } },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: false,
+          sentences: [{ supervisionPackage: { code: 'SPNS' }, isPrimarySentence: true }],
+        },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+    })
+
+    it('does not render the OASys review link when context.inFlight is false and currentPhase is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: false,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+    })
+
     it('does not render the OASys review link when oasysReviewHref is absent', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
       })
 
       expect(document.body.textContent).not.toContain('Start an OASys review')
@@ -929,7 +1048,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: true,
       })
@@ -945,7 +1068,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
         openInNewTab: false,
       })
@@ -961,7 +1088,11 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INNIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: true,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
         oasysReviewHref: '/oasys/review/123',
       })
 
@@ -986,7 +1117,7 @@ describe('supervision-package', () => {
         },
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
         },
         nextAppointmentHref: '/appointments/123',
       })
@@ -1009,7 +1140,7 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD' } },
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
         },
       })
 
@@ -1027,7 +1158,7 @@ describe('supervision-package', () => {
         nextAppointment: { date: '2026-08-13', type: { description: 'Home visit' } },
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
         },
       })
 
@@ -1045,7 +1176,7 @@ describe('supervision-package', () => {
       currentPhase: { phase: { code: 'STD' } },
       context: {
         name: { forename: 'Alex' },
-        sentences: [{ supervisionPackage: { code: 'INNIT' } }],
+        sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
       },
     })
 
@@ -1067,7 +1198,7 @@ describe('supervision-package', () => {
         currentPhase: { phase: { code: 'STD' } },
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'INNIT' }, inBreach: true }],
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, inBreach: true, isPrimarySentence: true }],
         },
       })
 
@@ -1085,7 +1216,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         context: {
           name: { forename: 'Alex' },
-          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false }],
+          sentences: [{ supervisionPackage: { code: 'SPA' }, inBreach: false, isPrimarySentence: true }],
         },
       })
 
@@ -1116,7 +1247,7 @@ describe('supervision-package', () => {
         tag: tierTags.none,
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         status: 200,
       })
 
@@ -1171,7 +1302,7 @@ describe('supervision-package', () => {
         tag: tierTags.none,
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
         status: 200,
       })
 
@@ -1196,7 +1327,7 @@ describe('supervision-package', () => {
         historyHref: '#',
         currentPhase: { phase: { code: 'STD' } },
         arrangeAppointmentHref: '/arrange-appointment',
-        context: { sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
       })
 
       expect(document.querySelector('.govuk-button-group')).not.toBeNull()
@@ -1215,7 +1346,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
+          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } }, isPrimarySentence: true }],
         },
       })
 
@@ -1231,7 +1362,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+          sentences: [{ custody: { location: { code: 'UATLRG' } }, isPrimarySentence: true }],
         },
       })
 
@@ -1249,7 +1380,11 @@ describe('supervision-package', () => {
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
           sentences: [
-            { supervisionPackage: { code: 'INIT' }, custody: { status: { code: 'B', description: 'Bailed' } } },
+            {
+              supervisionPackage: { code: 'INIT' },
+              custody: { status: { code: 'B', description: 'Bailed' } },
+              isPrimarySentence: true,
+            },
           ],
         },
       })
@@ -1273,7 +1408,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } } }],
+          sentences: [{ custody: { status: { code: 'D', description: 'Custody' } }, isPrimarySentence: true }],
         },
       })
 
@@ -1291,7 +1426,7 @@ describe('supervision-package', () => {
         crn: 'X123456',
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
-          sentences: [{ custody: { location: { code: 'UATLRG' } } }],
+          sentences: [{ custody: { location: { code: 'UATLRG' } }, isPrimarySentence: true }],
         },
       })
 
@@ -1311,7 +1446,11 @@ describe('supervision-package', () => {
         deliusBaseURL: 'https://ndelius.test.probation.service.justice.gov.uk',
         context: {
           sentences: [
-            { supervisionPackage: { code: 'INIT' }, custody: { status: { code: 'B', description: 'Bailed' } } },
+            {
+              supervisionPackage: { code: 'INIT' },
+              custody: { status: { code: 'B', description: 'Bailed' } },
+              isPrimarySentence: true,
+            },
           ],
         },
       })
@@ -1352,7 +1491,11 @@ describe('supervision-package', () => {
       tag: tierTags.provisional,
       historyHref: '#',
       currentPhase: { phase: { code: 'SPNK', description: 'Not yet known' } },
-      context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+      context: {
+        name: { forename: 'Alex' },
+        inFlight: true,
+        sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+      },
       createdAt: '2026-01-15',
       updatedAt: '2026-01-15',
       nextAppointment: { date: '2026-09-10' },
@@ -1394,13 +1537,13 @@ describe('supervision-package', () => {
     it('still renders the tier change history link', () => {
       const document = renderComponent(provisionalTierParams)
 
-      expect(document.querySelector('a')?.textContent?.trim()).toBe('View tier change history')
-      expect(document.querySelector('a')?.getAttribute('data-ai-id')).toBe('supervisionPackageTierHistoryLink')
+      const historyLink = document.querySelector('a[data-ai-id="supervisionPackageTierHistoryLink"]')
+      expect(historyLink?.textContent?.trim()).toBe('View tier change history')
     })
   })
 
   describe('sentence state rules', () => {
-    it('renders the supervision package when there is no sentence and no currentPhase', () => {
+    it('does not render the supervision package if there are no sentences and no currentPhase', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -1408,10 +1551,10 @@ describe('supervision-package', () => {
         context: { name: { forename: 'Alex' } },
       })
 
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
     })
 
-    it('renders the supervision package when there is no sentence and currentPhase.phase.code is SPNS', () => {
+    it('does not render the supervision package if there are no sentences and currentPhase.phase.code is SPNS', () => {
       const document = renderComponent({
         tierScore: 'C',
         tag: { text: null, color: null },
@@ -1420,7 +1563,7 @@ describe('supervision-package', () => {
         context: { name: { forename: 'Alex' } },
       })
 
-      expect(document.querySelector('.supervision-package')).not.toBeNull()
+      expect(document.querySelector('.supervision-package')).toBeNull()
     })
 
     it('does not render the supervision package when there is no sentence and currentPhase.phase.code is not SPNS', () => {
@@ -1440,7 +1583,10 @@ describe('supervision-package', () => {
         tierScore: 'C',
         tag: { text: null, color: null },
         historyHref: '#',
-        context: { name: { forename: 'Alex' }, sentences: [{ supervisionPackage: { code: 'INIT' } }] },
+        context: {
+          name: { forename: 'Alex' },
+          sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }],
+        },
       })
 
       expect(document.querySelector('.supervision-package')).not.toBeNull()

@@ -60,7 +60,11 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true, isSuspendedSentence: true } },
+            {
+              supervisionPackage: { code: 'SPA' },
+              type: { isCustodial: true, isSuspendedSentence: true },
+              isPrimarySentence: true,
+            },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -72,7 +76,11 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true, isSuspendedSentence: false } },
+            {
+              supervisionPackage: { code: 'SPA' },
+              type: { isCustodial: true, isSuspendedSentence: false },
+              isPrimarySentence: true,
+            },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -84,7 +92,11 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } },
+            {
+              supervisionPackage: { code: 'SPA' },
+              type: { isCustodial: true },
+              isPrimarySentence: true,
+            },
           ] as ContextDetails['sentences'],
         }),
       ),
@@ -96,7 +108,11 @@ describe('sentenceType', () => {
       sentenceType(
         buildContextDetails({
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } },
+            {
+              supervisionPackage: { code: 'SPA' },
+              type: { isCustodial: false },
+              isPrimarySentence: true,
+            },
           ] as ContextDetails['sentences'],
         }),
       ),

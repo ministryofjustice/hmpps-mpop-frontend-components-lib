@@ -1,18 +1,22 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
+import { getPrimarySentence } from '../../../utils/getPrimarySentence'
+import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
 const renderPartial = (params: Record<string, unknown> & { currentPhase?: { phase?: { code?: string } } } = {}) => {
   const phaseCode = params.currentPhase?.phase?.code?.toUpperCase()
-  const html = env.render('supervision-package/partials/_action-buttons.njk', { params, phaseCode })
+  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
+  const sentence = getPrimarySentence((params as { context?: { sentences?: FrontendSentence[] } }).context?.sentences)
+  const html = env.render('supervision-package/partials/_action-buttons.njk', { params, phaseCode, sentence })
   return new JSDOM(html).window.document
 }
 
-const inCustodySentences = [{ custody: { status: { code: 'C', description: 'In custody' } } }]
-const atLargeSentences = [{ custody: { location: { code: 'UATLRG' } } }]
+const inCustodySentences = [{ isPrimarySentence: true, custody: { status: { code: 'C', description: 'In custody' } } }]
+const atLargeSentences = [{ isPrimarySentence: true, custody: { location: { code: 'UATLRG' } } }]
 
 describe('_action-buttons partial', () => {
   describe('button group visibility', () => {

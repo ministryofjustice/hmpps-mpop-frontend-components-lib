@@ -6,7 +6,7 @@
             The supervision package shown may change. It is based on data that needs review.
         </strong>
     </div>
-{% elseif params.context.sentences | hasBreachedSentence %}
+{% elseif sentence.inBreach %}
     <div class='govuk-warning-text'>
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>
@@ -14,7 +14,7 @@
             {{ forename }} is in breach. You should continue to offer appointments.
         </strong>
     </div>
-{% elseif params.context.sentences | isInCustody(['C']) %}
+{% elseif sentence | isRecalled %}
     <div class='govuk-warning-text'>
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>
@@ -22,7 +22,7 @@
             {{ forename }} has been recalled. Their appointments are paused.
         </strong>
     </div>
-{% elseif params.context.sentences | isInCustody %}
+{% elseif sentence | hasRestrictedCustodyStatus %}
     <div class='govuk-warning-text'>
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>
@@ -30,7 +30,7 @@
             {{ forename }} is in custody. Their appointments are paused.
         </strong>
     </div>
-{% elseif params.context.sentences | isAtLarge  %}
+{% elseif sentence | isUnlawfullyAtLarge %}
     <div class='govuk-warning-text'>
         <span class='govuk-warning-text__icon' aria-hidden='true'>!</span>
         <strong class='govuk-warning-text__text'>

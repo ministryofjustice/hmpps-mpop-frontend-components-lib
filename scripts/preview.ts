@@ -115,6 +115,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#tier-service-unavailable">Tier service unavailable</a></li>
               <li><a class="govuk-link" href="#spx-only-sentence-list">SPX-only sentence list (nothing renders)</a></li>
               <li><a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT is not a recognised phase code (nothing renders)</a></li>
+              <li><a class="govuk-link" href="#standalone-order">Standalone order no sentence array (nothing renders)</a></li>
               <li><a class="govuk-link" href="#lifer-ipp">Lifer/IPP</a></li>
               <li><a class="govuk-link" href="#end-date-standard-supervision">End date (standard supervision)</a></li>
               <li><a class="govuk-link" href="#reset-date-standard-supervision">Reset Date (standard supervision)</a></li>
@@ -339,7 +340,7 @@ const html = env.renderString(
           <tr class="govuk-table__row">
             <td class="govuk-table__cell"><code>SENT</code></td>
             <td class="govuk-table__cell">In custody</td>
-            <td class="govuk-table__cell">A real backend value, but <strong>not one of the codes this component checks for</strong> - by design, only <code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code> are recognised, so <code>SENT</code> renders nothing (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">example</a>) - <strong>unless</strong> <code>provisional: true</code> is also set, in which case the panel still renders (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>). Whether someone is in custody/at large is shown separately, via a tag driven by <code>context.sentences[].custody</code> fields (see <a class="govuk-link" href="#in-custody">In Custody</a>) - it does not depend on <code>currentPhase.phase.code</code>.</td>
+            <td class="govuk-table__cell">A real backend value, but <strong>not one of the codes this component checks for</strong> - by design, only <code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code> are recognised, so <code>SENT</code> renders nothing (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">example</a>) - <strong>unless</strong> <code>provisional: true</code> is also set, in which case the panel still renders (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>). Whether someone is in custody/at large is shown separately, via a tag driven by the <strong>primary sentence's</strong> <code>custody</code> fields (see <a class="govuk-link" href="#in-custody">In Custody</a>) - it does not depend on <code>currentPhase.phase.code</code>, and non-primary sentences are not examined.</td>
           </tr>
         </tbody>
       </table>
@@ -362,12 +363,12 @@ const html = env.renderString(
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">Unlawfully at large</td>
             <td class="govuk-table__cell"><code>govuk-tag--yellow</code></td>
-            <td class="govuk-table__cell">a sentence's <code>custody.location.code</code> is <code>UATLRG</code></td>
+            <td class="govuk-table__cell">the <strong>primary sentence's</strong> (<code>isPrimarySentence: true</code>) <code>custody.location.code</code> is <code>UATLRG</code> - non-primary sentences are ignored</td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">In custody / on remand (title-cased)</td>
             <td class="govuk-table__cell"><code>govuk-tag--yellow</code></td>
-            <td class="govuk-table__cell">a sentence's <code>custody.status</code> indicates custody (takes priority over "In breach")</td>
+            <td class="govuk-table__cell">the <strong>primary sentence's</strong> (<code>isPrimarySentence: true</code>) <code>custody.status</code> indicates custody (takes priority over "In breach") - non-primary sentences are ignored</td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">In breach</td>
@@ -513,6 +514,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">false</mark> },
         "inBreach": false,
         "endDate": "2028-08-30"
@@ -532,7 +534,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
+          sentences: [{ isPrimarySentence: true, type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
         },
         earlyEngagement: { weeks: 3, completed: 0 },
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
@@ -569,6 +571,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": false },
         "inBreach": false,
         "endDate": "2028-08-30"
@@ -589,7 +592,7 @@ const html = env.renderString(
           gender: 'Female',
           integratedOffenderManagementRedRated: false,
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
+          sentences: [{ isPrimarySentence: true, type: { isCustodial: false }, inBreach: false, endDate: '2028-08-30' }]
         },
         earlyEngagement: { weeks: 3, completed: 0 },
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 0, completed: 0 } }
@@ -627,6 +630,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": {
@@ -655,7 +659,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -698,6 +702,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -723,7 +728,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -764,6 +769,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" }
@@ -785,7 +791,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' } },
             inBreach: false,
@@ -826,6 +832,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">false</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -849,7 +856,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -874,6 +881,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": {
@@ -897,7 +905,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'R', description: 'In Custody' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -918,9 +926,11 @@ const html = env.renderString(
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
+    "inFlight": true,
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": {
@@ -945,8 +955,9 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
+          inFlight: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'C', description: 'Recalled' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -985,6 +996,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1010,7 +1022,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, location: { code: 'COMMUN', description: 'In the Community' } },
             inBreach: true,
@@ -1051,6 +1063,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1076,7 +1089,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
@@ -1105,6 +1118,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1127,7 +1141,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
@@ -1154,6 +1168,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1176,7 +1191,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             inBreach: false,
             endDate: '2027-02-18',
@@ -1222,6 +1237,30 @@ const html = env.renderString(
       }) }}
       <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data.)</em></p>
 
+      <h3 class="govuk-heading-s" id="standalone-order">standalone order no sentence array (nothing renders)</h3>
+      <p class="govuk-body">An empty <code>sentences</code> array (<code>[]</code>) usually indicates a standalone order; in those cases, the Supervision package component should not be displayed.</p>
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "sentences": []
+  }
+}</code></pre>
+  </div>
+</details>
+      {{ supervisionPackage({
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          sentences: []
+        }
+      }) }}
+      <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data.)</em></p>
+
+
       <h3 class="govuk-heading-s" id="sent-not-a-recognised-phase-code">SENT is not a recognised phase code (nothing renders)</h3>
       <p class="govuk-body">The backend has its own internal "In custody" phase, sent to this component as <code>currentPhase.phase.code: "SENT"</code>. This component only recognises a specific list of codes (<code>INIT</code>/<code>STD</code>/<code>FTHRD</code>/<code>IOM</code>/<code>OPD</code>/<code>SPNS</code>/<code>SPNK</code>) - <code>SENT</code> is not one of them, so by design nothing renders, even with an otherwise valid, in-custody sentence. <strong>Exception:</strong> if <code>provisional: true</code> is also set, the panel renders anyway (see <a class="govuk-link" href="#provisional-in-custody-sent">example</a>):</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
@@ -1236,6 +1275,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": { "status": { "code": "R", "description": "In Custody" } }
       }
@@ -1253,7 +1293,7 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie' },
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'R', description: 'In Custody' } }
           }]
@@ -1301,6 +1341,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1325,7 +1366,7 @@ const html = env.renderString(
           gender: 'Male',
           liferCategory: { code: 'LF01', description: 'Imprisonment for Public Protection' },
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1366,6 +1407,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1389,7 +1431,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1430,6 +1472,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1453,7 +1496,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1497,6 +1540,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1520,7 +1564,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1562,6 +1606,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1587,7 +1632,7 @@ const html = env.renderString(
           gender: 'Female',
           integratedOffenderManagementRedRated: false,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1633,6 +1678,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": false },
         "inBreach": false,
         "endDate": "2027-08-30"
@@ -1653,7 +1699,7 @@ const html = env.renderString(
           gender: 'Male',
           offenderPersonalDisorderPathway: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { isCustodial: false }, inBreach: false, endDate: '2027-08-30' }]
+          sentences: [{ isPrimarySentence: true, type: { isCustodial: false }, inBreach: false, endDate: '2027-08-30' }]
         },
         earlyEngagement: { weeks: 3, completed: 3 },
         currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
@@ -1697,6 +1743,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1721,7 +1768,7 @@ const html = env.renderString(
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1763,6 +1810,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1787,7 +1835,7 @@ const html = env.renderString(
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1829,6 +1877,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">true</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1853,7 +1902,7 @@ const html = env.renderString(
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1895,6 +1944,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">false</mark> },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1919,7 +1969,7 @@ const html = env.renderString(
           gender: 'Male',
           integratedOffenderManagementRedRated: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -1967,6 +2017,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": true },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": <mark style="background:#ffdd00;">true</mark> },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -1990,7 +2041,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2028,8 +2079,10 @@ const html = env.renderString(
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
+    "inFlight": true,
     "finalThirdEligibility": { "eligible": false },
     "sentences": [{
+      "isPrimarySentence": true,
       "type": { "isCustodial": true },
       "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
       "inBreach": false,
@@ -2039,7 +2092,8 @@ const html = env.renderString(
       "type": { "isCustodial": true },
       "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
       "inBreach": false,
-      "endDate": "2027-08-30"
+      "endDate": "2027-08-30",
+      "isPrimarySentence": false
     }
   ]
   }
@@ -2053,8 +2107,9 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
+          inFlight: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2064,7 +2119,8 @@ const html = env.renderString(
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
-            endDate: '2027-08-30'
+            endDate: '2027-08-30',
+            isPrimarySentence: false
           }]
         },
         earlyEngagement: { weeks: 0, completed: 0 },
@@ -2101,8 +2157,10 @@ const html = env.renderString(
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
+    "inFlight": true,
     "finalThirdEligibility": { "eligible": false },
     "sentences": [ {
+      "isPrimarySentence": true,
       "type": { "isCustodial": true },
       "custody": { "status": { "code": "B", "description": "Released - On Licence" }, "finalThirdDate": "2026-08-06" },
       "inBreach": false,
@@ -2126,8 +2184,9 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
+          inFlight: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2179,6 +2238,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -2203,7 +2263,7 @@ const html = env.renderString(
           gender: 'Male',
           preventConcerns: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2245,6 +2305,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": true },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -2269,7 +2330,7 @@ const html = env.renderString(
           gender: 'Male',
           preventConcerns: true,
           finalThirdEligibility: { eligible: true },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2287,7 +2348,7 @@ const html = env.renderString(
       <h3 class="govuk-heading-s" id="provisional">Provisional</h3>
 
       <p class="govuk-body">The provisional tier is displayed when <code>provisional: true</code>.</p>
-      <p class="govuk-body">The provisional flag is supplied by the tier API calculation.</p>
+      <p class="govuk-body">The provisional flag is supplied by the tier API calculation. <code>currentPhase</code> is absent here, as it typically is while the tier calculation is still provisional and a phase hasn't been calculated yet.</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">View example JSON</span>
@@ -2295,12 +2356,6 @@ const html = env.renderString(
   <div class="govuk-details__text">
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "provisional": true,
-  "currentPhase": {
-    "phase": {
-      "code": "SPNK", "description": "Not yet known"
-    },
-    "endDate": "2027-08-31"
-  },
   "oasysReviewHref": "#",
   "historyHref": "#",
   "tierScore": "C",
@@ -2314,6 +2369,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "B", "description": "Released - On Licence" },
@@ -2335,7 +2391,6 @@ const html = env.renderString(
 
       {{ supervisionPackage({
         provisional: true,
-        currentPhase: { phase: { code: 'SPNK', description: 'Not yet known' }, endDate: '2027-08-31' },
         oasysReviewHref: '#',
         historyHref: '#',
         tierScore: 'C',
@@ -2344,7 +2399,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2372,8 +2427,10 @@ const html = env.renderString(
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
     "finalThirdEligibility": { "eligible": false },
+    "inFlight": true,
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "R", "description": "In Custody" },
@@ -2397,7 +2454,9 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
+          inFlight: true,
           sentences: [{
+            isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'R', description: 'In Custody' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2407,7 +2466,7 @@ const html = env.renderString(
       }) }}
 
       <h3 class="govuk-heading-s" id="provisional-in-custody-sent">Provisional and in custody (currentPhase SENT)</h3>
-      <p class="govuk-body">Once the supervision package has gone live, a person genuinely in custody has <code>currentPhase.phase.code: "SENT"</code> (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>). Normally <code>SENT</code> renders nothing, but the <code>provisional: true</code> flag overrides that check, so the panel still renders - now at two-thirds width, without the OASys review prompt (suppressed because <code>currentPhase</code> is present), and with an extra message not seen elsewhere: "We will calculate the supervision package once the tier is confirmed."</p>
+      <p class="govuk-body">Once the supervision package has gone live, a person genuinely in custody has <code>currentPhase.phase.code: "SENT"</code> (see <a class="govuk-link" href="#sent-not-a-recognised-phase-code">SENT example</a>). <code>SENT</code> is not a recognised phase code, so this example needs <code>provisional: true</code> to render the panel. Although <code>context.inFlight: true</code> is set, the OASys review prompt is not shown for <code>SENT</code>; that prompt is limited to <code>SPNS</code> or a missing phase. The panel renders at two-thirds width, with an extra message not seen elsewhere: "We will calculate the supervision package once the tier is confirmed."</p>
       <details class="govuk-details app-json-details" data-module="govuk-details">
   <summary class="govuk-details__summary">
     <span class="govuk-details__summary-text">View example JSON</span>
@@ -2425,9 +2484,11 @@ const html = env.renderString(
   "context": {
     "name": { "forename": "Gracie", "surname": "Beatty" },
     "gender": "Male",
+    "inFlight": <mark style="background:#ffdd00;">true</mark>,
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": {
           "status": { "code": "R", "description": "In Custody" },
@@ -2451,8 +2512,9 @@ const html = env.renderString(
         context: {
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
+          inFlight: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'R', description: 'In Custody' }, finalThirdDate: '2026-08-06' },
             inBreach: false,
@@ -2511,6 +2573,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2027-01-07",
               "type": {
                 "isCustodial": true
@@ -2538,7 +2601,7 @@ const html = env.renderString(
           nationalSecurityDivision: true,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2026-07-08',
               endDate: '2027-01-07',
@@ -2575,6 +2638,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2027-01-07",
               "type": {
                 "isCustodial": true
@@ -2608,7 +2672,7 @@ const html = env.renderString(
           nationalSecurityDivision: true,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2026-07-08',
               endDate: '2027-01-07',
@@ -2645,6 +2709,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2024-01-07",
               "type": {
                 "isCustodial": true
@@ -2674,7 +2739,7 @@ const html = env.renderString(
           nationalSecurityDivision: true,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2024-01-07',
               endDate: '2024-01-07',
@@ -2713,6 +2778,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2027-01-07",
               "type": {
                 "isCustodial": true
@@ -2747,7 +2813,7 @@ const html = env.renderString(
           nationalSecurityDivision: true,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2026-07-08',
               endDate: '2027-01-07',
@@ -2785,6 +2851,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2027-01-07",
               "type": {
                 "isCustodial": true
@@ -2844,7 +2911,7 @@ const html = env.renderString(
           nationalSecurityDivision: false,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2026-07-08',
               endDate: '2027-01-07',
@@ -2883,6 +2950,7 @@ const html = env.renderString(
           },
           "sentences": [
             {
+              "isPrimarySentence": true,
               "endDate": "2027-01-07",
               "type": {
                 "isCustodial": true
@@ -2947,7 +3015,7 @@ const html = env.renderString(
           nationalSecurityDivision: false,
           finalThirdEligibility: { eligible: true, since: '2026-07-10' },
           sentences: [
-            {
+            { isPrimarySentence: true,
               eventNumber: '1',
               startDate: '2026-07-08',
               endDate: '2027-01-07',
@@ -2982,7 +3050,7 @@ const html = env.renderString(
     "intensiveSupervisionCourt": <mark style="background:#ffdd00;">true</mark>,
     "nationalSecurityDivision": false,
     "sentences": [
-      { "type": { "isCustodial": false } }
+      { "isPrimarySentence": true, "type": { "isCustodial": false } }
     ]
   }
 }</code></pre>
@@ -2994,7 +3062,7 @@ const html = env.renderString(
           name: { forename: 'Gracie' },
           intensiveSupervisionCourt: true,
           nationalSecurityDivision: false,
-          sentences: [{ type: { isCustodial: false } }]
+          sentences: [{ isPrimarySentence: true, type: { isCustodial: false } }]
         }
       }) }}
       <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data.)</em></p>
@@ -3012,7 +3080,7 @@ const html = env.renderString(
     "nationalSecurityDivision": <mark style="background:#ffdd00;">true</mark>,
     "finalThirdEligibility": { "eligible": <mark style="background:#ffdd00;">false</mark> },
     "sentences": [
-      { "type": { "isCustodial": false }, "inBreach": false }
+      { "isPrimarySentence": true, "type": { "isCustodial": false }, "inBreach": false }
     ]
   }
 }</code></pre>
@@ -3025,7 +3093,7 @@ const html = env.renderString(
           gender: 'Female',
           nationalSecurityDivision: true,
           finalThirdEligibility: { eligible: false },
-          sentences: [{ type: { isCustodial: false }, inBreach: false }]
+          sentences: [{ isPrimarySentence: true, type: { isCustodial: false }, inBreach: false }]
         }
       }) }}
       <p class="govuk-body"><em>(Nothing is shown above - this is the expected, correct output for this data.)</em></p>
@@ -3043,7 +3111,7 @@ const html = env.renderString(
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
+      { "isPrimarySentence": true, "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": true } }
     ]
   }
 }</code></pre>
@@ -3061,7 +3129,7 @@ const html = env.renderString(
             surname: 'Morris'
           },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { isPrimarySentence: true, supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
         }
       }) }}
@@ -3076,7 +3144,7 @@ const html = env.renderString(
   <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
   "context": {
     "sentences": [
-      { "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
+      { "isPrimarySentence": true, "supervisionPackage": { "code": "SPA" }, "type": { "isCustodial": false } }
     ]
   }
 }</code></pre>
@@ -3094,7 +3162,7 @@ const html = env.renderString(
             surname: 'Morris'
           },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
+            { isPrimarySentence: true, supervisionPackage: { code: 'SPA' }, type: { isCustodial: false } }
           ]
         }
       }) }}
@@ -3126,7 +3194,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF03' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { isPrimarySentence: true, supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
         }
       }) }}
@@ -3158,7 +3226,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF01' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { isPrimarySentence: true, supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
         }
       }) }}
@@ -3190,7 +3258,7 @@ const html = env.renderString(
           },
           liferCategory: { code: 'LF02' },
           sentences: [
-            { supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
+            { isPrimarySentence: true, supervisionPackage: { code: 'SPA' }, type: { isCustodial: true } }
           ]
         }
       }) }}
@@ -3230,6 +3298,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": { "status": { "code": "B", "description": "Released - On Licence" } },
         "inBreach": false,
@@ -3250,7 +3319,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' } },
             inBreach: false,
@@ -3292,6 +3361,7 @@ const html = env.renderString(
     "finalThirdEligibility": { "eligible": false },
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": { "isCustodial": true },
         "custody": { "status": { "code": "B", "description": "Released - On Licence" } },
         "inBreach": false,
@@ -3312,7 +3382,7 @@ const html = env.renderString(
           name: { forename: 'Gracie', surname: 'Beatty' },
           gender: 'Male',
           finalThirdEligibility: { eligible: false },
-          sentences: [{
+          sentences: [{ isPrimarySentence: true,
             type: { isCustodial: true },
             custody: { status: { code: 'B', description: 'Released - On Licence' } },
             inBreach: false,
@@ -3430,6 +3500,7 @@ const html = env.renderString(
   "context": {
     "sentences": [
       {
+        "isPrimarySentence": true,
         "inBreach": true
       }
     ]
@@ -3447,7 +3518,7 @@ const html = env.renderString(
             eligible: false
           },
           sentences: [
-            {
+            { isPrimarySentence: true,
               inBreach: true
             }
           ]
@@ -3591,6 +3662,7 @@ const html = env.renderString(
     "nationalSecurityDivision": true,
     "sentences": [
       {
+        "isPrimarySentence": true,
         "type": {
           "isCustodial": true
         },
@@ -3614,7 +3686,7 @@ const html = env.renderString(
             eligible: true
           },
           sentences: [
-            {
+            { isPrimarySentence: true,
               type: { isCustodial: true },
               custody: { finalThirdDate: '2026-08-06' }
             }
