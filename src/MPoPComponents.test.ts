@@ -565,7 +565,7 @@ describe('MPoPComponents', () => {
 
       const result = await mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')
 
-      expect(result).toEqual(mockFrontendContext)
+      expect(result).toEqual({ ...mockFrontendContext, outcome: 'success' })
       expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/frontend-context/X123456', 'authToken')
     })
 
@@ -590,16 +590,21 @@ describe('MPoPComponents', () => {
       expect(loggerErrorSpy).toHaveBeenCalledWith('Supervision Package API unavailable (503) for crn X123456')
     })
 
-    it('should log a generic internal error message and rethrow for other failures', async () => {
-      const error = { responseStatus: 500, message: 'Internal Server Error' }
+    it('should log a generic internal error message and return the API error body for a 500', async () => {
+      const apiError = {
+        timestamp: '2026-10-08T10:00:00.000Z',
+        status: 500,
+        error: 'Internal Server Error',
+        path: '/frontend-context/X123456',
+      }
+      const error = { responseStatus: 500, message: 'Internal Server Error', data: apiError }
       const loggerErrorSpy = jest.spyOn(console, 'error').mockImplementation()
 
       mockedRestClient.prototype.get.mockRejectedValue(error)
 
-      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
-        new Error('500 Internal Server Error'),
-      )
+      const result = await mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')
 
+      expect(result).toEqual({ ...apiError, outcome: 'error' })
       expect(loggerErrorSpy).toHaveBeenCalledWith('Supervision Package API internal error (500) for crn X123456')
     })
 
@@ -610,6 +615,67 @@ describe('MPoPComponents', () => {
       mockedRestClient.prototype.get.mockRejectedValue(error)
 
       await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toBe(error)
+    })
+
+    it('should log a 500 message and rethrow when the error body is missing required ApiError fields', async () => {
+      const error = {
+        responseStatus: 500,
+        message: 'Internal Server Error',
+        data: { status: 500, error: 'Internal Server Error' },
+      }
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
+    })
+
+    it('should rethrow when the 500 error has no data at all', async () => {
+      const error = { responseStatus: 500, message: 'Internal Server Error' }
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
+    })
+
+    it('should rethrow when the 500 error data has fields of the wrong type', async () => {
+      const error = {
+        responseStatus: 500,
+        message: 'Internal Server Error',
+        data: { timestamp: '2026-10-08T10:00:00.000Z', status: '500', error: 'Internal Server Error', path: 123 },
+      }
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
+    })
+
+    it('should rethrow when the 500 error body has a stale/mismatched status field', async () => {
+      const error = {
+        responseStatus: 500,
+        message: 'Internal Server Error',
+        data: {
+          timestamp: '2026-10-08T10:00:00.000Z',
+          status: 503,
+          error: 'Service Unavailable',
+          path: '/frontend-context/X123456',
+        },
+      }
+      jest.spyOn(console, 'error').mockImplementation()
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      await expect(mpopComponents.getSupervisionPackageFrontendContext('authToken', 'X123456')).rejects.toEqual(
+        new Error('500 Internal Server Error'),
+      )
     })
   })
 })

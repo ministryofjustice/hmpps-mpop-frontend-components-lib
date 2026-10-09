@@ -133,6 +133,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#provisional-in-custody-sent">Provisional and in custody (currentPhase SENT)</a></li>
               <li><a class="govuk-link" href="#prevent-concerns">Prevent Concerns</a></li>
               <li><a class="govuk-link" href="#prevent-concerns-final-third">Prevent Concerns (final third)</a></li>
+              <li><a class="govuk-link" href="#error">Error</a></li>
               <li><a class="govuk-link" href="#final-third-progress-national-security-division-cases">Final third progress National Security Division cases</a>
                 <ul class="govuk-list govuk-list--bullet">
                   <li><a class="govuk-link" href="#final-third-progress-spna">Final third progress still renders when phase code is SPNA (Does not apply)</a></li>
@@ -467,6 +468,11 @@ const html = env.renderString(
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="stage-provisional" name="stage" type="radio" value="provisional" data-aria-controls="stage-provisional-conditional">
               <label class="govuk-label govuk-radios__label" for="stage-provisional">Provisional</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="stage-error" name="stage" type="radio" value="error" data-aria-controls="stage-error-conditional">
+              <label class="govuk-label govuk-radios__label" for="stage-error">Error (500)</label>
             </div>
           </div>
         </fieldset>
@@ -2453,6 +2459,34 @@ const html = env.renderString(
             endDate: '2027-02-18'
           }]
         }
+      }) }}
+
+    </div>
+
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="stage-error-conditional">
+
+      <h3 class="govuk-heading-s" id="error">Error</h3>
+      <p class="govuk-body">Triggered by <code>status: 500</code>, which indicates the supervision package API call failed. The component then ignores <code>currentPhase</code>/<code>context</code> and renders a reduced, warning-only view: a grey "Unavailable" tag, a warning that the package information is unavailable while it's being recalculated, no tier score or tier-history link, and no progress panel.</p>
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "status": <mark style="background:#ffdd00;">500</mark>
+}</code></pre>
+  </div>
+</details>
+
+      {{ supervisionPackage({
+        tierScore: 'test',
+        historyHref: '#',
+        arrangeAppointmentHref: '#',
+        allAppointmentsHref: '#',
+        timestamp: '',
+        status: 500,
+        error: '',
+        path: ''
       }) }}
 
     </div>

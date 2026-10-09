@@ -10,7 +10,9 @@ import type { PersonalDetailsSummary, PersonalDetailsResponse } from './types/Pe
 import type {
   SupervisionPackageResponse,
   SupervisionPackageFrontendContextResponse,
+  SupervisionPackageFrontendContextSuccess,
   CurrentPhase,
+  ApiError,
 } from './types/SupervisionPackage'
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
@@ -20,6 +22,19 @@ export const tierTags: Record<string, TierTag> = {
   provisional: { text: 'Provisional', color: 'orange' },
   unavailable: { text: 'Unavailable', color: 'grey' },
   none: { text: null, color: null },
+}
+
+const isApiError = (value: unknown): value is ApiError => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const candidate = value as Record<string, unknown>
+  return (
+    typeof candidate.timestamp === 'string' &&
+    typeof candidate.status === 'number' &&
+    typeof candidate.error === 'string' &&
+    typeof candidate.path === 'string'
+  )
 }
 
 export default class MPoPComponents {
@@ -236,18 +251,28 @@ export default class MPoPComponents {
   ): Promise<SupervisionPackageFrontendContextResponse | null> {
     try {
       // SuppressingRestClient resolves 404s to null rather than throwing, so a missing context is not an error
-      return await this.supervisionPackageApiRestClient.get<SupervisionPackageFrontendContextResponse>(
-        `/frontend-context/${crn}`,
-        authOptions,
-      )
+      const response = await this.supervisionPackageApiRestClient.get<
+        Omit<SupervisionPackageFrontendContextSuccess, 'outcome'>
+      >(`/frontend-context/${crn}`, authOptions)
+
+      return response ? { ...response, outcome: 'success' } : null
     } catch (err) {
       const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
       const error = err instanceof Error ? err : new Error('500 Internal Server Error')
 
       if (responseStatus === 503) {
         this.logger.error(`Supervision Package API unavailable (503) for crn ${crn}`)
-      } else {
+        throw error
+      }
+
+      if (responseStatus === 500) {
         this.logger.error(`Supervision Package API internal error (500) for crn ${crn}`)
+        // The API's 500 response body is already in the declared ApiError shape - tag it with the discriminator
+        const apiError = (err as { data?: unknown }).data
+        if (!isApiError(apiError) || apiError.status !== 500) {
+          throw error
+        }
+        return { ...apiError, outcome: 'error' }
       }
 
       throw error
