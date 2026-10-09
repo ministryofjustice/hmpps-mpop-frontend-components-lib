@@ -992,6 +992,43 @@ describe('supervision-package', () => {
       )
     })
 
+    it('does not render the OASys review link when context.inFlight is false and currentPhase.phase.code is SPNS', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        currentPhase: { phase: { code: 'SPNS' } },
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: false,
+          sentences: [{ supervisionPackage: { code: 'SPNS' }, isPrimarySentence: true }],
+        },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+    })
+
+    it('does not render the OASys review link when context.inFlight is false and currentPhase is absent', () => {
+      const document = renderComponent({
+        tierScore: 'C',
+        tag: { text: null, color: null },
+        historyHref: '#',
+        context: {
+          name: { forename: 'Alex' },
+          inFlight: false,
+          sentences: [{ supervisionPackage: { code: 'INNIT' }, isPrimarySentence: true }],
+        },
+        oasysReviewHref: '/oasys/review/123',
+      })
+
+      expect(document.querySelector('a[href="/oasys/review/123"]')).toBeNull()
+      expect(document.body.textContent).not.toContain('Start an OASys review')
+      expect(document.body.textContent).not.toContain('Complete an OASys review')
+    })
+
     it('does not render the OASys review link when oasysReviewHref is absent', () => {
       const document = renderComponent({
         tierScore: 'C',
