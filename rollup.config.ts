@@ -2,10 +2,76 @@
 import typescript from '@rollup/plugin-typescript'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { dts } from 'rollup-plugin-dts'
-import copy from 'rollup-plugin-copy'
+import { mkdir, readdir, readFile, writeFile, copyFile } from 'node:fs/promises'
+import { dirname, join, relative } from 'node:path'
 /* eslint-enable import/no-extraneous-dependencies */
 
 import pkg from './package.json'
+
+const copyComponentAssets = async () => {
+  const sourceRoot = 'src/components'
+  const destinationRoot = 'dist/mpop/components'
+  const queue = [sourceRoot]
+
+  while (queue.length > 0) {
+    const currentPath = queue.pop()
+    if (!currentPath) continue
+
+    const entries = await readdir(currentPath, { withFileTypes: true })
+    for (const entry of entries) {
+      const sourcePath = join(currentPath, entry.name)
+      if (entry.isDirectory()) {
+        queue.push(sourcePath)
+        continue
+      }
+
+      if (!entry.isFile() || (!entry.name.endsWith('.njk') && !entry.name.endsWith('.scss'))) {
+        continue
+      }
+
+      const relativePath = relative(sourceRoot, sourcePath)
+      const destinationPath = join(destinationRoot, relativePath)
+      await mkdir(dirname(destinationPath), { recursive: true })
+      await copyFile(sourcePath, destinationPath)
+    }
+  }
+}
+
+const copyJsAssets = async () => {
+  const sourceRoot = 'src/assets/js'
+  const destinationRoot = 'dist/js'
+  let entries
+  try {
+    entries = await readdir(sourceRoot, { withFileTypes: true })
+  } catch (error) {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') return
+    throw error
+  }
+
+  for (const entry of entries) {
+    if (!entry.isFile() || !entry.name.endsWith('.js')) continue
+
+    const sourcePath = join(sourceRoot, entry.name)
+    const destinationPath = join(destinationRoot, entry.name)
+    await mkdir(dirname(destinationPath), { recursive: true })
+    await copyFile(sourcePath, destinationPath)
+  }
+}
+
+const copyAndTransformAllScss = async () => {
+  const sourcePath = 'src/assets/scss/_all.scss'
+  const destinationPath = 'dist/_all.scss'
+  const content = await readFile(sourcePath, 'utf8')
+  await mkdir(dirname(destinationPath), { recursive: true })
+  await writeFile(destinationPath, content.replaceAll('../../components/', './mpop/components/'))
+}
+
+const copyAssetsPlugin = () => ({
+  name: 'copy-assets',
+  async writeBundle() {
+    await Promise.all([copyComponentAssets(), copyJsAssets(), copyAndTransformAllScss()])
+  },
+})
 
 export default [
   {
@@ -17,38 +83,7 @@ export default [
     plugins: [
       nodeResolve({ preferBuiltins: true }),
       typescript({ tsconfig: './tsconfig.json', noEmitOnError: true }),
-      copy({
-        targets: [
-          {
-            src: 'src/components/*/**/*.njk',
-            dest: 'dist/mpop',
-          },
-          {
-            src: 'src/components/*/**/*.scss',
-            dest: 'dist/mpop',
-          },
-        ],
-        flatten: false,
-      }),
-      copy({
-        targets: [
-          {
-            src: 'src/assets/scss/_all.scss',
-            dest: 'dist',
-            transform: contents => contents.toString().replaceAll('../../components/', './mpop/components/'),
-          },
-        ],
-        flatten: true,
-      }),
-      copy({
-        targets: [
-          {
-            src: 'src/assets/js/*.js',
-            dest: 'dist/js',
-          },
-        ],
-        flatten: true,
-      }),
+      copyAssetsPlugin(),
     ],
     external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
   },
