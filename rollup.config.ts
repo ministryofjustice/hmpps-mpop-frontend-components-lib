@@ -5,57 +5,63 @@ import { dts } from 'rollup-plugin-dts'
 import { mkdir, readdir, readFile, writeFile, copyFile } from 'node:fs/promises'
 import { dirname, join, relative } from 'node:path'
 /* eslint-enable import/no-extraneous-dependencies */
-
 import pkg from './package.json'
 
 const copyComponentAssets = async () => {
   const sourceRoot = 'src/components'
   const destinationRoot = 'dist/mpop/components'
-  const queue = [sourceRoot]
 
-  while (queue.length > 0) {
-    const currentPath = queue.pop()
-    if (!currentPath) continue
-
+  const readAndCopyRecursive = async currentPath => {
     const entries = await readdir(currentPath, { withFileTypes: true })
-    for (const entry of entries) {
+
+    const tasks = entries.map(async entry => {
       const sourcePath = join(currentPath, entry.name)
+
       if (entry.isDirectory()) {
-        queue.push(sourcePath)
-        continue
+        return readAndCopyRecursive(sourcePath)
       }
 
-      if (!entry.isFile() || (!entry.name.endsWith('.njk') && !entry.name.endsWith('.scss'))) {
-        continue
+      if (entry.isFile() && (entry.name.endsWith('.njk') || entry.name.endsWith('.scss'))) {
+        const relativePath = relative(sourceRoot, sourcePath)
+        const destinationPath = join(destinationRoot, relativePath)
+
+        await mkdir(dirname(destinationPath), { recursive: true })
+        return copyFile(sourcePath, destinationPath)
       }
 
-      const relativePath = relative(sourceRoot, sourcePath)
-      const destinationPath = join(destinationRoot, relativePath)
-      await mkdir(dirname(destinationPath), { recursive: true })
-      await copyFile(sourcePath, destinationPath)
-    }
+      return null
+    })
+
+    await Promise.all(tasks)
   }
+
+  await readAndCopyRecursive(sourceRoot)
 }
 
 const copyJsAssets = async () => {
   const sourceRoot = 'src/assets/js'
   const destinationRoot = 'dist/js'
   let entries
+
   try {
     entries = await readdir(sourceRoot, { withFileTypes: true })
   } catch (error) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') return
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      return
+    }
     throw error
   }
 
-  for (const entry of entries) {
-    if (!entry.isFile() || !entry.name.endsWith('.js')) continue
+  const copyPromises = entries
+    .filter(entry => entry.isFile() && entry.name.endsWith('.js'))
+    .map(async entry => {
+      const sourcePath = join(sourceRoot, entry.name)
+      const destinationPath = join(destinationRoot, entry.name)
+      await mkdir(dirname(destinationPath), { recursive: true })
+      return copyFile(sourcePath, destinationPath)
+    })
 
-    const sourcePath = join(sourceRoot, entry.name)
-    const destinationPath = join(destinationRoot, entry.name)
-    await mkdir(dirname(destinationPath), { recursive: true })
-    await copyFile(sourcePath, destinationPath)
-  }
+  await Promise.all(copyPromises)
 }
 
 const copyAndTransformAllScss = async () => {
