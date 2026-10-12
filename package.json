@@ -99,12 +99,8 @@
     "sass": "^1.103.1"
   },
   "overrides": {
-    "js-yaml": "4.3.2",
     "@istanbuljs/load-nyc-config": {
-      "js-yaml": "4.3.2"
-    },
-    "@istanbuljs/load-nyc-config@1.1.0": {
-      "js-yaml": "4.3.2"
+      "js-yaml": "3.15.2"
     },
     "brace-expansion@1": "1.1.21",
     "brace-expansion@2": "2.1.7",
