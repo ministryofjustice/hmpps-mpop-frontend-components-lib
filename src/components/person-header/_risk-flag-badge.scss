@@ -84,20 +84,15 @@ $risk-badge-colours: (
   }
 }
 
-/* Keyboard focus state */
-/* Mouse hover state */
-.person-header__risk-tags a.dps-alert-status:hover {
-  border: 3px solid #0b0c0c !important;
-  outline: none;
-  box-shadow: 0 0 0 3px #ffdd00 !important;
-}
-
-/* Keyboard focus state */
-.person-header__risk-tags a.dps-alert-status:focus,
-.person-header__risk-tags a.dps-alert-status:focus-visible {
-  border: 3px solid #0b0c0c !important;
-  outline: none !important;
-  box-shadow: 0 0 0 3px #ffdd00 !important;
+/* Keyboard focus state and Mouse hover state */
+.person-header__risk-tags a.dps-alert-status {
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    border: 3px solid #0b0c0c !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px #ffdd00 !important;
+  }
 }
 
 /* More risk flags link */
