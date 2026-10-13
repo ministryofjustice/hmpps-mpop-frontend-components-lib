@@ -42,7 +42,9 @@
             "allowJs": true,
             "ignoreDeprecations": "6.0",
             "module": "commonjs",
-            "moduleResolution": "node"
+            "moduleResolution": "node",
+            "esModuleInterop": true,
+            "allowSyntheticDefaultImports": true
           }
         }
       ]
