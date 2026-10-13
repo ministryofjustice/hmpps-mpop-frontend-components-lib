@@ -60,12 +60,17 @@ $risk-badge-very-high: #711a0d;
 $risk-badge-high: #d4351c;
 $risk-badge-medium: #f2590d;
 $risk-badge-low: #85994b;
+$cohort-risk-badge: #54319f;
+$misc-risk-badge: #484949;
 
+/* Map badge classes to their border and hover colours */
 $risk-badge-colours: (
         'very-high': $risk-badge-very-high,
         'high': $risk-badge-high,
         'medium': $risk-badge-medium,
         'low': $risk-badge-low,
+        'cohort': $cohort-risk-badge,
+        'misc': $misc-risk-badge,
 );
 
 @each $level, $colour in $risk-badge-colours {
@@ -75,19 +80,22 @@ $risk-badge-colours: (
     &:hover {
       background-color: $colour;
       color: #fff;
-      text-decoration-thickness: 2px;
     }
   }
 }
 
-.person-header__risk-tags .dps-alert-status:focus {
-  outline: 3px solid transparent;
-  color: #0b0c0c;
-  background-color: #ffdd00;
-  box-shadow: 0 -2px #ffdd00, 0 4px #0b0c0c;
-  text-decoration: none;
+/* Keyboard focus state and Mouse hover state */
+.person-header__risk-tags a.dps-alert-status {
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    border: 3px solid #0b0c0c !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px #ffdd00 !important;
+  }
 }
 
+/* More risk flags link */
 .person-header__risk-tags .risk-badge-more {
   white-space: nowrap;
 }
