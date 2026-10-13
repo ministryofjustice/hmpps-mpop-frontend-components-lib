@@ -37,6 +37,59 @@ describe('_early-engagement partial', () => {
     },
   )
 
+  describe('positive remaining total regression', () => {
+    // Regression: a positive remaining total must not be affected by the 0-clamp
+    it.each`
+      appointmentsAllowance | earlyEngagementWeeks | expectedRemaining
+      ${1}                  | ${0}                 | ${1}
+      ${100}                | ${1}                 | ${99}
+      ${12}                 | ${12}                | ${0}
+      ${6}                  | ${12}                | ${0}
+      ${30}                 | ${10}                | ${20}
+    `(
+      'shows $expectedRemaining remaining appointments when allowance is $appointmentsAllowance and weeks is $earlyEngagementWeeks',
+      ({ appointmentsAllowance, earlyEngagementWeeks, expectedRemaining }) => {
+        const document = renderPartial({
+          context: { name: { forename: 'Alex' } },
+          currentYear: { appointments: { allowance: appointmentsAllowance } },
+          earlyEngagement: { weeks: earlyEngagementWeeks },
+          currentPhase: { endDate: '2026-01-01' },
+        })
+
+        const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+        const remainingParagraph = paragraphs.find(p => p.textContent?.includes('supervision appointments'))
+
+        expect(remainingParagraph?.textContent).toContain(String(expectedRemaining))
+      },
+    )
+  })
+
+  describe('negative allowance regression', () => {
+    // Regression: a negative remaining total (allowance - weeks) must be clamped to 0
+    it.each`
+      appointmentsAllowance | earlyEngagementWeeks | expectedRemaining
+      ${-5}                 | ${5}                 | ${0}
+      ${-10}                | ${0}                 | ${0}
+      ${0}                  | ${0}                 | ${0}
+      ${5}                  | ${10}                | ${0}
+    `(
+      'clamps a negative remaining total to 0 when allowance is $appointmentsAllowance and weeks is $earlyEngagementWeeks',
+      ({ appointmentsAllowance, earlyEngagementWeeks, expectedRemaining }) => {
+        const document = renderPartial({
+          context: { name: { forename: 'Alex' } },
+          currentYear: { appointments: { allowance: appointmentsAllowance } },
+          earlyEngagement: { weeks: earlyEngagementWeeks },
+          currentPhase: { endDate: '2026-01-01' },
+        })
+
+        const paragraphs = Array.from(document.querySelectorAll('p.govuk-body'))
+        const remainingParagraph = paragraphs.find(p => p.textContent?.includes('supervision appointments'))
+
+        expect(remainingParagraph?.textContent).toContain(String(expectedRemaining))
+      },
+    )
+  })
+
   describe('weekly attendance guidance', () => {
     it('shows the weekly guidance when appointmentsCompleted is less than earlyEngagementWeeks', () => {
       const document = renderPartial({

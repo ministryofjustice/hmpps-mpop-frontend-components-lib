@@ -92,6 +92,91 @@ describe('supervision-package-summary', () => {
     )
   })
 
+  describe('maximum appointments remaining clamp regression', () => {
+    // Regression: a negative remaining total (allowance - earlyEngagement.weeks) must be clamped to 0
+    it.each`
+      allowance | earlyEngagementWeeks | expectedRemaining
+      ${8}      | ${4}                 | ${4}
+      ${4}      | ${4}                 | ${0}
+      ${4}      | ${10}                | ${0}
+    `(
+      'shows $expectedRemaining when allowance is $allowance and earlyEngagement.weeks is $earlyEngagementWeeks',
+      ({ allowance, earlyEngagementWeeks, expectedRemaining }) => {
+        const document = renderComponent({
+          currentPhase: {
+            phase: { code: 'INIT' },
+          },
+          context: {
+            name: {
+              forename: 'Stuart',
+            },
+            finalThirdEligibility: {
+              eligible: false,
+            },
+          },
+          earlyEngagement: {
+            startDate: '2026-08-06T13:46:16.916Z',
+            endDate: '2026-08-06T13:46:16.916Z',
+            weeks: earlyEngagementWeeks,
+            completed: 2,
+          },
+          currentYear: {
+            startDate: '2026-08-06',
+            endDate: '2026-08-06',
+            appointments: {
+              allowance,
+              scheduled: 1,
+              completed: 0,
+            },
+          },
+        })
+
+        expect(document.querySelector('.govuk-details__text p:nth-child(3)')?.textContent?.trim()).toBe(
+          `Stuart will then have a maximum of ${expectedRemaining} supervision appointments for the rest of this sentence year.`,
+        )
+      },
+    )
+
+    it('does not render the weekly guidance paragraph when completed exceeds required', () => {
+      const document = renderComponent({
+        currentPhase: {
+          phase: { code: 'INIT' },
+        },
+        context: {
+          name: {
+            forename: 'Stuart',
+          },
+          finalThirdEligibility: {
+            eligible: false,
+          },
+        },
+        earlyEngagement: {
+          startDate: '2026-08-06T13:46:16.916Z',
+          endDate: '2026-08-06T13:46:16.916Z',
+          weeks: 2,
+          completed: 2,
+        },
+        currentYear: {
+          startDate: '2026-08-06',
+          endDate: '2026-08-06',
+          appointments: {
+            allowance: 0,
+            scheduled: 1,
+            completed: 0,
+          },
+        },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('.govuk-details__text p'))
+
+      expect(paragraphs.find(p => p.textContent?.includes('every week'))).toBeUndefined()
+      expect(paragraphs[0]?.textContent?.trim()).toBe('Early engagement is expected to end on 6 August 2026.')
+      expect(paragraphs[1]?.textContent?.trim()).toBe(
+        'Stuart will then have a maximum of 0 supervision appointments for the rest of this sentence year.',
+      )
+    })
+  })
+
   it('renders the supervision stage', () => {
     const document = renderComponent({
       currentPhase: {
