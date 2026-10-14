@@ -105,6 +105,7 @@
 
     <div class='person-header__risk-panel'>
         <div
+                {% if params.collapsibleRiskFlags %}id='person-header-risk-flags'{% endif %}
                 class='person-header__risk-tags'
                 data-qa='personRiskBadges'
         >
@@ -142,6 +143,22 @@
             </a>
             {% endif %}
         </div>
+
+        {% if params.collapsibleRiskFlags %}
+        <button
+                type='button'
+                class='govuk-link person-header__risk-flags-toggle'
+                data-module='mpop-risk-flags-toggle'
+                data-show-text='Show active NDelius risk flags'
+                data-hide-text='Hide active NDelius risk flags'
+                aria-controls='person-header-risk-flags'
+                aria-expanded='true'
+                data-qa='riskFlagsToggle'
+                hidden
+        >
+            Hide active NDelius risk flags
+        </button>
+        {% endif %}
     </div>
     {% endif %}
     {% endif %}

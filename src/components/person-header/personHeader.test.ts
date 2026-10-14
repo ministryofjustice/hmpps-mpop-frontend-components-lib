@@ -151,6 +151,56 @@ describe('person-header', () => {
     expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
   })
 
+  describe('collapsible risk flags', () => {
+    const personRiskFlags = {
+      groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+      remainingCount: 3,
+    }
+
+    it('does not render the toggle by default', () => {
+      const document = renderComponent({ personRiskFlags })
+
+      expect(document.querySelector('[data-qa="riskFlagsToggle"]')).toBeNull()
+      expect(document.querySelector('[data-qa="personRiskBadges"]')?.hasAttribute('id')).toBe(false)
+    })
+
+    it('renders a hidden toggle button after the risk flags that controls them', () => {
+      const document = renderComponent({ personRiskFlags, collapsibleRiskFlags: true })
+
+      const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
+      const flags = document.querySelector('[data-qa="personRiskBadges"]')
+
+      expect(toggle.tagName).toBe('BUTTON')
+      expect(toggle.getAttribute('type')).toBe('button')
+      expect(toggle.hasAttribute('hidden')).toBe(true)
+      expect(toggle.getAttribute('data-module')).toBe('mpop-risk-flags-toggle')
+      expect(toggle.getAttribute('aria-expanded')).toBe('true')
+      expect(toggle.getAttribute('aria-controls')).toBe(flags?.id)
+      expect(toggle.textContent?.trim()).toBe('Hide active NDelius risk flags')
+      expect(flags?.compareDocumentPosition(toggle)).toBe(4)
+    })
+
+    it('keeps the risk badges outside the collapsible risk flags', () => {
+      const document = renderComponent({
+        riskBadges: '<span data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',
+        personRiskFlags,
+        collapsibleRiskFlags: true,
+      })
+
+      expect(document.querySelector('[data-qa="personRiskBadges"] [data-qa="ogrsBadge"]')).toBeNull()
+    })
+
+    it('does not render the toggle when there are no risk flags', () => {
+      const document = renderComponent({
+        riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
+        personRiskFlags: { groups: [], remainingCount: 0 },
+        collapsibleRiskFlags: true,
+      })
+
+      expect(document.querySelector('[data-qa="riskFlagsToggle"]')).toBeNull()
+    })
+  })
+
   it('does not render the risk panel when riskBadgeData has no groups', () => {
     const document = renderComponent({
       riskBadgeData: { groups: [], remainingCount: 0 },

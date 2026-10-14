@@ -89,5 +89,6 @@ $risk-badge-colours: (
 }
 
 .person-header__risk-tags .risk-badge-more {
+  @include govuk-font($size: 19);
   white-space: nowrap;
 }
