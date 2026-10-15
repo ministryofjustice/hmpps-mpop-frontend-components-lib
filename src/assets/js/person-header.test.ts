@@ -65,21 +65,29 @@ describe('person-header risk flags toggle', () => {
     expect(document.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+3 active risk flags')
   })
 
-  it('only toggles the risk flags in its own header', () => {
+  it('gives each header unique risk flag ids and only toggles its own risk flags', () => {
     const html = env.renderString(
       `{% from "person-header/macro.njk" import personHeader %}
-       {{ personHeader(params) }}
-       {{ personHeader(params) }}`,
-      { params },
+       {{ personHeader(first) }}
+       {{ personHeader(second) }}`,
+      { first: { ...params, crn: 'X000001' }, second: { ...params, crn: 'X000002' } },
     )
     const { document } = new JSDOM(html).window
     init(document)
 
-    const [first, second] = Array.from(document.querySelectorAll('.person-header'))
-    ;(second.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement).click()
+    const [first, second] = Array.from(document.querySelectorAll('.person-header')).map(header => ({
+      toggle: header.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement,
+      flags: header.querySelector('[data-qa="personRiskBadges"]') as HTMLElement,
+    }))
 
-    expect((first.querySelector('[data-qa="personRiskBadges"]') as HTMLElement).hidden).toBe(false)
-    expect((second.querySelector('[data-qa="personRiskBadges"]') as HTMLElement).hidden).toBe(true)
+    expect(first.flags.id).not.toBe(second.flags.id)
+    expect(first.toggle.getAttribute('aria-controls')).toBe(first.flags.id)
+    expect(second.toggle.getAttribute('aria-controls')).toBe(second.flags.id)
+
+    second.toggle.click()
+
+    expect(first.flags.hidden).toBe(false)
+    expect(second.flags.hidden).toBe(true)
   })
 
   it('does not bind twice when initialised more than once', () => {

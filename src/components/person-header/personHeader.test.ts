@@ -165,7 +165,7 @@ describe('person-header', () => {
     })
 
     it('renders a hidden toggle button after the risk flags that controls them', () => {
-      const document = renderComponent({ personRiskFlags, collapsibleRiskFlags: true })
+      const document = renderComponent({ crn: 'D004851', personRiskFlags, collapsibleRiskFlags: true })
 
       const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
       const flags = document.querySelector('[data-qa="personRiskBadges"]')
@@ -175,6 +175,7 @@ describe('person-header', () => {
       expect(toggle.hasAttribute('hidden')).toBe(true)
       expect(toggle.getAttribute('data-module')).toBe('mpop-risk-flags-toggle')
       expect(toggle.getAttribute('aria-expanded')).toBe('true')
+      expect(flags?.id).toBe('person-header-risk-flags-D004851')
       expect(toggle.getAttribute('aria-controls')).toBe(flags?.id)
       expect(toggle.textContent?.trim()).toBe('Hide active NDelius risk flags')
       expect(flags?.compareDocumentPosition(toggle)).toBe(4)
