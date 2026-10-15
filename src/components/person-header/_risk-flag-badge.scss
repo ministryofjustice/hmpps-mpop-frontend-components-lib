@@ -97,5 +97,6 @@ $risk-badge-colours: (
 
 /* More risk flags link */
 .person-header__risk-tags .risk-badge-more {
+  @include govuk-font($size: 19);
   white-space: nowrap;
 }

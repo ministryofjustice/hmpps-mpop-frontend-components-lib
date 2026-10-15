@@ -103,8 +103,12 @@
             params.personRiskFlags.groups and
             (params.personRiskFlags.groups | length) > 0 %}
 
+    {# Unique per person so each toggle's aria-controls points at its own risk flags #}
+    {% set riskFlagsId = 'person-header-risk-flags-' + params.crn %}
+
     <div class='person-header__risk-panel'>
         <div
+                {% if params.collapsibleRiskFlags %}id='{{ riskFlagsId }}'{% endif %}
                 class='person-header__risk-tags'
                 data-qa='personRiskBadges'
         >
@@ -142,6 +146,22 @@
             </a>
             {% endif %}
         </div>
+
+        {% if params.collapsibleRiskFlags %}
+        <button
+                type='button'
+                class='govuk-link person-header__risk-flags-toggle'
+                data-module='mpop-risk-flags-toggle'
+                data-show-text='Show active NDelius risk flags'
+                data-hide-text='Hide active NDelius risk flags'
+                aria-controls='{{ riskFlagsId }}'
+                aria-expanded='true'
+                data-qa='riskFlagsToggle'
+                hidden
+        >
+            Hide active NDelius risk flags
+        </button>
+        {% endif %}
     </div>
     {% endif %}
     {% endif %}

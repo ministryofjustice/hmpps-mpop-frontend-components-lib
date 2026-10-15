@@ -53,6 +53,9 @@ console.info(
     : `Showing: ${requestedComponents.join(', ')}`,
 )
 
+// The preview is opened from disk, where ES module imports are blocked, so inline the component JS
+const personHeaderJs = `${fs.readFileSync('src/assets/js/person-header.js', 'utf8').replace(/^export /gm, '')}\ninit()`
+
 const html = env.renderString(
   `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
@@ -96,6 +99,7 @@ const html = env.renderString(
           {% if showPersonHeader %}<li><a class="govuk-link" href="#person-header">Person Header</a>
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
+              <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
             </ul>
           </li>{% endif %}
           {% if showSupervisionPackage %}<li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
@@ -290,6 +294,39 @@ const html = env.renderString(
         managedByLocation: "Worksop Probation Office",
         managedByHref: "#",
         provisional: true
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</h2>
+      <p class="govuk-body">For transactional journeys (e.g. arrange an appointment, add a contact), pass <code>collapsibleRiskFlags: true</code> to add a "Hide active NDelius risk flags" / "Show active NDelius risk flags" link below the NDelius risk flags. Flags are shown by default and the state is not persisted. The link needs the component JS (<code>initAll</code> from <code>dist/js/all.js</code>); without JS it stays hidden and the flags are always shown. The risk badges row (<code>riskBadges</code>) is unaffected.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#",
+        riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
+        collapsibleRiskFlags: true,
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' },
+                { id: 2, text: 'Risk to probation staff', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            },
+            {
+              severity: 'MEDIUM',
+              badges: [
+                { id: 3, text: 'Victim contact', level: 'MEDIUM', badgeClass: 'risk-badge--medium' }
+              ]
+            }
+          ],
+          remainingCount: 3
+        }
       }) }}
 
       {% endif %}
@@ -3757,10 +3794,18 @@ const html = env.renderString(
       document.querySelectorAll('.app-json-details').forEach(details => { details.open = false })
     })
   </script>
+  <script>{{ personHeaderJs | safe }}</script>
 </body>
 </html>
 `,
-  { previewAge, showPopHeader, showPersonHeader, showSupervisionPackage, showSupervisionPackageSummary },
+  {
+    previewAge,
+    showPopHeader,
+    showPersonHeader,
+    showSupervisionPackage,
+    showSupervisionPackageSummary,
+    personHeaderJs,
+  },
 )
 
 fs.mkdirSync('preview', { recursive: true })
