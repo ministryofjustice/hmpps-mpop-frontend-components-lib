@@ -18,6 +18,10 @@ $supervision-package-accent-colour: govuk-colour("blue");
     padding-bottom: 10px;
     margin-bottom: 0;
   }
+
+  .govuk-tag {
+    max-width: none;
+  }
 }
 
 .app-tier-header {
