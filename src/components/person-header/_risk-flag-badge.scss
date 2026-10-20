@@ -21,6 +21,10 @@
   &:not(:empty) {
     margin-bottom: govuk-spacing(2);
   }
+
+  .govuk-tag {
+    padding: 2px 8px 3px;
+  }
 }
 
 .person-header__risk-tags {
