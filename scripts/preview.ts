@@ -99,6 +99,7 @@ const html = env.renderString(
           {% if showPersonHeader %}<li><a class="govuk-link" href="#person-header">Person Header</a>
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
+              <li><a class="govuk-link" href="#person-header-no-managed-by">No managed by</a></li>
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
             </ul>
           </li>{% endif %}
@@ -280,6 +281,16 @@ const html = env.renderString(
         tier: "B4",
         historyHref: "#",
         managedBy: "Unallocated"
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-no-managed-by">No managed by</h2>
+      <p class="govuk-body">When none of <code>managedByName</code>, <code>managedBy</code> or <code>managedByHref</code> are provided, the whole "Managed by" row is omitted.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#"
       }) }}
 
       <h2 class="govuk-heading-m" id="person-header-provisional-tier">Provisional tier</h2>
