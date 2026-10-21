@@ -93,6 +93,22 @@ describe('person-header', () => {
     expect(document.querySelector('[data-qa="managedBy"]')?.textContent?.trim()).toBe('jack frost (worksop)')
   })
 
+  it('does not render the managed by row when no managed by params are given', () => {
+    const document = renderComponent({ name: 'Andrew Langley', crn: 'D004851' })
+
+    expect(document.querySelector('[data-qa="managedBy"]')).toBeNull()
+    expect(document.body.textContent).not.toContain('Managed by:')
+  })
+
+  it('renders the managed by row when only managedByHref is given', () => {
+    const document = renderComponent({ managedByHref: '/case/D004851/personal-details/staff-contacts' })
+
+    expect(document.body.textContent).toContain('Managed by:')
+    expect(document.querySelector('[data-qa="managedBy"]')?.getAttribute('href')).toBe(
+      '/case/D004851/personal-details/staff-contacts',
+    )
+  })
+
   it('renders the photo when provided', () => {
     const document = renderComponent({ name: 'Andrew Langley', photo: '/search/prisoner-image/A1234BC' })
 

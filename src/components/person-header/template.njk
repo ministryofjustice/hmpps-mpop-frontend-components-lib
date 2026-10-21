@@ -48,6 +48,7 @@
                     </a>
                 </li>
 
+                {% if params.managedByName or params.managedBy or params.managedByHref %}
                 <li>
                     {% if params.managedByName %}
                     {% set managedByText = params.managedByName | formatName %}
@@ -73,6 +74,7 @@
                     <span data-qa='managedBy'>{{ managedByText }}</span>
                     {% endif %}
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>
