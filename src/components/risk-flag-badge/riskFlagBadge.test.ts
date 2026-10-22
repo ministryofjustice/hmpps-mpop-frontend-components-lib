@@ -20,7 +20,7 @@ describe('risk-flag-badge', () => {
     const document = renderComponent({ text: 'Foo' })
     const badge = document.querySelector('span')
 
-    expect(badge?.className).toEqual('dps-alert-status dps-alert-status--risk')
+    expect(badge?.className).toEqual('risk-badge')
     expect(badge?.textContent).toEqual('Foo')
   })
 
@@ -28,7 +28,7 @@ describe('risk-flag-badge', () => {
     const document = renderComponent({ text: 'Foo', badgeClass: 'foo-class', id: 'foo-id' })
     const badge = document.querySelector('span')
 
-    expect(badge?.className).toEqual('dps-alert-status dps-alert-status--risk foo-class')
+    expect(badge?.className).toEqual('risk-badge foo-class')
     expect(badge?.getAttribute('data-qa')).toEqual('risk-badge-foo-id')
   })
 
@@ -37,9 +37,7 @@ describe('risk-flag-badge', () => {
     const badge = document.querySelector('a')
 
     expect(badge?.getAttribute('href')).toEqual('/foo-url')
-    expect(badge?.className).toEqual(
-      'govuk-link govuk-link--no-underline govuk-link--text-colour dps-alert-status dps-alert-status--risk',
-    )
+    expect(badge?.className).toEqual('risk-badge')
     expect(badge?.textContent).toEqual('Link text')
   })
 
@@ -47,9 +45,7 @@ describe('risk-flag-badge', () => {
     const document = renderComponent({ text: 'Link text', href: '/foo-url', id: 'foo-id', badgeClass: 'foo-class' })
     const badge = document.querySelector('a')
 
-    expect(badge?.className).toEqual(
-      'govuk-link govuk-link--no-underline govuk-link--text-colour dps-alert-status dps-alert-status--risk foo-class',
-    )
+    expect(badge?.className).toEqual('risk-badge foo-class')
     expect(badge?.getAttribute('data-qa')).toEqual('risk-badge-foo-id')
   })
 

@@ -1,4 +1,4 @@
-{% set badgeClasses = 'dps-alert-status dps-alert-status--risk' %}
+{% set badgeClasses = 'risk-badge' %}
 {% if params.badgeClass %}
     {% set badgeClasses = badgeClasses + ' ' + params.badgeClass %}
 {% endif %}
@@ -11,15 +11,11 @@
 {% set badgeQaAttr = 'data-qa="risk-badge-' + params.id + '"' if params.id else '' %}
 
 {% if params.href %}
-    <a
-            href="{{ params.href }}"
-            class="govuk-link govuk-link--no-underline govuk-link--text-colour {{ badgeClasses }}"
-            {{ badgeQaAttr | safe }}
-    >
+    <a href="{{ params.href }}" class="{{ badgeClasses }}" {{ badgeQaAttr | safe }}>
         {{- badgeText | safe -}}
     </a>
 {% else %}
-    <span class="govuk-body {{ badgeClasses }}" {{ badgeQaAttr | safe }}>
+    <span class="{{ badgeClasses }}" {{ badgeQaAttr | safe }}>
         {{- badgeText | safe -}}
     </span>
 {% endif %}

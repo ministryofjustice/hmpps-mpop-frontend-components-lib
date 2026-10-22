@@ -1,4 +1,4 @@
-.dps-alert-status {
+.risk-badge {
   @include govuk-font($size: 16);
 
   display: inline-block;
@@ -13,7 +13,7 @@
   white-space: nowrap;
 }
 
-a.dps-alert-status {
+a.risk-badge {
   @include govuk-link-common();
 
   text-decoration: none;
@@ -61,7 +61,7 @@ $risk-badge-colours: (
 }
 
 /* Keyboard focus state */
-a.dps-alert-status {
+a.risk-badge {
   &:focus,
   &:focus-visible {
     border: 3px solid #0b0c0c !important;
