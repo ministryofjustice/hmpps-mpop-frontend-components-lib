@@ -16,7 +16,6 @@
   padding: govuk-spacing(3) govuk-spacing(4);
 }
 
-
 .pop-header-risk-badges {
   &:not(:empty) {
     margin-bottom: govuk-spacing(2);
@@ -42,9 +41,7 @@
 }
 
 .person-header__risk-tags .dps-alert-status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   background-color: #fff;
   border: 3px solid;
   padding: 5px 10px;
@@ -54,15 +51,24 @@
   line-height: 1;
   user-select: none;
   border-radius: 5px;
-  color: #0b0c0c;
+  color: govuk-colour("black");
   text-decoration: none;
   white-space: nowrap;
   font-weight: 400;
   text-transform: none;
+
   &:hover {
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 2px;
+    text-decoration-skip-ink: none;
+
+    strong {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 2px;
+      text-decoration-skip-ink: none;
+    }
   }
 }
 
@@ -88,16 +94,17 @@ $risk-badge-colours: (
   .person-header__risk-tags .risk-badge--#{$level} {
     border-color: $colour;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:focus-visible {
       background-color: $colour;
       color: #fff;
     }
   }
 }
 
-/* Keyboard focus state and Mouse hover state */
+/* Keyboard focus state */
 .person-header__risk-tags a.dps-alert-status {
-  &:hover,
   &:focus,
   &:focus-visible {
     border: 3px solid #0b0c0c !important;
