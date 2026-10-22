@@ -6,6 +6,15 @@
   }
 }
 
+.pop-header-risk-badges {
+  &:not(:empty) {
+    margin-bottom: govuk-spacing(2);
+  }
+
+  .govuk-tag {
+    padding: 2px 8px 3px;
+  }
+}
 
 .pop-header__details {
   display: flex;

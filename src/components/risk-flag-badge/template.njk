@@ -1,0 +1,25 @@
+{% set badgeClasses = 'dps-alert-status dps-alert-status--risk' %}
+{% if params.badgeClass %}
+    {% set badgeClasses = badgeClasses + ' ' + params.badgeClass %}
+{% endif %}
+
+{% set badgeText = params.text %}
+{% for level in ['Very High', 'Very high', 'High', 'Medium', 'Low'] %}
+    {% set badgeText = badgeText | replace('- ' + level, '-&nbsp;<strong>' + level + '</strong>') %}
+{% endfor %}
+
+{% set badgeQaAttr = 'data-qa="risk-badge-' + params.id + '"' if params.id else '' %}
+
+{% if params.href %}
+    <a
+            href="{{ params.href }}"
+            class="govuk-link govuk-link--no-underline govuk-link--text-colour {{ badgeClasses }}"
+            {{ badgeQaAttr | safe }}
+    >
+        {{- badgeText | safe -}}
+    </a>
+{% else %}
+    <span class="govuk-body {{ badgeClasses }}" {{ badgeQaAttr | safe }}>
+        {{- badgeText | safe -}}
+    </span>
+{% endif %}
