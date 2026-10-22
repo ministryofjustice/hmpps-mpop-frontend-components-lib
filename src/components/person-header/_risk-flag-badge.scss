@@ -1,3 +1,6 @@
+/* Risk badge text colour */
+$risk-badge-text-colour: #0b0c0c;
+
 .risk-badge-link {
   color: inherit;
   text-decoration: none;
@@ -54,16 +57,26 @@
   line-height: 1;
   user-select: none;
   border-radius: 5px;
-  color: #0b0c0c;
+  color: $risk-badge-text-colour;
   text-decoration: none;
   white-space: nowrap;
   font-weight: 400;
   text-transform: none;
-  &:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 2px;
-  }
+}
+
+.person-header__risk-tags .dps-alert-status:hover {
+  text-decoration: none;
+}
+
+.person-header__risk-tags .dps-alert-status:hover strong {
+  text-decoration: none;
+}
+
+.person-header__risk-tags .dps-alert-status:hover {
+  background-image: linear-gradient($risk-badge-text-colour, $risk-badge-text-colour);
+  background-repeat: no-repeat;
+  background-size: calc(100% - 20px) 2px;
+  background-position: center calc(100% - 2px);
 }
 
 /* Risk flag colours */
@@ -88,7 +101,9 @@ $risk-badge-colours: (
   .person-header__risk-tags .risk-badge--#{$level} {
     border-color: $colour;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:focus-visible {
       background-color: $colour;
       color: #fff;
     }
@@ -97,15 +112,19 @@ $risk-badge-colours: (
 
 /* Keyboard focus state and Mouse hover state */
 .person-header__risk-tags a.dps-alert-status {
-  &:hover,
+  &:hover {
+    border: 3px solid $risk-badge-text-colour !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
   &:focus,
   &:focus-visible {
-    border: 3px solid #0b0c0c !important;
+    border: 3px solid $risk-badge-text-colour !important;
     outline: none !important;
     box-shadow: 0 0 0 3px #ffdd00 !important;
   }
 }
-
 /* More risk flags link */
 .person-header__risk-tags .risk-badge-more {
   @include govuk-font($size: 19);
