@@ -184,7 +184,7 @@ const html = env.renderString(
           {% if showRiskFlagBadge %}<li><a class="govuk-link" href="#risk-flag-badge">Risk flag badge</a>
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#as-link">As link</a></li>
-              <li><a class="govuk-link" href="#basic">Basic</a></li>
+              <li><a class="govuk-link" href="#no-link">No link</a></li>
             </ul>
           </li>{% endif %}
         </ul>
@@ -3788,12 +3788,61 @@ const html = env.renderString(
         badgeClass: 'risk-badge--very-high'
       }) }}
       
-      <h3 class="govuk-heading-s govuk-!-margin-top-4" id="basic">Basic</h3>
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of bar - High',
+        badgeClass: 'risk-badge--high'
+      }) }}
       
       {{ riskFlagBadge({
-        text: 'Basic badge',
-        id: 'test-id',
+        href: '#',
+        text: 'Risk of baz - Medium',
         badgeClass: 'risk-badge--medium'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of qux - Low',
+        badgeClass: 'risk-badge--low'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Cohort badge',
+        badgeClass: 'risk-badge--cohort'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Miscellaneous',
+        badgeClass: 'risk-badge--misc'
+      }) }}
+      
+      <h3 class="govuk-heading-s govuk-!-margin-top-4" id="no-link">No link</h3>
+      
+      {{ riskFlagBadge({
+        text: 'Basic very high badge',
+        badgeClass: 'risk-badge--very-high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic high badge',
+        badgeClass: 'risk-badge--high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic medium badge',
+        badgeClass: 'risk-badge--medium'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic low badge',
+        badgeClass: 'risk-badge--low'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic miscellaneous badge',
+        badgeClass: 'risk-badge--misc'
       }) }}
     {% endif %}
     </div>
