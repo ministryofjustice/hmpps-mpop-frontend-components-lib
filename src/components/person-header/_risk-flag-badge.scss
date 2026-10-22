@@ -57,18 +57,11 @@
   font-weight: 400;
   text-transform: none;
 
-  &:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
+  &:hover,
+  &:hover strong {
+    text-decoration: underline 2px;
     text-underline-offset: 2px;
     text-decoration-skip-ink: none;
-
-    strong {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 2px;
-      text-decoration-skip-ink: none;
-    }
   }
 }
 
