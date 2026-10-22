@@ -3,12 +3,12 @@
     {% set badgeClasses = badgeClasses + ' ' + params.badgeClass %}
 {% endif %}
 
-{% set badgeText = params.text %}
+{% set badgeText = params.text | escape %}
 {% for level in ['Very High', 'Very high', 'High', 'Medium', 'Low'] %}
     {% set badgeText = badgeText | replace('- ' + level, '-&nbsp;<strong>' + level + '</strong>') %}
 {% endfor %}
 
-{% set badgeQaAttr = 'data-qa="risk-badge-' + params.id + '"' if params.id else '' %}
+{% set badgeQaAttr = 'data-qa="risk-badge-' + (params.id | escape) + '"' if params.id else '' %}
 
 {% if params.href %}
     <a href="{{ params.href }}" class="{{ badgeClasses }}" {{ badgeQaAttr | safe }}>
