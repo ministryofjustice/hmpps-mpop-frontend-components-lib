@@ -1,61 +1,23 @@
-.risk-badge-link {
-  color: inherit;
-  text-decoration: none;
+.risk-badge {
+  @include govuk-font($size: 16);
 
-  &:hover,
-  &:focus {
-    text-decoration: none;
-  }
-}
-
-.person-header__risk-panel {
-  display: flex;
-  flex-direction: column;
-  gap: govuk-spacing(2);
-  background-color: govuk-colour("black", $variant: "tint-95");
-  padding: govuk-spacing(3) govuk-spacing(4);
-}
-
-.pop-header-risk-badges {
-  &:not(:empty) {
-    margin-bottom: govuk-spacing(2);
-  }
-
-  .govuk-tag {
-    padding: 2px 8px 3px;
-  }
-}
-
-.person-header__risk-tags {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.person-header__risk-tags .pop-header-risk-badges {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-.person-header__risk-tags .dps-alert-status {
   display: inline-block;
   background-color: #fff;
   border: 3px solid;
   padding: 5px 10px;
-  height: initial;
-  font-size: 16px;
   text-align: center;
   line-height: 1;
   user-select: none;
   border-radius: 5px;
   color: govuk-colour("black");
-  text-decoration: none;
   white-space: nowrap;
-  font-weight: 400;
-  text-transform: none;
+}
+
+a.risk-badge {
+  @include govuk-link-common();
+
+  text-decoration: none;
+  color: govuk-colour("black");
 
   &:hover,
   &:hover strong {
@@ -84,9 +46,11 @@ $risk-badge-colours: (
 );
 
 @each $level, $colour in $risk-badge-colours {
-  .person-header__risk-tags .risk-badge--#{$level} {
+  .risk-badge--#{$level} {
     border-color: $colour;
+  }
 
+  a.risk-badge--#{$level} {
     &:hover,
     &:focus,
     &:focus-visible {
@@ -97,17 +61,11 @@ $risk-badge-colours: (
 }
 
 /* Keyboard focus state */
-.person-header__risk-tags a.dps-alert-status {
+a.risk-badge {
   &:focus,
   &:focus-visible {
     border: 3px solid #0b0c0c !important;
     outline: none !important;
     box-shadow: 0 0 0 3px #ffdd00 !important;
   }
-}
-
-/* More risk flags link */
-.person-header__risk-tags .risk-badge-more {
-  @include govuk-font($size: 19);
-  white-space: nowrap;
 }
