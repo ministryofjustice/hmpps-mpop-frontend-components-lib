@@ -28,7 +28,13 @@ const previewAge = yearsSince('1990-01-15')
 //   COMPONENT=supervision-package,supervision-package-summary npm run preview
 // Valid values: pop-header, person-header, supervision-package, supervision-package-summary
 // Leave COMPONENT unset (or empty) to show everything, as before.
-const validComponents = ['pop-header', 'person-header', 'supervision-package', 'supervision-package-summary']
+const validComponents = [
+  'pop-header',
+  'person-header',
+  'risk-flag-badge',
+  'supervision-package',
+  'supervision-package-summary',
+]
 const requestedComponents = (process.env.COMPONENT ?? '')
   .split(',')
   .map(component => component.trim().toLowerCase())
@@ -46,6 +52,7 @@ const showPopHeader = showAllComponents || requestedComponents.includes('pop-hea
 const showPersonHeader = showAllComponents || requestedComponents.includes('person-header')
 const showSupervisionPackage = showAllComponents || requestedComponents.includes('supervision-package')
 const showSupervisionPackageSummary = showAllComponents || requestedComponents.includes('supervision-package-summary')
+const showRiskFlagBadge = showAllComponents || requestedComponents.includes('risk-flag-badge')
 
 console.info(
   showAllComponents
@@ -62,6 +69,7 @@ const html = env.renderString(
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 {% from "person-header/macro.njk" import personHeader %}
+{% from "risk-flag-badge/macro.njk" import riskFlagBadge %}
 
 <!DOCTYPE html>
 <html lang="en" class="govuk-template">
@@ -171,6 +179,12 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#supervision-stage-with-recall-warning">Supervision stage with recall warning</a></li>
               <li><a class="govuk-link" href="#supervision-stage-with-all-appointments-used">Supervision stage with all appointments used</a></li>
               <li><a class="govuk-link" href="#final-third">Final third</a></li>
+            </ul>
+          </li>{% endif %}
+          {% if showRiskFlagBadge %}<li><a class="govuk-link" href="#risk-flag-badge">Risk flag badge</a>
+            <ul class="govuk-list govuk-list--bullet">
+              <li><a class="govuk-link" href="#as-link">As link</a></li>
+              <li><a class="govuk-link" href="#no-link">No link</a></li>
             </ul>
           </li>{% endif %}
         </ul>
@@ -3760,6 +3774,77 @@ const html = env.renderString(
         }
       }) }}
     {% endif %}
+    
+    {% if showRiskFlagBadge %}
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l" id="risk-flag-badge">Risk flag badge</h1>
+      
+      <h3 class="govuk-heading-s" id="as-link">As link</h3>
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of foo - Very high',
+        id: 'test-id',
+        badgeClass: 'risk-badge--very-high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of bar - High',
+        badgeClass: 'risk-badge--high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of baz - Medium',
+        badgeClass: 'risk-badge--medium'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Risk of qux - Low',
+        badgeClass: 'risk-badge--low'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Cohort badge',
+        badgeClass: 'risk-badge--cohort'
+      }) }}
+      
+      {{ riskFlagBadge({
+        href: '#',
+        text: 'Miscellaneous',
+        badgeClass: 'risk-badge--misc'
+      }) }}
+      
+      <h3 class="govuk-heading-s govuk-!-margin-top-4" id="no-link">No link</h3>
+      
+      {{ riskFlagBadge({
+        text: 'Basic very high badge',
+        badgeClass: 'risk-badge--very-high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic high badge',
+        badgeClass: 'risk-badge--high'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic medium badge',
+        badgeClass: 'risk-badge--medium'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic low badge',
+        badgeClass: 'risk-badge--low'
+      }) }}
+      
+      {{ riskFlagBadge({
+        text: 'Basic miscellaneous badge',
+        badgeClass: 'risk-badge--misc'
+      }) }}
+    {% endif %}
     </div>
   </main>
 
@@ -3804,6 +3889,7 @@ const html = env.renderString(
     showPersonHeader,
     showSupervisionPackage,
     showSupervisionPackageSummary,
+    showRiskFlagBadge,
     personHeaderJs,
   },
 )
