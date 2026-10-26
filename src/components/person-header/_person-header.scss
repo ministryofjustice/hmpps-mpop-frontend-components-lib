@@ -66,13 +66,7 @@
   padding-top: 0 !important;
 }
 
-.person-header__risk-tags {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
+.person-header__risk-tags,
 .person-header__risk-tags .pop-header-risk-badges {
   display: flex;
   flex-wrap: wrap;
