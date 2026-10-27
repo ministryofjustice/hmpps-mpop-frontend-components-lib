@@ -27,6 +27,13 @@ a.risk-badge {
     text-underline-offset: 2px;
     text-decoration-skip-ink: none;
   }
+
+  &:focus,
+  &:focus-visible {
+    border: 3px solid #0b0c0c;
+    outline: none;
+    box-shadow: 0 0 0 3px #ffdd00;
+  }
 }
 
 /* Map badge classes to their border colours */
@@ -60,15 +67,5 @@ $risk-badge-bg-colours: (
       background-color: map.get($risk-badge-bg-colours, $level);
       color: #fff;
     }
-  }
-}
-
-/* Keyboard focus state */
-a.risk-badge {
-  &:focus,
-  &:focus-visible {
-    border: 3px solid #0b0c0c !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px #ffdd00 !important;
   }
 }
