@@ -291,6 +291,46 @@ describe('_progress-bar partial', () => {
     })
   })
 
+  describe('completed value source by phase', () => {
+    it('reads completed from params.earlyEngagement.completed for the INIT phase, ignoring currentYear.appointments.completed', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'INIT' } },
+        earlyEngagement: { completed: 2, weeks: 4 },
+        currentYear: { appointments: { completed: 999, scheduled: 0 } },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(paragraphs[1]?.textContent?.trim()).toBe('2')
+
+      const bar = document.querySelector(
+        '.appointment-progress__bar, .appointment-progress__bar-maximum',
+      ) as HTMLElement
+      expect(bar.classList.contains('appointment-progress__bar--width-50')).toBe(true)
+
+      const usedText = document.querySelector('p.govuk-body')?.textContent?.trim()
+      expect(usedText).toBe('2 of 4 appointments used')
+    })
+
+    it('reads completed from params.currentYear.appointments.completed for non-INIT phases, ignoring earlyEngagement.completed', () => {
+      const document = renderPartial({
+        currentPhase: { phase: { code: 'STD' } },
+        earlyEngagement: { completed: 999, weeks: 4 },
+        currentYear: { appointments: { allowance: 10, completed: 3, scheduled: 0 } },
+      })
+
+      const paragraphs = Array.from(document.querySelectorAll('p.govuk-body-l'))
+      expect(paragraphs[1]?.textContent?.trim()).toBe('7')
+
+      const bar = document.querySelector(
+        '.appointment-progress__bar, .appointment-progress__bar-maximum',
+      ) as HTMLElement
+      expect(bar.classList.contains('appointment-progress__bar--width-30')).toBe(true)
+
+      const usedText = document.querySelector('p.govuk-body')?.textContent?.trim()
+      expect(usedText).toBe('3 of 10 appointments used')
+    })
+  })
+
   describe('missing value coercion', () => {
     it('treats undefined appointmentsEarlyEngagementCompleted as 0 and renders 0% width', () => {
       const document = renderPartial({
