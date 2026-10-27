@@ -1,3 +1,5 @@
+@use "sass:map";
+
 .risk-badge {
   @include govuk-font($size: 16);
 
@@ -27,34 +29,35 @@ a.risk-badge {
   }
 }
 
-/* Risk flag colours */
-$risk-badge-very-high: #711a0d;
-$risk-badge-high: #d4351c;
-$risk-badge-medium: #f2590d;
-$risk-badge-low: #85994b;
-$cohort-risk-badge: #54319f;
-$misc-risk-badge: #484949;
-
-/* Map badge classes to their border and hover colours */
-$risk-badge-colours: (
-        'very-high': $risk-badge-very-high,
-        'high': $risk-badge-high,
-        'medium': $risk-badge-medium,
-        'low': $risk-badge-low,
-        'cohort': $cohort-risk-badge,
-        'misc': $misc-risk-badge,
+/* Map badge classes to their border colours */
+$risk-badge-border-colours: (
+  'very-high': #711a0d,
+  'high': #d4351c,
+  'medium': #f2590d,
+  'low': #85994b,
+  'cohort': #54319f,
+  'misc': #484949,
 );
 
-@each $level, $colour in $risk-badge-colours {
+$risk-badge-bg-colours: (
+  'very-high': #801606,
+  'high': #ad2d19,
+  'medium': #cb4b0b,
+  'low': #687b3d,
+  'cohort': #552782,
+  'misc': #505a5f,
+);
+
+@each $level, $border-colour in $risk-badge-border-colours {
   .risk-badge--#{$level} {
-    border-color: $colour;
+    border-color: $border-colour;
   }
 
   a.risk-badge--#{$level} {
     &:hover,
     &:focus,
     &:focus-visible {
-      background-color: $colour;
+      background-color: map.get($risk-badge-bg-colours, $level);
       color: #fff;
     }
   }
