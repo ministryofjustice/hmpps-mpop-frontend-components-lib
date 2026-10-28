@@ -6,6 +6,10 @@
   "module": "./dist/index.esm.js",
   "types": "./dist/index.d.ts",
   "sass": "./dist/_all.scss",
+  "engines": {
+    "node": "^24",
+    "npm": "^12"
+  },
   "files": [
     "dist/**/*"
   ],
@@ -20,7 +24,7 @@
     "lint": "eslint . --cache --max-warnings 0",
     "lint:fix": "eslint . --cache --max-warnings 0 --fix",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "setup": "npm ci && hmpps-npm-script-run-allowlist",
+    "setup": "npm ci",
     "preview": "tsx scripts/preview.ts",
     "preview:api": "tsx scripts/preview-api.ts"
   },
@@ -73,7 +77,6 @@
   "license": "ISC",
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "1.0.3",
-    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
@@ -122,5 +125,11 @@
       "undici": "6.29.1"
     },
     "source-map-js": "1.2.2"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true,
+    "unrs-resolver@1.12.2": true
   }
 }

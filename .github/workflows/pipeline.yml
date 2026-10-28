@@ -34,6 +34,8 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: ${{ matrix.node }}
+      - name: Update npm
+        run: npm install -g npm@12
       - name: Install dependencies
         run: npm run setup
       - name: Test build step
@@ -51,6 +53,8 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: 24
+      - name: Update npm
+        run: npm install -g npm@12
       - name: Install dependencies
         run: npm run setup
       - name: Clean build step
@@ -79,10 +83,8 @@ jobs:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
           scope: '@ministryofjustice'
-      # Ensure npm 11.5.1 or later is installed, to support OIDC publishing
-      # Need to install v10 first as a workaround to this issue: https://github.com/nodejs/node/issues/62425
       - name: Update npm
-        run: npm install -g npm@10 && npm install -g npm@11.5.1
+        run: npm install -g npm@12
       - name: Install dependencies
         run: npm run setup
       - name: Build all packages
