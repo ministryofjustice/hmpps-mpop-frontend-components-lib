@@ -1,6 +1,8 @@
+@use "govuk-frontend/dist/govuk/base" as govuk;
+
 .inline-list-from-tablet {
   > li {
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       display: inline;
     }
   }
@@ -8,7 +10,7 @@
 
 .pop-header-risk-badges {
   &:not(:empty) {
-    margin-bottom: govuk-spacing(2);
+    margin-bottom: govuk.govuk-spacing(2);
   }
 
   .govuk-tag {

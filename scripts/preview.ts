@@ -9,9 +9,6 @@ import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
 const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.meta.url)), {
   loadPaths: [process.cwd(), 'node_modules'],
-  // The library (and govuk-frontend itself) still uses the legacy @import syntax throughout,
-  // so this is expected noise rather than something to fix here.
-  silenceDeprecations: ['import'],
 }).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
@@ -79,7 +76,7 @@ const html = env.renderString(
 
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
+    href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.6.0/dist/govuk/govuk-frontend.min.css"
   >
 
   <style>${previewCss}</style>
@@ -3774,72 +3771,72 @@ const html = env.renderString(
         }
       }) }}
     {% endif %}
-    
+
     {% if showRiskFlagBadge %}
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l" id="risk-flag-badge">Risk flag badge</h1>
-      
+
       <h3 class="govuk-heading-s" id="as-link">As link</h3>
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of foo - Very high',
         id: 'test-id',
         badgeClass: 'risk-badge--very-high'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of bar - High',
         badgeClass: 'risk-badge--high'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of baz - Medium',
         badgeClass: 'risk-badge--medium'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of qux - Low',
         badgeClass: 'risk-badge--low'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Cohort badge',
         badgeClass: 'risk-badge--cohort'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Miscellaneous',
         badgeClass: 'risk-badge--misc'
       }) }}
-      
+
       <h3 class="govuk-heading-s govuk-!-margin-top-4" id="no-link">No link</h3>
-      
+
       {{ riskFlagBadge({
         text: 'Basic very high badge',
         badgeClass: 'risk-badge--very-high'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic high badge',
         badgeClass: 'risk-badge--high'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic medium badge',
         badgeClass: 'risk-badge--medium'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic low badge',
         badgeClass: 'risk-badge--low'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic miscellaneous badge',
         badgeClass: 'risk-badge--misc'
@@ -3849,7 +3846,7 @@ const html = env.renderString(
   </main>
 
   <script type="module">
-    import { initAll } from 'https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.js'
+    import { initAll } from 'https://cdn.jsdelivr.net/npm/govuk-frontend@6.6.0/dist/govuk/govuk-frontend.min.js'
     initAll()
 
     // Contents links can point inside a hidden radio "conditional reveal" panel

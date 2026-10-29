@@ -1,17 +1,19 @@
+@use "govuk-frontend/dist/govuk/base" as govuk;
+
 .supervision-final-third-progress {
-  border: 1px solid govuk-colour("mid-grey");
-  margin-bottom: govuk-spacing(4);
+  border: 1px solid govuk.govuk-colour("black", $variant: "tint-80");
+  margin-bottom: govuk.govuk-spacing(4);
 
   .supervision-final-third-progress__body {
-    padding: govuk-spacing(4);
+    padding: govuk.govuk-spacing(4);
   }
 
   .supervision-final-third-progress__title {
-    margin-bottom: govuk-spacing(3);
+    margin-bottom: govuk.govuk-spacing(3);
   }
 
   .supervision-final-third-progress__tier {
-    margin-bottom: govuk-spacing(1);
+    margin-bottom: govuk.govuk-spacing(1);
   }
 
   .govuk-table {

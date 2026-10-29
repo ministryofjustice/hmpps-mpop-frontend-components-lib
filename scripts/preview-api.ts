@@ -14,7 +14,6 @@ import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
 const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', import.meta.url)), {
   loadPaths: [process.cwd(), 'node_modules'],
-  silenceDeprecations: ['import'],
 }).css
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
@@ -173,7 +172,7 @@ async function main() {
 
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
+    href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.6.0/dist/govuk/govuk-frontend.min.css"
   >
 
   <style>${previewApiCss}</style>
