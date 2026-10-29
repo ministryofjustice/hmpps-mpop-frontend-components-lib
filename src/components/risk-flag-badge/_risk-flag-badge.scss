@@ -1,7 +1,8 @@
 @use "sass:map";
+@use "govuk-frontend/dist/govuk/base" as govuk;
 
 .risk-badge {
-  @include govuk-font($size: 16);
+  @include govuk.govuk-font($size: 16);
 
   display: inline-block;
   background-color: #fff;
@@ -11,15 +12,15 @@
   line-height: 1;
   user-select: none;
   border-radius: 5px;
-  color: govuk-colour("black");
+  color: govuk.govuk-colour("black");
   white-space: nowrap;
 }
 
 a.risk-badge {
-  @include govuk-link-common();
+  @include govuk.govuk-link-common();
 
   text-decoration: none;
-  color: govuk-colour("black");
+  color: govuk.govuk-colour("black");
 
   &:hover,
   &:focus,

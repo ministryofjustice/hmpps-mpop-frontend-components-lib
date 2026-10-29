@@ -1,5 +1,7 @@
-$supervision-package-border-colour: govuk-colour("mid-grey");
-$supervision-package-accent-colour: govuk-colour("blue");
+@use "govuk-frontend/dist/govuk/base" as govuk;
+
+$supervision-package-border-colour: govuk.govuk-colour("black", $variant: "tint-80");
+$supervision-package-accent-colour: govuk.govuk-colour("blue");
 
 .supervision-package {
   border-top: 5px solid $supervision-package-accent-colour;
@@ -7,11 +9,11 @@ $supervision-package-accent-colour: govuk-colour("blue");
   border-bottom: 1px solid $supervision-package-border-colour;
   border-left: 1px solid $supervision-package-border-colour;
 
-  padding-top: govuk-spacing(4);
-  padding-right: govuk-spacing(4);
-  padding-left: govuk-spacing(4);
+  padding-top: govuk.govuk-spacing(4);
+  padding-right: govuk.govuk-spacing(4);
+  padding-left: govuk.govuk-spacing(4);
 
-  margin-bottom: govuk-spacing(6);
+  margin-bottom: govuk.govuk-spacing(6);
 
   .govuk-warning-text {
     padding-top: 0;
@@ -27,9 +29,9 @@ $supervision-package-accent-colour: govuk-colour("blue");
 .app-tier-header {
   display: flex;
   align-items: center;
-  gap: govuk-spacing(3);
+  gap: govuk.govuk-spacing(3);
   flex-wrap: wrap;
-  margin-bottom: govuk-spacing(3);
+  margin-bottom: govuk.govuk-spacing(3);
 
   > h3,
   > h4 {
@@ -38,7 +40,7 @@ $supervision-package-accent-colour: govuk-colour("blue");
 }
 
 .supervision-package > .app-tier-header {
-  gap: govuk-spacing(6);
+  gap: govuk.govuk-spacing(6);
 }
 
 .supervision-package__tier-tag {
@@ -46,7 +48,7 @@ $supervision-package-accent-colour: govuk-colour("blue");
 }
 
 .appointment-progress {
-  background-color: govuk-colour("teal", $variant: "tint-80");
+  background-color: govuk.govuk-colour("teal", $variant: "tint-80");
   border-radius: 20px;
   height: 19px;
   overflow: hidden;
@@ -54,12 +56,12 @@ $supervision-package-accent-colour: govuk-colour("blue");
 }
 
 .appointment-progress__bar {
-  background-color: govuk-colour("teal", $variant: "tint-25");
+  background-color: govuk.govuk-colour("teal", $variant: "tint-25");
   height: 100%;
 }
 
 .appointment-progress__bar-maximum {
-  background-color: govuk-colour("red");
+  background-color: govuk.govuk-colour("red");
   height: 100%;
 }
 
