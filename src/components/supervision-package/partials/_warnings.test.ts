@@ -2,18 +2,21 @@ import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
 import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 import { getPrimarySentence } from '../../../utils/getPrimarySentence'
-import { FrontendSentence } from '../../../types/SupervisionPackage'
 
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params: Record<string, unknown> = {}) => {
-  // mirrors `{% set sentence = params.context.sentences | getPrimarySentence %}` in template.njk
-  const sentence = getPrimarySentence((params as { context?: { sentences?: FrontendSentence[] } }).context?.sentences)
+const renderPartial = (params: Record<string, any> = {}) => {
+  const sentence = getPrimarySentence(params.context?.sentences)
+  const phaseCode = params.currentPhase?.phase?.code?.toUpperCase()
+  const showPhaseColumn = ['INIT', 'STD', 'FTHRD', 'IOM', 'OPD', 'SPNS'].includes(phaseCode)
   const html = env.render('supervision-package/partials/_warnings.njk', {
     params,
     sentence,
-    forename: (params as { context?: { name?: { forename?: string } } }).context?.name?.forename,
+    forename: params.context?.name?.forename,
+    phaseCode,
+    showPhaseColumn,
+    provisionalTier: params.provisional === true,
   })
   return new JSDOM(html).window.document
 }
@@ -46,7 +49,9 @@ const atLargeSentence = {
   isPrimarySentence: true,
 }
 
-const context = (sentences: object[]) => ({
+const context = (sentences: object[], provisionalTier: boolean = false, phaseCode?: string) => ({
+  provisional: provisionalTier,
+  currentPhase: phaseCode ? { phase: { code: phaseCode } } : undefined,
   context: { name: { forename: 'Alex' }, sentences },
 })
 
@@ -130,6 +135,74 @@ describe('_warnings partial', () => {
 
       expect(warnings).toHaveLength(1)
       expect(warnings[0].textContent).toContain('is in custody')
+    })
+  })
+
+  describe('display warning regarding provisional tier', () => {
+    it('renders the tier information warning text if a person has a supervision phase of "Not yet started" (SPNS)', () => {
+      const document = renderPartial(
+        context(
+          [
+            {
+              supervisionPackage: { code: 'SPNS' },
+              inBreach: false,
+              custody: { status: { code: 'A' } },
+            },
+          ],
+          false,
+          'SPNS',
+        ),
+      )
+
+      const warning = document.querySelector('.govuk-warning-text__text')
+
+      expect(warning?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+        'Warning The supervision package shown may change. It is based on data that needs review.',
+      )
+    })
+
+    it('renders the tier information warning text if a person has a provisional tier with a supervision package', () => {
+      const document = renderPartial(
+        context(
+          [
+            {
+              supervisionPackage: { code: 'STD' },
+              inBreach: false,
+              custody: { status: { code: 'A' } },
+            },
+          ],
+          true,
+          'STD',
+        ),
+      )
+
+      const warning = document.querySelector('.govuk-warning-text__text')
+
+      expect(warning?.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+        'Warning The supervision package shown may change. It is based on data that needs review.',
+      )
+    })
+
+    it('does not render the warning message when the supervision package is not provisional', () => {
+      const document = renderPartial(
+        context(
+          [
+            {
+              provisional: false,
+              tierScore: 'C',
+              supervisionPackage: { code: 'STD' },
+              inBreach: false,
+              custody: { status: { code: 'A' } },
+            },
+          ],
+          false,
+          'STD',
+        ),
+      )
+
+      const warning = document.querySelector('.govuk-warning-text__text')
+
+      expect(warning).toBeNull()
     })
   })
 

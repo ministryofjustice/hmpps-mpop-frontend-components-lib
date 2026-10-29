@@ -144,6 +144,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#provisional">Provisional</a></li>
               <li><a class="govuk-link" href="#provisional-in-custody-no-phase">Provisional and in custody (no currentPhase)</a></li>
               <li><a class="govuk-link" href="#provisional-in-custody-sent">Provisional and in custody (currentPhase SENT)</a></li>
+              <li><a class="govuk-link" href="#provisional-with-supervision-package">Provisional with a supervision package (currentPhase STD)</a></li>
               <li><a class="govuk-link" href="#prevent-concerns">Prevent Concerns</a></li>
               <li><a class="govuk-link" href="#prevent-concerns-final-third">Prevent Concerns (final third)</a></li>
               <li><a class="govuk-link" href="#error">Error</a></li>
@@ -2586,6 +2587,67 @@ const html = env.renderString(
             endDate: '2027-02-18'
           }]
         }
+      }) }}
+
+      <h3 class="govuk-heading-s" id="provisional-with-supervision-package">Provisional with a supervision package (currentPhase STD)</h3>
+      <p class="govuk-body">When <code>provisional: true</code> is set alongside a recognised phase code (here <code>STD</code>), the supervision package is shown with a warning above it: "The supervision package shown may change. It is based on data that needs review." The same warning is shown when <code>currentPhase.phase.code</code> is <code>SPNS</code> (see <a class="govuk-link" href="#day-1-or-shortly-after">Day 1 or shortly after</a>), whether or not the tier is provisional.</p>
+      <details class="govuk-details app-json-details" data-module="govuk-details">
+  <summary class="govuk-details__summary">
+    <span class="govuk-details__summary-text">View example JSON</span>
+  </summary>
+  <div class="govuk-details__text">
+  <pre class="govuk-body" style="background:#f3f2f1;padding:10px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><code>{
+  "currentPhase": {
+    "phase": { "code": <mark style="background:#ffdd00;">"STD"</mark>, "description": "Standard" }
+  },
+  "provisional": <mark style="background:#ffdd00;">true</mark>,
+  "tierScore": "C",
+  "tag": { "text": "Provisional", "color": "orange" },
+  "oasysReviewHref": "#",
+  "historyHref": "#",
+  "context": {
+    "name": { "forename": "Gracie", "surname": "Beatty" },
+    "gender": "Male",
+    "finalThirdEligibility": { "eligible": false },
+    "sentences": [
+      {
+        "isPrimarySentence": true,
+        "type": { "isCustodial": true },
+        "custody": {
+          "status": { "code": "B", "description": "Released - On Licence" },
+          "finalThirdDate": "2026-08-06"
+        },
+        "inBreach": false,
+        "endDate": "2027-08-30"
+      }
+    ]
+  },
+  "currentYear": {
+    "endDate": "2027-08-31",
+    "appointments": { "allowance": 12, "scheduled": 1, "completed": 4 }
+  }
+}</code></pre>
+  </div>
+</details>
+      {{ supervisionPackage({
+        currentPhase: { phase: { code: 'STD', description: 'Standard' } },
+        provisional: true,
+        tierScore: 'C',
+        tag: { text: 'Provisional', color: 'orange' },
+        oasysReviewHref: '#',
+        historyHref: '#',
+        context: {
+          name: { forename: 'Gracie', surname: 'Beatty' },
+          gender: 'Male',
+          finalThirdEligibility: { eligible: false },
+          sentences: [{ isPrimarySentence: true,
+            type: { isCustodial: true },
+            custody: { status: { code: 'B', description: 'Released - On Licence' }, finalThirdDate: '2026-08-06' },
+            inBreach: false,
+            endDate: '2027-08-30'
+          }]
+        },
+        currentYear: { endDate: '2027-08-31', appointments: { allowance: 12, scheduled: 1, completed: 4 } }
       }) }}
 
     </div>
