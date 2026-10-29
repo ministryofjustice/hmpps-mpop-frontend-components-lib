@@ -311,7 +311,7 @@ const html = env.renderString(
       }) }}
 
       <h2 class="govuk-heading-m" id="person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</h2>
-      <p class="govuk-body">For transactional journeys (e.g. arrange an appointment, add a contact), pass <code>collapsibleRiskFlags: true</code> to add a "Hide active NDelius risk flags" / "Show active NDelius risk flags" link below the NDelius risk flags. Flags are shown by default and the state is not persisted. The link needs the component JS (<code>initAll</code> from <code>dist/js/all.js</code>); without JS it stays hidden and the flags are always shown. The risk badges row (<code>riskBadges</code>) is unaffected.</p>
+      <p class="govuk-body">For transactional journeys (e.g. arrange an appointment, add a contact), pass <code>collapsibleRiskFlags: true</code> to add a "Hide active NDelius risk flags" / "Show active NDelius risk flags" link below the NDelius risk flags. Flags are hidden by default and the state is not persisted. The link needs the component JS (<code>initAll</code> from <code>dist/js/all.js</code>); without JS it stays hidden and the flags are always shown. The risk badges row (<code>riskBadges</code>) is unaffected.</p>
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
@@ -3774,72 +3774,72 @@ const html = env.renderString(
         }
       }) }}
     {% endif %}
-    
+
     {% if showRiskFlagBadge %}
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l" id="risk-flag-badge">Risk flag badge</h1>
-      
+
       <h3 class="govuk-heading-s" id="as-link">As link</h3>
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of foo - Very high',
         id: 'test-id',
         badgeClass: 'risk-badge--very-high'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of bar - High',
         badgeClass: 'risk-badge--high'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of baz - Medium',
         badgeClass: 'risk-badge--medium'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Risk of qux - Low',
         badgeClass: 'risk-badge--low'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Cohort badge',
         badgeClass: 'risk-badge--cohort'
       }) }}
-      
+
       {{ riskFlagBadge({
         href: '#',
         text: 'Miscellaneous',
         badgeClass: 'risk-badge--misc'
       }) }}
-      
+
       <h3 class="govuk-heading-s govuk-!-margin-top-4" id="no-link">No link</h3>
-      
+
       {{ riskFlagBadge({
         text: 'Basic very high badge',
         badgeClass: 'risk-badge--very-high'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic high badge',
         badgeClass: 'risk-badge--high'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic medium badge',
         badgeClass: 'risk-badge--medium'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic low badge',
         badgeClass: 'risk-badge--low'
       }) }}
-      
+
       {{ riskFlagBadge({
         text: 'Basic miscellaneous badge',
         badgeClass: 'risk-badge--misc'

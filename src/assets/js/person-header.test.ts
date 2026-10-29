@@ -26,7 +26,7 @@ const params = {
 }
 
 describe('person-header risk flags toggle', () => {
-  it('shows the toggle once initialised, with the risk flags visible by default', () => {
+  it('shows the toggle once initialised, with the risk flags hidden by default', () => {
     const document = renderComponent(params)
     init(document)
 
@@ -34,35 +34,35 @@ describe('person-header risk flags toggle', () => {
     const flags = document.querySelector('[data-qa="personRiskBadges"]') as HTMLElement
 
     expect(toggle.hidden).toBe(false)
-    expect(toggle.getAttribute('aria-expanded')).toBe('true')
-    expect(toggle.textContent).toBe('Hide active NDelius risk flags')
-    expect(flags.hidden).toBe(false)
-  })
-
-  it('hides the risk flags and changes the link text when selected', () => {
-    const document = renderComponent(params)
-    init(document)
-
-    const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
-    toggle.click()
-
     expect(toggle.getAttribute('aria-expanded')).toBe('false')
     expect(toggle.textContent).toBe('Show active NDelius risk flags')
-    expect((document.querySelector('[data-qa="personRiskBadges"]') as HTMLElement).hidden).toBe(true)
+    expect(flags.hidden).toBe(true)
   })
 
-  it('shows the risk flags again, including the truncation link, when selected a second time', () => {
+  it('shows the risk flags, including the truncation link, and changes the link text when selected', () => {
     const document = renderComponent(params)
     init(document)
 
     const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
-    toggle.click()
     toggle.click()
 
     expect(toggle.getAttribute('aria-expanded')).toBe('true')
     expect(toggle.textContent).toBe('Hide active NDelius risk flags')
     expect((document.querySelector('[data-qa="personRiskBadges"]') as HTMLElement).hidden).toBe(false)
     expect(document.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+3 active risk flags')
+  })
+
+  it('hides the risk flags again when selected a second time', () => {
+    const document = renderComponent(params)
+    init(document)
+
+    const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
+    toggle.click()
+    toggle.click()
+
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+    expect(toggle.textContent).toBe('Show active NDelius risk flags')
+    expect((document.querySelector('[data-qa="personRiskBadges"]') as HTMLElement).hidden).toBe(true)
   })
 
   it('gives each header unique risk flag ids and only toggles its own risk flags', () => {
@@ -86,8 +86,8 @@ describe('person-header risk flags toggle', () => {
 
     second.toggle.click()
 
-    expect(first.flags.hidden).toBe(false)
-    expect(second.flags.hidden).toBe(true)
+    expect(first.flags.hidden).toBe(true)
+    expect(second.flags.hidden).toBe(false)
   })
 
   it('does not bind twice when initialised more than once', () => {
@@ -98,6 +98,6 @@ describe('person-header risk flags toggle', () => {
     const toggle = document.querySelector('[data-qa="riskFlagsToggle"]') as HTMLButtonElement
     toggle.click()
 
-    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+    expect(toggle.getAttribute('aria-expanded')).toBe('true')
   })
 })

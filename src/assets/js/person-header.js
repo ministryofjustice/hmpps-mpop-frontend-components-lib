@@ -4,7 +4,7 @@ const MODULE_NAME = 'mpop-risk-flags-toggle'
 /*
  * Show/hide toggle for the person header's NDelius risk flags (transactional variant).
  * The toggle is rendered hidden so that without JS the risk flags are always shown.
- * State is not persisted - the flags are shown again on every page load.
+ * State is not persisted - the flags are hidden again on every page load.
  */
 
 function setExpanded($toggle, $flags, expanded) {
@@ -24,7 +24,7 @@ function initToggle($toggle) {
   $toggle.addEventListener('click', () =>
     setExpanded($toggle, $flags, $toggle.getAttribute('aria-expanded') !== 'true'),
   )
-  setExpanded($toggle, $flags, true)
+  setExpanded($toggle, $flags, false)
   $toggle.removeAttribute('hidden')
 }
 
