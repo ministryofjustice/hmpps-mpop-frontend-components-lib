@@ -5,8 +5,8 @@ import { mpopNunjucksSetup } from '../../../utils/nunjucksFilters'
 const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], { autoescape: true })
 mpopNunjucksSetup(env)
 
-const renderPartial = (params = {}) => {
-  const html = env.render('supervision-package/partials/_tier.njk', { params })
+const renderPartial = (params = {}, phaseCode?: string) => {
+  const html = env.render('supervision-package/partials/_tier.njk', { params, phaseCode })
   return new JSDOM(html).window.document
 }
 
@@ -103,33 +103,49 @@ describe('_tier partial', () => {
   })
 
   describe('provisional message', () => {
-    it('renders the provisional message when the tag text is Provisional and currentPhase is present', () => {
-      const document = renderPartial({
-        tierScore: 'A2',
-        tag: { text: 'Provisional', color: 'yellow' },
-        currentPhase: { phase: { code: 'STD' } },
-      })
+    const message = 'We will calculate the supervision package once the tier is confirmed.'
 
-      const paragraph = document.querySelector('p.govuk-body')
+    it('renders the provisional message when the tag text is Provisional and the phase code is SPNS', () => {
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Provisional', color: 'yellow' } }, 'SPNS')
 
-      expect(paragraph?.textContent?.trim()).toBe(
-        'We will calculate the supervision package once the tier is confirmed.',
-      )
+      expect(document.querySelector('p.govuk-body')?.textContent?.trim()).toBe(message)
     })
 
     it('does not render the provisional message for other tag text', () => {
-      const document = renderPartial({
-        tierScore: 'A2',
-        tag: { text: 'Confirmed', color: 'green' },
-        currentPhase: { phase: { code: 'STD' } },
-      })
+      const document = renderPartial({ tierScore: 'A2', tag: { text: 'Confirmed', color: 'green' } }, 'SPNS')
 
       expect(document.querySelector('p.govuk-body')).toBeNull()
     })
 
-    // Regression test: message must not render once the phase has ended, even if the tag is still Provisional
-    it('does not render the provisional message when currentPhase is missing', () => {
+    // Regression tests: the message is driven by phaseCode == 'SPNS', not by the mere presence of currentPhase
+    it.each(['STD', 'INIT', 'FTHRD', 'IOM', 'OPD', 'SPNK', 'SPNA'])(
+      'does not render the provisional message when the phase code is %s',
+      phaseCode => {
+        const document = renderPartial(
+          {
+            tierScore: 'A2',
+            tag: { text: 'Provisional', color: 'yellow' },
+            currentPhase: { phase: { code: phaseCode } },
+          },
+          phaseCode,
+        )
+
+        expect(document.querySelector('p.govuk-body')).toBeNull()
+      },
+    )
+
+    it('does not render the provisional message when there is no phase code', () => {
       const document = renderPartial({ tierScore: 'A2', tag: { text: 'Provisional', color: 'yellow' } })
+
+      expect(document.querySelector('p.govuk-body')).toBeNull()
+    })
+
+    it('does not render the provisional message when currentPhase is present but no phase code is set', () => {
+      const document = renderPartial({
+        tierScore: 'A2',
+        tag: { text: 'Provisional', color: 'yellow' },
+        currentPhase: { phase: { code: 'SPNS' } },
+      })
 
       expect(document.querySelector('p.govuk-body')).toBeNull()
     })

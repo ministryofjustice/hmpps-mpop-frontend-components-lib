@@ -23,12 +23,13 @@ describe('supervision-package', () => {
     ${'missing'}     | ${tierTags.missing}     | ${'Missing'}     | ${'govuk-tag--red'}    | ${null}
     ${'unavailable'} | ${tierTags.unavailable} | ${'Unavailable'} | ${'govuk-tag--grey'}   | ${'Tier information is currently unavailable.'}
     ${'none'}        | ${tierTags.none}        | ${null}          | ${null}                | ${null}
-  `('renders the "$name" tag state', ({ tag, expectedTagText, expectedTagClass, expectedBodyText }) => {
+  `('renders the "$name" tag state', ({ name, tag, expectedTagText, expectedTagClass, expectedBodyText }) => {
     const document = renderComponent({
       tierScore: 'C',
       tag,
       historyHref: '#',
-      currentPhase: { phase: { code: 'STD' } },
+      // the provisional message is only shown for the SPNS phase
+      currentPhase: { phase: { code: name === 'provisional' ? 'SPNS' : 'STD' } },
       context: { sentences: [{ supervisionPackage: { code: 'INIT' }, isPrimarySentence: true }] },
     })
 
@@ -1508,7 +1509,35 @@ describe('supervision-package', () => {
       expect(document.querySelector('.supervision-package')).not.toBeNull()
       const tagElement = document.querySelector('.govuk-tag')
       expect(tagElement?.textContent?.trim()).toBe('Provisional')
+    })
+
+    it('renders the provisional message when the phase is SPNS', () => {
+      const document = renderComponent({
+        ...provisionalTierParams,
+        currentPhase: { phase: { code: 'SPNS', description: 'Not yet known' } },
+      })
+
       expect(document.body.textContent).toContain(
+        'We will calculate the supervision package once the tier is confirmed.',
+      )
+    })
+
+    // Regression test: the message must only show for SPNS, not for any other phase
+    it.each(['SPNK', 'STD', 'INIT'])('does not render the provisional message when the phase is %s', code => {
+      const document = renderComponent({
+        ...provisionalTierParams,
+        currentPhase: { phase: { code, description: 'Phase' } },
+      })
+
+      expect(document.body.textContent).not.toContain(
+        'We will calculate the supervision package once the tier is confirmed.',
+      )
+    })
+
+    it('does not render the provisional message when there is no current phase', () => {
+      const document = renderComponent({ ...provisionalTierParams, currentPhase: undefined })
+
+      expect(document.body.textContent).not.toContain(
         'We will calculate the supervision package once the tier is confirmed.',
       )
     })
