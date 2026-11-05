@@ -108,6 +108,7 @@ const html = env.renderString(
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
+              <li><a class="govuk-link" href="#person-header-risks-hidden">Risk section hidden</a></li>
             </ul>
           </li>{% endif %}
           {% if showSupervisionPackage %}<li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
@@ -342,6 +343,32 @@ const html = env.renderString(
           ],
           remainingCount: 3
         }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-risks-hidden">Risk section hidden</h2>
+      <p class="govuk-body">Pass <code>showRisks: false</code> to render only the blue section, even when <code>riskBadges</code> and <code>personRiskFlags</code> are supplied. The grey risk section is shown by default.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#",
+        riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 0
+        },
+        showRisks: false
       }) }}
 
       {% endif %}
