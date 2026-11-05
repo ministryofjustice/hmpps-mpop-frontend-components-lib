@@ -1,155 +1,82 @@
+{%- from '../person-header-banner/macro.njk' import personHeaderBanner -%}
 {%- from '../risk-flag-badge/macro.njk' import riskFlagBadge -%}
 
 <div class='person-header govuk-body'>
-    <div class='person-header__band{% if params.photo %} person-header__band--with-photo{% endif %}'>
-        {% if params.photo %}
-            <img
-                    class='person-header__photo'
-                    data-qa='personPhoto'
-                    src='{{ params.photo }}'
-                    alt='Photo of {{ params.name }}'
-            >
+    {{ personHeaderBanner(params) }}
+
+    {% if params.showRisks !== false %}
+        {# RSR / ROSH risk badges #}
+
+        {% if params.riskBadges and (params.riskBadges | trim) %}
+            <div class='person-header__risk-panel'>
+                <div
+                        class='person-header__risk-tags'
+                        data-qa='riskBadges'
+                >
+                    {{ params.riskBadges | safe }}
+                </div>
+            </div>
         {% endif %}
 
-        <div class='person-header__details'>
-            <h1
-                    class='govuk-heading-xl govuk-!-margin-bottom-2 person-header__name'
-                    data-qa='personName'
-            >
-                {{ params.name }}
 
-                {% if params.personStatusTag %}
-                    <strong
-                            class='app-status-badge govuk-tag govuk-tag--yellow'
-                            data-qa='personStatusTag'
-                    >
-                        {{ params.personStatusTag }}
-                    </strong>
-                {% endif %}
-            </h1>
+        {% set personRiskFlags = params.personRiskFlags.headerBadges %}
 
-            <p class='govuk-caption-l govuk-!-margin-bottom-3 person-header__crn'>
-                <span class='govuk-!-font-weight-bold'>CRN:</span>
-                <span data-qa='crn'>{{ params.crn }}</span>
-            </p>
+        {% if params.personRiskFlags.groups %}
+            {% set personRiskFlags = [] %}
+            {% for group in params.personRiskFlags.groups %}
+                {% set personRiskFlags = personRiskFlags.concat(group.badges) %}
+            {% endfor %}
+        {% endif %}
 
-            <ul class='govuk-list person-header__meta'>
-                <li>
-                    <span class='govuk-!-font-weight-bold'>Date of birth:</span>
-                    <span data-qa='dob'>{{ params.dob }}</span>
-                </li>
+        {% if personRiskFlags and personRiskFlags | length > 0 %}
 
-                <li>
-                    <a
-                            class='govuk-link govuk-link--inverse'
-                            href='{{ params.historyHref }}'
-                            data-qa='tier'
-                    >
-                        <span class='govuk-!-font-weight-regular'>Tier:</span> {{ params.tier }}{% if params.provisional %}
-                            <span data-qa='tierProvisional'>(provisional)</span>{% endif %}
-                    </a>
-                </li>
+            {# Person risk flags #}
 
-                <li>
-                    {% if params.managedByName %}
-                        {% set managedByText = params.managedByName | formatName %}
+            {# Unique per person so each toggle's aria-controls points at its own risk flags #}
+            {% set riskFlagsId = 'person-header-risk-flags-' + params.crn %}
 
-                        {% if params.managedByLocation %}
-                            {% set managedByText = managedByText + ' (' + params.managedByLocation + ')' %}
-                        {% endif %}
-                    {% else %}
-                        {% set managedByText = params.managedBy %}
-                    {% endif %}
-
-                    <span class='govuk-!-font-weight-bold'>Managed by:</span>
-
-                    {% if params.managedByHref %}
-                        <a
-                                class='govuk-link govuk-link--inverse'
-                                href='{{ params.managedByHref }}'
-                                data-qa='managedBy'
-                        >
-                            {{ managedByText }}
-                        </a>
-                    {% else %}
-                        <span data-qa='managedBy'>{{ managedByText }}</span>
-                    {% endif %}
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    {# RSR / ROSH risk badges #}
-
-    {% if params.riskBadges and (params.riskBadges | trim) %}
-        <div class='person-header__risk-panel'>
-            <div
-                    class='person-header__risk-tags'
-                    data-qa='riskBadges'
-            >
-                {{ params.riskBadges | safe }}
-            </div>
-        </div>
-    {% endif %}
-
-
-    {% set personRiskFlags = params.personRiskFlags.headerBadges %}
-
-    {% if params.personRiskFlags.groups %}
-        {% set personRiskFlags = [] %}
-        {% for group in params.personRiskFlags.groups %}
-            {% set personRiskFlags = personRiskFlags.concat(group.badges) %}
-        {% endfor %}
-    {% endif %}
-
-    {% if personRiskFlags and personRiskFlags | length > 0 %}
-
-        {# Person risk flags #}
-
-        {# Unique per person so each toggle's aria-controls points at its own risk flags #}
-        {% set riskFlagsId = 'person-header-risk-flags-' + params.crn %}
-
-        <div class='person-header__risk-panel'>
-            <div
-                    {% if params.collapsibleRiskFlags %}id='{{ riskFlagsId }}'{% endif %}
-                    class='person-header__risk-tags'
-                    data-qa='personRiskBadges'
-            >
-                {% for risk in personRiskFlags %}
-                    {{ riskFlagBadge({
-                        href: '/case/' + params.crn + '/risk/flag/' + risk.id,
-                        badgeClass: risk.badgeClass,
-                        text: risk.text,
-                        id: risk.id
-                    }) }}
-                {% endfor %}
-
-                {% if params.personRiskFlags.remainingCount > 0 %}
-                    <a
-                            href='/case/{{ params.crn }}/risk'
-                            class='govuk-link risk-badge-more'
-                            data-qa='risk-badge-more'
-                    >
-                        +{{ params.personRiskFlags.remainingCount }} active risk flags
-                    </a>
-                {% endif %}
-            </div>
-
-            {% if params.collapsibleRiskFlags %}
-                <button
-                        type='button'
-                        class='govuk-link person-header__risk-flags-toggle'
-                        data-module='mpop-risk-flags-toggle'
-                        data-show-text='Show active NDelius risk flags'
-                        data-hide-text='Hide active NDelius risk flags'
-                        aria-controls='{{ riskFlagsId }}'
-                        aria-expanded='true'
-                        data-qa='riskFlagsToggle'
-                        hidden
+            <div class='person-header__risk-panel'>
+                <div
+                        {% if params.collapsibleRiskFlags %}id='{{ riskFlagsId }}'{% endif %}
+                        class='person-header__risk-tags'
+                        data-qa='personRiskBadges'
                 >
-                    Hide active NDelius risk flags
-                </button>
-            {% endif %}
-        </div>
+                    {% for risk in personRiskFlags %}
+                        {{ riskFlagBadge({
+                            href: '/case/' + params.crn + '/risk/flag/' + risk.id,
+                            badgeClass: risk.badgeClass,
+                            text: risk.text,
+                            id: risk.id
+                        }) }}
+                    {% endfor %}
+
+                    {% if params.personRiskFlags.remainingCount > 0 %}
+                        <a
+                                href='/case/{{ params.crn }}/risk'
+                                class='govuk-link risk-badge-more'
+                                data-qa='risk-badge-more'
+                        >
+                            +{{ params.personRiskFlags.remainingCount }} active risk flags
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if params.collapsibleRiskFlags %}
+                    <button
+                            type='button'
+                            class='govuk-link person-header__risk-flags-toggle'
+                            data-module='mpop-risk-flags-toggle'
+                            data-show-text='Show active NDelius risk flags'
+                            data-hide-text='Hide active NDelius risk flags'
+                            aria-controls='{{ riskFlagsId }}'
+                            aria-expanded='true'
+                            data-qa='riskFlagsToggle'
+                            hidden
+                    >
+                        Hide active NDelius risk flags
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
     {% endif %}
 </div>

@@ -240,6 +240,40 @@ describe('person-header', () => {
     })
   })
 
+  describe('showRisks', () => {
+    const riskParams = {
+      name: 'Andrew Langley',
+      crn: 'D004851',
+      riskBadges: '<span data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',
+      personRiskFlags: {
+        groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+        remainingCount: 0,
+      },
+    }
+
+    it('renders the risk panels by default', () => {
+      const document = renderComponent(riskParams)
+
+      expect(document.querySelector('[data-qa="riskBadges"]')).not.toBeNull()
+      expect(document.querySelector('[data-qa="personRiskBadges"]')).not.toBeNull()
+    })
+
+    it('renders the risk panels when showRisks is true', () => {
+      const document = renderComponent({ ...riskParams, showRisks: true })
+
+      expect(document.querySelectorAll('.person-header__risk-panel')).toHaveLength(2)
+    })
+
+    it('does not render the risk panels when showRisks is false but still renders the banner', () => {
+      const document = renderComponent({ ...riskParams, showRisks: false, collapsibleRiskFlags: true })
+
+      expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+      expect(document.querySelector('[data-qa="riskFlagsToggle"]')).toBeNull()
+      expect(document.querySelector('.person-header__band')).not.toBeNull()
+      expect(document.querySelector('[data-qa="personName"]')?.textContent?.trim()).toBe('Andrew Langley')
+    })
+  })
+
   it('does not render the risk panel when riskBadgeData has no groups', () => {
     const document = renderComponent({
       riskBadgeData: { groups: [], remainingCount: 0 },
