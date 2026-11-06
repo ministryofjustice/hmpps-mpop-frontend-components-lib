@@ -1,0 +1,46 @@
+.person-header__risk-panel {
+  display: flex;
+  flex-direction: column;
+  gap: govuk-spacing(2);
+  background-color: govuk-colour("black", $variant: "tint-95");
+  padding: govuk-spacing(3) govuk-spacing(4);
+}
+
+.person-header__risk-panel + .person-header__risk-panel {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.person-header__risk-tags,
+.person-header__risk-tags .pop-header-risk-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.person-header__risk-tags[hidden] {
+  display: none;
+}
+
+.person-header__risk-flags-toggle {
+  @include govuk-font($size: 19);
+  align-self: flex-start;
+  margin: -2px 0;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: govuk-functional-colour(link);
+  text-align: left;
+  cursor: pointer;
+
+  @media (forced-colors: active) {
+    color: LinkText;
+  }
+}
+
+/* More risk flags link */
+.person-header__risk-tags .risk-badge-more {
+  @include govuk-font($size: 19);
+  white-space: nowrap;
+}
