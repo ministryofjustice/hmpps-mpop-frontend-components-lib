@@ -6,7 +6,7 @@ MPoP front-end library
 ### Installation
 
 ```bash
-npm install @ministryofjustice/hmpps-mpop-frontend-components-lib
+npm install @ministryofjustice/hmpps-mpop-frontend-components-lib govuk-frontend@6.6.0
 ```
 
 ### Nunjucks setup
@@ -28,7 +28,7 @@ mpopNunjucksSetup(env)
 Import the component styles in your SCSS entry point:
 
 ```scss
-@import '@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/all';
+@use '@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/all';
 ```
 
 ## Importing this as an npm package in another project
@@ -40,7 +40,7 @@ The package is published to npm here: https://www.npmjs.com/package/@ministryofj
 Add the latest (or a specific) version to your project:
 
 ```bash
-npm install @ministryofjustice/hmpps-mpop-frontend-components-lib@latest
+npm install @ministryofjustice/hmpps-mpop-frontend-components-lib@latest govuk-frontend@6.6.0
 ```
 
 ### 2. Import the styles
@@ -48,7 +48,7 @@ npm install @ministryofjustice/hmpps-mpop-frontend-components-lib@latest
 Import the component styles into your global CSS/SCSS entry point (see [SCSS](#scss) above):
 
 ```scss
-@import '@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/all';
+@use '@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/all';
 ```
 
 ### 3. Register the Nunjucks filters

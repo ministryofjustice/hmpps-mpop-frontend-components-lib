@@ -1,8 +1,7 @@
 // MPOP Frontend Components Library
-// Requires govuk-frontend to be imported first
 
-@import "../../components/supervision-package/supervision-package";
-@import "../../components/pop-header/pop-header";
-@import "../../components/supervision-final-third-progress/supervision-final-third-progress";
-@import "../../components/person-header/person-header";
-@import "../../components/risk-flag-badge/risk-flag-badge";
+@forward "../../components/supervision-package/supervision-package";
+@forward "../../components/pop-header/pop-header";
+@forward "../../components/supervision-final-third-progress/supervision-final-third-progress";
+@forward "../../components/person-header/person-header";
+@forward "../../components/risk-flag-badge/risk-flag-badge";
