@@ -96,7 +96,10 @@
     {% set personRiskFlags = params.personRiskFlags.headerBadges %}
 
     {% if params.personRiskFlags.groups %}
-        {% set personRiskFlags = params.personRiskFlags.groups[0].badges %}
+        {% set personRiskFlags = [] %}
+        {% for group in params.personRiskFlags.groups %}
+            {% set personRiskFlags = personRiskFlags.concat(group.badges) %}
+        {% endfor %}
     {% endif %}
 
     {% if personRiskFlags and personRiskFlags | length > 0 %}

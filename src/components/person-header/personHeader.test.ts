@@ -160,12 +160,24 @@ describe('person-header', () => {
               },
             ],
           },
+          {
+            badges: [
+              {
+                id: 'foo',
+                text: 'FOO HIGH',
+                badgeClass: 'risk-badge--high',
+              },
+            ],
+          },
         ],
         remainingCount: 2,
       },
     })
 
     const wrapper = document.querySelector('[data-qa="personRiskBadges"]')
+    const badges = wrapper?.querySelectorAll('.risk-badge')
+    expect(badges).toHaveLength(2)
+
     const link = wrapper?.querySelector('[data-qa="risk-badge-ogrs"]')
 
     expect(wrapper).not.toBeNull()
