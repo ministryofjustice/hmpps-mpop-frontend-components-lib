@@ -123,6 +123,33 @@ describe('person-header', () => {
     const document = renderComponent({
       crn: 'D004851',
       personRiskFlags: {
+        headerBadges: [
+          {
+            id: 'ogrs',
+            text: 'OGRS LOW',
+            badgeClass: 'risk-badge--low',
+          },
+        ],
+        remainingCount: 2,
+      },
+    })
+
+    const wrapper = document.querySelector('[data-qa="personRiskBadges"]')
+    const link = wrapper?.querySelector('[data-qa="risk-badge-ogrs"]')
+
+    expect(wrapper).not.toBeNull()
+    expect(link?.tagName).toBe('A')
+    expect(link?.getAttribute('href')).toBe('/case/D004851/risk/flag/ogrs')
+    expect(link?.textContent?.trim()).toBe('OGRS LOW')
+    expect(link?.classList.contains('risk-badge')).toBe(true)
+    expect(link?.classList.contains('risk-badge--low')).toBe(true)
+    expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
+  })
+
+  it('renders structured personRiskFlags provided as groups with the remaining risk count link', () => {
+    const document = renderComponent({
+      crn: 'D004851',
+      personRiskFlags: {
         groups: [
           {
             badges: [
