@@ -23,6 +23,9 @@ jobs:
   test:
     name: Run unit tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ 24, 26 ]
     needs: lint
     steps:
       - name: Checkout repository
@@ -30,7 +33,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version-file: '.nvmrc'
+          node-version: ${{ matrix.node }}
       - name: Update npm
         run: npm install -g npm@12
       - name: Install dependencies
