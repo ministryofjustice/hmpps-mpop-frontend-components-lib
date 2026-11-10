@@ -1,0 +1,43 @@
+const capsRegex = /^[A-Z]+(?:\/[A-Z]+)*$/
+const defaultPreservedWords = ['(NS)', '(Non', 'NS)']
+const defaultPreservedSeparators = ['-']
+
+export const toSentenceCase = (
+  value: string | null | undefined,
+  preserveWords: string[] = [],
+  preserveSeparators: string[] | null = null,
+  leadingCaps: boolean = true,
+  ignoreCapWords: boolean = true,
+): string => {
+  if (!value) return ''
+  const preservedWords = new Set([...preserveWords, ...defaultPreservedWords])
+  const preservedSeparators = preserveSeparators ?? defaultPreservedSeparators
+  const words = value.split(' ')
+  const separators = ['-', '_']
+  const formatWord = (word: string) => {
+    if (preservedWords.has(word) || preservedSeparators.includes(word)) {
+      return word
+    }
+    let formattedWord = word
+    separators.forEach(separator => {
+      if (!preservedSeparators.includes(separator)) {
+        formattedWord = formattedWord.split(separator).join(' ')
+      }
+    })
+    return formattedWord
+      .split(' ')
+      .map(subWord => {
+        if (preservedWords.has(subWord) || (capsRegex.test(subWord) && ignoreCapWords)) {
+          return subWord
+        }
+        return subWord.toLowerCase()
+      })
+      .join(' ')
+  }
+  const formatted = words
+    .map(word => {
+      return formatWord(word)
+    })
+    .join(' ')
+  return leadingCaps ? `${formatted.charAt(0).toUpperCase()}${formatted.substring(1)}` : `${formatted}`
+}
