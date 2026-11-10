@@ -15,3 +15,9 @@ export interface Prisoner {
   recall?: boolean
   releaseDate?: string
 }
+
+export type PrisonerResponse = {
+  prisoner: Prisoner | null
+  httpStatus: number
+  error?: Error | null
+}

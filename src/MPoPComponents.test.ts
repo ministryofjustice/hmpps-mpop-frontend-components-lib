@@ -697,6 +697,87 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getPrisonerDetails', () => {
+    const mockPrisoner = {
+      prisonerNumber: 'A1234BC',
+      firstName: 'John',
+      lastName: 'Doe',
+      status: 'ACTIVE IN',
+      inOutStatus: 'IN',
+      prisonId: 'LEI',
+      prisonName: 'HMP Leeds',
+      recall: false,
+    }
+
+    it('should return prisoner with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPrisoner)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: mockPrisoner,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/prisoner/A1234BC', 'authToken')
+    })
+
+    it('should return null prisoner with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null prisoner with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
   describe('getSupervisionPackageFrontendContext', () => {
     const mockFrontendContext = {
       currentPhase: {

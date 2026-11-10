@@ -97,12 +97,17 @@ const config: MPoPComponentsConfig = {
     timeout: { response: 5000, deadline: 5000 },
     agent: new AgentConfig(5000),
   },
+  prisonerSearchApiConfig: {
+    url: prisonerSearchApiUrl,
+    timeout: { response: 5000, deadline: 5000 },
+    agent: new AgentConfig(5000),
+  },
 }
 
 const mpopComponents = new MPoPComponents(authenticationClient, config, logger)
 ```
 
-Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS and Supervision Package APIs for the environment you're running in.
+Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package and Prisoner Search APIs for the environment you're running in.
 
 ### 5. Render a component
 
