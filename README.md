@@ -130,6 +130,48 @@ const supervisionPackageData = {
 
 See `scripts/preview-api.ts` for a fuller example of building these params from the API responses.
 
+### Person header
+
+`personHeader` is made of two components, which can also be used on their own:
+
+- `personHeaderBanner`, the blue section: photo, name, status tag, CRN, date of birth, tier and managed by
+- `personHeaderRisks`, the grey section: risk badges, NDelius risk flags and the optional show/hide toggle
+
+```njk
+{% from "mpop/components/person-header/macro.njk" import personHeader %}
+
+{{ personHeader({
+  name: "Andrew Langley",
+  crn: "D004851",
+  dob: "18 November 1995",
+  tier: "B4",
+  historyHref: tierHistoryUrl,
+  managedByName: "jack frost",
+  managedByLocation: "Worksop Probation Office",
+  managedByHref: staffContactsUrl,
+  photo: photoUrl,
+  riskBadges: riskBadgesHtml,
+  personRiskFlags: riskBadgeData
+}) }}
+```
+
+| Param | Description |
+| --- | --- |
+| `name`, `crn`, `dob` | Shown in the banner. `dob` should already be formatted. |
+| `personStatusTag` | Optional status shown next to the name, e.g. `In custody`. |
+| `tier`, `provisional`, `historyHref` | Tier link. `provisional: true` adds "(provisional)". |
+| `managedByName`, `managedByLocation` | Responsible officer's name, formatted with `formatName`, and their location in brackets. |
+| `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
+| `managedByHref` | Optional. Makes managed by a link. |
+| `photo` | Optional image URL. Nothing is shown when it's missing. |
+| `riskBadges` | Pre-rendered HTML, e.g. ARNS `predictorBadge` output. |
+| `personRiskFlags` | `{ groups: [{ badges: [{ id, text, badgeClass }] }], remainingCount }` |
+| `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
+| `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
+| `showRisks` | Set to `false` to hide the grey section. Defaults to `true`. |
+
+`personHeaderBanner` takes the banner params and `personHeaderRisks` takes the risk params, with the same names.
+
 
 ## Viewing your changes
 

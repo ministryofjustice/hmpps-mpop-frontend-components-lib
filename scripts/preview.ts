@@ -69,6 +69,8 @@ const html = env.renderString(
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 {% from "person-header/macro.njk" import personHeader %}
+{% from "person-header-banner/macro.njk" import personHeaderBanner %}
+{% from "person-header-risks/macro.njk" import personHeaderRisks %}
 {% from "risk-flag-badge/macro.njk" import riskFlagBadge %}
 
 <!DOCTYPE html>
@@ -109,6 +111,8 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
               <li><a class="govuk-link" href="#person-header-risks-hidden">Risk section hidden</a></li>
+              <li><a class="govuk-link" href="#person-header-risk-href-base">Custom risk link base</a></li>
+              <li><a class="govuk-link" href="#person-header-standalone">Banner and risks on their own</a></li>
             </ul>
           </li>{% endif %}
           {% if showSupervisionPackage %}<li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
@@ -369,6 +373,59 @@ const html = env.renderString(
           remainingCount: 0
         },
         showRisks: false
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-risk-href-base">Custom risk link base</h2>
+      <p class="govuk-body">Risk flag links default to <code>/case/{crn}/risk</code>. Pass <code>riskHrefBase</code> to point them elsewhere, e.g. at MPoP from another service. Each flag links to <code>{riskHrefBase}/flag/{id}</code> and "+N active risk flags" links to <code>riskHrefBase</code>.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskHrefBase: "https://manage-people-on-probation.example.com/case/D004851/risk",
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 2
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-standalone">Banner and risks on their own</h2>
+      <p class="govuk-body"><code>personHeader</code> composes <code>personHeaderBanner</code> (blue section) and <code>personHeaderRisks</code> (grey section). Each can be imported and used on its own.</p>
+      <h3 class="govuk-heading-s"><code>personHeaderBanner</code></h3>
+      {{ personHeaderBanner({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#"
+      }) }}
+      <h3 class="govuk-heading-s govuk-!-margin-top-6"><code>personHeaderRisks</code></h3>
+      {{ personHeaderRisks({
+        crn: "D004851",
+        riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 0
+        }
       }) }}
 
       {% endif %}
