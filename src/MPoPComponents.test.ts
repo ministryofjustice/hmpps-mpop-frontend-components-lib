@@ -517,6 +517,98 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getPersonRiskFlags', () => {
+    const mockPersonRiskFlags = {
+      personSummary: {
+        name: { forename: 'John', surname: 'Doe' },
+        crn: 'X123456',
+        dateOfBirth: '1990-01-01',
+      },
+      opd: { eligible: false },
+      mappa: { level: 1, category: 2 },
+      riskFlags: [
+        {
+          id: 1,
+          description: 'Risk to Staff',
+          level: 'HIGH',
+          createdDate: '2024-01-01',
+          createdBy: { forename: 'Jane', surname: 'Smith' },
+          removed: false,
+          removalHistory: [],
+        },
+      ],
+      removedRiskFlags: [],
+    }
+
+    it('should return personRiskFlags with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPersonRiskFlags)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: mockPersonRiskFlags,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/risk-flags/X123456', 'authToken')
+    })
+
+    it('should return null personRiskFlags with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null personRiskFlags with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
   describe('getSupervisionPackageFrontendContext', () => {
     const mockFrontendContext = {
       currentPhase: {

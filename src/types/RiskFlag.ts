@@ -37,3 +37,39 @@ export interface RiskFlag {
 export type RiskFlagLevel = 'HIGH' | 'MEDIUM' | 'LOW' | 'INFORMATION_ONLY'
 
 export type RoshBadgeLevel = RiskFlagLevel | 'VERY HIGH'
+
+export interface PersonSummary {
+  name: Name
+  crn: string
+  offenderId?: number
+  pnc?: string
+  dateOfBirth: string
+  preferredLanguage?: string
+}
+
+export interface Mappa {
+  level?: number
+  category?: number
+  categoryDescription?: string
+  startDate?: string
+  reviewDate?: string
+}
+
+export interface Opd {
+  eligible?: boolean
+  date?: string
+}
+
+export interface PersonRiskFlags {
+  personSummary: PersonSummary
+  opd: Opd
+  mappa: Mappa
+  riskFlags: RiskFlag[]
+  removedRiskFlags: RiskFlag[]
+}
+
+export type PersonRiskFlagsResponse = {
+  personRiskFlags: PersonRiskFlags | null
+  httpStatus: number
+  error?: Error | null
+}
