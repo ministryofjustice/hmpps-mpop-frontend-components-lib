@@ -1,5 +1,7 @@
 export { default as MPoPComponents } from './MPoPComponents'
 export type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
+export type * from './types/Prisoner'
+export type * from './types/ProfessionalContact'
 export type * from './types/RiskFlag'
 export * from './utils'
 export { mpopNunjucksSetup as addFilters } from './utils'
