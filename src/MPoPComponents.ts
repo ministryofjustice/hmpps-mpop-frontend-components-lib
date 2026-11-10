@@ -19,6 +19,7 @@ import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCount'
 import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
 import type { ProfessionalContact, ProfessionalContactResponse } from './types/ProfessionalContact'
+import type { Prisoner, PrisonerResponse } from './types/Prisoner'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -47,6 +48,8 @@ export default class MPoPComponents {
 
   private readonly supervisionPackageApiRestClient: SuppressingRestClient
 
+  private readonly prisonerSearchApiRestClient: SuppressingRestClient
+
   private readonly logger: Logger | Console
 
   constructor(
@@ -73,6 +76,11 @@ export default class MPoPComponents {
         logger,
         authenticationClient,
       ),
+      logger,
+    )
+
+    this.prisonerSearchApiRestClient = new SuppressingRestClient(
+      new RestClient('Prisoner Search API', config.prisonerSearchApiConfig ?? config, logger, authenticationClient),
       logger,
     )
   }
@@ -339,6 +347,38 @@ export default class MPoPComponents {
 
     return {
       ...professionalContactResponse,
+      error,
+    }
+  }
+
+  async getPrisonerDetails(authOptions: AuthOptions | string, nomsNumber: string): Promise<PrisonerResponse> {
+    let error: Error | null = null
+    let prisonerResponse: PrisonerResponse
+
+    try {
+      const response = await this.prisonerSearchApiRestClient.get<Prisoner>(`/prisoner/${nomsNumber}`, authOptions)
+      if (!response) {
+        prisonerResponse = {
+          prisoner: null,
+          httpStatus: 404,
+        }
+      } else {
+        prisonerResponse = {
+          prisoner: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      prisonerResponse = {
+        prisoner: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...prisonerResponse,
       error,
     }
   }
