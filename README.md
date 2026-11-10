@@ -165,7 +165,7 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 | `managedByHref` | Optional. Makes managed by a link. |
 | `photo` | Optional image URL. Nothing is shown when it's missing. |
 | `riskBadges` | Pre-rendered HTML, e.g. ARNS `predictorBadge` output. |
-| `personRiskFlags` | `{ groups: [{ badges: [{ id, text, badgeClass }] }], remainingCount }` |
+| `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, or the badges grouped by severity as `{ groups: [{ badges: [...] }], remainingCount }`. `groups` is used when both are given. |
 | `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
 | `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
 | `showRisks` | Set to `false` to hide the grey section. Defaults to `true`. |
