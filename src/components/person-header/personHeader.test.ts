@@ -240,6 +240,24 @@ describe('person-header', () => {
     })
   })
 
+  it('passes riskHrefBase through to the risk flag links', () => {
+    const document = renderComponent({
+      crn: 'D004851',
+      riskHrefBase: 'https://mpop.example.com/case/D004851/risk',
+      personRiskFlags: {
+        groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+        remainingCount: 1,
+      },
+    })
+
+    expect(document.querySelector('[data-qa="risk-badge-staff"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk/flag/staff',
+    )
+    expect(document.querySelector('[data-qa="risk-badge-more"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk',
+    )
+  })
+
   describe('showRisks', () => {
     const riskParams = {
       name: 'Andrew Langley',

@@ -28,6 +28,7 @@
 
     {# Unique per person so each toggle's aria-controls points at its own risk flags #}
     {% set riskFlagsId = 'person-header-risk-flags-' + params.crn %}
+    {% set riskHrefBase = params.riskHrefBase or ('/case/' + params.crn + '/risk') %}
 
     <div class='person-header__risk-panel'>
         <div
@@ -37,7 +38,7 @@
         >
             {% for risk in personRiskFlags %}
                 {{ riskFlagBadge({
-                    href: '/case/' + params.crn + '/risk/flag/' + risk.id,
+                    href: riskHrefBase + '/flag/' + risk.id,
                     badgeClass: risk.badgeClass,
                     text: risk.text,
                     id: risk.id
@@ -46,7 +47,7 @@
 
             {% if params.personRiskFlags.remainingCount > 0 %}
                 <a
-                        href='/case/{{ params.crn }}/risk'
+                        href='{{ riskHrefBase }}'
                         class='govuk-link risk-badge-more'
                         data-qa='risk-badge-more'
                 >
