@@ -17,6 +17,7 @@ import type {
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
+import type { ProfessionalContact, ProfessionalContactResponse } from './types/ProfessionalContact'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -274,6 +275,38 @@ export default class MPoPComponents {
 
     return {
       ...personRiskFlagsResponse,
+      error,
+    }
+  }
+
+  async getContacts(authOptions: AuthOptions | string, crn: string): Promise<ProfessionalContactResponse> {
+    let error: Error | null = null
+    let professionalContactResponse: ProfessionalContactResponse
+
+    try {
+      const response = await this.masApiRestClient.get<ProfessionalContact>(`/sentence/${crn}/contacts`, authOptions)
+      if (!response) {
+        professionalContactResponse = {
+          professionalContact: null,
+          httpStatus: 404,
+        }
+      } else {
+        professionalContactResponse = {
+          professionalContact: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      professionalContactResponse = {
+        professionalContact: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...professionalContactResponse,
       error,
     }
   }

@@ -20,3 +20,9 @@ export interface Contact {
   isUnallocated?: boolean
   lastUpdated?: string
 }
+
+export type ProfessionalContactResponse = {
+  professionalContact: ProfessionalContact | null
+  httpStatus: number
+  error?: Error | null
+}

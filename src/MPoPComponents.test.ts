@@ -609,6 +609,94 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getContacts', () => {
+    const mockProfessionalContact = {
+      name: { forename: 'John', surname: 'Doe' },
+      currentContacts: [
+        {
+          name: 'Jack Frost',
+          telephoneNumber: '07700 900000',
+          email: 'jack.frost@justice.gov.uk',
+          provider: 'London',
+          probationDeliveryUnit: 'Camden and Islington',
+          team: 'Team 1',
+          allocationDate: '2024-01-01',
+          responsibleOfficer: true,
+          prisonOffenderManager: false,
+        },
+      ],
+      previousContacts: [],
+    }
+
+    it('should return professionalContact with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockProfessionalContact)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: mockProfessionalContact,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/sentence/X123456/contacts', 'authToken')
+    })
+
+    it('should return null professionalContact with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null professionalContact with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
   describe('getSupervisionPackageFrontendContext', () => {
     const mockFrontendContext = {
       currentPhase: {
