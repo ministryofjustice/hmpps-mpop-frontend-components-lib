@@ -17,6 +17,7 @@ import type {
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCount'
+import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -273,6 +274,38 @@ export default class MPoPComponents {
 
     return {
       ...personScheduleResponse,
+      error,
+    }
+  }
+
+  async getPersonRiskFlags(authOptions: AuthOptions | string, crn: string): Promise<PersonRiskFlagsResponse> {
+    let error: Error | null = null
+    let personRiskFlagsResponse: PersonRiskFlagsResponse
+
+    try {
+      const response = await this.masApiRestClient.get<PersonRiskFlags>(`/risk-flags/${crn}`, authOptions)
+      if (!response) {
+        personRiskFlagsResponse = {
+          personRiskFlags: null,
+          httpStatus: 404,
+        }
+      } else {
+        personRiskFlagsResponse = {
+          personRiskFlags: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      personRiskFlagsResponse = {
+        personRiskFlags: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...personRiskFlagsResponse,
       error,
     }
   }
