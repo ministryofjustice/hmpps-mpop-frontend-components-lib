@@ -57,6 +57,21 @@ describe('person-header-risks', () => {
     )
   })
 
+  it('uses riskHrefBase for the risk flag and remaining count links when given', () => {
+    const document = renderComponent({
+      crn: 'D004851',
+      personRiskFlags,
+      riskHrefBase: 'https://mpop.example.com/case/D004851/risk',
+    })
+
+    expect(document.querySelector('[data-qa="risk-badge-staff"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk/flag/staff',
+    )
+    expect(document.querySelector('[data-qa="risk-badge-more"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk',
+    )
+  })
+
   it('renders risk badges and risk flags in separate panels', () => {
     const document = renderComponent({
       crn: 'D004851',
