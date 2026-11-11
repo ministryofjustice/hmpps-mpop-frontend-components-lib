@@ -73,3 +73,5 @@ export type PersonRiskFlagsResponse = {
   httpStatus: number
   error?: Error | null
 }
+
+export type RiskScore = 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
