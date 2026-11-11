@@ -2,7 +2,10 @@ import { hasRestrictedCustodyStatus } from './hasRestrictedCustodyStatus'
 import { isRecalled } from './isRecalled'
 import { isUnlawfullyAtLarge } from './isUnlawfullyAtLarge'
 import { Prisoner } from '../types/Prisoner'
-import { SupervisionPackageFrontendContextResponse as SupervisionPackage } from '../types/SupervisionPackage'
+import {
+  FrontendSentence,
+  SupervisionPackageFrontendContextResponse as SupervisionPackage,
+} from '../types/SupervisionPackage'
 
 export interface PersonStatusDetails {
   dateOfDeath?: string
@@ -36,26 +39,33 @@ export async function getStatusTag(
   if (supervisionPackage?.outcome === 'success') {
     // There will always be one active primary sentence
     const activePrimarySentence = supervisionPackage?.context?.sentences?.find(sentence => sentence.isPrimarySentence)
+    return extractStatusFromPrimarySentence(activePrimarySentence)
+  }
+  return undefined
+}
 
-    if (!activePrimarySentence) {
-      return undefined
-    }
+function extractStatusFromPrimarySentence(activePrimarySentence: FrontendSentence | undefined): string | undefined {
+  if (!activePrimarySentence) {
+    return undefined
+  }
 
-    if (isUnlawfullyAtLarge(activePrimarySentence)) {
-      return PERSON_STATUS_TAGS.UNLAWFULLY_AT_LARGE
-    }
-
-    if (activePrimarySentence.inBreach) {
-      return PERSON_STATUS_TAGS.IN_BREACH
-    }
-
+  if (isUnlawfullyAtLarge(activePrimarySentence)) {
     if (isRecalled(activePrimarySentence)) {
-      return PERSON_STATUS_TAGS.RECALLED
+      return PERSON_STATUS_TAGS.RECALLED_UNLAWFULLY_AT_LARGE
     }
+    return PERSON_STATUS_TAGS.UNLAWFULLY_AT_LARGE
+  }
 
-    if (hasRestrictedCustodyStatus(activePrimarySentence)) {
-      return PERSON_STATUS_TAGS.IN_CUSTODY
-    }
+  if (activePrimarySentence.inBreach) {
+    return PERSON_STATUS_TAGS.IN_BREACH
+  }
+
+  if (isRecalled(activePrimarySentence)) {
+    return PERSON_STATUS_TAGS.RECALLED
+  }
+
+  if (hasRestrictedCustodyStatus(activePrimarySentence)) {
+    return PERSON_STATUS_TAGS.IN_CUSTODY
   }
   return undefined
 }
