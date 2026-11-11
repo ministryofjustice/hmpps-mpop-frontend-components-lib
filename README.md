@@ -180,11 +180,17 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 `toPersonHeaderParams` builds these params from the API responses:
 
 ```ts
-import { getStatusTag, toPersonHeaderParams } from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+import {
+  getStatusTag,
+  toPersonHeaderParams,
+  toPersonRiskDetails,
+} from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
 
 const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions, crn)
 const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
 const { prisoner } = await mpopComponents.getPrisonerDetails(authOptions, noms)
+
+const { riskBadgeData } = toPersonRiskDetails(personRiskFlags)
 
 const personHeaderParams = toPersonHeaderParams({
   crn,
@@ -193,12 +199,14 @@ const personHeaderParams = toPersonHeaderParams({
   tier: calculation,
   historyHref: tierHistoryUrl,
   professionalContact,
-  riskFlags: personRiskFlags?.riskFlags,
+  riskBadgeData,
   personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
   photo: photoUrl,
   riskBadges: riskBadgesHtml,
 })
 ```
+
+`toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff`, `riskToProbationStaff` and `rosh`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
 
 
 ## Viewing your changes
