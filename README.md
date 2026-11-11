@@ -177,6 +177,29 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 
 `personHeaderBanner` takes the banner params and `personHeaderRisks` takes the risk params, with the same names.
 
+`toPersonHeaderParams` builds these params from the API responses:
+
+```ts
+import { getStatusTag, toPersonHeaderParams } from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+
+const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions, crn)
+const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
+const { prisoner } = await mpopComponents.getPrisonerDetails(authOptions, noms)
+
+const personHeaderParams = toPersonHeaderParams({
+  crn,
+  name: personalDetails.name,
+  dateOfBirth: personalDetails.dateOfBirth,
+  tier: calculation,
+  historyHref: tierHistoryUrl,
+  professionalContact,
+  riskFlags: personRiskFlags?.riskFlags,
+  personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
+  photo: photoUrl,
+  riskBadges: riskBadgesHtml,
+})
+```
+
 
 ## Viewing your changes
 
