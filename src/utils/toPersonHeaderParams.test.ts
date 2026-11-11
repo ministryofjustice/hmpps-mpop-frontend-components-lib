@@ -115,6 +115,19 @@ describe('toPersonHeaderParams', () => {
     expect(params.showRisks).toBe(false)
   })
 
+  it('uses riskBadgeData instead of building the badges from riskFlags when given', () => {
+    const riskBadgeData = { groupedBadges: [], headerBadges: [], remainingCount: 3 }
+
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      riskFlags,
+      riskBadgeData,
+    })
+
+    expect(params.personRiskFlags).toBe(riskBadgeData)
+  })
+
   it('produces params the personHeader macro renders', () => {
     const env = nunjucks.configure(['src/components'], { autoescape: true })
     mpopNunjucksSetup(env)

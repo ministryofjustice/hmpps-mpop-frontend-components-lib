@@ -10,6 +10,7 @@ export interface PersonHeaderParamsInput {
   historyHref?: string
   professionalContact?: ProfessionalContact | null
   riskFlags?: RiskFlag[] | null
+  riskBadgeData?: RiskBadgeData
   personStatusTag?: string
   photo?: string
   riskBadges?: string
