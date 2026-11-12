@@ -1,14 +1,20 @@
 {%- from '../risk-flag-badge/macro.njk' import riskFlagBadge -%}
+{%- from '../person-header-risk-badges/macro.njk' import personHeaderRiskBadges -%}
 
 {# RSR / ROSH risk badges #}
 
-{% if params.riskBadges and (params.riskBadges | trim) %}
+{% set riskBadges = params.riskBadges %}
+{% if not (riskBadges and (riskBadges | trim)) and (params.riskData or params.roshLevel) %}
+    {% set riskBadges %}{{ personHeaderRiskBadges(params) }}{% endset %}
+{% endif %}
+
+{% if riskBadges and (riskBadges | trim) %}
     <div class='person-header__risk-panel'>
         <div
                 class='person-header__risk-tags'
                 data-qa='riskBadges'
         >
-            {{ params.riskBadges | safe }}
+            {{ riskBadges | safe }}
         </div>
     </div>
 {% endif %}

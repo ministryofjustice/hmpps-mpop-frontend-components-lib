@@ -1,12 +1,21 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
 import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
-const env = nunjucks.configure(['src/components'], { autoescape: true })
+const env = nunjucks.configure(
+  [
+    'src/components',
+    'node_modules/govuk-frontend/dist',
+    'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  ],
+  { autoescape: true },
+)
 mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
 
-const renderComponent = (params = {}) => {
-  const html = env.renderString(
+const renderComponent = (params = {}, environment = env) => {
+  const html = environment.renderString(
     `{% from "person-header-risks/macro.njk" import personHeaderRisks %}
      {{ personHeaderRisks(params) }}`,
     { params },
@@ -100,6 +109,60 @@ describe('person-header-risks', () => {
     const document = renderComponent({ riskBadges: '\n  \n', personRiskFlags: { groups: [], remainingCount: 0 } })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+  })
+
+  describe('ARNS risk badges from riskData', () => {
+    const riskData = (combinedBand = 'LOW') => ({
+      assessments: [
+        {
+          outputVersion: '2',
+          combinedSeriousReoffendingPredictor: {
+            name: 'Combined serious reoffending predictor',
+            band: combinedBand,
+            staticOrDynamic: 'Dynamic',
+            score: 0.18,
+          },
+        },
+      ],
+      httpStatus: 200,
+    })
+
+    it('renders the ARNS risk badges in the risk badges panel', () => {
+      const document = renderComponent({ riskData: riskData(), roshLevel: 'HIGH', useNDeliusRosh: true })
+
+      const panel = document.querySelector('[data-qa="riskBadges"] .pop-header-risk-badges')
+      const badges = Array.from(panel?.querySelectorAll('[data-badge-base]') ?? []).map(el =>
+        el.getAttribute('data-badge-base'),
+      )
+      expect(badges).toEqual(['Risk of serious harm HIGH', 'Combined serious reoffending predictor LOW'])
+    })
+
+    it('uses riskBadges instead when both are given', () => {
+      const document = renderComponent({
+        riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
+        riskData: riskData(),
+        roshLevel: 'HIGH',
+        useNDeliusRosh: true,
+      })
+
+      expect(document.querySelector('[data-qa="riskBadges"] [data-qa="ogrsBadge"]')).not.toBeNull()
+      expect(document.querySelector('[data-badge-base]')).toBeNull()
+    })
+
+    it('does not render the risk badges panel when there are no badges to show', () => {
+      const document = renderComponent({ riskData: riskData('NOT APPLICABLE'), roshLevel: 'MEDIUM' })
+
+      expect(document.querySelector('[data-qa="riskBadges"]')).toBeNull()
+    })
+
+    it('renders without the ARNS lib when riskData is not given', () => {
+      const envWithoutArns = nunjucks.configure(['src/components'], { autoescape: true })
+      mpopNunjucksSetup(envWithoutArns)
+
+      const document = renderComponent({ crn: 'D004851', personRiskFlags }, envWithoutArns)
+
+      expect(document.querySelector('[data-qa="risk-badge-staff"]')).not.toBeNull()
+    })
   })
 
   it('does not render the blue band', () => {
