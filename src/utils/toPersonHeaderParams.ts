@@ -2,6 +2,7 @@ import type { PersonHeaderParams, PersonHeaderParamsInput } from '../types/Perso
 import { dateWithYear } from './dateWithYear'
 import { getManagedByDetails } from './getManagedByDetails'
 import { getRiskBadges } from './personRiskFlagSorter'
+import { tierUrlV3 } from './tierUrlV3'
 import { toTitleCase } from './toTitleCase'
 
 export const toPersonHeaderParams = ({
@@ -10,6 +11,7 @@ export const toPersonHeaderParams = ({
   dateOfBirth,
   tier,
   historyHref,
+  tierUrl,
   professionalContact,
   managedByHref,
   riskFlags,
@@ -32,7 +34,7 @@ export const toPersonHeaderParams = ({
     dob: dateOfBirth ? (dateWithYear(dateOfBirth) ?? undefined) : undefined,
     tier: toTitleCase(tier?.tierScore),
     provisional: tier?.provisional ?? false,
-    historyHref,
+    historyHref: historyHref ?? (tierUrl ? tierUrlV3(tierUrl, crn) : undefined),
     managedBy: managedBy.text,
     managedByName: managedBy.name,
     managedByLocation: managedBy.location,
