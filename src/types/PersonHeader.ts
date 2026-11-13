@@ -8,6 +8,7 @@ export interface PersonHeaderParamsInput {
   dateOfBirth?: string
   tier?: { tierScore?: string; provisional?: boolean } | null
   historyHref?: string
+  tierUrl?: string
   professionalContact?: ProfessionalContact | null
   managedByHref?: string
   riskFlags?: RiskFlag[] | null

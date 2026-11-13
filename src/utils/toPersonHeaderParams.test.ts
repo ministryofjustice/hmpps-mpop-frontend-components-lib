@@ -119,6 +119,27 @@ describe('toPersonHeaderParams', () => {
     expect(params.showRisks).toBe(false)
   })
 
+  it('builds historyHref from tierUrl', () => {
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      tierUrl: 'https://tier.example.com',
+    })
+
+    expect(params.historyHref).toBe('https://tier.example.com/v3/case/D004851')
+  })
+
+  it('uses historyHref instead of tierUrl when both are given', () => {
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      historyHref: '/tier-history/D004851',
+      tierUrl: 'https://tier.example.com',
+    })
+
+    expect(params.historyHref).toBe('/tier-history/D004851')
+  })
+
   it('uses managedByHref for the managed by link when given', () => {
     const params = toPersonHeaderParams({
       crn: 'D004851',

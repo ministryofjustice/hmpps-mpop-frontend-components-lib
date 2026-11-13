@@ -201,7 +201,7 @@ const personHeaderParams = toPersonHeaderParams({
   name: personalDetails.name,
   dateOfBirth: personalDetails.dateOfBirth,
   tier: calculation,
-  historyHref: tierHistoryUrl,
+  tierUrl,
   professionalContact,
   riskBadgeData,
   personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
@@ -213,6 +213,8 @@ const personHeaderParams = toPersonHeaderParams({
 ```
 
 `toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff` and `riskToProbationStaff`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
+
+`tierUrl` is the Tier service's base URL. The tier links to `tierUrlV3(tierUrl, crn)`, which is `{tierUrl}/v3/case/{crn}`. Pass `historyHref` instead to set the link yourself.
 
 The managed by link goes to `/case/{crn}/personal-details/staff-contacts`. Pass `managedByHref` to point it elsewhere, e.g. at MPoP from another service.
 
