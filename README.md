@@ -155,7 +155,8 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
   managedByLocation: "Worksop Probation Office",
   managedByHref: staffContactsUrl,
   photo: photoUrl,
-  riskBadges: riskBadgesHtml,
+  riskData: riskData,
+  roshLevel: "HIGH",
   personRiskFlags: riskBadgeData
 }) }}
 ```
@@ -169,7 +170,10 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 | `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
 | `managedByHref` | Optional. Makes managed by a link. |
 | `photo` | Optional image URL. Nothing is shown when it's missing. |
-| `riskBadges` | Pre-rendered HTML, e.g. ARNS `predictorBadge` output. |
+| `riskBadges` | Optional pre-rendered risk badge HTML. Used instead of `riskData` when both are given. |
+| `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
+| `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |
+| `useNDeliusRosh` | Set to `true` when `roshLevel` comes from NDelius. The ROSH badge then shows even when the combined predictor is `NOT APPLICABLE`. |
 | `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, or the badges grouped by severity as `{ groups: [{ badges: [...] }], remainingCount }`. `groups` is used when both are given. |
 | `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
 | `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
@@ -190,7 +194,7 @@ const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions,
 const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
 const { prisoner } = await mpopComponents.getPrisonerDetails(authOptions, noms)
 
-const { riskBadgeData } = toPersonRiskDetails(personRiskFlags)
+const { riskBadgeData, rosh } = toPersonRiskDetails(personRiskFlags)
 
 const personHeaderParams = toPersonHeaderParams({
   crn,
@@ -202,11 +206,46 @@ const personHeaderParams = toPersonHeaderParams({
   riskBadgeData,
   personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
   photo: photoUrl,
-  riskBadges: riskBadgesHtml,
+  riskData,
+  roshLevel: rosh.level,
+  useNDeliusRosh: true,
 })
 ```
 
-`toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff`, `riskToProbationStaff` and `rosh`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
+`toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff` and `riskToProbationStaff`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
+
+To use the ARNS ROSH level instead of the NDelius one, pass `roshLevel: toRoshWidget(roshSummary).overallRisk` and leave out `useNDeliusRosh`.
+
+#### ARNS risk badges
+
+`personHeaderRiskBadges` renders the ROSH, combined serious reoffending predictor and RSR badges from `riskData`, `roshLevel` and `useNDeliusRosh`. `personHeaderRisks` and `personHeader` use it when `riskData` or `roshLevel` is given, so most services won't need to call it directly.
+
+It uses the `predictorBadge` macro from `@ministryofjustice/hmpps-arns-frontend-components-lib`, an optional peer dependency. It's only needed if you show these badges:
+
+```bash
+npm install @ministryofjustice/hmpps-arns-frontend-components-lib
+```
+
+Add its templates to your Nunjucks paths and register its setup, alongside GOV.UK Frontend:
+
+```ts
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
+
+const env = nunjucks.configure([
+  'node_modules/@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/mpop/components',
+  'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  'node_modules/govuk-frontend/dist',
+  'app/views',
+])
+mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
+```
+
+Import its styles too:
+
+```scss
+@import '@ministryofjustice/hmpps-arns-frontend-components-lib/dist/all';
+```
 
 
 ## Viewing your changes

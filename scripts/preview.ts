@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
 import sass from 'sass'
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
 import { yearsSince } from '../src/utils/yearsSince'
 import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
@@ -14,11 +15,17 @@ const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.m
   silenceDeprecations: ['import'],
 }).css
 
-const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
-  autoescape: true,
-})
+const env = nunjucks.configure(
+  [
+    'src/components',
+    'node_modules/govuk-frontend/dist',
+    'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  ],
+  { autoescape: true },
+)
 
 mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
 
 const previewAge = yearsSince('1990-01-15')
 
@@ -112,6 +119,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
               <li><a class="govuk-link" href="#person-header-risks-hidden">Risk section hidden</a></li>
               <li><a class="govuk-link" href="#person-header-risk-href-base">Custom risk link base</a></li>
+              <li><a class="govuk-link" href="#person-header-arns-risk-badges">ARNS risk badges from riskData</a></li>
               <li><a class="govuk-link" href="#person-header-standalone">Banner and risks on their own</a></li>
             </ul>
           </li>{% endif %}
@@ -396,6 +404,49 @@ const html = env.renderString(
           ],
           remainingCount: 2
         }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-arns-risk-badges">ARNS risk badges from riskData</h2>
+      <p class="govuk-body">Pass <code>riskData</code> (from <code>ArnsComponents.getRiskData</code>) and <code>roshLevel</code> instead of <code>riskBadges</code> to render the ROSH, combined serious reoffending predictor and RSR badges with the ARNS <code>predictorBadge</code> macro. This needs the ARNS lib on the Nunjucks path. With <code>useNDeliusRosh: true</code> the badge is labelled "Risk of serious harm" and uses the NDelius level.</p>
+      {% set arnsRiskData = {
+        assessments: [
+          {
+            outputVersion: '2',
+            completedDate: '09 June 2026',
+            combinedSeriousReoffendingPredictor: {
+              name: 'Combined serious reoffending predictor',
+              band: 'MEDIUM',
+              staticOrDynamic: 'Dynamic',
+              score: 3.45,
+              completedDate: '09 June 2026'
+            },
+            rsr: { name: 'RSR', band: 'LOW', score: 0.77, staticOrDynamic: 'Static' }
+          }
+        ],
+        httpStatus: 200
+      } %}
+      <h3 class="govuk-heading-s">NDelius ROSH level</h3>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskData: arnsRiskData,
+        roshLevel: "HIGH",
+        useNDeliusRosh: true
+      }) }}
+      <h3 class="govuk-heading-s govuk-!-margin-top-6">ARNS ROSH level</h3>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskData: arnsRiskData,
+        roshLevel: "VERY_HIGH"
       }) }}
 
       <h2 class="govuk-heading-m" id="person-header-standalone">Banner and risks on their own</h2>
