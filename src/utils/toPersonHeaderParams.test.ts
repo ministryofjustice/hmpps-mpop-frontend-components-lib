@@ -1,5 +1,6 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
 import { toPersonHeaderParams } from './toPersonHeaderParams'
 import { mpopNunjucksSetup } from './nunjucksFilters'
 import type { ProfessionalContact } from '../types/ProfessionalContact'
@@ -64,6 +65,9 @@ describe('toPersonHeaderParams', () => {
       managedByHref: '/case/D004851/personal-details/staff-contacts',
       photo: '/search/prisoner-image/A1234BC',
       riskBadges: '<span>OGRS</span>',
+      riskData: undefined,
+      roshLevel: undefined,
+      useNDeliusRosh: undefined,
       personRiskFlags: {
         groupedBadges: expect.any(Array),
         headerBadges: [expect.objectContaining({ text: 'Risk to staff - High' })],
@@ -115,6 +119,22 @@ describe('toPersonHeaderParams', () => {
     expect(params.showRisks).toBe(false)
   })
 
+  it('passes riskData, roshLevel and useNDeliusRosh through', () => {
+    const riskData = { assessments: [] }
+
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      riskData,
+      roshLevel: 'HIGH',
+      useNDeliusRosh: true,
+    })
+
+    expect(params.riskData).toBe(riskData)
+    expect(params.roshLevel).toBe('HIGH')
+    expect(params.useNDeliusRosh).toBe(true)
+  })
+
   it('uses riskBadgeData instead of building the badges from riskFlags when given', () => {
     const riskBadgeData = { groupedBadges: [], headerBadges: [], remainingCount: 3 }
 
@@ -155,5 +175,50 @@ describe('toPersonHeaderParams', () => {
       'Jack Frost (Camden and Islington)',
     )
     expect(document.querySelector('[data-qa="risk-badge-1"]')?.getAttribute('href')).toBe('/case/D004851/risk/flag/1')
+  })
+
+  it('produces params the personHeader macro renders the ARNS risk badges from', () => {
+    const env = nunjucks.configure(
+      [
+        'src/components',
+        'node_modules/govuk-frontend/dist',
+        'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+      ],
+      { autoescape: true },
+    )
+    mpopNunjucksSetup(env)
+    arnsNunjucksSetup(env)
+
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      riskData: {
+        assessments: [
+          {
+            outputVersion: '2',
+            combinedSeriousReoffendingPredictor: {
+              name: 'Combined serious reoffending predictor',
+              band: 'LOW',
+              staticOrDynamic: 'Dynamic',
+              score: 0.18,
+            },
+          },
+        ],
+      },
+      roshLevel: 'HIGH',
+      useNDeliusRosh: true,
+    })
+
+    const html = env.renderString(
+      `{% from "person-header/macro.njk" import personHeader %}
+       {{ personHeader(params) }}`,
+      { params },
+    )
+    const { document } = new JSDOM(html).window
+
+    const badges = Array.from(document.querySelectorAll('[data-qa="riskBadges"] [data-badge-base]')).map(el =>
+      el.getAttribute('data-badge-base'),
+    )
+    expect(badges).toEqual(['Risk of serious harm HIGH', 'Combined serious reoffending predictor LOW'])
   })
 })
