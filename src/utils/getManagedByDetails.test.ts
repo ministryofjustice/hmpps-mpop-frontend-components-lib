@@ -89,4 +89,12 @@ describe('utils/getManagedByDetails', () => {
 
     expect(result).toEqual({ text: 'Unallocated' })
   })
+
+  it('uses the given href when provided', () => {
+    const href = `https://mpop.example.com/case/${CRN}/personal-details/staff-contacts`
+
+    const result = getManagedByDetails(CRN, professionalContact([contact()]), href)
+
+    expect(result.href).toBe(href)
+  })
 })

@@ -12,13 +12,16 @@ const isRealContact = (contact: Contact): boolean => !contact.isUnallocated
 const preferResponsibleOfficer = (contacts: Contact[]): Contact | undefined =>
   contacts.find(contact => contact.responsibleOfficer) ?? contacts[0]
 
-export const getManagedByDetails = (crn: string, professionalContact: ProfessionalContact | null): ManagedByDetails => {
+export const getManagedByDetails = (
+  crn: string,
+  professionalContact: ProfessionalContact | null,
+  href = `/case/${crn}/personal-details/staff-contacts`,
+): ManagedByDetails => {
   if (!professionalContact) {
     return { text: 'No data available' }
   }
 
   const contacts = (professionalContact.currentContacts ?? []).filter(isRealContact)
-  const href = `/case/${crn}/personal-details/staff-contacts`
 
   const com = preferResponsibleOfficer(contacts.filter(contact => !contact.prisonOffenderManager))
   if (com) {

@@ -119,6 +119,17 @@ describe('toPersonHeaderParams', () => {
     expect(params.showRisks).toBe(false)
   })
 
+  it('uses managedByHref for the managed by link when given', () => {
+    const params = toPersonHeaderParams({
+      crn: 'D004851',
+      name: { forename: 'Andrew', surname: 'Langley' },
+      professionalContact,
+      managedByHref: 'https://mpop.example.com/case/D004851/personal-details/staff-contacts',
+    })
+
+    expect(params.managedByHref).toBe('https://mpop.example.com/case/D004851/personal-details/staff-contacts')
+  })
+
   it('passes riskData, roshLevel and useNDeliusRosh through', () => {
     const riskData = { assessments: [] }
 

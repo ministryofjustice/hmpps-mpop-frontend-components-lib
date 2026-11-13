@@ -9,6 +9,7 @@ export interface PersonHeaderParamsInput {
   tier?: { tierScore?: string; provisional?: boolean } | null
   historyHref?: string
   professionalContact?: ProfessionalContact | null
+  managedByHref?: string
   riskFlags?: RiskFlag[] | null
   riskBadgeData?: RiskBadgeData
   personStatusTag?: string

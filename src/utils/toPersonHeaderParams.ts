@@ -11,6 +11,7 @@ export const toPersonHeaderParams = ({
   tier,
   historyHref,
   professionalContact,
+  managedByHref,
   riskFlags,
   riskBadgeData,
   personStatusTag,
@@ -23,7 +24,7 @@ export const toPersonHeaderParams = ({
   riskHrefBase,
   showRisks,
 }: PersonHeaderParamsInput): PersonHeaderParams => {
-  const managedBy = getManagedByDetails(crn, professionalContact ?? null)
+  const managedBy = getManagedByDetails(crn, professionalContact ?? null, managedByHref)
 
   return {
     name: `${name.forename} ${name.surname}`,
