@@ -14,6 +14,9 @@ export interface PersonHeaderParamsInput {
   personStatusTag?: string
   photo?: string
   riskBadges?: string
+  riskData?: object | null
+  roshLevel?: string | null
+  useNDeliusRosh?: boolean
   collapsibleRiskFlags?: boolean
   riskHrefBase?: string
   showRisks?: boolean
@@ -32,6 +35,9 @@ export interface PersonHeaderParams {
   managedByHref?: string
   photo?: string
   riskBadges?: string
+  riskData?: object | null
+  roshLevel?: string | null
+  useNDeliusRosh?: boolean
   personRiskFlags?: RiskBadgeData
   collapsibleRiskFlags?: boolean
   riskHrefBase?: string
