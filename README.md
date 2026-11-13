@@ -97,12 +97,17 @@ const config: MPoPComponentsConfig = {
     timeout: { response: 5000, deadline: 5000 },
     agent: new AgentConfig(5000),
   },
+  prisonerSearchApiConfig: {
+    url: prisonerSearchApiUrl,
+    timeout: { response: 5000, deadline: 5000 },
+    agent: new AgentConfig(5000),
+  },
 }
 
 const mpopComponents = new MPoPComponents(authenticationClient, config, logger)
 ```
 
-Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS and Supervision Package APIs for the environment you're running in.
+Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package and Prisoner Search APIs for the environment you're running in.
 
 ### 5. Render a component
 
@@ -129,6 +134,122 @@ const supervisionPackageData = {
 ```
 
 See `scripts/preview-api.ts` for a fuller example of building these params from the API responses.
+
+### Person header
+
+`personHeader` is made of two components, which can also be used on their own:
+
+- `personHeaderBanner`, the blue section: photo, name, status tag, CRN, date of birth, tier and managed by
+- `personHeaderRisks`, the grey section: risk badges, NDelius risk flags and the optional show/hide toggle
+
+```njk
+{% from "mpop/components/person-header/macro.njk" import personHeader %}
+
+{{ personHeader({
+  name: "Andrew Langley",
+  crn: "D004851",
+  dob: "18 November 1995",
+  tier: "B4",
+  historyHref: tierHistoryUrl,
+  managedByName: "jack frost",
+  managedByLocation: "Worksop Probation Office",
+  managedByHref: staffContactsUrl,
+  photo: photoUrl,
+  riskData: riskData,
+  roshLevel: "HIGH",
+  personRiskFlags: riskBadgeData
+}) }}
+```
+
+| Param | Description |
+| --- | --- |
+| `name`, `crn`, `dob` | Shown in the banner. `dob` should already be formatted. |
+| `personStatusTag` | Optional status shown next to the name, e.g. `In custody`. |
+| `tier`, `provisional`, `historyHref` | Tier link. `provisional: true` adds "(provisional)". |
+| `managedByName`, `managedByLocation` | Responsible officer's name, formatted with `formatName`, and their location in brackets. |
+| `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
+| `managedByHref` | Optional. Makes managed by a link. |
+| `photo` | Optional image URL. Nothing is shown when it's missing. |
+| `riskBadges` | Optional pre-rendered risk badge HTML. Used instead of `riskData` when both are given. |
+| `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
+| `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |
+| `useNDeliusRosh` | Set to `true` when `roshLevel` comes from NDelius. The ROSH badge then shows even when the combined predictor is `NOT APPLICABLE`. |
+| `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, or the badges grouped by severity as `{ groups: [{ badges: [...] }], remainingCount }`. `groups` is used when both are given. |
+| `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
+| `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
+| `showRisks` | Set to `false` to hide the grey section. Defaults to `true`. |
+
+`personHeaderBanner` takes the banner params and `personHeaderRisks` takes the risk params, with the same names.
+
+`toPersonHeaderParams` builds these params from the API responses:
+
+```ts
+import {
+  getStatusTag,
+  toPersonHeaderParams,
+  toPersonRiskDetails,
+} from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+
+const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions, crn)
+const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
+const { prisoner } = await mpopComponents.getPrisonerDetails(authOptions, noms)
+
+const { riskBadgeData, rosh } = toPersonRiskDetails(personRiskFlags)
+
+const personHeaderParams = toPersonHeaderParams({
+  crn,
+  name: personalDetails.name,
+  dateOfBirth: personalDetails.dateOfBirth,
+  tier: calculation,
+  tierUrl,
+  professionalContact,
+  riskBadgeData,
+  personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
+  photo: photoUrl,
+  riskData,
+  roshLevel: rosh.level,
+  useNDeliusRosh: true,
+})
+```
+
+`toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff` and `riskToProbationStaff`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
+
+`tierUrl` is the Tier service's base URL. The tier links to `tierUrlV3(tierUrl, crn)`, which is `{tierUrl}/v3/case/{crn}`. Pass `historyHref` instead to set the link yourself.
+
+The managed by link goes to `/case/{crn}/personal-details/staff-contacts`. Pass `managedByHref` to point it elsewhere, e.g. at MPoP from another service.
+
+To use the ARNS ROSH level instead of the NDelius one, pass `roshLevel: toRoshWidget(roshSummary).overallRisk` and leave out `useNDeliusRosh`.
+
+#### ARNS risk badges
+
+`personHeaderRiskBadges` renders the ROSH, combined serious reoffending predictor and RSR badges from `riskData`, `roshLevel` and `useNDeliusRosh`. `personHeaderRisks` and `personHeader` use it when `riskData` or `roshLevel` is given, so most services won't need to call it directly.
+
+It uses the `predictorBadge` macro from `@ministryofjustice/hmpps-arns-frontend-components-lib`, an optional peer dependency. It's only needed if you show these badges:
+
+```bash
+npm install @ministryofjustice/hmpps-arns-frontend-components-lib
+```
+
+Add its templates to your Nunjucks paths and register its setup, alongside GOV.UK Frontend:
+
+```ts
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
+
+const env = nunjucks.configure([
+  'node_modules/@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/mpop/components',
+  'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  'node_modules/govuk-frontend/dist',
+  'app/views',
+])
+mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
+```
+
+Import its styles too:
+
+```scss
+@import '@ministryofjustice/hmpps-arns-frontend-components-lib/dist/all';
+```
 
 
 ## Viewing your changes

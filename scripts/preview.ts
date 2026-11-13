@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import nunjucks from 'nunjucks'
 import sass from 'sass'
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
 import { yearsSince } from '../src/utils/yearsSince'
 import { mpopNunjucksSetup } from '../src/utils/nunjucksFilters'
 
@@ -14,11 +15,17 @@ const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.m
   silenceDeprecations: ['import'],
 }).css
 
-const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
-  autoescape: true,
-})
+const env = nunjucks.configure(
+  [
+    'src/components',
+    'node_modules/govuk-frontend/dist',
+    'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  ],
+  { autoescape: true },
+)
 
 mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
 
 const previewAge = yearsSince('1990-01-15')
 
@@ -69,6 +76,8 @@ const html = env.renderString(
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 {% from "person-header/macro.njk" import personHeader %}
+{% from "person-header-banner/macro.njk" import personHeaderBanner %}
+{% from "person-header-risks/macro.njk" import personHeaderRisks %}
 {% from "risk-flag-badge/macro.njk" import riskFlagBadge %}
 
 <!DOCTYPE html>
@@ -108,6 +117,10 @@ const html = env.renderString(
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#managed-by-unallocated-not-clickable-no-photo">Managed by: Unallocated (not clickable), no photo</a></li>
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
+              <li><a class="govuk-link" href="#person-header-risks-hidden">Risk section hidden</a></li>
+              <li><a class="govuk-link" href="#person-header-risk-href-base">Custom risk link base</a></li>
+              <li><a class="govuk-link" href="#person-header-arns-risk-badges">ARNS risk badges from riskData</a></li>
+              <li><a class="govuk-link" href="#person-header-standalone">Banner and risks on their own</a></li>
             </ul>
           </li>{% endif %}
           {% if showSupervisionPackage %}<li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
@@ -341,6 +354,128 @@ const html = env.renderString(
             }
           ],
           remainingCount: 3
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-risks-hidden">Risk section hidden</h2>
+      <p class="govuk-body">Pass <code>showRisks: false</code> to render only the blue section, even when <code>riskBadges</code> and <code>personRiskFlags</code> are supplied. The grey risk section is shown by default.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#",
+        riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 0
+        },
+        showRisks: false
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-risk-href-base">Custom risk link base</h2>
+      <p class="govuk-body">Risk flag links default to <code>/case/{crn}/risk</code>. Pass <code>riskHrefBase</code> to point them elsewhere, e.g. at MPoP from another service. Each flag links to <code>{riskHrefBase}/flag/{id}</code> and "+N active risk flags" links to <code>riskHrefBase</code>.</p>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskHrefBase: "https://manage-people-on-probation.example.com/case/D004851/risk",
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 2
+        }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-arns-risk-badges">ARNS risk badges from riskData</h2>
+      <p class="govuk-body">Pass <code>riskData</code> (from <code>ArnsComponents.getRiskData</code>) and <code>roshLevel</code> instead of <code>riskBadges</code> to render the ROSH, combined serious reoffending predictor and RSR badges with the ARNS <code>predictorBadge</code> macro. This needs the ARNS lib on the Nunjucks path. With <code>useNDeliusRosh: true</code> the badge is labelled "Risk of serious harm" and uses the NDelius level.</p>
+      {% set arnsRiskData = {
+        assessments: [
+          {
+            outputVersion: '2',
+            completedDate: '09 June 2026',
+            combinedSeriousReoffendingPredictor: {
+              name: 'Combined serious reoffending predictor',
+              band: 'MEDIUM',
+              staticOrDynamic: 'Dynamic',
+              score: 3.45,
+              completedDate: '09 June 2026'
+            },
+            rsr: { name: 'RSR', band: 'LOW', score: 0.77, staticOrDynamic: 'Static' }
+          }
+        ],
+        httpStatus: 200
+      } %}
+      <h3 class="govuk-heading-s">NDelius ROSH level</h3>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskData: arnsRiskData,
+        roshLevel: "HIGH",
+        useNDeliusRosh: true
+      }) }}
+      <h3 class="govuk-heading-s govuk-!-margin-top-6">ARNS ROSH level</h3>
+      {{ personHeader({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedBy: "Unallocated",
+        riskData: arnsRiskData,
+        roshLevel: "VERY_HIGH"
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-standalone">Banner and risks on their own</h2>
+      <p class="govuk-body"><code>personHeader</code> composes <code>personHeaderBanner</code> (blue section) and <code>personHeaderRisks</code> (grey section). Each can be imported and used on its own.</p>
+      <h3 class="govuk-heading-s"><code>personHeaderBanner</code></h3>
+      {{ personHeaderBanner({
+        name: "Andrew Langley",
+        crn: "D004851",
+        dob: "18 November 1995",
+        tier: "B4",
+        historyHref: "#",
+        managedByName: "jack frost",
+        managedByLocation: "Worksop Probation Office",
+        managedByHref: "#"
+      }) }}
+      <h3 class="govuk-heading-s govuk-!-margin-top-6"><code>personHeaderRisks</code></h3>
+      {{ personHeaderRisks({
+        crn: "D004851",
+        riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
+        personRiskFlags: {
+          groups: [
+            {
+              severity: 'HIGH',
+              badges: [
+                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
+              ]
+            }
+          ],
+          remainingCount: 0
         }
       }) }}
 
