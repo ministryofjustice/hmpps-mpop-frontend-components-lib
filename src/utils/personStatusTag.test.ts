@@ -226,6 +226,35 @@ describe('getStatusTag', () => {
 
     await expect(getStatusTag(personalDetails, supervisionPackage)).resolves.toBeUndefined()
   })
+
+  it('returns Recalled when the primary sentence is recalled', async () => {
+    const supervisionPackage = createSupervisionPackage({
+      context: {
+        sentences: [
+          createSentence({
+            isPrimarySentence: true,
+            inBreach: false,
+          }),
+        ],
+      },
+    })
+
+    await expect(getStatusTag(createPersonalDetails(), supervisionPackage)).resolves.toBe(undefined)
+  })
+
+  it('does not return Recalled when only a non-primary sentence is recalled', async () => {
+    const supervisionPackage = createSupervisionPackage({
+      context: {
+        sentences: [
+          createSentence({
+            isPrimarySentence: false,
+          }),
+        ],
+      },
+    })
+
+    await expect(getStatusTag(createPersonalDetails(), supervisionPackage)).resolves.toBeUndefined()
+  })
 })
 
 describe('getStatusTagForPersonInCustody', () => {
