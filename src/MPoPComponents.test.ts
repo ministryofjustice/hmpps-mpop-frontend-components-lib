@@ -281,6 +281,74 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getUserAlertsCount', () => {
+    it('should return userAlertsCount with computed count and status 200 when the API responds with count under 100', async () => {
+      const mockCount = {
+        count: 5,
+      }
+      mockedRestClient.prototype.get.mockResolvedValue(mockCount)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: '5',
+        httpStatus: 200,
+        error: null,
+      })
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/alerts/count', 'authToken')
+    })
+    it('should return userAlertsCount with computed count and status 200 when the API responds with count over 99', async () => {
+      const mockCount = {
+        count: 120,
+      }
+      mockedRestClient.prototype.get.mockResolvedValue(mockCount)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: '99+',
+        httpStatus: 200,
+        error: null,
+      })
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/alerts/count', 'authToken')
+    })
+    it('should return null userAlertsCount with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+    it('should return status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+      const result = await mpopComponents.getUserAlertsCount('authToken')
+      expect(result).toEqual({
+        userAlertsCount: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
   describe('getSupervisionPackage', () => {
     const mockSupervisionPackage = {
       phase: {

@@ -17,9 +17,12 @@ const previewApiCss = sass.compile(fileURLToPath(new URL('./preview-api.scss', i
   silenceDeprecations: ['import'],
 }).css
 
-const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
-  autoescape: true,
-})
+const env = nunjucks.configure(
+  ['src/components', 'node_modules/govuk-frontend/dist', 'node_modules/@ministryofjustice/frontend'],
+  {
+    autoescape: true,
+  },
+)
 
 mpopNunjucksSetup(env)
 
@@ -119,6 +122,7 @@ async function main() {
   const result = await mpopComponents.getTierDetails(authToken, crn)
   const { calculation } = result
   const personalDetailsResponse = await mpopComponents.getPersonalDetails(authToken, crn)
+  const userAlertsCountResponse = await mpopComponents.getUserAlertsCount(authToken)
   const supervisionPackageFrontendContextResponse = await mpopComponents.getSupervisionPackageFrontendContext(
     authToken,
     crn,
@@ -126,6 +130,7 @@ async function main() {
 
   console.info(result)
   console.info(personalDetailsResponse)
+  console.info(userAlertsCountResponse)
   console.dir(supervisionPackageFrontendContextResponse, { depth: null })
 
   const { personalDetails } = personalDetailsResponse
@@ -159,9 +164,16 @@ async function main() {
     ...(calculation ?? {}),
   }
 
+  const userNavigationParams = {
+    user: { userId: '123', username: 'testuser' },
+    home: true,
+    userAlertsCount: userAlertsCountResponse?.userAlertsCount ?? null,
+  }
+
   const html = env.renderString(
     `
 {% from "supervision-package/macro.njk" import supervisionPackage %}
+{% from "user-navigation/macro.njk" import userNavigation %}
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 
@@ -184,6 +196,13 @@ async function main() {
     <div class="govuk-width-container">
       <h1 class="govuk-heading-l">MPOP Component Preview</h1>
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <h1 class="govuk-heading-l">User Navigation</h1>
+        <div style="display: flex; justify-content: center;">
+          <div style="width: 100%; max-width: 960px;">
+            {{ userNavigation(userNavigationParams) }}
+          </div>
+        </div>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
         <h1 class="govuk-heading-l">PoP Header</h1>
         <div style="display: flex; justify-content: center;">
           <div style="width: 100%; max-width: 960px;">
@@ -202,7 +221,7 @@ async function main() {
 </body>
 </html>
 `,
-    { supervisionPackageParams, popHeaderParams, supervisionPackageSummaryParams },
+    { supervisionPackageParams, popHeaderParams, userNavigationParams, supervisionPackageSummaryParams },
   )
 
   fs.mkdirSync('preview', { recursive: true })
