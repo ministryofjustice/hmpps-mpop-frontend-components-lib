@@ -33,7 +33,7 @@ describe('user-navigation', () => {
     const search = nav.querySelectorAll('.moj-primary-navigation__item')[2]
     const alerts = nav.querySelectorAll('.moj-primary-navigation__item')[3]
     expect(home.textContent?.trim()).toContain('Home')
-    expect(home.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('home')
+    expect(home.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('page')
     expect(home.querySelector('.moj-primary-navigation__link')?.getAttribute('href')).toBe('/')
     expect(cases.textContent?.trim()).toContain('Cases')
     expect(cases.querySelector('.moj-primary-navigation__link')?.getAttribute('href')).toBe('/case')
@@ -53,7 +53,7 @@ describe('user-navigation', () => {
     expect(nav).not.toBeNull()
     const cases = nav.querySelectorAll('.moj-primary-navigation__item')[1]
     const alerts = nav.querySelectorAll('.moj-primary-navigation__item')[3]
-    expect(cases.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('cases')
+    expect(cases.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('page')
     expect(alerts.querySelector('.moj-notification-badge')?.textContent?.trim()).toContain('99+')
   })
   it('renders the navigation on search page', () => {
@@ -65,7 +65,7 @@ describe('user-navigation', () => {
     const nav = document.querySelector('.moj-primary-navigation') as Element
     expect(nav).not.toBeNull()
     const search = nav.querySelectorAll('.moj-primary-navigation__item')[2]
-    expect(search.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('search')
+    expect(search.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('page')
   })
   it('renders the navigation on alerts page', () => {
     const document = renderComponent({
@@ -76,7 +76,7 @@ describe('user-navigation', () => {
     const nav = document.querySelector('.moj-primary-navigation') as Element
     expect(nav).not.toBeNull()
     const alerts = nav.querySelectorAll('.moj-primary-navigation__item')[3]
-    expect(alerts.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('alerts')
+    expect(alerts.querySelector('.moj-primary-navigation__link')?.getAttribute('aria-current')).toBe('page')
   })
   it('should not render the navigation if user not logged in', () => {
     const document = renderComponent({
