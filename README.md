@@ -107,12 +107,17 @@ const config: MPoPComponentsConfig = {
     timeout: { response: 5000, deadline: 5000 },
     agent: new AgentConfig(5000),
   },
+  eSupervisionApiConfig: {
+    url: eSupervisionApiUrl,
+    timeout: { response: 10000, deadline: 10000 },
+    agent: new AgentConfig(10000),
+  },
 }
 
 const mpopComponents = new MPoPComponents(authenticationClient, config, logger)
 ```
 
-Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package, Prisoner Search and Person Record APIs for the environment you're running in.
+Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package, Prisoner Search, Person Record and eSupervision APIs for the environment you're running in.
 
 ### 5. Render a component
 
@@ -218,11 +223,18 @@ const personHeaderParams = toPersonHeaderParams({
 })
 ```
 
-`photo` is the URL of a route in your app that serves the image. Use `hasPersonPhoto` to check there's a photo before setting it. `error` is set when the Person Record API fails:
+`photo` is the online check-in photo if there is one, otherwise the prison photo from a route in your app. `toPersonPhotoSrc` picks between them. The check-in photo URL expires, so get it on each request. `hasPersonPhoto` checks for a prison photo, and its `error` is set when the Person Record API fails:
 
 ```ts
-const { hasPhoto } = await mpopComponents.hasPersonPhoto(authOptions, noms)
-const photo = hasPhoto ? `/search/prisoner-image/${noms}` : undefined
+const { photoUrl } = await mpopComponents.getCheckInPhotoUrl(authOptions, crn)
+const { hasPhoto } = photoUrl ? { hasPhoto: false } : await mpopComponents.hasPersonPhoto(authOptions, noms)
+
+const photo = toPersonPhotoSrc({
+  checkInPhotoUrl: photoUrl,
+  noms,
+  hasPrisonPhoto: hasPhoto,
+  prisonPhotoHref: nomsNumber => `/person-photo/${nomsNumber}`,
+})
 ```
 
 In the route, get the image with `getPersonPhoto`, which returns `photo` as a stream, or `null` when there's no photo or the API returns 403:

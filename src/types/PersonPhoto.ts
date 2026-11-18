@@ -6,6 +6,12 @@ export type PersonPhotoResponse = {
   error?: Error | null
 }
 
+export type CheckInPhotoUrlResponse = {
+  photoUrl: string | null
+  httpStatus: number
+  error?: Error | null
+}
+
 export type PersonPhotoAvailability = {
   hasPhoto: boolean
   httpStatus: number

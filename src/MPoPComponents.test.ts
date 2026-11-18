@@ -816,6 +816,42 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getCheckInPhotoUrl', () => {
+    it('should return the photo url with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue({ crn: 'X000001', photoUrl: 'https://photos.example.com/1.jpg' })
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: 'https://photos.example.com/1.jpg', httpStatus: 200, error: null })
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/v2/offenders/crn/X000001', 'authToken')
+    })
+
+    it('should return no photo url when the person has no photo', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue({ crn: 'X000001' })
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 200, error: null })
+    })
+
+    it('should return no photo url with status 404 when the person is not registered', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 404, error: null })
+    })
+
+    it('should return the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 500, error })
+    })
+  })
+
   describe('hasPersonPhoto', () => {
     it('should return hasPhoto true and close the stream when there is a photo', async () => {
       const photo = Readable.from(['image'])
