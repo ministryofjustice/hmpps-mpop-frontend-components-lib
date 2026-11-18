@@ -1,0 +1,51 @@
+{%- from "arns/components/predictor-badge/macro.njk" import predictorBadge -%}
+
+{% set overallRisk = params.roshLevel %}
+{% set riskName = 'Risk of serious harm' %}
+{% if not params.useNDeliusRosh %}
+    {% set riskName = 'ROSH' if params.riskData.assessments[0].rsr.band else 'Risk of serious harm' %}
+    {% if overallRisk == 'VERY_HIGH' %}
+        {% set overallRisk = 'VERY HIGH' %}
+    {% endif %}
+{% endif %}
+{% set riskDataRosh = {
+    assessments: [
+        {
+            rosh: {
+                name: riskName,
+                band: overallRisk
+            }
+        }
+    ]
+} %}
+
+{% set riskBadges %}
+{% set showPredictorBadges = params.riskData.assessments[0].combinedSeriousReoffendingPredictor.band != "NOT APPLICABLE" %}
+{% if (params.useNDeliusRosh or showPredictorBadges) and overallRisk and overallRisk !== 'NOT_FOUND' %}
+{{ predictorBadge({
+    data: riskDataRosh,
+    predictor: 'rosh',
+    showScore: false
+}) }}
+{% endif %}
+{% if showPredictorBadges %}
+{{ predictorBadge({
+    data: params.riskData,
+    predictor: 'combinedSeriousReoffendingPredictor',
+    showScore: true
+}) }}
+{% if params.riskData.assessments[0].rsr.band %}
+{{ predictorBadge({
+    data: params.riskData,
+    predictor: 'rsr',
+    showScore: true
+}) }}
+{% endif %}
+{% endif %}
+{% endset %}
+
+{% if riskBadges | trim %}
+    <div class="pop-header-risk-badges">
+        {{ riskBadges | safe }}
+    </div>
+{% endif %}

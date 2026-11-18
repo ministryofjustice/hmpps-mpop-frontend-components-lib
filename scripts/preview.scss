@@ -7,6 +7,9 @@
 // The library's real component styles - any change here is automatically reflected in the preview.
 @import "../src/assets/scss/all";
 
+// ARNS badge styles, for the predictor badges rendered by personHeaderRiskBadges
+@import "@ministryofjustice/hmpps-arns-frontend-components-lib/dist/arns/components/badge-base/badge-base";
+
 .supervision-package .govuk-tag {
   font-family: "GDS Transport", arial, sans-serif;
   -webkit-font-smoothing: antialiased;

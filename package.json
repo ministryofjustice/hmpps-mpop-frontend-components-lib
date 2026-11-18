@@ -77,6 +77,7 @@
   "license": "ISC",
   "devDependencies": {
     "@ministryofjustice/eslint-config-hmpps": "1.0.4",
+    "@ministryofjustice/hmpps-arns-frontend-components-lib": "3.0.5",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
@@ -109,6 +110,14 @@
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
     "@types/nunjucks": "3.2.6",
     "sass": "^1.103.1"
+  },
+  "peerDependencies": {
+    "@ministryofjustice/hmpps-arns-frontend-components-lib": "^3.0.5"
+  },
+  "peerDependenciesMeta": {
+    "@ministryofjustice/hmpps-arns-frontend-components-lib": {
+      "optional": true
+    }
   },
   "overrides": {
     "@istanbuljs/load-nyc-config": {

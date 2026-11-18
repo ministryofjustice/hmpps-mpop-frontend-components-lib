@@ -1,0 +1,43 @@
+import { Contact, ProfessionalContact } from '../types/ProfessionalContact'
+
+export interface ManagedByDetails {
+  text: string
+  name?: string
+  location?: string
+  href?: string
+}
+
+const isRealContact = (contact: Contact): boolean => !contact.isUnallocated
+
+const preferResponsibleOfficer = (contacts: Contact[]): Contact | undefined =>
+  contacts.find(contact => contact.responsibleOfficer) ?? contacts[0]
+
+export const getManagedByDetails = (
+  crn: string,
+  professionalContact: ProfessionalContact | null,
+  href = `/case/${crn}/personal-details/staff-contacts`,
+): ManagedByDetails => {
+  if (!professionalContact) {
+    return { text: 'No data available' }
+  }
+
+  const contacts = (professionalContact.currentContacts ?? []).filter(isRealContact)
+
+  const com = preferResponsibleOfficer(contacts.filter(contact => !contact.prisonOffenderManager))
+  if (com) {
+    const location = com.probationDeliveryUnit ? ` (${com.probationDeliveryUnit})` : ''
+    return {
+      text: `${com.name}${location}`,
+      name: com.name,
+      ...(com.probationDeliveryUnit && { location: com.probationDeliveryUnit }),
+      href,
+    }
+  }
+
+  const pom = preferResponsibleOfficer(contacts.filter(contact => contact.prisonOffenderManager))
+  if (pom) {
+    return { text: pom.name, name: pom.name, href }
+  }
+
+  return { text: 'Unallocated' }
+}
