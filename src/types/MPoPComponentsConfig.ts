@@ -4,4 +4,5 @@ export interface MPoPComponentsConfig extends ApiConfig {
   masApiConfig?: ApiConfig
   supervisionPackageApiConfig?: ApiConfig
   prisonerSearchApiConfig?: ApiConfig
+  personRecordApiConfig?: ApiConfig
 }

@@ -64,6 +64,7 @@ describe('toPersonHeaderParams', () => {
       managedByLocation: 'Camden and Islington',
       managedByHref: '/case/D004851/personal-details/staff-contacts',
       photo: '/search/prisoner-image/A1234BC',
+      showPhoto: undefined,
       riskBadges: '<span>OGRS</span>',
       riskData: undefined,
       roshLevel: undefined,
@@ -107,16 +108,18 @@ describe('toPersonHeaderParams', () => {
     expect(params.personRiskFlags).toBeUndefined()
   })
 
-  it('passes riskHrefBase and showRisks through', () => {
+  it('passes riskHrefBase, showRisks and showPhoto through', () => {
     const params = toPersonHeaderParams({
       crn: 'D004851',
       name: { forename: 'Andrew', surname: 'Langley' },
       riskHrefBase: 'https://mpop.example.com/case/D004851/risk',
       showRisks: false,
+      showPhoto: false,
     })
 
     expect(params.riskHrefBase).toBe('https://mpop.example.com/case/D004851/risk')
     expect(params.showRisks).toBe(false)
+    expect(params.showPhoto).toBe(false)
   })
 
   it('builds historyHref from tierUrl', () => {

@@ -1,6 +1,7 @@
 export { default as MPoPComponents } from './MPoPComponents'
 export type { MPoPComponentsConfig } from './types/MPoPComponentsConfig'
 export type * from './types/PersonHeader'
+export type * from './types/PersonPhoto'
 export type * from './types/Prisoner'
 export type * from './types/ProfessionalContact'
 export type * from './types/RiskFlag'

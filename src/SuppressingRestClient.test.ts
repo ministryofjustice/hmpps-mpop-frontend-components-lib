@@ -1,3 +1,4 @@
+import { Readable } from 'stream'
 import { RestClient } from '@ministryofjustice/hmpps-rest-client'
 import { SuppressingRestClient } from './SuppressingRestClient'
 
@@ -10,7 +11,7 @@ describe('SuppressingRestClient', () => {
 
   beforeEach(() => {
     mockedRestClient = new RestClient('API', {} as any, null as any, null as any) as jest.Mocked<RestClient>
-    mockedLogger = { debug: jest.fn() }
+    mockedLogger = { debug: jest.fn(), warn: jest.fn() }
 
     handler = new SuppressingRestClient(mockedRestClient, mockedLogger)
   })
@@ -47,5 +48,42 @@ describe('SuppressingRestClient', () => {
 
     await expect(handler.get('/test-path', 'authToken')).rejects.toEqual(internalServerErrorResponse)
     expect(mockedLogger.debug).not.toHaveBeenCalled()
+  })
+
+  describe('stream', () => {
+    it('should pass through the stream', async () => {
+      const stream = Readable.from(['image'])
+      mockedRestClient.stream.mockResolvedValue(stream)
+
+      const result = await handler.stream('/test-path', 'authToken')
+
+      expect(result).toBe(stream)
+      expect(mockedRestClient.stream).toHaveBeenCalledWith(expect.objectContaining({ path: '/test-path' }), 'authToken')
+    })
+
+    it('should return null for a 404 without logging a warning', async () => {
+      const notFoundResponse = { responseStatus: 404 }
+      mockedRestClient.stream.mockImplementation(async (req: any) => {
+        req.errorLogger('/test-path', 'GET', notFoundResponse)
+        throw notFoundResponse
+      })
+
+      const result = await handler.stream('/test-path', 'authToken')
+
+      expect(result).toBeNull()
+      expect(mockedLogger.warn).not.toHaveBeenCalled()
+      expect(mockedLogger.debug).toHaveBeenCalledWith('API returned 404 (Not Found) for GET: /test-path')
+    })
+
+    it('should log a warning and rethrow other errors', async () => {
+      const internalServerErrorResponse = { responseStatus: 500, message: 'Internal Server Error' }
+      mockedRestClient.stream.mockImplementation(async (req: any) => {
+        req.errorLogger('/test-path', 'GET', internalServerErrorResponse)
+        throw internalServerErrorResponse
+      })
+
+      await expect(handler.stream('/test-path', 'authToken')).rejects.toEqual(internalServerErrorResponse)
+      expect(mockedLogger.warn).toHaveBeenCalled()
+    })
   })
 })
