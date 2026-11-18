@@ -102,12 +102,17 @@ const config: MPoPComponentsConfig = {
     timeout: { response: 5000, deadline: 5000 },
     agent: new AgentConfig(5000),
   },
+  personRecordApiConfig: {
+    url: personRecordApiUrl,
+    timeout: { response: 5000, deadline: 5000 },
+    agent: new AgentConfig(5000),
+  },
 }
 
 const mpopComponents = new MPoPComponents(authenticationClient, config, logger)
 ```
 
-Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package and Prisoner Search APIs for the environment you're running in.
+Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package, Prisoner Search and Person Record APIs for the environment you're running in.
 
 ### 5. Render a component
 
@@ -170,6 +175,7 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 | `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
 | `managedByHref` | Optional. Makes managed by a link. |
 | `photo` | Optional image URL. Nothing is shown when it's missing. |
+| `showPhoto` | Set to `false` to hide the photo. Defaults to `true`. |
 | `riskBadges` | Optional pre-rendered risk badge HTML. Used instead of `riskData` when both are given. |
 | `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
 | `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |
@@ -210,6 +216,23 @@ const personHeaderParams = toPersonHeaderParams({
   roshLevel: rosh.level,
   useNDeliusRosh: true,
 })
+```
+
+`photo` is the URL of a route in your app that serves the image. Use `hasPersonPhoto` to check there's a photo before setting it. `error` is set when the Person Record API fails:
+
+```ts
+const { hasPhoto } = await mpopComponents.hasPersonPhoto(authOptions, noms)
+const photo = hasPhoto ? `/search/prisoner-image/${noms}` : undefined
+```
+
+In the route, get the image with `getPersonPhoto`, which returns `photo` as a stream, or `null` when there's no photo or the API returns 403:
+
+```ts
+const { photo, error } = await mpopComponents.getPersonPhoto(authOptions, noms)
+if (photo) {
+  res.type('image/jpeg')
+  await pipeline(photo, res)
+}
 ```
 
 `toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff` and `riskToProbationStaff`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.

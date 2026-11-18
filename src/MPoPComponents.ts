@@ -20,6 +20,7 @@ import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCoun
 import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
 import type { ProfessionalContact, ProfessionalContactResponse } from './types/ProfessionalContact'
 import type { Prisoner, PrisonerResponse } from './types/Prisoner'
+import type { PersonPhotoAvailability, PersonPhotoResponse } from './types/PersonPhoto'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -49,6 +50,8 @@ export default class MPoPComponents {
   private readonly supervisionPackageApiRestClient: SuppressingRestClient
 
   private readonly prisonerSearchApiRestClient: SuppressingRestClient
+
+  private readonly personRecordApiRestClient: SuppressingRestClient
 
   private readonly logger: Logger | Console
 
@@ -81,6 +84,11 @@ export default class MPoPComponents {
 
     this.prisonerSearchApiRestClient = new SuppressingRestClient(
       new RestClient('Prisoner Search API', config.prisonerSearchApiConfig ?? config, logger, authenticationClient),
+      logger,
+    )
+
+    this.personRecordApiRestClient = new SuppressingRestClient(
+      new RestClient('Person Record API', config.personRecordApiConfig ?? config, logger, authenticationClient),
       logger,
     )
   }
@@ -381,6 +389,32 @@ export default class MPoPComponents {
       ...prisonerResponse,
       error,
     }
+  }
+
+  async getPersonPhoto(authOptions: AuthOptions | string, nomsNumber: string): Promise<PersonPhotoResponse> {
+    try {
+      const photo = await this.personRecordApiRestClient.stream(
+        `/person/prison/${encodeURIComponent(nomsNumber)}/image`,
+        authOptions,
+      )
+      return { photo, httpStatus: photo ? 200 : 404, error: null }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      if (responseStatus === 403) {
+        return { photo: null, httpStatus: 403, error: null }
+      }
+      return {
+        photo: null,
+        httpStatus: responseStatus ?? 500,
+        error: err instanceof Error ? err : new Error('500 Internal Server Error'),
+      }
+    }
+  }
+
+  async hasPersonPhoto(authOptions: AuthOptions | string, nomsNumber: string): Promise<PersonPhotoAvailability> {
+    const { photo, httpStatus, error } = await this.getPersonPhoto(authOptions, nomsNumber)
+    photo?.destroy()
+    return { hasPhoto: photo !== null, httpStatus, error }
   }
 
   async getSupervisionPackageFrontendContext(

@@ -1,3 +1,4 @@
+import { Readable } from 'stream'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents, { tierTags } from './MPoPComponents'
 import { SuppressingRestClient } from './SuppressingRestClient'
@@ -843,6 +844,72 @@ describe('MPoPComponents', () => {
         httpStatus: 500,
         error,
       })
+    })
+  })
+
+  describe('getPersonPhoto', () => {
+    it('should return the photo with status 200 when the API responds', async () => {
+      const photo = Readable.from(['image'])
+      mockedRestClient.prototype.stream.mockResolvedValue(photo)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo, httpStatus: 200, error: null })
+      expect(mockedRestClient.prototype.stream).toHaveBeenCalledWith('/person/prison/A1234BC/image', 'authToken')
+    })
+
+    it('should return no photo with status 404 when there is no photo', async () => {
+      mockedRestClient.prototype.stream.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 404, error: null })
+    })
+
+    it('should return no photo and no error when the API returns 403', async () => {
+      mockedRestClient.prototype.stream.mockRejectedValue({ responseStatus: 403 })
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 403, error: null })
+    })
+
+    it('should return the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.stream.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 500, error })
+    })
+  })
+
+  describe('hasPersonPhoto', () => {
+    it('should return hasPhoto true and close the stream when there is a photo', async () => {
+      const photo = Readable.from(['image'])
+      mockedRestClient.prototype.stream.mockResolvedValue(photo)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: true, httpStatus: 200, error: null })
+      expect(photo.destroyed).toBe(true)
+    })
+
+    it('should return hasPhoto false when there is no photo', async () => {
+      mockedRestClient.prototype.stream.mockResolvedValue(null)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: false, httpStatus: 404, error: null })
+    })
+
+    it('should return hasPhoto false with the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.stream.mockRejectedValue(error)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: false, httpStatus: 500, error })
     })
   })
 

@@ -15,6 +15,7 @@ export interface PersonHeaderParamsInput {
   riskBadgeData?: RiskBadgeData
   personStatusTag?: string
   photo?: string
+  showPhoto?: boolean
   riskBadges?: string
   riskData?: object | null
   roshLevel?: string | null
@@ -36,6 +37,7 @@ export interface PersonHeaderParams {
   managedByLocation?: string
   managedByHref?: string
   photo?: string
+  showPhoto?: boolean
   riskBadges?: string
   riskData?: object | null
   roshLevel?: string | null
