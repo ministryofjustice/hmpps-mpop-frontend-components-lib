@@ -14,9 +14,12 @@ const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.m
   silenceDeprecations: ['import'],
 }).css
 
-const env = nunjucks.configure(['src/components', 'node_modules/govuk-frontend/dist'], {
-  autoescape: true,
-})
+const env = nunjucks.configure(
+  ['src/components', 'node_modules/govuk-frontend/dist', 'node_modules/@ministryofjustice/frontend'],
+  {
+    autoescape: true,
+  },
+)
 
 mpopNunjucksSetup(env)
 
@@ -31,6 +34,7 @@ const previewAge = yearsSince('1990-01-15')
 const validComponents = [
   'pop-header',
   'person-header',
+  'user-navigation',
   'risk-flag-badge',
   'supervision-package',
   'supervision-package-summary',
@@ -50,6 +54,7 @@ if (unknownComponents.length) {
 const showAllComponents = requestedComponents.length === 0
 const showPopHeader = showAllComponents || requestedComponents.includes('pop-header')
 const showPersonHeader = showAllComponents || requestedComponents.includes('person-header')
+const showUserNavigation = showAllComponents || requestedComponents.includes('user-navigation')
 const showSupervisionPackage = showAllComponents || requestedComponents.includes('supervision-package')
 const showSupervisionPackageSummary = showAllComponents || requestedComponents.includes('supervision-package-summary')
 const showRiskFlagBadge = showAllComponents || requestedComponents.includes('risk-flag-badge')
@@ -69,6 +74,7 @@ const html = env.renderString(
 {% from "pop-header/macro.njk" import popHeader %}
 {% from "supervision-package-summary/macro.njk" import supervisionPackageSummary %}
 {% from "person-header/macro.njk" import personHeader %}
+{% from "user-navigation/macro.njk" import userNavigation %}
 {% from "risk-flag-badge/macro.njk" import riskFlagBadge %}
 
 <!DOCTYPE html>
@@ -81,7 +87,6 @@ const html = env.renderString(
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/govuk-frontend@6.2.0/dist/govuk/govuk-frontend.min.css"
   >
-
   <style>${previewCss}</style>
 </head>
 
@@ -110,6 +115,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#person-header-collapsible-risk-flags">Collapsible risk flags (transactional)</a></li>
             </ul>
           </li>{% endif %}
+          {% if showUserNavigation %}<li><a class="govuk-link" href="#user-navigation">User Navigation</a></li>{% endif %}
           {% if showSupervisionPackage %}<li><a class="govuk-link" href="#supervision-package">Supervision Package</a>
             <ul class="govuk-list govuk-list--bullet">
               <li><a class="govuk-link" href="#glossary">Glossary: phase codes and enums</a></li>
@@ -346,6 +352,25 @@ const html = env.renderString(
 
       {% endif %}
 
+      {% if showUserNavigation %}
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      <h1 class="govuk-heading-l" id="user-navigation">User Navigation</h1>
+       <h3 class="govuk-heading-s">Count is zero</h3>
+      {{ userNavigation({
+        user: { userId: '123', username: 'testuser' },
+        userAlertsCount: null
+      }) }}
+      <h3 class="govuk-heading-s govuk-!-margin-top-4">Count is less than 100</h3>
+      {{ userNavigation({
+        user: { userId: '123', username: 'testuser' },
+        userAlertsCount: '10'
+      }) }}
+        <h3 class="govuk-heading-s govuk-!-margin-top-4">Count is higher than 99</h3>
+      {{ userNavigation({
+        user: { userId: '123', username: 'testuser' },
+        userAlertsCount: '100'
+      }) }}
+      {% endif %}
       {% if showSupervisionPackage %}
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
       <h1 class="govuk-heading-l" id="supervision-package">Supervision Package</h1>
@@ -3949,6 +3974,7 @@ const html = env.renderString(
     previewAge,
     showPopHeader,
     showPersonHeader,
+    showUserNavigation,
     showSupervisionPackage,
     showSupervisionPackageSummary,
     showRiskFlagBadge,

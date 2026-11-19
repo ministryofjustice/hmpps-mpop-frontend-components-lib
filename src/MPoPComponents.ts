@@ -16,6 +16,7 @@ import type {
 } from './types/SupervisionPackage'
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
+import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCount'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -162,6 +163,37 @@ export default class MPoPComponents {
 
     return {
       ...personalDetailsResponse,
+      error,
+    }
+  }
+
+  async getUserAlertsCount(authOptions: AuthOptions | string): Promise<UserAlertsCountResponse> {
+    let error: Error | null = null
+    let userAlertsCountResponse: UserAlertsCountResponse
+    try {
+      const response = await this.masApiRestClient.get<UserAlertsCount>(`/alerts/count`, authOptions)
+      if (response && 'count' in response && response.count !== undefined && response.count !== null) {
+        userAlertsCountResponse = {
+          userAlertsCount: response.count < 100 ? response.count.toString() : '99+',
+          httpStatus: 200,
+        }
+      } else {
+        userAlertsCountResponse = {
+          userAlertsCount: null,
+          httpStatus: 404,
+        }
+      }
+    } catch (err) {
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+
+      userAlertsCountResponse = {
+        userAlertsCount: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+    return {
+      ...userAlertsCountResponse,
       error,
     }
   }

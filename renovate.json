@@ -19,7 +19,7 @@
       "enabled": false
     },
     {
-      "matchPackageNames": ["typescript", "govuk-frontend"],
+      "matchPackageNames": ["typescript", "govuk-frontend", "@ministryofjustice/frontend"],
       "rangeStrategy": "bump",
       "stabilityDays": 0
     },
