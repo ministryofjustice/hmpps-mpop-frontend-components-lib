@@ -1,6 +1,5 @@
-{% set showPhoto = params.photo and params.showPhoto !== false %}
-<div class='person-header__band{% if showPhoto %} person-header__band--with-photo{% endif %}'>
-    {% if showPhoto %}
+<div class='person-header__band{% if params.photo %} person-header__band--with-photo{% endif %}'>
+    {% if params.photo %}
         <img
                 class='person-header__photo'
                 data-qa='personPhoto'

@@ -180,7 +180,6 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 | `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
 | `managedByHref` | Optional. Makes managed by a link. |
 | `photo` | Optional image URL. Nothing is shown when it's missing. |
-| `showPhoto` | Set to `false` to hide the photo. Defaults to `true`. |
 | `riskBadges` | Optional pre-rendered risk badge HTML. Used instead of `riskData` when both are given. |
 | `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
 | `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |

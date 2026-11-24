@@ -66,17 +66,6 @@ describe('person-header-banner', () => {
     expect(document.querySelector('.person-header__band--with-photo')).toBeNull()
   })
 
-  it('does not render the photo when showPhoto is false', () => {
-    const document = renderComponent({
-      name: 'Andrew Langley',
-      photo: '/search/prisoner-image/A1234BC',
-      showPhoto: false,
-    })
-
-    expect(document.querySelector('[data-qa="personPhoto"]')).toBeNull()
-    expect(document.querySelector('.person-header__band--with-photo')).toBeNull()
-  })
-
   it('renders the person status tag', () => {
     const document = renderComponent({ personStatusTag: 'In custody' })
 
