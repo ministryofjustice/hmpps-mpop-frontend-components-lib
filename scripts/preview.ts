@@ -16,7 +16,11 @@ const previewCss = sass.compile(fileURLToPath(new URL('./preview.scss', import.m
 }).css
 
 const env = nunjucks.configure(
-  ['src/components', 'node_modules/govuk-frontend/dist', 'node_modules/@ministryofjustice/frontend', 'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  [
+    'src/components',
+    'node_modules/govuk-frontend/dist',
+    'node_modules/@ministryofjustice/frontend',
+    'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
   ],
   {
     autoescape: true,
