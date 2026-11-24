@@ -184,7 +184,7 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 | `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
 | `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |
 | `useNDeliusRosh` | Set to `true` when `roshLevel` comes from NDelius. The ROSH badge then shows even when the combined predictor is `NOT APPLICABLE`. |
-| `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, or the badges grouped by severity as `{ groups: [{ badges: [...] }], remainingCount }`. `groups` is used when both are given. |
+| `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, as returned by `getRiskBadges`. The older `{ groups: [{ badges: [...] }], remainingCount }` format is deprecated but still works, and is used when both are given. |
 | `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
 | `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
 | `showRisks` | Set to `false` to hide the grey section. Defaults to `true`. |

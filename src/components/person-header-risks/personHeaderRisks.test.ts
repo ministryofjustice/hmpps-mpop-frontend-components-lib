@@ -25,7 +25,7 @@ const renderComponent = (params = {}, environment = env) => {
 }
 
 const personRiskFlags = {
-  groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+  headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
   remainingCount: 2,
 }
 
@@ -52,11 +52,11 @@ describe('person-header-risks', () => {
     expect(more?.textContent?.trim()).toBe('+2 active risk flags')
   })
 
-  it('renders risk flags provided as headerBadges', () => {
+  it('still renders risk flags provided as the deprecated groups', () => {
     const document = renderComponent({
       crn: 'D004851',
       personRiskFlags: {
-        headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
+        groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
         remainingCount: 0,
       },
     })
@@ -106,7 +106,7 @@ describe('person-header-risks', () => {
   })
 
   it('renders nothing when there are no risk badges or risk flags', () => {
-    const document = renderComponent({ riskBadges: '\n  \n', personRiskFlags: { groups: [], remainingCount: 0 } })
+    const document = renderComponent({ riskBadges: '\n  \n', personRiskFlags: { headerBadges: [], remainingCount: 0 } })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
   })

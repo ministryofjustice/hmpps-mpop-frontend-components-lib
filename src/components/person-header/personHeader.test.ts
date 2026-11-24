@@ -146,7 +146,7 @@ describe('person-header', () => {
     expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
   })
 
-  it('renders structured personRiskFlags provided as groups with the remaining risk count link', () => {
+  it('still renders personRiskFlags provided as the deprecated groups with the remaining risk count link', () => {
     const document = renderComponent({
       crn: 'D004851',
       personRiskFlags: {
@@ -191,7 +191,7 @@ describe('person-header', () => {
 
   describe('collapsible risk flags', () => {
     const personRiskFlags = {
-      groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+      headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
       remainingCount: 3,
     }
 
@@ -232,7 +232,7 @@ describe('person-header', () => {
     it('does not render the toggle when there are no risk flags', () => {
       const document = renderComponent({
         riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
-        personRiskFlags: { groups: [], remainingCount: 0 },
+        personRiskFlags: { headerBadges: [], remainingCount: 0 },
         collapsibleRiskFlags: true,
       })
 
@@ -245,7 +245,7 @@ describe('person-header', () => {
       crn: 'D004851',
       riskHrefBase: 'https://mpop.example.com/case/D004851/risk',
       personRiskFlags: {
-        groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+        headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
         remainingCount: 1,
       },
     })
@@ -264,7 +264,7 @@ describe('person-header', () => {
       crn: 'D004851',
       riskBadges: '<span data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',
       personRiskFlags: {
-        groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+        headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
         remainingCount: 0,
       },
     }
@@ -292,9 +292,9 @@ describe('person-header', () => {
     })
   })
 
-  it('does not render the risk panel when riskBadgeData has no groups', () => {
+  it('does not render the risk panel when riskBadgeData has no badges', () => {
     const document = renderComponent({
-      riskBadgeData: { groups: [], remainingCount: 0 },
+      riskBadgeData: { headerBadges: [], remainingCount: 0 },
     })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()

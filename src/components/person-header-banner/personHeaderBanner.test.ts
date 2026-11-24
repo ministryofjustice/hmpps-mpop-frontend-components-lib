@@ -76,7 +76,7 @@ describe('person-header-banner', () => {
     const document = renderComponent({
       crn: 'D004851',
       riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
-      personRiskFlags: { groups: [{ badges: [{ id: '1', text: 'Flag', badgeClass: 'risk-badge--low' }] }] },
+      personRiskFlags: { headerBadges: [{ id: '1', text: 'Flag', badgeClass: 'risk-badge--low' }], remainingCount: 0 },
     })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()
