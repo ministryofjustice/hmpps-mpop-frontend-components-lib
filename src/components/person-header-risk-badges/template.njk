@@ -20,28 +20,28 @@
 } %}
 
 {% set riskBadges %}
-{% set showPredictorBadges = params.riskData.assessments[0].combinedSeriousReoffendingPredictor.band != "NOT APPLICABLE" %}
-{% if (params.useNDeliusRosh or showPredictorBadges) and overallRisk and overallRisk !== 'NOT_FOUND' %}
-{{ predictorBadge({
-    data: riskDataRosh,
-    predictor: 'rosh',
-    showScore: false
-}) }}
-{% endif %}
-{% if showPredictorBadges %}
-{{ predictorBadge({
-    data: params.riskData,
-    predictor: 'combinedSeriousReoffendingPredictor',
-    showScore: true
-}) }}
-{% if params.riskData.assessments[0].rsr.band %}
-{{ predictorBadge({
-    data: params.riskData,
-    predictor: 'rsr',
-    showScore: true
-}) }}
-{% endif %}
-{% endif %}
+    {% set showPredictorBadges = params.riskData.assessments[0].combinedSeriousReoffendingPredictor.band != "NOT APPLICABLE" %}
+    {% if (params.useNDeliusRosh or showPredictorBadges) and overallRisk and overallRisk !== 'NOT_FOUND' %}
+        {{ predictorBadge({
+            data: riskDataRosh,
+            predictor: 'rosh',
+            showScore: false
+        }) }}
+    {% endif %}
+    {% if showPredictorBadges %}
+        {{ predictorBadge({
+            data: params.riskData,
+            predictor: 'combinedSeriousReoffendingPredictor',
+            showScore: true
+        }) }}
+        {% if params.riskData.assessments[0].rsr.band %}
+            {{ predictorBadge({
+                data: params.riskData,
+                predictor: 'rsr',
+                showScore: true
+            }) }}
+        {% endif %}
+    {% endif %}
 {% endset %}
 
 {% if riskBadges | trim %}
