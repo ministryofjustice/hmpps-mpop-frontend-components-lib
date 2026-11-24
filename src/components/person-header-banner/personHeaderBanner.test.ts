@@ -72,7 +72,7 @@ describe('person-header-banner', () => {
     expect(document.querySelector('[data-qa="personStatusTag"]')?.textContent?.trim()).toBe('In custody')
   })
 
-  it('does not render risk information', () => {
+  it('does not render risk information, even when risk data is given', () => {
     const document = renderComponent({
       crn: 'D004851',
       riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
