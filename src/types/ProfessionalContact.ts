@@ -1,4 +1,5 @@
 import { Name } from './RiskFlag'
+import type { ApiResponse } from './ApiResponse'
 
 export interface ProfessionalContact {
   name: Name
@@ -21,8 +22,6 @@ export interface Contact {
   lastUpdated?: string
 }
 
-export type ProfessionalContactResponse = {
+export type ProfessionalContactResponse = ApiResponse & {
   professionalContact: ProfessionalContact | null
-  httpStatus: number
-  error?: Error | null
 }

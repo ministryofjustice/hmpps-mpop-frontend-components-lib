@@ -1,12 +1,12 @@
+import type { ApiResponse } from './ApiResponse'
+
 type Release = {
   releaseDate: string
   recallDate?: string
 }
 
-export type SupervisionPackageResponse = {
+export type SupervisionPackageResponse = ApiResponse & {
   supervisionPackage: CurrentPhase | null
-  httpStatus: number
-  error?: Error | null
 }
 
 type CodeDescription = {

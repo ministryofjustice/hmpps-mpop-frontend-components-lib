@@ -1,3 +1,5 @@
+import type { ApiResponse } from './ApiResponse'
+
 export interface Prisoner {
   prisonerNumber?: string
   firstName?: string
@@ -16,8 +18,6 @@ export interface Prisoner {
   releaseDate?: string
 }
 
-export type PrisonerResponse = {
+export type PrisonerResponse = ApiResponse & {
   prisoner: Prisoner | null
-  httpStatus: number
-  error?: Error | null
 }

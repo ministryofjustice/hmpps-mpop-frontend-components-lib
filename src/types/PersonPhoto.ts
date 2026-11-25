@@ -1,19 +1,14 @@
 import type { Readable } from 'stream'
+import type { ApiResponse } from './ApiResponse'
 
-export type PersonPhotoResponse = {
+export type PersonPhotoResponse = ApiResponse & {
   photo: Readable | null
-  httpStatus: number
-  error?: Error | null
 }
 
-export type CheckInPhotoUrlResponse = {
+export type CheckInPhotoUrlResponse = ApiResponse & {
   photoUrl: string | null
-  httpStatus: number
-  error?: Error | null
 }
 
-export type PersonPhotoAvailability = {
+export type PersonPhotoAvailability = ApiResponse & {
   hasPhoto: boolean
-  httpStatus: number
-  error?: Error | null
 }

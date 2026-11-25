@@ -1,9 +1,9 @@
+import type { ApiResponse } from './ApiResponse'
+
 export interface UserAlertsCount {
   count: number
 }
 
-export type UserAlertsCountResponse = {
+export type UserAlertsCountResponse = ApiResponse & {
   userAlertsCount: string | null
-  httpStatus: number
-  error?: Error | null
 }

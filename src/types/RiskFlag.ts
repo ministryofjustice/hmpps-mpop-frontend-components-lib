@@ -1,3 +1,5 @@
+import type { ApiResponse } from './ApiResponse'
+
 export interface Name {
   forename: string
   middleName?: string
@@ -68,10 +70,8 @@ export interface PersonRiskFlags {
   removedRiskFlags: RiskFlag[]
 }
 
-export type PersonRiskFlagsResponse = {
+export type PersonRiskFlagsResponse = ApiResponse & {
   personRiskFlags: PersonRiskFlags | null
-  httpStatus: number
-  error?: Error | null
 }
 
 export type RiskScore = 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
