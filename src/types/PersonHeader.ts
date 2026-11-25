@@ -46,3 +46,10 @@ export interface PersonHeaderParams {
   showRisks?: boolean
   personStatusTag?: string
 }
+
+export type PersonHeaderErrorsParams = {
+  statusUnavailable?: boolean
+  photoUnavailable?: boolean
+  throughcareUnavailable?: 'some' | 'all'
+  arnsUnavailable?: boolean
+}

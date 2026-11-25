@@ -84,6 +84,7 @@ const html = env.renderString(
 {% from "user-navigation/macro.njk" import userNavigation %}
 {% from "person-header-banner/macro.njk" import personHeaderBanner %}
 {% from "person-header-risks/macro.njk" import personHeaderRisks %}
+{% from "person-header-errors/macro.njk" import personHeaderErrors %}
 {% from "risk-flag-badge/macro.njk" import riskFlagBadge %}
 
 <!DOCTYPE html>
@@ -126,6 +127,7 @@ const html = env.renderString(
               <li><a class="govuk-link" href="#person-header-risk-href-base">Custom risk link base</a></li>
               <li><a class="govuk-link" href="#person-header-arns-risk-badges">ARNS risk badges from riskData</a></li>
               <li><a class="govuk-link" href="#person-header-standalone">Banner and risks on their own</a></li>
+              <li><a class="govuk-link" href="#person-header-errors">Errors</a></li>
             </ul>
           </li>{% endif %}
           {% if showUserNavigation %}<li><a class="govuk-link" href="#user-navigation">User Navigation</a></li>{% endif %}
@@ -473,16 +475,21 @@ const html = env.renderString(
         crn: "D004851",
         riskBadges: '<span class="govuk-tag govuk-tag--orange">Risk of serious harm <strong>MEDIUM</strong></span>',
         personRiskFlags: {
-          groups: [
-            {
-              severity: 'HIGH',
-              badges: [
-                { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
-              ]
-            }
+          headerBadges: [
+            { id: 1, text: 'Risk to staff - High', level: 'HIGH', badgeClass: 'risk-badge--high' }
           ],
           remainingCount: 0
         }
+      }) }}
+
+      <h2 class="govuk-heading-m" id="person-header-errors">Errors</h2>
+      <p class="govuk-body"><code>personHeaderErrors</code> shows what couldn't be loaded, above the header. One message is shown as text, several as a list.</p>
+      {{ personHeaderErrors({ photoUnavailable: true }) }}
+      {{ personHeaderErrors({
+        statusUnavailable: true,
+        photoUnavailable: true,
+        throughcareUnavailable: 'some',
+        arnsUnavailable: true
       }) }}
 
       {% endif %}

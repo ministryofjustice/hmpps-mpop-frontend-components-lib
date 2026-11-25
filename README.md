@@ -288,6 +288,31 @@ Import its styles too:
 @import '@ministryofjustice/hmpps-arns-frontend-components-lib/dist/all';
 ```
 
+### Person header errors
+
+`personHeaderErrors` shows a "There is a problem" alert above the header listing what couldn't be loaded. It needs the MoJ Frontend templates on your Nunjucks path. Nothing is shown when nothing is unavailable.
+
+```njk
+{% from "mpop/components/person-header-errors/macro.njk" import personHeaderErrors %}
+
+{{ personHeaderErrors({
+  statusUnavailable: true,
+  photoUnavailable: true,
+  throughcareUnavailable: 'some',
+  arnsUnavailable: false
+}) }}
+```
+
+| Param | Message |
+| --- | --- |
+| `arnsUnavailable` | Risk information from the ARNS service is currently unavailable. |
+| `photoUnavailable` | Photo is currently unavailable. |
+| `statusUnavailable` | Status information is currently unavailable. |
+| `throughcareUnavailable: 'some'` | Some throughcare information is currently unavailable. |
+| `throughcareUnavailable: 'all'` | Throughcare information is currently unavailable. |
+
+The messages are shown in this order.
+
 
 ## Viewing your changes
 
