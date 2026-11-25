@@ -50,6 +50,16 @@ describe('getStatusTag', () => {
     await expect(getStatusTag(details, createSupervisionPackage())).resolves.toBe(PERSON_STATUS_TAGS.DECEASED)
   })
 
+  it('returns undefined when the personal details, supervision package and prisoner are null', async () => {
+    await expect(getStatusTag(null, null, null)).resolves.toBeUndefined()
+  })
+
+  it('returns the prisoner status when the personal details and supervision package are null', async () => {
+    const prisoner = { status: 'ACTIVE IN' } as Prisoner
+
+    await expect(getStatusTag(null, null, prisoner)).resolves.toBe(PERSON_STATUS_TAGS.IN_CUSTODY)
+  })
+
   it('returns the custody status for a primary custodial sentence', async () => {
     const supervisionPackage = createSupervisionPackage({
       context: {

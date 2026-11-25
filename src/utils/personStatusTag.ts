@@ -22,9 +22,9 @@ export const PERSON_STATUS_TAGS = {
 } as const
 
 export async function getStatusTag(
-  personalDetails: PersonStatusDetails,
-  supervisionPackage: SupervisionPackage,
-  prisoner?: Prisoner,
+  personalDetails: PersonStatusDetails | null | undefined,
+  supervisionPackage: SupervisionPackage | null | undefined,
+  prisoner?: Prisoner | null,
 ): Promise<string | undefined> {
   if (personalDetails?.dateOfDeath !== undefined) {
     return PERSON_STATUS_TAGS.DECEASED
@@ -70,7 +70,7 @@ function extractStatusFromPrimarySentence(activePrimarySentence: FrontendSentenc
   return undefined
 }
 
-export async function getStatusTagForPersonInCustody(prisoner?: Prisoner): Promise<string | undefined> {
+export async function getStatusTagForPersonInCustody(prisoner?: Prisoner | null): Promise<string | undefined> {
   if (prisoner?.legalStatus === 'DEAD') {
     return PERSON_STATUS_TAGS.DECEASED
   }

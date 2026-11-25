@@ -203,6 +203,7 @@ import {
 const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions, crn)
 const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
 const { prisoner } = await mpopComponents.getPrisonerDetails(authOptions, noms)
+const supervisionPackage = await mpopComponents.getSupervisionPackageFrontendContext(authOptions, crn)
 
 const { riskBadgeData, rosh } = toPersonRiskDetails(personRiskFlags)
 
@@ -214,13 +215,15 @@ const personHeaderParams = toPersonHeaderParams({
   tierUrl,
   professionalContact,
   riskBadgeData,
-  personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner ?? undefined),
+  personStatusTag: await getStatusTag(personalDetails, supervisionPackage, prisoner),
   photo: photoUrl,
   riskData,
   roshLevel: rosh.level,
   useNDeliusRosh: true,
 })
 ```
+
+`getStatusTag` shows `Deceased` from `personalDetails.dateOfDeath`. The `getPersonalDetails` summary doesn't include it, so pass your app's own personal details.
 
 `photo` is the online check-in photo if there is one, otherwise the prison photo from a route in your app. `toPersonPhotoSrc` picks between them. The check-in photo URL expires, so get it on each request. `hasPersonPhoto` checks for a prison photo, and its `error` is set when the Person Record API fails:
 
