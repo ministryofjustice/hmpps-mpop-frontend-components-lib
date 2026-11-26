@@ -55,7 +55,7 @@ describe('toPersonHeaderParams', () => {
     expect(params).toEqual({
       name: 'Andrew Langley',
       crn: 'D004851',
-      dob: '18 November 1995',
+      dob: '1995-11-18',
       tier: 'B4',
       provisional: true,
       historyHref: '/tier-history/D004851',

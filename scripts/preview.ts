@@ -234,7 +234,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedByName: "jack frost",
@@ -312,7 +312,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedBy: "Unallocated"
@@ -323,7 +323,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "G",
         historyHref: "#",
         managedByName: "jack frost",
@@ -337,7 +337,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedByName: "jack frost",
@@ -370,7 +370,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedByName: "jack frost",
@@ -396,7 +396,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedBy: "Unallocated",
@@ -437,7 +437,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedBy: "Unallocated",
@@ -449,7 +449,7 @@ const html = env.renderString(
       {{ personHeader({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedBy: "Unallocated",
@@ -463,7 +463,7 @@ const html = env.renderString(
       {{ personHeaderBanner({
         name: "Andrew Langley",
         crn: "D004851",
-        dob: "18 November 1995",
+        dob: "1995-11-18",
         tier: "B4",
         historyHref: "#",
         managedByName: "jack frost",

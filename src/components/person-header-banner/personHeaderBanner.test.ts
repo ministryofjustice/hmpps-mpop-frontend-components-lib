@@ -17,7 +17,7 @@ const renderComponent = (params = {}) => {
 
 describe('person-header-banner', () => {
   it('renders the name, CRN and date of birth', () => {
-    const document = renderComponent({ name: 'Andrew Langley', crn: 'D004851', dob: '18 November 1995' })
+    const document = renderComponent({ name: 'Andrew Langley', crn: 'D004851', dob: '1995-11-18' })
 
     expect(document.querySelector('[data-qa="personName"]')?.textContent?.trim()).toBe('Andrew Langley')
     expect(document.querySelector('[data-qa="crn"]')?.textContent?.trim()).toBe('D004851')

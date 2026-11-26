@@ -158,7 +158,7 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 {{ personHeader({
   name: "Andrew Langley",
   crn: "D004851",
-  dob: "18 November 1995",
+  dob: "1995-11-18",
   tier: "B4",
   historyHref: tierHistoryUrl,
   managedByName: "jack frost",
@@ -173,7 +173,7 @@ See `scripts/preview-api.ts` for a fuller example of building these params from 
 
 | Param | Description |
 | --- | --- |
-| `name`, `crn`, `dob` | Shown in the banner. `dob` should already be formatted. |
+| `name`, `crn`, `dob` | Shown in the banner. `dob` is an ISO date, e.g. `1995-11-18`, and is shown as `18 November 1995`. |
 | `personStatusTag` | Optional status shown next to the name, e.g. `In custody`. |
 | `tier`, `provisional`, `historyHref` | Tier link. `provisional: true` adds "(provisional)". |
 | `managedByName`, `managedByLocation` | Responsible officer's name, formatted with `formatName`, and their location in brackets. |

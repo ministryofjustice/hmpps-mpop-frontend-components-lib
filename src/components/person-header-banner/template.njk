@@ -33,7 +33,7 @@
         <ul class='govuk-list person-header__meta'>
             <li>
                 <span class='govuk-!-font-weight-bold'>Date of birth:</span>
-                <span data-qa='dob'>{{ params.dob }}</span>
+                <span data-qa='dob'>{{ params.dob | dateWithYear }}</span>
             </li>
 
             <li>

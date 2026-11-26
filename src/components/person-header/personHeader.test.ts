@@ -29,7 +29,7 @@ describe('person-header', () => {
   })
 
   it('renders the date of birth', () => {
-    const document = renderComponent({ dob: '18 November 1995' })
+    const document = renderComponent({ dob: '1995-11-18' })
 
     expect(document.querySelector('[data-qa="dob"]')?.textContent?.trim()).toBe('18 November 1995')
   })
