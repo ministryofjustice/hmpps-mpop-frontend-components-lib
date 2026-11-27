@@ -12,3 +12,24 @@ export type CheckInPhotoUrlResponse = ApiResponse & {
 export type PersonPhotoAvailability = ApiResponse & {
   hasPhoto: boolean
 }
+
+export type CheckInPhoto = {
+  photoUrl: string | null
+  failed: boolean
+}
+
+export type PersonHeaderPhotoOptions = {
+  crn: string
+  noms?: string | null
+  prisonPhotoHref: (noms: string) => string
+  includeCheckInPhoto?: boolean
+  checkInPhoto?: CheckInPhoto
+  hasPrisonPhoto?: boolean
+}
+
+export type PersonHeaderPhoto = {
+  photo?: string
+  photoUnavailable: boolean
+  checkInPhoto?: CheckInPhoto
+  hasPrisonPhoto?: boolean
+}

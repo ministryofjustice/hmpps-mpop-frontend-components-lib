@@ -225,19 +225,28 @@ const personHeaderParams = toPersonHeaderParams({
 
 `getStatusTag` shows `Deceased` from `personalDetails.dateOfDeath`. The `getPersonalDetails` summary doesn't include it, so pass your app's own personal details.
 
-`photo` is the online check-in photo if there is one, otherwise the prison photo from a route in your app. `toPersonPhotoSrc` picks between them. The check-in photo URL expires, so get it on each request. `hasPersonPhoto` checks for a prison photo, and its `error` is set when the Person Record API fails:
+`photo` is the online check-in photo if there is one, otherwise the prison photo from a route in your app. `getPersonHeaderPhoto` gets it in that order and tells you when it is unavailable:
 
 ```ts
-const { photoUrl } = await mpopComponents.getCheckInPhotoUrl(authOptions, crn)
-const { hasPhoto } = photoUrl ? { hasPhoto: false } : await mpopComponents.hasPersonPhoto(authOptions, noms)
-
-const photo = toPersonPhotoSrc({
-  checkInPhotoUrl: photoUrl,
+const { photo, photoUnavailable, hasPrisonPhoto } = await mpopComponents.getPersonHeaderPhoto(authOptions, {
+  crn,
   noms,
-  hasPrisonPhoto: hasPhoto,
   prisonPhotoHref: nomsNumber => `/person-photo/${nomsNumber}`,
+  hasPrisonPhoto: cachedHasPrisonPhoto,
 })
 ```
+
+| Option | Description |
+| --- | --- |
+| `crn`, `noms` | The check-in photo is looked up by CRN, and the prison photo by NOMS number. |
+| `prisonPhotoHref` | Builds the path of your app's prison photo route. |
+| `includeCheckInPhoto` | `false` skips the check-in photo. Defaults to `true`. |
+| `checkInPhoto` | A `checkInPhoto` returned earlier in the same request, so it isn't looked up again. The URL expires, so don't keep it between requests. |
+| `hasPrisonPhoto` | A `hasPrisonPhoto` you cached earlier, so the prison photo isn't checked again. |
+
+`photoUnavailable` is `true` when there is no photo and either lookup failed. `hasPrisonPhoto` is only returned when the prison photo was checked successfully, so cache it when it is set.
+
+To build the src yourself, `toPersonPhotoSrc` applies the same order, using `getCheckInPhotoUrl` and `hasPersonPhoto`.
 
 In the route, get the image with `getPersonPhoto`, which returns `photo` as a stream, or `null` when there's no photo or the API returns 403:
 

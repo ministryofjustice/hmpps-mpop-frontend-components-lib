@@ -949,6 +949,120 @@ describe('MPoPComponents', () => {
     })
   })
 
+  describe('getPersonHeaderPhoto', () => {
+    const prisonPhotoHref = (noms: string) => `/person-photo/${noms}`
+    const options = { crn: 'X000001', noms: 'A1234BC', prisonPhotoHref }
+    const checkInPhotoUrl = 'https://photos.example.com/1.jpg'
+    let getCheckInPhotoUrl: jest.SpyInstance
+    let hasPersonPhoto: jest.SpyInstance
+
+    beforeEach(() => {
+      getCheckInPhotoUrl = jest
+        .spyOn(mpopComponents, 'getCheckInPhotoUrl')
+        .mockResolvedValue({ photoUrl: null, httpStatus: 404, error: null })
+      hasPersonPhoto = jest
+        .spyOn(mpopComponents, 'hasPersonPhoto')
+        .mockResolvedValue({ hasPhoto: false, httpStatus: 404, error: null })
+    })
+
+    it('should use the check-in photo without checking for a prison photo', async () => {
+      getCheckInPhotoUrl.mockResolvedValue({ photoUrl: checkInPhotoUrl, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result).toEqual({
+        photo: checkInPhotoUrl,
+        photoUnavailable: false,
+        checkInPhoto: { photoUrl: checkInPhotoUrl, failed: false },
+        hasPrisonPhoto: undefined,
+      })
+      expect(getCheckInPhotoUrl).toHaveBeenCalledWith('authToken', 'X000001')
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+    })
+
+    it('should use the prison photo when there is no check-in photo', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result).toEqual({
+        photo: '/person-photo/A1234BC',
+        photoUnavailable: false,
+        checkInPhoto: { photoUrl: null, failed: false },
+        hasPrisonPhoto: true,
+      })
+      expect(hasPersonPhoto).toHaveBeenCalledWith('authToken', 'A1234BC')
+    })
+
+    it('should return no photo when there is neither photo', async () => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result.photo).toBeUndefined()
+      expect(result.photoUnavailable).toBe(false)
+      expect(result.hasPrisonPhoto).toBe(false)
+    })
+
+    it('should not look up the check-in photo when it is not included', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, includeCheckInPhoto: false })
+
+      expect(getCheckInPhotoUrl).not.toHaveBeenCalled()
+      expect(result.photo).toBe('/person-photo/A1234BC')
+      expect(result.checkInPhoto).toBeUndefined()
+    })
+
+    it('should reuse a check-in photo that was already looked up', async () => {
+      const checkInPhoto = { photoUrl: checkInPhotoUrl, failed: false }
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, checkInPhoto })
+
+      expect(getCheckInPhotoUrl).not.toHaveBeenCalled()
+      expect(result.photo).toBe(checkInPhotoUrl)
+    })
+
+    it.each([true, false])('should use a known prison photo result of %s without checking again', async known => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, hasPrisonPhoto: known })
+
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+      expect(result.photo).toBe(known ? '/person-photo/A1234BC' : undefined)
+      expect(result.hasPrisonPhoto).toBeUndefined()
+    })
+
+    it('should not check for a prison photo when there is no NOMS number', async () => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, noms: undefined })
+
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+      expect(result.photo).toBeUndefined()
+    })
+
+    it('should flag the photo as unavailable and fall back to the prison photo when the check-in lookup fails', async () => {
+      const error = new Error('Network Failure')
+      getCheckInPhotoUrl.mockResolvedValue({ photoUrl: null, httpStatus: 500, error })
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const failed = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+      const withPrisonPhoto = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(failed.photoUnavailable).toBe(true)
+      expect(failed.checkInPhoto).toEqual({ photoUrl: null, failed: true })
+      expect(withPrisonPhoto).toEqual(
+        expect.objectContaining({ photo: '/person-photo/A1234BC', photoUnavailable: false }),
+      )
+      expect(logError).toHaveBeenCalledWith(error, 'Failed to get the online check-in photo for CRN X000001')
+    })
+
+    it('should flag the photo as unavailable and not return a prison photo result when the prison check fails', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: false, httpStatus: 500, error: new Error('Network Failure') })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result.photoUnavailable).toBe(true)
+      expect(result.hasPrisonPhoto).toBeUndefined()
+    })
+  })
+
   describe('getSupervisionPackageFrontendContext', () => {
     const mockFrontendContext = {
       currentPhase: {

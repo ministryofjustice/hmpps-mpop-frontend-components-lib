@@ -20,7 +20,14 @@ import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCoun
 import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
 import type { ProfessionalContact, ProfessionalContactResponse } from './types/ProfessionalContact'
 import type { Prisoner, PrisonerResponse } from './types/Prisoner'
-import type { CheckInPhotoUrlResponse, PersonPhotoAvailability, PersonPhotoResponse } from './types/PersonPhoto'
+import type {
+  CheckInPhotoUrlResponse,
+  PersonHeaderPhoto,
+  PersonHeaderPhotoOptions,
+  PersonPhotoAvailability,
+  PersonPhotoResponse,
+} from './types/PersonPhoto'
+import { toPersonPhotoSrc } from './utils/toPersonPhotoSrc'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -438,6 +445,49 @@ export default class MPoPComponents {
         httpStatus: responseStatus ?? 500,
         error: err instanceof Error ? err : new Error('500 Internal Server Error'),
       }
+    }
+  }
+
+  async getPersonHeaderPhoto(
+    authOptions: AuthOptions | string,
+    {
+      crn,
+      noms,
+      prisonPhotoHref,
+      includeCheckInPhoto = true,
+      checkInPhoto: knownCheckInPhoto,
+      hasPrisonPhoto: knownHasPrisonPhoto,
+    }: PersonHeaderPhotoOptions,
+  ): Promise<PersonHeaderPhoto> {
+    let checkInPhoto = knownCheckInPhoto
+    if (includeCheckInPhoto && !checkInPhoto) {
+      const { photoUrl, error } = await this.getCheckInPhotoUrl(authOptions, crn)
+      if (error) {
+        this.logger.error(error, `Failed to get the online check-in photo for CRN ${crn}`)
+      }
+      checkInPhoto = { photoUrl, failed: Boolean(error) }
+    }
+
+    let hasPrisonPhoto: boolean | undefined
+    let prisonPhotoFailed = false
+    if (!checkInPhoto?.photoUrl && noms && knownHasPrisonPhoto === undefined) {
+      const { hasPhoto, error } = await this.hasPersonPhoto(authOptions, noms)
+      prisonPhotoFailed = Boolean(error)
+      hasPrisonPhoto = prisonPhotoFailed ? undefined : hasPhoto
+    }
+
+    const photo = toPersonPhotoSrc({
+      checkInPhotoUrl: checkInPhoto?.photoUrl,
+      noms,
+      hasPrisonPhoto: hasPrisonPhoto ?? knownHasPrisonPhoto,
+      prisonPhotoHref,
+    })
+
+    return {
+      photo,
+      photoUnavailable: !photo && (Boolean(checkInPhoto?.failed) || prisonPhotoFailed),
+      checkInPhoto,
+      hasPrisonPhoto,
     }
   }
 
