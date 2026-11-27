@@ -21,7 +21,7 @@ export type CheckInPhoto = {
 export type PersonHeaderPhotoOptions = {
   crn: string
   noms?: string | null
-  prisonPhotoHref: (noms: string) => string
+  prisonPhotoHref?: (noms: string) => string
   includeCheckInPhoto?: boolean
   checkInPhoto?: CheckInPhoto
   hasPrisonPhoto?: boolean
@@ -32,4 +32,11 @@ export type PersonHeaderPhoto = {
   photoUnavailable: boolean
   checkInPhoto?: CheckInPhoto
   hasPrisonPhoto?: boolean
+}
+
+export interface PersonPhotoHttpResponse extends NodeJS.WritableStream {
+  set(field: string, value: string): unknown
+  removeHeader(name: string): void
+  type(type: string): unknown
+  sendStatus(code: number): unknown
 }

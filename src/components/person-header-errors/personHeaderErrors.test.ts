@@ -1,10 +1,12 @@
 import nunjucks from 'nunjucks'
 import { JSDOM } from 'jsdom'
+import { mpopNunjucksSetup } from '../../utils/nunjucksFilters'
 
 const env = nunjucks.configure(
   ['src/components', 'node_modules/govuk-frontend/dist', 'node_modules/@ministryofjustice/frontend'],
   { autoescape: true },
 )
+mpopNunjucksSetup(env)
 
 const renderComponent = (params = {}) => {
   const html = env.renderString(
@@ -59,5 +61,25 @@ describe('person-header-errors', () => {
       'Status information is currently unavailable.',
       'Some throughcare information is currently unavailable.',
     ])
+  })
+
+  it('is rendered above the person header when passed as errors', () => {
+    const html = env.renderString(
+      `{% from "person-header/macro.njk" import personHeader %}
+       {{ personHeader(toPersonHeaderParams(input)) }}`,
+      {
+        input: {
+          crn: 'X000001',
+          name: { forename: 'Andrew', surname: 'Langley' },
+          errors: { photoUnavailable: true },
+        },
+      },
+    )
+    const { document } = new JSDOM(html).window
+
+    expect(messages(document)).toEqual(['Photo is currently unavailable.'])
+    expect(document.querySelector('.person-header')?.previousElementSibling?.getAttribute('data-qa')).toBe(
+      'headerErrors',
+    )
   })
 })

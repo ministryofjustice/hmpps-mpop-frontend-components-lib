@@ -14,6 +14,7 @@ import { getPrimarySentence } from './getPrimarySentence'
 import { supervisionAppointmentsReset } from './supervisionAppointmentsReset'
 import { spaceOutChars } from './spaceOutChars'
 import { formatName } from './formatName'
+import { toPersonHeaderParams } from './toPersonHeaderParams'
 
 export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('dateWithYear', dateWithYear)
@@ -31,4 +32,5 @@ export const mpopNunjucksSetup = (env: Environment): void => {
   env.addFilter('supervisionAppointmentsReset', supervisionAppointmentsReset)
   env.addFilter('spaceOutChars', spaceOutChars)
   env.addFilter('formatName', formatName)
+  env.addGlobal('toPersonHeaderParams', toPersonHeaderParams)
 }

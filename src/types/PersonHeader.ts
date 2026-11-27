@@ -22,6 +22,7 @@ export interface PersonHeaderParamsInput {
   collapsibleRiskFlags?: boolean
   riskHrefBase?: string
   showRisks?: boolean
+  errors?: PersonHeaderErrorsParams
 }
 
 export interface PersonHeaderParams {
@@ -45,6 +46,7 @@ export interface PersonHeaderParams {
   riskHrefBase?: string
   showRisks?: boolean
   personStatusTag?: string
+  errors?: PersonHeaderErrorsParams
 }
 
 export type PersonHeaderErrorsParams = {

@@ -1,5 +1,6 @@
 export { default as MPoPComponents } from './MPoPComponents'
 export type * from './types/PersonHeader'
+export type * from './types/PersonHeaderStatus'
 export type * from './types/PersonPhoto'
 export type * from './types/Prisoner'
 export type * from './types/ProfessionalContact'

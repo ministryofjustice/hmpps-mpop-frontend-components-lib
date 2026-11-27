@@ -24,6 +24,7 @@ export const toPersonHeaderParams = ({
   collapsibleRiskFlags,
   riskHrefBase,
   showRisks,
+  errors,
 }: PersonHeaderParamsInput): PersonHeaderParams => {
   const managedBy = getManagedByDetails(crn, professionalContact ?? null, managedByHref)
 
@@ -48,5 +49,6 @@ export const toPersonHeaderParams = ({
     riskHrefBase,
     showRisks,
     personStatusTag,
+    errors,
   }
 }

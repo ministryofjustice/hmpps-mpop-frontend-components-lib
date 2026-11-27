@@ -1,4 +1,4 @@
-import { Readable } from 'stream'
+import { PassThrough, Readable } from 'stream'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents, { tierTags } from './MPoPComponents'
 import { SuppressingRestClient } from './SuppressingRestClient'
@@ -1002,6 +1002,14 @@ describe('MPoPComponents', () => {
       expect(result.hasPrisonPhoto).toBe(false)
     })
 
+    it('should use the default prison photo route when no prisonPhotoHref is given', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { crn: 'X000001', noms: 'A1234BC' })
+
+      expect(result.photo).toBe('/person-photo/A1234BC')
+    })
+
     it('should not look up the check-in photo when it is not included', async () => {
       hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
 
@@ -1060,6 +1068,178 @@ describe('MPoPComponents', () => {
 
       expect(result.photoUnavailable).toBe(true)
       expect(result.hasPrisonPhoto).toBeUndefined()
+    })
+  })
+
+  describe('sendPersonPhoto', () => {
+    const response = () =>
+      Object.assign(new PassThrough(), {
+        set: jest.fn(),
+        removeHeader: jest.fn(),
+        type: jest.fn(),
+        sendStatus: jest.fn(),
+      })
+
+    it('should stream the photo as a cached jpeg', async () => {
+      jest
+        .spyOn(mpopComponents, 'getPersonPhoto')
+        .mockResolvedValue({ photo: Readable.from(['image']), httpStatus: 200, error: null })
+      const res = response()
+      const chunks: string[] = []
+      res.on('data', chunk => chunks.push(chunk.toString()))
+
+      await mpopComponents.sendPersonPhoto('authToken', 'A1234BC', res)
+
+      expect(mpopComponents.getPersonPhoto).toHaveBeenCalledWith('authToken', 'A1234BC')
+      expect(res.set).toHaveBeenCalledWith('Cache-Control', 'private, max-age=86400')
+      expect(res.removeHeader).toHaveBeenCalledWith('pragma')
+      expect(res.type).toHaveBeenCalledWith('image/jpeg')
+      expect(chunks.join('')).toBe('image')
+      expect(res.sendStatus).not.toHaveBeenCalled()
+    })
+
+    it('should return a 404 when there is no photo', async () => {
+      jest.spyOn(mpopComponents, 'getPersonPhoto').mockResolvedValue({ photo: null, httpStatus: 404, error: null })
+      const res = response()
+
+      await mpopComponents.sendPersonPhoto('authToken', 'A1234BC', res)
+
+      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(res.type).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('getPersonHeaderStatus', () => {
+    const personalDetails = { crn: 'X000001', noms: 'A1234BC' }
+    const inBreach = {
+      outcome: 'success',
+      context: { sentences: [{ isPrimarySentence: true, inBreach: true }] },
+    } as never
+    let getPrisonerDetails: jest.SpyInstance
+
+    beforeEach(() => {
+      getPrisonerDetails = jest
+        .spyOn(mpopComponents, 'getPrisonerDetails')
+        .mockResolvedValue({ prisoner: null, httpStatus: 404, error: null })
+    })
+
+    it('should get the status from the prisoner when there is a NOMS number', async () => {
+      const prisoner = { prisonerNumber: 'A1234BC', legalStatus: 'DEAD' } as never
+      getPrisonerDetails.mockResolvedValue({ prisoner, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', { personalDetails })
+
+      expect(getPrisonerDetails).toHaveBeenCalledWith('authToken', 'A1234BC')
+      expect(result).toEqual({
+        personStatusTag: 'Deceased',
+        statusUnavailable: false,
+        prisoner,
+        prisonerUnavailable: false,
+      })
+    })
+
+    it('should get the status from the supervision package without calling Prisoner Search when there is no NOMS number', async () => {
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails: { crn: 'X000001' },
+        supervisionPackage: inBreach,
+      })
+
+      expect(getPrisonerDetails).not.toHaveBeenCalled()
+      expect(result).toEqual({
+        personStatusTag: 'In breach',
+        statusUnavailable: false,
+        prisoner: undefined,
+        prisonerUnavailable: false,
+      })
+    })
+
+    it('should log and flag the prisoner as unavailable when Prisoner Search fails', async () => {
+      const error = new Error('Network Failure')
+      getPrisonerDetails.mockResolvedValue({ prisoner: null, httpStatus: 500, error })
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails,
+        supervisionPackage: inBreach,
+      })
+
+      expect(result).toEqual(expect.objectContaining({ personStatusTag: 'In breach', prisonerUnavailable: true }))
+      expect(logError).toHaveBeenCalledWith(
+        'Failed to get prisoner details for NOMS number: A1234BC CRN: X000001',
+        error,
+      )
+    })
+
+    it.each([
+      [true, true],
+      [false, false],
+    ])(
+      'should set statusUnavailable to %s when there is no status and supervisionPackageUnavailable is %s',
+      async (statusUnavailable, supervisionPackageUnavailable) => {
+        const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+          personalDetails,
+          supervisionPackageUnavailable,
+        })
+
+        expect(result.personStatusTag).toBeUndefined()
+        expect(result.statusUnavailable).toBe(statusUnavailable)
+      },
+    )
+
+    it('should not flag the status as unavailable when there is a status', async () => {
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails: { ...personalDetails, dateOfDeath: '2026-01-01' },
+        supervisionPackageUnavailable: true,
+      })
+
+      expect(result.personStatusTag).toBe('Deceased')
+      expect(result.statusUnavailable).toBe(false)
+    })
+  })
+
+  describe('getSupervisionPackageContext', () => {
+    let getContext: jest.SpyInstance
+
+    beforeEach(() => {
+      getContext = jest.spyOn(mpopComponents, 'getSupervisionPackageFrontendContext')
+    })
+
+    it('should return the supervision package', async () => {
+      const supervisionPackage = { outcome: 'success', context: {} } as never
+      getContext.mockResolvedValue(supervisionPackage)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(getContext).toHaveBeenCalledWith('authToken', 'X000001')
+      expect(result).toEqual({ supervisionPackage, unavailable: false })
+    })
+
+    it('should not flag a missing supervision package as unavailable', async () => {
+      getContext.mockResolvedValue(null)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage: null, unavailable: false })
+    })
+
+    it('should flag an error outcome as unavailable', async () => {
+      const supervisionPackage = { outcome: 'error', status: 500 } as never
+      getContext.mockResolvedValue(supervisionPackage)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage, unavailable: true })
+    })
+
+    it('should log and flag the supervision package as unavailable when the request fails', async () => {
+      const error = new Error('503')
+      getContext.mockRejectedValue(error)
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage: null, unavailable: true })
+      expect(logError).toHaveBeenCalledWith(error, 'Failed to get the supervision package for CRN X000001')
     })
   })
 

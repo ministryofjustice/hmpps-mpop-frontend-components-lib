@@ -1,6 +1,11 @@
 {%- from '../person-header-banner/macro.njk' import personHeaderBanner -%}
 {%- from '../person-header-risks/macro.njk' import personHeaderRisks -%}
 
+{% if params.errors %}
+    {%- from '../person-header-errors/macro.njk' import personHeaderErrors -%}
+    {{ personHeaderErrors(params.errors) }}
+{% endif %}
+
 <div class='person-header govuk-body'>
     {{ personHeaderBanner(params) }}
 

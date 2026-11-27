@@ -1,3 +1,4 @@
+import { pipeline } from 'node:stream/promises'
 import { RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthOptions } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
@@ -25,9 +26,17 @@ import type {
   PersonHeaderPhoto,
   PersonHeaderPhotoOptions,
   PersonPhotoAvailability,
+  PersonPhotoHttpResponse,
   PersonPhotoResponse,
 } from './types/PersonPhoto'
+import type {
+  PersonHeaderStatus,
+  PersonHeaderStatusOptions,
+  SupervisionPackageContext,
+} from './types/PersonHeaderStatus'
 import { toPersonPhotoSrc } from './utils/toPersonPhotoSrc'
+import { personPhotoHref } from './utils/personPhotoHref'
+import { getStatusTag } from './utils/personStatusTag'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -453,7 +462,7 @@ export default class MPoPComponents {
     {
       crn,
       noms,
-      prisonPhotoHref,
+      prisonPhotoHref = personPhotoHref,
       includeCheckInPhoto = true,
       checkInPhoto: knownCheckInPhoto,
       hasPrisonPhoto: knownHasPrisonPhoto,
@@ -488,6 +497,63 @@ export default class MPoPComponents {
       photoUnavailable: !photo && (Boolean(checkInPhoto?.failed) || prisonPhotoFailed),
       checkInPhoto,
       hasPrisonPhoto,
+    }
+  }
+
+  async sendPersonPhoto(
+    authOptions: AuthOptions | string,
+    nomsNumber: string,
+    res: PersonPhotoHttpResponse,
+  ): Promise<void> {
+    const { photo } = await this.getPersonPhoto(authOptions, nomsNumber)
+    if (!photo) {
+      res.sendStatus(404)
+      return
+    }
+    res.set('Cache-Control', 'private, max-age=86400')
+    res.removeHeader('pragma')
+    res.type('image/jpeg')
+    await pipeline(photo, res)
+  }
+
+  async getPersonHeaderStatus(
+    authOptions: AuthOptions | string,
+    { personalDetails, supervisionPackage, supervisionPackageUnavailable = false }: PersonHeaderStatusOptions,
+  ): Promise<PersonHeaderStatus> {
+    let prisoner: Prisoner | undefined
+    let prisonerUnavailable = false
+    if (personalDetails.noms) {
+      const response = await this.getPrisonerDetails(authOptions, personalDetails.noms)
+      if (response.error) {
+        this.logger.error(
+          `Failed to get prisoner details for NOMS number: ${personalDetails.noms} CRN: ${personalDetails.crn}`,
+          response.error,
+        )
+      }
+      prisoner = response.prisoner ?? undefined
+      prisonerUnavailable = Boolean(response.error)
+    }
+
+    const personStatusTag = await getStatusTag(personalDetails, supervisionPackage, prisoner)
+
+    return {
+      personStatusTag,
+      statusUnavailable: !personStatusTag && supervisionPackageUnavailable,
+      prisoner,
+      prisonerUnavailable,
+    }
+  }
+
+  async getSupervisionPackageContext(
+    authOptions: AuthOptions | string,
+    crn: string,
+  ): Promise<SupervisionPackageContext> {
+    try {
+      const supervisionPackage = await this.getSupervisionPackageFrontendContext(authOptions, crn)
+      return { supervisionPackage, unavailable: supervisionPackage?.outcome === 'error' }
+    } catch (err) {
+      this.logger.error(err, `Failed to get the supervision package for CRN ${crn}`)
+      return { supervisionPackage: null, unavailable: true }
     }
   }
 
