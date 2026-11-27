@@ -3,4 +3,7 @@ import type { ApiConfig } from '@ministryofjustice/hmpps-rest-client'
 export interface MPoPComponentsConfig extends ApiConfig {
   masApiConfig?: ApiConfig
   supervisionPackageApiConfig?: ApiConfig
+  prisonerSearchApiConfig?: ApiConfig
+  personRecordApiConfig?: ApiConfig
+  eSupervisionApiConfig?: ApiConfig
 }

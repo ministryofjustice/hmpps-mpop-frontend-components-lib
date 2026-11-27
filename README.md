@@ -97,12 +97,27 @@ const config: MPoPComponentsConfig = {
     timeout: { response: 5000, deadline: 5000 },
     agent: new AgentConfig(5000),
   },
+  prisonerSearchApiConfig: {
+    url: prisonerSearchApiUrl,
+    timeout: { response: 5000, deadline: 5000 },
+    agent: new AgentConfig(5000),
+  },
+  personRecordApiConfig: {
+    url: personRecordApiUrl,
+    timeout: { response: 5000, deadline: 5000 },
+    agent: new AgentConfig(5000),
+  },
+  eSupervisionApiConfig: {
+    url: eSupervisionApiUrl,
+    timeout: { response: 10000, deadline: 10000 },
+    agent: new AgentConfig(10000),
+  },
 }
 
 const mpopComponents = new MPoPComponents(authenticationClient, config, logger)
 ```
 
-Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS and Supervision Package APIs for the environment you're running in.
+Set the `url` (and any other connection details) for each of these in your app's local config, pointing at the Tier, MAS, Supervision Package, Prisoner Search, Person Record and eSupervision APIs for the environment you're running in.
 
 ### 5. Render a component
 
@@ -129,6 +144,191 @@ const supervisionPackageData = {
 ```
 
 See `scripts/preview-api.ts` for a fuller example of building these params from the API responses.
+
+### Person header
+
+`personHeader` is made of two components, which can also be used on their own:
+
+- `personHeaderBanner`, the blue section: photo, name, status tag, CRN, date of birth, tier and managed by
+- `personHeaderRisks`, the grey section: risk badges, NDelius risk flags and the optional show/hide toggle
+
+```njk
+{% from "mpop/components/person-header/macro.njk" import personHeader %}
+
+{{ personHeader({
+  name: "Andrew Langley",
+  crn: "D004851",
+  dob: "1995-11-18",
+  tier: "B4",
+  historyHref: tierHistoryUrl,
+  managedByName: "jack frost",
+  managedByLocation: "Worksop Probation Office",
+  managedByHref: staffContactsUrl,
+  photo: photoUrl,
+  riskData: riskData,
+  roshLevel: "HIGH",
+  personRiskFlags: riskBadgeData
+}) }}
+```
+
+| Param | Description |
+| --- | --- |
+| `name`, `crn`, `dob` | Shown in the banner. `dob` is an ISO date, e.g. `1995-11-18`, and is shown as `18 November 1995`. |
+| `personStatusTag` | Optional status shown next to the name, e.g. `In custody`. |
+| `tier`, `provisional`, `historyHref` | Tier link. `provisional: true` adds "(provisional)". |
+| `managedByName`, `managedByLocation` | Responsible officer's name, formatted with `formatName`, and their location in brackets. |
+| `managedBy` | Plain text used when there's no `managedByName`, e.g. `Unallocated`. |
+| `managedByHref` | Optional. Makes managed by a link. |
+| `photo` | Optional image URL. Nothing is shown when it's missing. |
+| `riskBadges` | Optional pre-rendered risk badge HTML. Used instead of `riskData` when both are given. |
+| `riskData` | ARNS risk data (from `ArnsComponents.getRiskData`). Renders the ROSH, combined serious reoffending predictor and RSR badges. Needs the ARNS lib, see [ARNS risk badges](#arns-risk-badges). |
+| `roshLevel` | ROSH level for the ROSH badge, e.g. `HIGH` or `VERY_HIGH`. `NOT_FOUND` shows no ROSH badge. |
+| `useNDeliusRosh` | Set to `true` when `roshLevel` comes from NDelius. The ROSH badge then shows even when the combined predictor is `NOT APPLICABLE`. |
+| `personRiskFlags` | `{ headerBadges: [{ id, text, badgeClass }], remainingCount }`, as returned by `getRiskBadges`. The older `{ groups: [{ badges: [...] }], remainingCount }` format is deprecated but still works, and is used when both are given. |
+| `collapsibleRiskFlags` | Adds a show/hide toggle for the NDelius risk flags. Needs `initAll()` from `dist/js/all.js`. |
+| `riskHrefBase` | Base URL for the risk flag links. Defaults to `/case/{crn}/risk`. |
+| `showRisks` | Set to `false` to hide the grey section. Defaults to `true`. |
+| `errors` | Optional. Shows the [person header errors](#person-header-errors) above the header. |
+
+`personHeaderBanner` takes the banner params and `personHeaderRisks` takes the risk params, with the same names.
+
+`toPersonHeaderParams` builds these params from the API responses. `mpopNunjucksSetup` registers it as a Nunjucks global, so you can call it in a template or in your code:
+
+```ts
+import { toPersonHeaderParams, toPersonRiskDetails } from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+
+const { personRiskFlags } = await mpopComponents.getPersonRiskFlags(authOptions, crn)
+const { professionalContact } = await mpopComponents.getContacts(authOptions, crn)
+const { supervisionPackage, unavailable } = await mpopComponents.getSupervisionPackageContext(authOptions, crn)
+const { personStatusTag, statusUnavailable } = await mpopComponents.getPersonHeaderStatus(authOptions, {
+  personalDetails,
+  supervisionPackage,
+  supervisionPackageUnavailable: unavailable,
+})
+const { photo, photoUnavailable } = await mpopComponents.getPersonHeaderPhoto(authOptions, { crn, noms })
+
+const { riskBadgeData, rosh } = toPersonRiskDetails(personRiskFlags)
+
+const personHeaderParams = toPersonHeaderParams({
+  crn,
+  name: personalDetails.name,
+  dateOfBirth: personalDetails.dateOfBirth,
+  tier: calculation,
+  tierUrl,
+  professionalContact,
+  riskBadgeData,
+  personStatusTag,
+  photo,
+  riskData,
+  roshLevel: rosh.level,
+  useNDeliusRosh: true,
+  errors: { statusUnavailable, photoUnavailable },
+})
+```
+
+`getSupervisionPackageContext` returns `unavailable: true` when the Supervision Package API fails or returns an error. A person with no supervision package isn't treated as unavailable.
+
+`getPersonHeaderStatus` gets the prisoner from Prisoner Search when `personalDetails.noms` is set, then works out the status tag with `getStatusTag`. It also returns `prisoner`, and `prisonerUnavailable` when Prisoner Search fails. `statusUnavailable` is `true` when there's no status and the supervision package is unavailable.
+
+`getStatusTag` shows `Deceased` from `personalDetails.dateOfDeath`. The `getPersonalDetails` summary doesn't include it, so pass your app's own personal details.
+
+`photo` is the online check-in photo if there is one, otherwise the prison photo from a route in your app. `getPersonHeaderPhoto` gets it in that order and tells you when it is unavailable:
+
+```ts
+const { photo, photoUnavailable, hasPrisonPhoto } = await mpopComponents.getPersonHeaderPhoto(authOptions, {
+  crn,
+  noms,
+  hasPrisonPhoto: cachedHasPrisonPhoto,
+})
+```
+
+| Option | Description |
+| --- | --- |
+| `crn`, `noms` | The check-in photo is looked up by CRN, and the prison photo by NOMS number. |
+| `prisonPhotoHref` | Builds the path of your app's prison photo route. Defaults to `personPhotoHref`, which gives `/person-photo/{noms}`. |
+| `includeCheckInPhoto` | `false` skips the check-in photo. Defaults to `true`. |
+| `checkInPhoto` | A `checkInPhoto` returned earlier in the same request, so it isn't looked up again. The URL expires, so don't keep it between requests. |
+| `hasPrisonPhoto` | A `hasPrisonPhoto` you cached earlier, so the prison photo isn't checked again. |
+
+`photoUnavailable` is `true` when there is no photo and either lookup failed. `hasPrisonPhoto` is only returned when the prison photo was checked successfully, so cache it when it is set.
+
+To build the src yourself, `toPersonPhotoSrc` applies the same order, using `getCheckInPhotoUrl` and `hasPersonPhoto`.
+
+Add the prison photo route at `PERSON_PHOTO_PATH` (`/person-photo/:nomsNumber`). `sendPersonPhoto` streams the image, cached for a day, or returns a 404 when there's no photo:
+
+```ts
+import { PERSON_PHOTO_PATH } from '@ministryofjustice/hmpps-mpop-frontend-components-lib'
+
+router.get(PERSON_PHOTO_PATH, async (req, res) => {
+  await mpopComponents.sendPersonPhoto(authOptions, req.params.nomsNumber, res)
+})
+```
+
+To handle the image yourself, `getPersonPhoto` returns `photo` as a stream, or `null` when there's no photo or the API returns 403.
+
+`toPersonRiskDetails` also returns `personRisks` (with "RoSH" renamed to "ROSH"), `riskToStaff` and `riskToProbationStaff`. Pass `riskFlags` instead of `riskBadgeData` to have the badges built for you.
+
+`tierUrl` is the Tier service's base URL. The tier links to `tierUrlV3(tierUrl, crn)`, which is `{tierUrl}/v3/case/{crn}`. Pass `historyHref` instead to set the link yourself.
+
+The managed by link goes to `/case/{crn}/personal-details/staff-contacts`. Pass `managedByHref` to point it elsewhere, e.g. at MPoP from another service.
+
+To use the ARNS ROSH level instead of the NDelius one, pass `roshLevel: toRoshWidget(roshSummary).overallRisk` and leave out `useNDeliusRosh`.
+
+#### ARNS risk badges
+
+`personHeaderRiskBadges` renders the ROSH, combined serious reoffending predictor and RSR badges from `riskData`, `roshLevel` and `useNDeliusRosh`. `personHeaderRisks` and `personHeader` use it when `riskData` or `roshLevel` is given, so most services won't need to call it directly.
+
+It uses the `predictorBadge` macro from `@ministryofjustice/hmpps-arns-frontend-components-lib`, an optional peer dependency. It's only needed if you show these badges:
+
+```bash
+npm install @ministryofjustice/hmpps-arns-frontend-components-lib
+```
+
+Add its templates to your Nunjucks paths and register its setup, alongside GOV.UK Frontend:
+
+```ts
+import { arnsNunjucksSetup } from '@ministryofjustice/hmpps-arns-frontend-components-lib'
+
+const env = nunjucks.configure([
+  'node_modules/@ministryofjustice/hmpps-mpop-frontend-components-lib/dist/mpop/components',
+  'node_modules/@ministryofjustice/hmpps-arns-frontend-components-lib/dist/',
+  'node_modules/govuk-frontend/dist',
+  'app/views',
+])
+mpopNunjucksSetup(env)
+arnsNunjucksSetup(env)
+```
+
+Import its styles too:
+
+```scss
+@import '@ministryofjustice/hmpps-arns-frontend-components-lib/dist/all';
+```
+
+### Person header errors
+
+`personHeaderErrors` shows a "There is a problem" alert listing what couldn't be loaded. It needs the MoJ Frontend templates on your Nunjucks path. Nothing is shown when nothing is unavailable. Pass these params as `errors` to `personHeader` to show the alert above the header, or call it on its own:
+
+```njk
+{% from "mpop/components/person-header-errors/macro.njk" import personHeaderErrors %}
+
+{{ personHeaderErrors({
+  statusUnavailable: true,
+  photoUnavailable: true,
+  throughcareUnavailable: 'some',
+  arnsUnavailable: false
+}) }}
+```
+
+| Param | Message |
+| --- | --- |
+| `arnsUnavailable` | Risk information from the ARNS service is currently unavailable. |
+| `photoUnavailable` | Photo is currently unavailable. |
+| `statusUnavailable` | Status information is currently unavailable. |
+| `throughcareUnavailable: 'some'` | Some throughcare information is currently unavailable. |
+| `throughcareUnavailable: 'all'` | Throughcare information is currently unavailable. |
+
+The messages are shown in this order.
 
 
 ## Viewing your changes

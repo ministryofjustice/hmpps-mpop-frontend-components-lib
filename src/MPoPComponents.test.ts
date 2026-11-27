@@ -1,3 +1,4 @@
+import { PassThrough, Readable } from 'stream'
 import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
 import MPoPComponents, { tierTags } from './MPoPComponents'
 import { SuppressingRestClient } from './SuppressingRestClient'
@@ -582,6 +583,663 @@ describe('MPoPComponents', () => {
         httpStatus: 500,
         error,
       })
+    })
+  })
+
+  describe('getPersonRiskFlags', () => {
+    const mockPersonRiskFlags = {
+      personSummary: {
+        name: { forename: 'John', surname: 'Doe' },
+        crn: 'X123456',
+        dateOfBirth: '1990-01-01',
+      },
+      opd: { eligible: false },
+      mappa: { level: 1, category: 2 },
+      riskFlags: [
+        {
+          id: 1,
+          description: 'Risk to Staff',
+          level: 'HIGH',
+          createdDate: '2024-01-01',
+          createdBy: { forename: 'Jane', surname: 'Smith' },
+          removed: false,
+          removalHistory: [],
+        },
+      ],
+      removedRiskFlags: [],
+    }
+
+    it('should return personRiskFlags with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPersonRiskFlags)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: mockPersonRiskFlags,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/risk-flags/X123456', 'authToken')
+    })
+
+    it('should return null personRiskFlags with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null personRiskFlags with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonRiskFlags('authToken', 'X123456')
+
+      expect(result).toEqual({
+        personRiskFlags: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
+  describe('getContacts', () => {
+    const mockProfessionalContact = {
+      name: { forename: 'John', surname: 'Doe' },
+      currentContacts: [
+        {
+          name: 'Jack Frost',
+          telephoneNumber: '07700 900000',
+          email: 'jack.frost@justice.gov.uk',
+          provider: 'London',
+          probationDeliveryUnit: 'Camden and Islington',
+          team: 'Team 1',
+          allocationDate: '2024-01-01',
+          responsibleOfficer: true,
+          prisonOffenderManager: false,
+        },
+      ],
+      previousContacts: [],
+    }
+
+    it('should return professionalContact with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockProfessionalContact)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: mockProfessionalContact,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/sentence/X123456/contacts', 'authToken')
+    })
+
+    it('should return null professionalContact with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null professionalContact with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getContacts('authToken', 'X123456')
+
+      expect(result).toEqual({
+        professionalContact: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
+  describe('getPrisonerDetails', () => {
+    const mockPrisoner = {
+      prisonerNumber: 'A1234BC',
+      firstName: 'John',
+      lastName: 'Doe',
+      status: 'ACTIVE IN',
+      inOutStatus: 'IN',
+      prisonId: 'LEI',
+      prisonName: 'HMP Leeds',
+      recall: false,
+    }
+
+    it('should return prisoner with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(mockPrisoner)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: mockPrisoner,
+        httpStatus: 200,
+        error: null,
+      })
+
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/prisoner/A1234BC', 'authToken')
+    })
+
+    it('should return null prisoner with status 404 when the API returns null', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 404,
+        error: null,
+      })
+    })
+
+    it('should return responseStatus from the error object when the API fails', async () => {
+      const error = { responseStatus: 401, data: { status: 401, userMessage: 'Unauthorized' } }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 401,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should return null prisoner with status 500 when the error object has no responseStatus', async () => {
+      const error = { message: 'Network Failure' }
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 500,
+        error: new Error('500 Internal Server Error'),
+      })
+    })
+
+    it('should preserve the original Error instance when the API throws an Error', async () => {
+      const error = new Error('Network Failure')
+
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPrisonerDetails('authToken', 'A1234BC')
+
+      expect(result).toEqual({
+        prisoner: null,
+        httpStatus: 500,
+        error,
+      })
+    })
+  })
+
+  describe('getPersonPhoto', () => {
+    it('should return the photo with status 200 when the API responds', async () => {
+      const photo = Readable.from(['image'])
+      mockedRestClient.prototype.stream.mockResolvedValue(photo)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo, httpStatus: 200, error: null })
+      expect(mockedRestClient.prototype.stream).toHaveBeenCalledWith('/person/prison/A1234BC/image', 'authToken')
+    })
+
+    it('should return no photo with status 404 when there is no photo', async () => {
+      mockedRestClient.prototype.stream.mockResolvedValue(null)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 404, error: null })
+    })
+
+    it('should return no photo and no error when the API returns 403', async () => {
+      mockedRestClient.prototype.stream.mockRejectedValue({ responseStatus: 403 })
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 403, error: null })
+    })
+
+    it('should return the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.stream.mockRejectedValue(error)
+
+      const result = await mpopComponents.getPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ photo: null, httpStatus: 500, error })
+    })
+  })
+
+  describe('getCheckInPhotoUrl', () => {
+    it('should return the photo url with status 200 when the API responds', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue({ crn: 'X000001', photoUrl: 'https://photos.example.com/1.jpg' })
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: 'https://photos.example.com/1.jpg', httpStatus: 200, error: null })
+      expect(mockedRestClient.prototype.get).toHaveBeenCalledWith('/v2/offenders/crn/X000001', 'authToken')
+    })
+
+    it('should return no photo url when the person has no photo', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue({ crn: 'X000001' })
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 200, error: null })
+    })
+
+    it('should return no photo url with status 404 when the person is not registered', async () => {
+      mockedRestClient.prototype.get.mockResolvedValue(null)
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 404, error: null })
+    })
+
+    it('should return the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.get.mockRejectedValue(error)
+
+      const result = await mpopComponents.getCheckInPhotoUrl('authToken', 'X000001')
+
+      expect(result).toEqual({ photoUrl: null, httpStatus: 500, error })
+    })
+  })
+
+  describe('hasPersonPhoto', () => {
+    it('should return hasPhoto true and close the stream when there is a photo', async () => {
+      const photo = Readable.from(['image'])
+      mockedRestClient.prototype.stream.mockResolvedValue(photo)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: true, httpStatus: 200, error: null })
+      expect(photo.destroyed).toBe(true)
+    })
+
+    it('should return hasPhoto false when there is no photo', async () => {
+      mockedRestClient.prototype.stream.mockResolvedValue(null)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: false, httpStatus: 404, error: null })
+    })
+
+    it('should return hasPhoto false with the error when the API fails', async () => {
+      const error = new Error('Network Failure')
+      mockedRestClient.prototype.stream.mockRejectedValue(error)
+
+      const result = await mpopComponents.hasPersonPhoto('authToken', 'A1234BC')
+
+      expect(result).toEqual({ hasPhoto: false, httpStatus: 500, error })
+    })
+  })
+
+  describe('getPersonHeaderPhoto', () => {
+    const prisonPhotoHref = (noms: string) => `/person-photo/${noms}`
+    const options = { crn: 'X000001', noms: 'A1234BC', prisonPhotoHref }
+    const checkInPhotoUrl = 'https://photos.example.com/1.jpg'
+    let getCheckInPhotoUrl: jest.SpyInstance
+    let hasPersonPhoto: jest.SpyInstance
+
+    beforeEach(() => {
+      getCheckInPhotoUrl = jest
+        .spyOn(mpopComponents, 'getCheckInPhotoUrl')
+        .mockResolvedValue({ photoUrl: null, httpStatus: 404, error: null })
+      hasPersonPhoto = jest
+        .spyOn(mpopComponents, 'hasPersonPhoto')
+        .mockResolvedValue({ hasPhoto: false, httpStatus: 404, error: null })
+    })
+
+    it('should use the check-in photo without checking for a prison photo', async () => {
+      getCheckInPhotoUrl.mockResolvedValue({ photoUrl: checkInPhotoUrl, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result).toEqual({
+        photo: checkInPhotoUrl,
+        photoUnavailable: false,
+        checkInPhoto: { photoUrl: checkInPhotoUrl, failed: false },
+        hasPrisonPhoto: undefined,
+      })
+      expect(getCheckInPhotoUrl).toHaveBeenCalledWith('authToken', 'X000001')
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+    })
+
+    it('should use the prison photo when there is no check-in photo', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result).toEqual({
+        photo: '/person-photo/A1234BC',
+        photoUnavailable: false,
+        checkInPhoto: { photoUrl: null, failed: false },
+        hasPrisonPhoto: true,
+      })
+      expect(hasPersonPhoto).toHaveBeenCalledWith('authToken', 'A1234BC')
+    })
+
+    it('should return no photo when there is neither photo', async () => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result.photo).toBeUndefined()
+      expect(result.photoUnavailable).toBe(false)
+      expect(result.hasPrisonPhoto).toBe(false)
+    })
+
+    it('should use the default prison photo route when no prisonPhotoHref is given', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { crn: 'X000001', noms: 'A1234BC' })
+
+      expect(result.photo).toBe('/person-photo/A1234BC')
+    })
+
+    it('should not look up the check-in photo when it is not included', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, includeCheckInPhoto: false })
+
+      expect(getCheckInPhotoUrl).not.toHaveBeenCalled()
+      expect(result.photo).toBe('/person-photo/A1234BC')
+      expect(result.checkInPhoto).toBeUndefined()
+    })
+
+    it('should reuse a check-in photo that was already looked up', async () => {
+      const checkInPhoto = { photoUrl: checkInPhotoUrl, failed: false }
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, checkInPhoto })
+
+      expect(getCheckInPhotoUrl).not.toHaveBeenCalled()
+      expect(result.photo).toBe(checkInPhotoUrl)
+    })
+
+    it.each([true, false])('should use a known prison photo result of %s without checking again', async known => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, hasPrisonPhoto: known })
+
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+      expect(result.photo).toBe(known ? '/person-photo/A1234BC' : undefined)
+      expect(result.hasPrisonPhoto).toBeUndefined()
+    })
+
+    it('should not check for a prison photo when there is no NOMS number', async () => {
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', { ...options, noms: undefined })
+
+      expect(hasPersonPhoto).not.toHaveBeenCalled()
+      expect(result.photo).toBeUndefined()
+    })
+
+    it('should flag the photo as unavailable and fall back to the prison photo when the check-in lookup fails', async () => {
+      const error = new Error('Network Failure')
+      getCheckInPhotoUrl.mockResolvedValue({ photoUrl: null, httpStatus: 500, error })
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const failed = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: true, httpStatus: 200, error: null })
+      const withPrisonPhoto = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(failed.photoUnavailable).toBe(true)
+      expect(failed.checkInPhoto).toEqual({ photoUrl: null, failed: true })
+      expect(withPrisonPhoto).toEqual(
+        expect.objectContaining({ photo: '/person-photo/A1234BC', photoUnavailable: false }),
+      )
+      expect(logError).toHaveBeenCalledWith(error, 'Failed to get the online check-in photo for CRN X000001')
+    })
+
+    it('should flag the photo as unavailable and not return a prison photo result when the prison check fails', async () => {
+      hasPersonPhoto.mockResolvedValue({ hasPhoto: false, httpStatus: 500, error: new Error('Network Failure') })
+
+      const result = await mpopComponents.getPersonHeaderPhoto('authToken', options)
+
+      expect(result.photoUnavailable).toBe(true)
+      expect(result.hasPrisonPhoto).toBeUndefined()
+    })
+  })
+
+  describe('sendPersonPhoto', () => {
+    const response = () =>
+      Object.assign(new PassThrough(), {
+        set: jest.fn(),
+        removeHeader: jest.fn(),
+        type: jest.fn(),
+        sendStatus: jest.fn(),
+      })
+
+    it('should stream the photo as a cached jpeg', async () => {
+      jest
+        .spyOn(mpopComponents, 'getPersonPhoto')
+        .mockResolvedValue({ photo: Readable.from(['image']), httpStatus: 200, error: null })
+      const res = response()
+      const chunks: string[] = []
+      res.on('data', chunk => chunks.push(chunk.toString()))
+
+      await mpopComponents.sendPersonPhoto('authToken', 'A1234BC', res)
+
+      expect(mpopComponents.getPersonPhoto).toHaveBeenCalledWith('authToken', 'A1234BC')
+      expect(res.set).toHaveBeenCalledWith('Cache-Control', 'private, max-age=86400')
+      expect(res.removeHeader).toHaveBeenCalledWith('pragma')
+      expect(res.type).toHaveBeenCalledWith('image/jpeg')
+      expect(chunks.join('')).toBe('image')
+      expect(res.sendStatus).not.toHaveBeenCalled()
+    })
+
+    it('should return a 404 when there is no photo', async () => {
+      jest.spyOn(mpopComponents, 'getPersonPhoto').mockResolvedValue({ photo: null, httpStatus: 404, error: null })
+      const res = response()
+
+      await mpopComponents.sendPersonPhoto('authToken', 'A1234BC', res)
+
+      expect(res.sendStatus).toHaveBeenCalledWith(404)
+      expect(res.type).not.toHaveBeenCalled()
+    })
+  })
+
+  describe('getPersonHeaderStatus', () => {
+    const personalDetails = { crn: 'X000001', noms: 'A1234BC' }
+    const inBreach = {
+      outcome: 'success',
+      context: { sentences: [{ isPrimarySentence: true, inBreach: true }] },
+    } as never
+    let getPrisonerDetails: jest.SpyInstance
+
+    beforeEach(() => {
+      getPrisonerDetails = jest
+        .spyOn(mpopComponents, 'getPrisonerDetails')
+        .mockResolvedValue({ prisoner: null, httpStatus: 404, error: null })
+    })
+
+    it('should get the status from the prisoner when there is a NOMS number', async () => {
+      const prisoner = { prisonerNumber: 'A1234BC', legalStatus: 'DEAD' } as never
+      getPrisonerDetails.mockResolvedValue({ prisoner, httpStatus: 200, error: null })
+
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', { personalDetails })
+
+      expect(getPrisonerDetails).toHaveBeenCalledWith('authToken', 'A1234BC')
+      expect(result).toEqual({
+        personStatusTag: 'Deceased',
+        statusUnavailable: false,
+        prisoner,
+        prisonerUnavailable: false,
+      })
+    })
+
+    it('should get the status from the supervision package without calling Prisoner Search when there is no NOMS number', async () => {
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails: { crn: 'X000001' },
+        supervisionPackage: inBreach,
+      })
+
+      expect(getPrisonerDetails).not.toHaveBeenCalled()
+      expect(result).toEqual({
+        personStatusTag: 'In breach',
+        statusUnavailable: false,
+        prisoner: undefined,
+        prisonerUnavailable: false,
+      })
+    })
+
+    it('should log and flag the prisoner as unavailable when Prisoner Search fails', async () => {
+      const error = new Error('Network Failure')
+      getPrisonerDetails.mockResolvedValue({ prisoner: null, httpStatus: 500, error })
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails,
+        supervisionPackage: inBreach,
+      })
+
+      expect(result).toEqual(expect.objectContaining({ personStatusTag: 'In breach', prisonerUnavailable: true }))
+      expect(logError).toHaveBeenCalledWith(
+        'Failed to get prisoner details for NOMS number: A1234BC CRN: X000001',
+        error,
+      )
+    })
+
+    it.each([
+      [true, true],
+      [false, false],
+    ])(
+      'should set statusUnavailable to %s when there is no status and supervisionPackageUnavailable is %s',
+      async (statusUnavailable, supervisionPackageUnavailable) => {
+        const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+          personalDetails,
+          supervisionPackageUnavailable,
+        })
+
+        expect(result.personStatusTag).toBeUndefined()
+        expect(result.statusUnavailable).toBe(statusUnavailable)
+      },
+    )
+
+    it('should not flag the status as unavailable when there is a status', async () => {
+      const result = await mpopComponents.getPersonHeaderStatus('authToken', {
+        personalDetails: { ...personalDetails, dateOfDeath: '2026-01-01' },
+        supervisionPackageUnavailable: true,
+      })
+
+      expect(result.personStatusTag).toBe('Deceased')
+      expect(result.statusUnavailable).toBe(false)
+    })
+  })
+
+  describe('getSupervisionPackageContext', () => {
+    let getContext: jest.SpyInstance
+
+    beforeEach(() => {
+      getContext = jest.spyOn(mpopComponents, 'getSupervisionPackageFrontendContext')
+    })
+
+    it('should return the supervision package', async () => {
+      const supervisionPackage = { outcome: 'success', context: {} } as never
+      getContext.mockResolvedValue(supervisionPackage)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(getContext).toHaveBeenCalledWith('authToken', 'X000001')
+      expect(result).toEqual({ supervisionPackage, unavailable: false })
+    })
+
+    it('should not flag a missing supervision package as unavailable', async () => {
+      getContext.mockResolvedValue(null)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage: null, unavailable: false })
+    })
+
+    it('should flag an error outcome as unavailable', async () => {
+      const supervisionPackage = { outcome: 'error', status: 500 } as never
+      getContext.mockResolvedValue(supervisionPackage)
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage, unavailable: true })
+    })
+
+    it('should log and flag the supervision package as unavailable when the request fails', async () => {
+      const error = new Error('503')
+      getContext.mockRejectedValue(error)
+      const logError = jest.spyOn(console, 'error').mockImplementation()
+
+      const result = await mpopComponents.getSupervisionPackageContext('authToken', 'X000001')
+
+      expect(result).toEqual({ supervisionPackage: null, unavailable: true })
+      expect(logError).toHaveBeenCalledWith(error, 'Failed to get the supervision package for CRN X000001')
     })
   })
 

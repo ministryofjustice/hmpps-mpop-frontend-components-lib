@@ -29,7 +29,7 @@ describe('person-header', () => {
   })
 
   it('renders the date of birth', () => {
-    const document = renderComponent({ dob: '18 November 1995' })
+    const document = renderComponent({ dob: '1995-11-18' })
 
     expect(document.querySelector('[data-qa="dob"]')?.textContent?.trim()).toBe('18 November 1995')
   })
@@ -146,7 +146,7 @@ describe('person-header', () => {
     expect(wrapper?.querySelector('[data-qa="risk-badge-more"]')?.textContent?.trim()).toBe('+2 active risk flags')
   })
 
-  it('renders structured personRiskFlags provided as groups with the remaining risk count link', () => {
+  it('still renders personRiskFlags provided as the deprecated groups with the remaining risk count link', () => {
     const document = renderComponent({
       crn: 'D004851',
       personRiskFlags: {
@@ -191,7 +191,7 @@ describe('person-header', () => {
 
   describe('collapsible risk flags', () => {
     const personRiskFlags = {
-      groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+      headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
       remainingCount: 3,
     }
 
@@ -232,7 +232,7 @@ describe('person-header', () => {
     it('does not render the toggle when there are no risk flags', () => {
       const document = renderComponent({
         riskBadges: '<span data-qa="ogrsBadge">OGRS</span>',
-        personRiskFlags: { groups: [], remainingCount: 0 },
+        personRiskFlags: { headerBadges: [], remainingCount: 0 },
         collapsibleRiskFlags: true,
       })
 
@@ -240,9 +240,61 @@ describe('person-header', () => {
     })
   })
 
-  it('does not render the risk panel when riskBadgeData has no groups', () => {
+  it('passes riskHrefBase through to the risk flag links', () => {
     const document = renderComponent({
-      riskBadgeData: { groups: [], remainingCount: 0 },
+      crn: 'D004851',
+      riskHrefBase: 'https://mpop.example.com/case/D004851/risk',
+      personRiskFlags: {
+        headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
+        remainingCount: 1,
+      },
+    })
+
+    expect(document.querySelector('[data-qa="risk-badge-staff"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk/flag/staff',
+    )
+    expect(document.querySelector('[data-qa="risk-badge-more"]')?.getAttribute('href')).toBe(
+      'https://mpop.example.com/case/D004851/risk',
+    )
+  })
+
+  describe('showRisks', () => {
+    const riskParams = {
+      name: 'Andrew Langley',
+      crn: 'D004851',
+      riskBadges: '<span data-qa="ogrsBadge">OGRS <strong>LOW</strong></span>',
+      personRiskFlags: {
+        headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
+        remainingCount: 0,
+      },
+    }
+
+    it('renders the risk panels by default', () => {
+      const document = renderComponent(riskParams)
+
+      expect(document.querySelector('[data-qa="riskBadges"]')).not.toBeNull()
+      expect(document.querySelector('[data-qa="personRiskBadges"]')).not.toBeNull()
+    })
+
+    it('renders the risk panels when showRisks is true', () => {
+      const document = renderComponent({ ...riskParams, showRisks: true })
+
+      expect(document.querySelectorAll('.person-header__risk-panel')).toHaveLength(2)
+    })
+
+    it('does not render the risk panels when showRisks is false but still renders the banner', () => {
+      const document = renderComponent({ ...riskParams, showRisks: false, collapsibleRiskFlags: true })
+
+      expect(document.querySelector('.person-header__risk-panel')).toBeNull()
+      expect(document.querySelector('[data-qa="riskFlagsToggle"]')).toBeNull()
+      expect(document.querySelector('.person-header__band')).not.toBeNull()
+      expect(document.querySelector('[data-qa="personName"]')?.textContent?.trim()).toBe('Andrew Langley')
+    })
+  })
+
+  it('does not render the risk panel when riskBadgeData has no badges', () => {
+    const document = renderComponent({
+      riskBadgeData: { headerBadges: [], remainingCount: 0 },
     })
 
     expect(document.querySelector('.person-header__risk-panel')).toBeNull()

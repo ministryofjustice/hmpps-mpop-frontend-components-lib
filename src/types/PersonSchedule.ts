@@ -1,3 +1,5 @@
+import type { ApiResponse } from './ApiResponse'
+
 export type PersonSchedule = {
   personSummary: {
     name: {
@@ -21,10 +23,8 @@ export type PersonSchedule = {
   }
 }
 
-export type PersonScheduleResponse = {
+export type PersonScheduleResponse = ApiResponse & {
   personSchedule: PersonSchedule | null
-  httpStatus: number
-  error?: Error | null
 }
 
 type Activity = {

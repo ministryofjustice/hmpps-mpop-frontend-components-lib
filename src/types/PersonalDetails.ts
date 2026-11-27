@@ -1,7 +1,7 @@
-export type PersonalDetailsResponse = {
+import type { ApiResponse } from './ApiResponse'
+
+export type PersonalDetailsResponse = ApiResponse & {
   personalDetails: PersonalDetailsSummary | null
-  httpStatus: number
-  error?: Error | null
 }
 
 export type PersonalDetailsSummary = {

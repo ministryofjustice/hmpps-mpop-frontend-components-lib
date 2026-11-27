@@ -1,0 +1,38 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{% set errors = [] %}
+{% if params.arnsUnavailable %}
+    {% set errors = (errors.push('Risk information from the ARNS service is currently unavailable.'), errors) %}
+{% endif %}
+{% if params.photoUnavailable %}
+    {% set errors = (errors.push('Photo is currently unavailable.'), errors) %}
+{% endif %}
+{% if params.statusUnavailable %}
+    {% set errors = (errors.push('Status information is currently unavailable.'), errors) %}
+{% endif %}
+{% if params.throughcareUnavailable == 'all' %}
+    {% set errors = (errors.push('Throughcare information is currently unavailable.'), errors) %}
+{% elif params.throughcareUnavailable == 'some' %}
+    {% set errors = (errors.push('Some throughcare information is currently unavailable.'), errors) %}
+{% endif %}
+
+{% if errors.length %}
+    {% set errorsHtml %}
+        {% if errors.length > 1 %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ errors[0] }}</p>
+        {% endif %}
+    {% endset %}
+    {{ mojAlert({
+        variant: 'error',
+        title: 'There is a problem',
+        showTitleAsHeading: true,
+        attributes: { 'data-qa': 'headerErrors' },
+        html: errorsHtml
+    }) }}
+{% endif %}

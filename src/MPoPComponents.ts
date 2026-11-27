@@ -1,3 +1,4 @@
+import { pipeline } from 'node:stream/promises'
 import { RestClient } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthOptions } from '@ministryofjustice/hmpps-rest-client'
 import type { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
@@ -17,6 +18,25 @@ import type {
 import { yearsSince } from './utils/yearsSince'
 import { PersonSchedule, PersonScheduleResponse } from './types/PersonSchedule'
 import { UserAlertsCount, UserAlertsCountResponse } from './types/UserAlertsCount'
+import type { PersonRiskFlags, PersonRiskFlagsResponse } from './types/RiskFlag'
+import type { ProfessionalContact, ProfessionalContactResponse } from './types/ProfessionalContact'
+import type { Prisoner, PrisonerResponse } from './types/Prisoner'
+import type {
+  CheckInPhotoUrlResponse,
+  PersonHeaderPhoto,
+  PersonHeaderPhotoOptions,
+  PersonPhotoAvailability,
+  PersonPhotoHttpResponse,
+  PersonPhotoResponse,
+} from './types/PersonPhoto'
+import type {
+  PersonHeaderStatus,
+  PersonHeaderStatusOptions,
+  SupervisionPackageContext,
+} from './types/PersonHeaderStatus'
+import { toPersonPhotoSrc } from './utils/toPersonPhotoSrc'
+import { personPhotoHref } from './utils/personPhotoHref'
+import { getStatusTag } from './utils/personStatusTag'
 
 export const tierTags: Record<string, TierTag> = {
   missing: { text: 'Missing', color: 'red' },
@@ -45,6 +65,12 @@ export default class MPoPComponents {
 
   private readonly supervisionPackageApiRestClient: SuppressingRestClient
 
+  private readonly prisonerSearchApiRestClient: SuppressingRestClient
+
+  private readonly personRecordApiRestClient: SuppressingRestClient
+
+  private readonly eSupervisionApiRestClient: SuppressingRestClient
+
   private readonly logger: Logger | Console
 
   constructor(
@@ -71,6 +97,21 @@ export default class MPoPComponents {
         logger,
         authenticationClient,
       ),
+      logger,
+    )
+
+    this.prisonerSearchApiRestClient = new SuppressingRestClient(
+      new RestClient('Prisoner Search API', config.prisonerSearchApiConfig ?? config, logger, authenticationClient),
+      logger,
+    )
+
+    this.personRecordApiRestClient = new SuppressingRestClient(
+      new RestClient('Person Record API', config.personRecordApiConfig ?? config, logger, authenticationClient),
+      logger,
+    )
+
+    this.eSupervisionApiRestClient = new SuppressingRestClient(
+      new RestClient('eSupervision API', config.eSupervisionApiConfig ?? config, logger, authenticationClient),
       logger,
     )
   }
@@ -274,6 +315,245 @@ export default class MPoPComponents {
     return {
       ...personScheduleResponse,
       error,
+    }
+  }
+
+  async getPersonRiskFlags(authOptions: AuthOptions | string, crn: string): Promise<PersonRiskFlagsResponse> {
+    let error: Error | null = null
+    let personRiskFlagsResponse: PersonRiskFlagsResponse
+
+    try {
+      const response = await this.masApiRestClient.get<PersonRiskFlags>(`/risk-flags/${crn}`, authOptions)
+      if (!response) {
+        personRiskFlagsResponse = {
+          personRiskFlags: null,
+          httpStatus: 404,
+        }
+      } else {
+        personRiskFlagsResponse = {
+          personRiskFlags: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      personRiskFlagsResponse = {
+        personRiskFlags: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...personRiskFlagsResponse,
+      error,
+    }
+  }
+
+  async getContacts(authOptions: AuthOptions | string, crn: string): Promise<ProfessionalContactResponse> {
+    let error: Error | null = null
+    let professionalContactResponse: ProfessionalContactResponse
+
+    try {
+      const response = await this.masApiRestClient.get<ProfessionalContact>(`/sentence/${crn}/contacts`, authOptions)
+      if (!response) {
+        professionalContactResponse = {
+          professionalContact: null,
+          httpStatus: 404,
+        }
+      } else {
+        professionalContactResponse = {
+          professionalContact: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      professionalContactResponse = {
+        professionalContact: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...professionalContactResponse,
+      error,
+    }
+  }
+
+  async getPrisonerDetails(authOptions: AuthOptions | string, nomsNumber: string): Promise<PrisonerResponse> {
+    let error: Error | null = null
+    let prisonerResponse: PrisonerResponse
+
+    try {
+      const response = await this.prisonerSearchApiRestClient.get<Prisoner>(`/prisoner/${nomsNumber}`, authOptions)
+      if (!response) {
+        prisonerResponse = {
+          prisoner: null,
+          httpStatus: 404,
+        }
+      } else {
+        prisonerResponse = {
+          prisoner: response,
+          httpStatus: 200,
+        }
+      }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      error = err instanceof Error ? err : new Error('500 Internal Server Error')
+      prisonerResponse = {
+        prisoner: null,
+        httpStatus: responseStatus ?? 500,
+      }
+    }
+
+    return {
+      ...prisonerResponse,
+      error,
+    }
+  }
+
+  async getPersonPhoto(authOptions: AuthOptions | string, nomsNumber: string): Promise<PersonPhotoResponse> {
+    try {
+      const photo = await this.personRecordApiRestClient.stream(
+        `/person/prison/${encodeURIComponent(nomsNumber)}/image`,
+        authOptions,
+      )
+      return { photo, httpStatus: photo ? 200 : 404, error: null }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      if (responseStatus === 403) {
+        return { photo: null, httpStatus: 403, error: null }
+      }
+      return {
+        photo: null,
+        httpStatus: responseStatus ?? 500,
+        error: err instanceof Error ? err : new Error('500 Internal Server Error'),
+      }
+    }
+  }
+
+  async hasPersonPhoto(authOptions: AuthOptions | string, nomsNumber: string): Promise<PersonPhotoAvailability> {
+    const { photo, httpStatus, error } = await this.getPersonPhoto(authOptions, nomsNumber)
+    photo?.destroy()
+    return { hasPhoto: photo !== null, httpStatus, error }
+  }
+
+  async getCheckInPhotoUrl(authOptions: AuthOptions | string, crn: string): Promise<CheckInPhotoUrlResponse> {
+    try {
+      const response = await this.eSupervisionApiRestClient.get<{ photoUrl?: string }>(
+        `/v2/offenders/crn/${crn}`,
+        authOptions,
+      )
+      return { photoUrl: response?.photoUrl || null, httpStatus: response ? 200 : 404, error: null }
+    } catch (err) {
+      const responseStatus = (err as { responseStatus?: number } | null)?.responseStatus
+      return {
+        photoUrl: null,
+        httpStatus: responseStatus ?? 500,
+        error: err instanceof Error ? err : new Error('500 Internal Server Error'),
+      }
+    }
+  }
+
+  async getPersonHeaderPhoto(
+    authOptions: AuthOptions | string,
+    {
+      crn,
+      noms,
+      prisonPhotoHref = personPhotoHref,
+      includeCheckInPhoto = true,
+      checkInPhoto: knownCheckInPhoto,
+      hasPrisonPhoto: knownHasPrisonPhoto,
+    }: PersonHeaderPhotoOptions,
+  ): Promise<PersonHeaderPhoto> {
+    let checkInPhoto = knownCheckInPhoto
+    if (includeCheckInPhoto && !checkInPhoto) {
+      const { photoUrl, error } = await this.getCheckInPhotoUrl(authOptions, crn)
+      if (error) {
+        this.logger.error(error, `Failed to get the online check-in photo for CRN ${crn}`)
+      }
+      checkInPhoto = { photoUrl, failed: Boolean(error) }
+    }
+
+    let hasPrisonPhoto: boolean | undefined
+    let prisonPhotoFailed = false
+    if (!checkInPhoto?.photoUrl && noms && knownHasPrisonPhoto === undefined) {
+      const { hasPhoto, error } = await this.hasPersonPhoto(authOptions, noms)
+      prisonPhotoFailed = Boolean(error)
+      hasPrisonPhoto = prisonPhotoFailed ? undefined : hasPhoto
+    }
+
+    const photo = toPersonPhotoSrc({
+      checkInPhotoUrl: checkInPhoto?.photoUrl,
+      noms,
+      hasPrisonPhoto: hasPrisonPhoto ?? knownHasPrisonPhoto,
+      prisonPhotoHref,
+    })
+
+    return {
+      photo,
+      photoUnavailable: !photo && (Boolean(checkInPhoto?.failed) || prisonPhotoFailed),
+      checkInPhoto,
+      hasPrisonPhoto,
+    }
+  }
+
+  async sendPersonPhoto(
+    authOptions: AuthOptions | string,
+    nomsNumber: string,
+    res: PersonPhotoHttpResponse,
+  ): Promise<void> {
+    const { photo } = await this.getPersonPhoto(authOptions, nomsNumber)
+    if (!photo) {
+      res.sendStatus(404)
+      return
+    }
+    res.set('Cache-Control', 'private, max-age=86400')
+    res.removeHeader('pragma')
+    res.type('image/jpeg')
+    await pipeline(photo, res)
+  }
+
+  async getPersonHeaderStatus(
+    authOptions: AuthOptions | string,
+    { personalDetails, supervisionPackage, supervisionPackageUnavailable = false }: PersonHeaderStatusOptions,
+  ): Promise<PersonHeaderStatus> {
+    let prisoner: Prisoner | undefined
+    let prisonerUnavailable = false
+    if (personalDetails.noms) {
+      const response = await this.getPrisonerDetails(authOptions, personalDetails.noms)
+      if (response.error) {
+        this.logger.error(
+          `Failed to get prisoner details for NOMS number: ${personalDetails.noms} CRN: ${personalDetails.crn}`,
+          response.error,
+        )
+      }
+      prisoner = response.prisoner ?? undefined
+      prisonerUnavailable = Boolean(response.error)
+    }
+
+    const personStatusTag = await getStatusTag(personalDetails, supervisionPackage, prisoner)
+
+    return {
+      personStatusTag,
+      statusUnavailable: !personStatusTag && supervisionPackageUnavailable,
+      prisoner,
+      prisonerUnavailable,
+    }
+  }
+
+  async getSupervisionPackageContext(
+    authOptions: AuthOptions | string,
+    crn: string,
+  ): Promise<SupervisionPackageContext> {
+    try {
+      const supervisionPackage = await this.getSupervisionPackageFrontendContext(authOptions, crn)
+      return { supervisionPackage, unavailable: supervisionPackage?.outcome === 'error' }
+    } catch (err) {
+      this.logger.error(err, `Failed to get the supervision package for CRN ${crn}`)
+      return { supervisionPackage: null, unavailable: true }
     }
   }
 

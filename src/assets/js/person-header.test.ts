@@ -20,7 +20,7 @@ const params = {
   crn: 'D004851',
   collapsibleRiskFlags: true,
   personRiskFlags: {
-    groups: [{ badges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }] }],
+    headerBadges: [{ id: 'staff', text: 'Risk to staff - High', badgeClass: 'risk-badge--high' }],
     remainingCount: 3,
   },
 }
